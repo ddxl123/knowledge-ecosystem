@@ -85,7 +85,9 @@ Yours,
 - The more you practice, the better you will become.
 - Practice makes perfect.
 
-## 核心概念
+## 收集指南
+
+> ⚠️ **严格范围限定：** 仅收集本文件内容，禁止跨文件、跨目录引用。例如本文件为「Unit5-Languages-Around-the-World」，则只收集该单元内容，不得涉及其他单元
 
 ### 概述
 

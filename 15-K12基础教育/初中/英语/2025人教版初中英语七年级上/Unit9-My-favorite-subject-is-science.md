@@ -74,7 +74,9 @@ B: Who is your P.E. teacher?
 A: Mr. Li. He always plays games with us.
 B: That sounds great!
 
-## 核心概念
+## 收集指南
+
+> ⚠️ **严格范围限定：** 仅收集本文件内容，禁止跨文件、跨目录引用。例如本文件为「Unit9-My-favorite-subject-is-science」，则只收集该单元内容，不得涉及其他单元
 
 ### 概述
 

@@ -68,7 +68,9 @@ A: No, I don't like vegetables. But I like fruit. I like bananas and oranges.
 B: How about apples? I don't like apples!
 A: Yes, I like apples. And I like strawberries, too.
 
-## 核心概念
+## 收集指南
+
+> ⚠️ **严格范围限定：** 仅收集本文件内容，禁止跨文件、跨目录引用。例如本文件为「Unit6-Do-you-like-bananas」，则只收集该单元内容，不得涉及其他单元
 
 ### 概述
 

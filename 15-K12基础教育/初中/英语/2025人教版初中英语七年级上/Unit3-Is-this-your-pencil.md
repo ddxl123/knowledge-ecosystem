@@ -60,7 +60,9 @@ C: No, it isn't. It's her ruler.
 A: OK, and this is my book. And this is your dictionary, Jane.
 C: Thank you!
 
-## 核心概念
+## 收集指南
+
+> ⚠️ **严格范围限定：** 仅收集本文件内容，禁止跨文件、跨目录引用。例如本文件为「Unit3-Is-this-your-pencil」，则只收集该单元内容，不得涉及其他单元
 
 ### 概述
 
