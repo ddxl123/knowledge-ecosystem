@@ -1,26 +1,17 @@
 # 高频词汇 List02 - 短语搭配
 
-| 短语 | 释义 | 例句 |
-|------|------|------|
-| afford to do | 负担得起做某事 | We can't afford to waste time. |
-| be alert to | 对…保持警惕 | Be alert to signs of danger. |
-| allocate...to... | 把…分配给… | The funds were allocated to research. |
-| have no alternative but to | 别无选择只能 | We had no alternative but to cancel the trip. |
-| amaze sb. with sth. | 用某事使某人惊奇 | She amazed everyone with her performance. |
-| be ambitious to do | 雄心勃勃地要做 | He is ambitious to change the world. |
-| appeal to | 呼吁；对…有吸引力 | The proposal appeals to environmentalists. |
-| apply for | 申请 | She applied for a visa. |
-| apply to | 适用于 | This rule applies to everyone. |
-| appreciate doing sth. | 感激做某事 | I appreciate you telling me the truth. |
-| approach to | …的方法/途径 | We need a new approach to teaching. |
-| be appropriate for | 适合于 | This movie is not appropriate for children. |
-| approve of | 赞成 | Her parents approved of her decision. |
-| arise from | 由…产生 | Problems arise from poor communication. |
-| arouse one's interest | 引起某人的兴趣 | The book aroused my interest in history. |
-| as a result of | 由于…的结果 | As a result of the storm, flights were cancelled. |
-| assess...as... | 评估…为… | The risk was assessed as low. |
-| be associated with | 与…有关联 | Smoking is associated with lung cancer. |
-| assume that | 假设 | Let's assume that the plan works. |
-| assure sb. of sth. | 向某人保证某事 | She assured him of her support. |
-| on the assumption that | 假设 | We planned on the assumption that funding would continue. |
-| be assigned to | 被分配到 | He was assigned to the marketing department. |
+
+## 核心概念
+
+### 条目描述
+2025恋练有词中高频词汇 List02的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

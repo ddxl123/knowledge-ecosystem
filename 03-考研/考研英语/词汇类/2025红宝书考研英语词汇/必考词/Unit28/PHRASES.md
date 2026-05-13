@@ -1,32 +1,17 @@
 # Unit 28 短语搭配
 
-- acknowledge doing sth. 承认做了某事
-- be adequate for 足够的
-- advocate doing sth. 提倡做某事
-- in the aggregate 总共
-- allocate…to 把…分配给
-- an ambiguous statement 含糊的声明
-- draw an analogy between 在…之间作类比
-- anticipate doing sth. 预期做某事
-- scientific apparatus 科学仪器
-- an arbitrary decision 武断的决定
-- assert oneself 坚持自己的权利
-- an authentic document 真实的文件
-- autonomous region 自治区
-- on behalf of 代表
-- have a bias against 对…有偏见
-- red tape and bureaucracy 繁文缛节和官僚主义
-- without cease 不停地
-- chronic disease 慢性病
-- a coherent argument 连贯的论点
-- by coincidence 碰巧
-- collaborate with 与…合作
-- a commodity market 商品市场
-- be compatible with 与…兼容
-- compensate for 弥补
-- compile a report 编写报告
-- complement each other 相辅相成
-- comply with 遵守
-- conceive of 想象
-- be confined to 限制在
-- conform to 遵守；符合
+
+## 核心概念
+
+### 条目描述
+2025红宝书考研英语词汇中必考词 Unit28的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

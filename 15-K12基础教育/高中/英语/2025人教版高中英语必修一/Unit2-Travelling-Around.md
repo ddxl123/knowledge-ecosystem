@@ -75,3 +75,30 @@ I'm looking forward to this trip because [reason].
 - The best time to visit... is...
 - It's famous for...
 - You can enjoy...
+
+## 核心概念
+
+### 概述
+
+**Unit 2: Travelling Around** 是英语学科中的语言知识模块，涉及词汇、语法、听说读写等语言技能。
+
+### 知识结构
+
+本部分内容按以下结构组织：
+
+1. **单元主题**
+2. **核心词汇**
+3. **语法：现在进行时表将来**
+4. **写作：旅行计划**
+
+### 关键概念
+
+- 例：I'm leaving tomorrow.（我明天走。）
+- I'm going to study abroad.（打算去，但还没安排）
+- I'll help you.（临时决定）
+
+### 学习要点
+
+- 在语境中学习词汇和语法
+- 注重听说读写的综合训练
+- 多读多听，培养语感

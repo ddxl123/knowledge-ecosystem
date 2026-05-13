@@ -1,36 +1,17 @@
 # Unit 12 短语搭配
 
-- a flood of 大量的
-- in full flourish 在全盛时期
-- flow into 流入
-- be fluent in 精通
-- focus on 集中于
-- forbid sb. from doing sth. 禁止某人做某事
-- the weather forecast 天气预报
-- forge ahead 稳步前进
-- forge a relationship 建立关系
-- the former…the latter… 前者…后者…
-- apply a formula 应用公式
-- make a fortune 发财
-- foster growth 促进增长
-- lay a foundation 奠定基础
-- a fraction of 一小部分
-- fragment of …的碎片
-- a framework for …的框架
-- commit fraud 犯欺诈罪
-- frequent flyer 飞行常客
-- friction between …之间的摩擦
-- push back the frontier 拓展前沿
-- be frustrated at/by 对…感到沮丧
-- fulfill one's dream 实现梦想
-- fulfill one's duty 履行职责
-- perform a function 执行功能
-- function as 起…的作用
-- raise funds 筹集资金
-- be fundamental to 对…至关重要
-- furnish sb. with sth. 向某人提供某物
-- gain access to 获得进入
-- gain weight 增重
-- bridge the gap 弥补差距
-- generate electricity 发电
-- generate income 产生收入
+
+## 核心概念
+
+### 条目描述
+2026红宝书考研英语词汇中基础词 Unit12的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

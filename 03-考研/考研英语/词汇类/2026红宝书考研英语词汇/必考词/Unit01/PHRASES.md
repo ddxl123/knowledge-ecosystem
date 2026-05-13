@@ -1,52 +1,17 @@
 # Unit 01 短语搭配
 
-- abandon oneself to 沉溺于
-- with abandon 放纵地；放肆地
-- at an abnormal speed 以异常的速度
-- abolish slavery 废除奴隶制
-- in abundance 大量地；充裕地
-- an abundance of 大量的；丰富的
-- abuse one's power 滥用权力
-- drug abuse 药物滥用
-- accelerate the pace of 加速…的步伐
-- have access to 有权使用；可以接近
-- give access to 准许进入
-- accommodate to 适应
-- accompany sb. to 陪某人去
-- accomplish one's goal 实现目标
-- on account of 因为；由于
-- take into account 考虑到
-- account for 解释；说明；占（比例）
-- by/from all accounts 据大家所说
-- accumulate experience 积累经验
-- be accurate in 在…方面准确
-- accuse sb. of sth. 指控某人做了某事
-- be accustomed to 习惯于
-- achieve success 取得成功
-- acknowledge doing sth. 承认做了某事
-- acquire knowledge 获得知识
-- adapt to 适应
-- adapt from 改编自
-- be adequate for 足够的；适当的
-- adhere to 坚持；遵守
-- adjust to 适应；调节
-- administer to 有助于；给予
-- be admitted to/into 被录取进入
-- adopt a policy 采取政策
-- in advance 预先；提前
-- advance in 在…方面进步
-- advocate doing sth. 提倡做某事
-- have an effect on 对…有影响
-- affect and effect 影响和效果
-- afford to do sth. 负担得起做某事
-- be alert to 对…警觉
-- on the alert 警惕着；提防
-- allocate sth. to sb. 把…分配给某人
-- alter one's mind 改变主意
-- be amazed at/by 对…感到惊奇
-- be ambitious for 渴望获得
-- amend one's ways 改过自新
-- amuse oneself 自娱自乐
-- draw an analogy between 在…之间作类比
-- by analogy 用类推的方法
-- analyze the situation 分析形势
+
+## 核心概念
+
+### 条目描述
+2026红宝书考研英语词汇中必考词 Unit01的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

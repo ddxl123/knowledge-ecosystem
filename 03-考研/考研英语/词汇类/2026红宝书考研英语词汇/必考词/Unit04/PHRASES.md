@@ -1,48 +1,17 @@
 # Unit 04 短语搭配
 
-- cancel out 抵消
-- a candidate for …的候选人
-- be capable of 有能力做
-- to capacity 满负荷地
-- capture one's attention 吸引注意力
-- career development 职业发展
-- with caution 小心翼翼地
-- cease to do/doing sth. 停止做某事
-- without cease 不停地
-- graduation ceremony 毕业典礼
-- a certificate of …的证书
-- rise to the challenge 接受挑战
-- challenge sb. to sth. 向某人挑战
-- a world champion 世界冠军
-- through proper channels 通过正当渠道
-- in character 符合某人性格
-- out of character 不符合某人性格
-- charge sb. with sth. 指控某人某事
-- free of charge 免费
-- in charge of 负责
-- take charge of 接管
-- charity begins at home 仁爱先及亲友
-- chronic disease 慢性病
-- under/in the circumstances 在这种情况下
-- under no circumstances 决不
-- cite an example 举例
-- make a claim for 提出要求
-- claim to be 声称是
-- clarify matters 澄清事实
-- classify…into 把…分成
-- climate change 气候变化
-- cling to 紧紧抓住；坚持
-- not have a clue 一无所知
-- a clue to …的线索
-- coalition government 联合政府
-- bar code 条形码
-- code of conduct 行为准则
-- collapse into 倒塌成；陷入
-- colonial rule 殖民统治
-- combat terrorism 打击恐怖主义
-- combine…with 把…与…结合
-- in command of 指挥
-- take command of 接管指挥
-- commence with 以…开始
-- make a comment on 对…发表评论
-- no comment 无可奉告
+
+## 核心概念
+
+### 条目描述
+2026红宝书考研英语词汇中必考词 Unit04的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

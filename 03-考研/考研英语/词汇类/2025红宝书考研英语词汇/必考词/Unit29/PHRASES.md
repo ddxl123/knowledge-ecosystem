@@ -1,33 +1,17 @@
 # Unit 29 短语搭配
 
-- a clear conscience 问心无愧
-- a matter of conscience 良心问题
-- reach a consensus 达成共识
-- conserve energy 节约能源
-- be constrained by 受…限制
-- budget constraints 预算限制
-- contemplate doing sth. 考虑做某事
-- hold in contempt 蔑视
-- contradict oneself 自相矛盾
-- stir up controversy 挑起争论
-- a controversial issue 有争议的问题
-- conventional methods 传统方法
-- correspond to 与…对应
-- meet the criteria 符合标准
-- at a crucial moment 在关键时刻
-- a budget deficit 预算赤字
-- the definitive version 最终版本
-- demographic change 人口变化
-- denounce sb. for sth. 因某事谴责某人
-- depict sth. as 把…描绘成
-- deplete natural resources 耗尽自然资源
-- deploy troops 部署军队
-- deprive sb. of sth. 剥夺某人某物
-- derive from 源自
-- deteriorate into 恶化为
-- devise a plan 制定计划
-- differentiate between 区分
-- a moral dilemma 道德困境
-- diminish in value 贬值
-- discard old ideas 抛弃旧观念
-- disclose information 透露信息
+
+## 核心概念
+
+### 条目描述
+2025红宝书考研英语词汇中必考词 Unit29的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

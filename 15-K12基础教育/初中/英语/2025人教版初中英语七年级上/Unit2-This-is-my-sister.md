@@ -61,3 +61,33 @@ A: Oh, Jane, this is my sister Kate. Kate, this is my friend Jane.
 B: Nice to meet you, Jane.
 C: Nice to meet you, too. Are those your parents?
 B: Yes, they are.
+
+## 核心概念
+
+### 概述
+
+**Unit 2: This is my sister** 是英语学科中的语言知识模块，涉及词汇、语法、听说读写等语言技能。
+
+### 知识结构
+
+本部分内容按以下结构组织：
+
+1. **重点词汇**
+2. **核心句型**
+3. **语法要点**
+4. **家庭成员词汇扩展**
+5. **对话范例**
+
+### 关键概念
+
+- parent /ˈpeərənt/ 父（母）亲
+- grandmother /ˈɡrænmʌðər/ （外）祖母
+- grandfather /ˈɡrænfɑːðər/ （外）祖父
+- grandparent /ˈɡrænpeərənt/ （外）祖父母
+- they /ðeɪ/ 他（她、它）们
+
+### 学习要点
+
+- 在语境中学习词汇和语法
+- 注重听说读写的综合训练
+- 多读多听，培养语感

@@ -1,36 +1,17 @@
 # Unit 16 短语搭配
 
-- label…as 把…称为
-- for lack of 因缺乏
-- lack of confidence 缺乏信心
-- the political landscape 政治格局
-- launch a campaign 发起运动
-- launch into 投身于
-- layer upon layer 层层叠叠
-- lean on 依靠；依赖
-- leap forward 飞跃
-- give a lecture 做讲座
-- legal system 法律体系
-- take legal action 采取法律行动
-- legislation on 关于…的立法
-- at leisure 闲暇时
-- liberal arts 文科
-- a limit to 对…的限制
-- within limits 在一定限度内
-- without limit 无限地
-- a link between …之间的联系
-- link…to/with 把…与…联系起来
-- financial literacy 财务素养
-- literary works 文学作品
-- a heavy load 重负
-- take out a loan 贷款
-- be located in/at 位于
-- logical thinking 逻辑思维
-- a life of luxury 奢华的生活
-- maintain order 维持秩序
-- maintain that 主张
-- a major issue 主要问题
-- manifest itself 表现出来
-- manipulate public opinion 操纵舆论
-- in a manner 以…的方式
-- a massive amount of 大量的
+
+## 核心概念
+
+### 条目描述
+2025红宝书考研英语词汇中基础词 Unit16的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

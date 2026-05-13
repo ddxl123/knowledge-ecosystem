@@ -1,24 +1,17 @@
 # 高频词汇 List09 - 短语搭配
 
-| 短语 | 释义 | 例句 |
-|------|------|------|
-| discourage sb. from doing | 劝阻某人做 | The bad weather discouraged us from going out. |
-| discrimination against | 对…的歧视 | Discrimination against minorities is wrong. |
-| dismiss...as... | 把…当作…不予理会 | He dismissed the idea as impractical. |
-| on display | 展出 | The products are on display in the showroom. |
-| in dispute | 有争议 | The ownership of the land is in dispute. |
-| distinct from | 与…不同 | His style is distinct from others. |
-| distinguish...from... | 把…与…区分开 | Can you distinguish fact from fiction? |
-| be distributed among | 被分配给 | The prizes were distributed among the winners. |
-| a diverse range of | 多种多样的 | The store offers a diverse range of products. |
-| in the domain of | 在…领域 | He is an expert in the domain of physics. |
-| dominate over | 支配 | The company dominates over the market. |
-| donate...to... | 把…捐赠给 | She donated $1000 to the charity. |
-| a draft of | 一份…的草稿 | He showed me a draft of the report. |
-| due to | 由于 | The game was cancelled due to rain. |
-| dwell on/upon | 老是想着 | Don't dwell on your mistakes. |
-| have the edge over | 比…有优势 | Her experience gives her the edge over others. |
-| on duty | 值班 | Who is on duty today? |
-| off duty | 下班 | The officer is off duty now. |
-| economic growth | 经济增长 | The country achieved rapid economic growth. |
-| be educated in | 在…方面受过教育 | She was educated in the UK. |
+
+## 核心概念
+
+### 条目描述
+2026恋练有词中高频词汇 List09的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

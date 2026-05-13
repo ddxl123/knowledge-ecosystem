@@ -1,46 +1,17 @@
 # Unit 18 短语搭配
 
-- without pause 不停地
-- at one's peak 在鼎盛时期
-- peak hours 高峰时段
-- be peculiar to 为…所特有
-- peer pressure 同伴压力
-- the death penalty 死刑
-- perceive…as 把…看作
-- a high percentage of 高比例的
-- perform a task 执行任务
-- perform an operation 做手术
-- a permanent job 永久性工作
-- permit sb. to do sth. 允许某人做某事
-- with your permission 如果你允许的话
-- persist in 坚持
-- from one's perspective 从某人的角度来看
-- gain perspective 获得视角
-- persuade sb. to do sth. 说服某人做某事
-- a natural phenomenon 自然现象
-- a philosophy of life 人生哲学
-- physical exercise 体育锻炼
-- physical education 体育课
-- a pile of 一大堆
-- in plain English 用简单明了的英语
-- it is plain that 很明显
-- a plausible explanation 合理的解释
-- make a pledge 做出承诺
-- keep one's pledge 信守誓言
-- the plot thickens 情节变得复杂
-- plunge into 投入；陷入
-- a policy on 关于…的政策
-- public opinion polls 民意调查
-- be popular with/among 受…欢迎
-- pose a threat 构成威胁
-- pose a question 提出问题
-- a positive attitude 积极的态度
-- be possessed of 具有
-- postpone doing sth. 推迟做某事
-- potential risk 潜在风险
-- pour into 大量投入
-- in poverty 在贫困中
-- power of attorney 委托书
-- practical experience 实践经验
-- as a precaution 作为预防措施
-- take precautions 采取预防措施
+
+## 核心概念
+
+### 条目描述
+2026红宝书考研英语词汇中必考词 Unit18的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

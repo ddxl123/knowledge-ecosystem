@@ -1,47 +1,17 @@
 # Unit 25 短语搭配
 
-- surrender to 屈服于
-- survive on 靠…存活
-- be suspected of 有…嫌疑
-- suspend operations 暂停运营
-- sustain growth 维持增长
-- a sustainable development 可持续发展
-- swap…for 用…交换
-- a swift response 迅速的反应
-- swing between 在…之间摇摆
-- switch to 转换到
-- a symbol of …的象征
-- sympathize with 同情
-- flu symptoms 流感症状
-- tackle a problem 解决问题
-- set a target 设定目标
-- a target audience 目标受众
-- impose a tax on 对…征税
-- tear down 拆除
-- in tears 流着泪
-- advanced techniques 先进技术
-- information technology 信息技术
-- a temporary solution 临时解决方案
-- tend to do sth. 倾向于做某事
-- a growing tendency 日益增长的趋势
-- be tense about 对…感到紧张
-- terminal illness 晚期疾病
-- the theme of …的主题
-- in theory 理论上
-- undergo therapy 接受治疗
-- a thorough understanding 透彻的理解
-- pose a threat 构成威胁
-- under threat 受到威胁
-- thrive on 以…为乐
-- turn the tide 扭转局面
-- tighten one's belt 勒紧裤腰带
-- show tolerance 表现出宽容
-- a friendly tone 友好的语气
-- a tough job 棘手的工作
-- trace back to 追溯到
-- by tradition 按照传统
-- a cultural tradition 文化传统
-- a nature trail 自然小径
-- transfer to 转移到
-- transform…into 把…转变为
-- a transparent policy 透明的政策
+
+## 核心概念
+
+### 条目描述
+2026红宝书考研英语词汇中必考词 Unit25的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

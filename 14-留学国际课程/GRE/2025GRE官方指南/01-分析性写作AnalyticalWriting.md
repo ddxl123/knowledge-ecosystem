@@ -1,5 +1,20 @@
 # GRE 分析性写作 Analytical Writing
 
+## 核心概念
+
+### 条目描述
+分析性写作是GRE考试的第一部分，包括Issue和Argument两篇作文。
+
+### 知识结构
+- Issue - 审题、立论、论证
+- Argument - 逻辑谬误分析
+- 评分 - 各分数段要求
+
+### 待收集原子知识点
+- Issue Task：就给定话题表达观点并论证
+- Argument Task：分析论证中的逻辑漏洞
+- 写作技巧：结构组织、论证方法、语言表达
+
 ## 核心考点
 
 ### Analyze an Issue（Issue写作）

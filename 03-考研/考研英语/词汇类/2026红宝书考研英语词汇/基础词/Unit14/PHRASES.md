@@ -1,36 +1,17 @@
 # Unit 14 短语搭配
 
-- be identical to/with 与…完全相同
-- identify with 认同；与…产生共鸣
-- idle away 虚度（光阴）
-- be ignorant of 对…无知
-- illustrate the point 说明观点
-- public image 公众形象
-- immediate effect 立即生效
-- immune system 免疫系统
-- be immune to 对…免疫；不受影响
-- have an impact on 对…有影响
-- implement a plan 实施计划
-- have implications for 对…有影响
-- impose…on 把…强加于
-- on impulse 一时冲动
-- the incidence of …的发生率
-- be inclined to do sth. 倾向于做某事
-- disposable income 可支配收入
-- incorporate…into 把…纳入
-- be indicative of 表明；暗示
-- individual effort 个人努力
-- induce sb. to do sth. 劝诱某人做某事
-- the inevitable result 必然结果
-- in one's infancy 在初期
-- inflation rate 通货膨胀率
-- have influence on/over 对…有影响
-- inform sb. of/about sth. 通知某人某事
-- be well informed 消息灵通
-- key ingredient 关键成分
-- the initial stage 初始阶段
-- take the initiative 采取主动
-- on one's own initiative 主动地
-- declare sb. innocent 宣布某人无罪
-- an innovation in …方面的创新
-- input into 对…的投入
+
+## 核心概念
+
+### 条目描述
+2026红宝书考研英语词汇中基础词 Unit14的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

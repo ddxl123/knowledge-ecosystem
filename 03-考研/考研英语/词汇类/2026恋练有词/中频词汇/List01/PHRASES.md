@@ -1,24 +1,17 @@
 # 中频词汇 List01 - 短语搭配
 
-| 短语 | 释义 | 例句 |
-|------|------|------|
-| establish a relationship | 建立关系 | The two countries established diplomatic relations. |
-| estimate...at | 估计…为 | The damage was estimated at a million dollars. |
-| evaluate...as | 评估…为 | The project was evaluated as successful. |
-| in evidence | 明显的 | Her talent was clearly in evidence. |
-| exceed one's expectations | 超出期望 | The movie exceeded my expectations. |
-| be excluded from | 被排除在…之外 | He was excluded from the team. |
-| execute a plan | 执行计划 | The team executed the plan flawlessly. |
-| on exhibit | 在展出 | The paintings are on exhibit at the museum. |
-| expand on | 详述 | Could you expand on your idea? |
-| at the expense of | 以…为代价 | He succeeded at the expense of his health. |
-| be exposed to | 暴露于；接触 | Children should be exposed to different cultures. |
-| extend to | 延伸到 | The park extends to the river. |
-| in the extreme | 极其 | The situation was dangerous in the extreme. |
-| have faith in | 对…有信心 | She has faith in her team. |
-| be familiar with | 熟悉 | Are you familiar with this software? |
-| figure out | 弄明白 | I can't figure out how to solve this problem. |
-| an important figure | 重要人物 | Einstein was an important figure in science. |
-| finance a project | 资助项目 | The bank financed the construction project. |
-| feature in | 在…中起重要作用 | Technology features in modern education. |
-| fade away | 逐渐消失 | The sound faded away into the distance. |
+
+## 核心概念
+
+### 条目描述
+2026恋练有词中中频词汇 List01的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

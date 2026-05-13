@@ -1,24 +1,17 @@
 # 低频词汇 List04 - 短语搭配
 
-| 短语 | 释义 | 例句 |
-|------|------|------|
-| submit to | 屈服于；提交 | He refused to submit to the enemy's demands. |
-| subscribe to | 订阅；赞同 | She subscribes to the theory of evolution. |
-| subsequent to | 在…之后 | Subsequent to the meeting, a decision was made. |
-| a substantial amount of | 大量的 | A substantial amount of money was spent on research. |
-| substitute A for B | 用A代替B | We substituted oil for butter in the recipe. |
-| succeed in doing | 成功做 | She succeeded in winning the competition. |
-| be sufficient for | 足够…用 | The funds are sufficient for the project. |
-| be suitable for | 适合于 | This job is suitable for you. |
-| in summary | 总之 | In summary, the project was a success. |
-| survive on | 靠…生存 | The family survived on very little money. |
-| be suspected of | 被怀疑 | He was suspected of stealing the money. |
-| be suspended from | 被暂停 | He was suspended from school for fighting. |
-| sustain one's interest | 保持兴趣 | It's hard to sustain interest in a long lecture. |
-| a symbol of | …的象征 | The eagle is a symbol of freedom. |
-| express sympathy for | 对…表示同情 | She expressed sympathy for the victims. |
-| target audience | 目标受众 | The ad is designed for a young target audience. |
-| tend to do | 倾向于做 | People tend to resist change. |
-| in theory | 理论上 | In theory, the plan should work. |
-| be threatened by | 受到…的威胁 | The species is threatened by habitat loss. |
-| a thorough understanding | 深入的理解 | A thorough understanding of the subject is required. |
+
+## 核心概念
+
+### 条目描述
+2025恋练有词中低频词汇 List04的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

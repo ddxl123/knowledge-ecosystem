@@ -1,36 +1,17 @@
 # Unit 13 短语搭配
 
-- be generous with 在…方面慷慨
-- a genius for …的天赋
-- a genuine concern 真诚的关心
-- global economy 全球经济
-- global warming 全球变暖
-- achieve glory 获得荣耀
-- govern oneself 自律
-- grab hold of 抓住
-- with grace 优雅地
-- fall from grace 失宠
-- gradual change 渐变
-- take…for granted 认为…理所当然
-- grant a request 批准请求
-- grasp the meaning 理解含义
-- within one's grasp 在某人力所能及的范围内
-- be grateful to sb. for sth. 因某事感激某人
-- grave concern 严重关切
-- guarantee sb. sth. 向某人保证某事
-- a user's guide 用户指南
-- be guilty of 犯有…罪
-- come to a halt 停止
-- handle the situation 处理情况
-- harsh reality 严酷的现实
-- a good harvest 丰收
-- in haste 匆忙地
-- a fire hazard 火灾隐患
-- highlight the importance of 强调…的重要性
-- take a hint 领会暗示
-- a hollow promise 空洞的承诺
-- in honor of 向…表示敬意
-- broaden one's horizons 开阔眼界
-- be hostile to/toward 对…有敌意
-- household chores 家务事
-- a humble background 卑微的出身
+
+## 核心概念
+
+### 条目描述
+2025红宝书考研英语词汇中基础词 Unit13的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

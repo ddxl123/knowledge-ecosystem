@@ -78,3 +78,24 @@ B: Well, do you want to come to my birthday party?
 A: Oh, yes. When is it?
 B: At three this afternoon.
 A: OK, great. See you!
+
+## 核心概念
+
+### 概述
+
+**Unit 8: When is your birthday?** 是英语学科中的语言知识模块，涉及词汇、语法、听说读写等语言技能。
+
+### 知识结构
+
+本部分内容按以下结构组织：
+
+1. **重点词汇**
+2. **核心句型**
+3. **语法要点**
+4. **对话范例**
+
+### 学习要点
+
+- 在语境中学习词汇和语法
+- 注重听说读写的综合训练
+- 多读多听，培养语感

@@ -1,33 +1,17 @@
 # Unit 01 短语搭配
 
-- an absolute majority 绝大多数
-- be absorbed in 全神贯注于
-- an abstract concept 抽象概念
-- academic achievement 学术成就
-- be acceptable to 对…来说可以接受
-- by accident 意外地
-- make accommodations for 为…提供膳宿
-- be accurate in 在…方面准确
-- a great achievement 伟大的成就
-- acknowledge doing sth. 承认做了某事
-- language acquisition 语言习得
-- in addition 此外
-- in addition to 除…之外
-- be adequate for 足够的
-- the administration of 管理
-- adopt a policy 采取政策
-- in advance 预先；提前
-- take advantage of 利用
-- have an effect on 对…有影响
-- affordable housing 经济适用房
-- item on the agenda 议程上的项目
-- aggressive behavior 攻击性行为
-- the agriculture industry 农业产业
-- alcohol abuse 酗酒
-- an alternative to …的替代品
-- an amateur photographer 业余摄影师
-- be amazed at 对…感到惊奇
-- have the ambition to do 有做…的雄心
-- a large amount of 大量的
-- amuse oneself 自娱自乐
-- analyze the data 分析数据
+
+## 核心概念
+
+### 条目描述
+2025红宝书考研英语词汇中基础词 Unit01的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

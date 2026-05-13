@@ -1,50 +1,17 @@
 # Unit 12 短语搭配
 
-- make a fortune 发财
-- by fortune 靠运气
-- foster growth 促进增长
-- lay a foundation 奠定基础
-- a fraction of 一小部分
-- fragment of …的碎片
-- a framework for …的框架
-- commit fraud 犯欺诈罪
-- frequent flyer 飞行常客
-- friction between …之间的摩擦
-- push back the frontier 拓展前沿
-- be frustrated at/by 对…感到沮丧
-- fulfill one's dream 实现梦想
-- fulfill one's duty 履行职责
-- fulfill the requirements 满足要求
-- perform a function 执行功能
-- function as 起…的作用
-- raise funds 筹集资金
-- be fundamental to 对…至关重要
-- furnish sb. with sth. 向某人提供某物
-- gain access to 获得进入
-- gain weight 增重
-- bridge the gap 弥补差距
-- generate electricity 发电
-- generate income 产生收入
-- be generous with 在…方面慷慨
-- a genius for …的天赋
-- a genuine concern 真诚的关心
-- global economy 全球经济
-- global warming 全球变暖
-- achieve glory 获得荣耀
-- govern oneself 自律
-- grab hold of 抓住
-- with grace 优雅地
-- fall from grace 失宠
-- gradual change 渐变
-- take…for granted 认为…理所当然
-- grant a request 批准请求
-- grasp the meaning 理解含义
-- within one's grasp 在某人力所能及的范围内
-- be grateful to sb. for sth. 因某事感激某人
-- grave concern 严重关切
-- guarantee sb. sth. 向某人保证某事
-- a user's guide 用户指南
-- be guilty of 犯有…罪
-- come to a halt 停止
-- handle the situation 处理情况
-- harsh reality 严酷的现实
+
+## 核心概念
+
+### 条目描述
+2025红宝书考研英语词汇中必考词 Unit12的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

@@ -1,29 +1,17 @@
 # Unit 26 短语搭配
 
-- be similar to 与…相似
-- simplify the process 简化流程
-- simulate real conditions 模拟真实条件
-- construction site 建筑工地
-- be skeptical about 对…持怀疑态度
-- skip breakfast 不吃早饭
-- a slim chance 渺茫的机会
-- a steep slope 陡坡
-- smart phone 智能手机
-- a smooth transition 平稳过渡
-- snap out of 迅速从…中恢复
-- soar to new heights 创新高
-- the sole purpose 唯一目的
-- a solemn promise 庄严的承诺
-- show solidarity 表示团结
-- find a solution 找到解决办法
-- sophisticated technology 先进技术
-- all sorts of 各种各样的
-- a reliable source 可靠来源
-- be specific about 对…具体说明
-- speculate on/about 推测；投机
-- in every sphere 在各个领域
-- spill the beans 泄露秘密
-- spin a story 编故事
-- spiritual growth 精神成长
-- split up 分开；分手
-- sponsor a program 赞助一个项目
+
+## 核心概念
+
+### 条目描述
+2025红宝书考研英语词汇中基础词 Unit26的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

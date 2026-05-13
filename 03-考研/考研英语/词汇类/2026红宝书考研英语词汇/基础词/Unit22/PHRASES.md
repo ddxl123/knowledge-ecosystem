@@ -1,38 +1,17 @@
 # Unit 22 短语搭配
 
-- launch a project 启动项目
-- play a prominent role 发挥重要作用
-- promote economic growth 促进经济增长
-- promote sb. to 提升某人为
-- a prompt response 迅速的回应
-- be prone to 易于
-- in proportion to 与…成比例
-- out of proportion 不成比例
-- propose a plan 提出计划
-- the prospects for …的前景
-- in protest 抗议
-- protest against 抗议
-- provide sb. with sth. 向某人提供某物
-- provide for 赡养；为…做准备
-- provoke sb. into doing sth. 激怒某人做某事
-- pursue a career 从事职业
-- in pursuit of 追求
-- be qualified for 有资格担任
-- quote from 引用自
-- radical changes 根本性的变化
-- at random 随机地
-- a wide range of 范围广泛的
-- rank first 名列前茅
-- at a rapid pace 以飞快的速度
-- rare species 稀有物种
-- at any rate 无论如何
-- at this rate 照此速度
-- a rational decision 理性的决定
-- raw materials 原材料
-- react to 对…做出反应
-- a realistic goal 切实可行的目标
-- in the realm of 在…领域
-- a reasonable price 合理的价格
-- rebel against 反抗
-- beyond recall 记不起来的
-- economic recession 经济衰退
+
+## 核心概念
+
+### 条目描述
+2026红宝书考研英语词汇中基础词 Unit22的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

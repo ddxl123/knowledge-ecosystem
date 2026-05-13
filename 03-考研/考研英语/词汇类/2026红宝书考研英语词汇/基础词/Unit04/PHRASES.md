@@ -1,33 +1,17 @@
 # Unit 04 短语搭配
 
-- with caution 小心翼翼地
-- rise to the challenge 接受挑战
-- through proper channels 通过正当渠道
-- in character 符合某人性格
-- charge sb. with sth. 指控某人某事
-- free of charge 免费
-- charity begins at home 仁爱先及亲友
-- under/in the circumstances 在这种情况下
-- under no circumstances 决不
-- cite an example 举例
-- make a claim for 提出要求
-- clarify matters 澄清事实
-- classify…into 把…分成
-- climate change 气候变化
-- not have a clue 一无所知
-- bar code 条形码
-- code of conduct 行为准则
-- collapse into 倒塌成
-- colonial rule 殖民统治
-- combat terrorism 打击恐怖主义
-- combine…with 把…与…结合
-- in command of 指挥
-- make a comment on 对…发表评论
-- commit suicide 自杀
-- commit oneself to 致力于
-- communicate with 与…交流
-- the international community 国际社会
-- comparable to/with 可与…相比
-- compete with/against 与…竞争
-- a complex system 复杂系统
-- be composed of 由…组成
+
+## 核心概念
+
+### 条目描述
+2026红宝书考研英语词汇中基础词 Unit04的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

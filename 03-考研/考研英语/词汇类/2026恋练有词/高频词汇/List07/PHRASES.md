@@ -1,24 +1,17 @@
 # 高频词汇 List07 - 短语搭配
 
-| 短语 | 释义 | 例句 |
-|------|------|------|
-| crash into | 撞上 | The car crashed into a tree. |
-| give credit to | 归功于 | We should give credit to the whole team. |
-| on credit | 赊账 | He bought the TV on credit. |
-| be critical of | 对…挑剔/批评 | She is critical of the government's policies. |
-| a crucial moment | 关键时刻 | This is a crucial moment for the company. |
-| cultivate one's interest | 培养兴趣 | Schools should cultivate students' interest in science. |
-| out of curiosity | 出于好奇 | She opened the box out of curiosity. |
-| be curious about | 对…好奇 | Children are curious about everything. |
-| current affairs | 时事 | He reads about current affairs every day. |
-| customize to | 定制 | The software can be customized to your needs. |
-| a heated debate | 激烈的辩论 | The issue sparked a heated debate. |
-| debate on/about | 辩论 | They debated on the topic for hours. |
-| in decline | 在下降 | The industry has been in decline for years. |
-| dedicate...to... | 把…奉献给 | She dedicated her life to medicine. |
-| defend against | 防御 | The army defended the city against attack. |
-| be defined as | 被定义为 | Happiness can be defined as a state of well-being. |
-| deliberate on | 审议 | The committee will deliberate on the matter. |
-| deliver a speech | 发表演讲 | The president delivered a speech at the ceremony. |
-| in demand | 有需求 | Skilled workers are in high demand. |
-| deny doing | 否认做 | He denied breaking the window. |
+
+## 核心概念
+
+### 条目描述
+2026恋练有词中高频词汇 List07的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

@@ -1,36 +1,17 @@
 # Unit 24 短语搭配
 
-- require sb. to do sth. 要求某人做某事
-- conduct research 进行研究
-- bear a resemblance to 与…相似
-- in reserve 储备；留出
-- without reservation 毫无保留地
-- reside in 居住于；存在于
-- resign from 辞去
-- resist the temptation 抵制诱惑
-- resolve a conflict 解决冲突
-- resort to 诉诸；求助于
-- natural resources 自然资源
-- respond to 对…做出反应
-- in response to 作为对…的回应
-- restore…to 恢复到
-- restrain oneself 克制自己
-- be restricted to 限制在
-- retain one's composure 保持镇静
-- it is revealed that 据透露
-- government revenue 政府收入
-- in reverse 反过来
-- revise one's opinion 修正看法
-- the Industrial Revolution 工业革命
-- a rigid structure 刚性结构
-- without a rival 无与伦比
-- play a role in 在…中起作用
-- the root cause 根本原因
-- take root 生根；扎根
-- roughly speaking 大体来说
-- daily routine 日常生活
-- in ruins 成为废墟
-- go to rack and ruin 陷入毁灭
-- rural areas 农村地区
-- make sacrifices 做出牺牲
-- for the sake of 为了…的缘故
+
+## 核心概念
+
+### 条目描述
+2025红宝书考研英语词汇中基础词 Unit24的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

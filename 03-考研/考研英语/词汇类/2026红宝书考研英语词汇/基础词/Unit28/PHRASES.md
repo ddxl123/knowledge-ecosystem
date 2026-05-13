@@ -1,32 +1,17 @@
 # Unit 28 短语搭配
 
-- subsequent to 在…之后
-- in substance 实质上
-- a substitute for …的替代品
-- a subtle difference 微妙的差异
-- be sufficient for 对…来说足够
-- it is suggested that 有人建议
-- be suitable for 适合于
-- summarize the situation 总结形势
-- a supplement to …的补充
-- supply and demand 供求关系
-- be supposed to do sth. 应该做某事
-- the Supreme Court 最高法院
-- a surge in …的激增
-- a trade surplus 贸易顺差
-- surrender to 屈服于
-- survive on 靠…存活
-- be suspected of 有…嫌疑
-- suspend operations 暂停运营
-- sustain growth 维持增长
-- a sustainable development 可持续发展
-- swap…for 用…交换
-- a swift response 迅速的反应
-- swing between 在…之间摇摆
-- switch to 转换到
-- a symbol of …的象征
-- sympathize with 同情
-- flu symptoms 流感症状
-- tackle a problem 解决问题
-- set a target 设定目标
-- a target audience 目标受众
+
+## 核心概念
+
+### 条目描述
+2026红宝书考研英语词汇中基础词 Unit28的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

@@ -29,3 +29,12 @@
 8. Derivatives（衍生品）
 9. Alternative Investments（另类投资）
 10. Portfolio Management（投资组合管理）
+
+## 适用人群
+- 备考相关考试的考生
+- 相关专业学生和从业人员
+
+## 学习建议
+- 按照考试大纲系统学习各科目
+- 重点突破高频考点
+- 配合真题和模拟题巩固知识

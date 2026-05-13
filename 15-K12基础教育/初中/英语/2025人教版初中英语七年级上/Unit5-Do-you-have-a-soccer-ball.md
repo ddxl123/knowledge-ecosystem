@@ -68,3 +68,30 @@ A: Well, let's play volleyball!
 B: That sounds good. Do you have a volleyball?
 A: No, I don't. Does your brother Alan have one?
 B: Yes, he does. Let's go!
+
+## 核心概念
+
+### 概述
+
+**Unit 5: Do you have a soccer ball?** 是英语学科中的语言知识模块，涉及词汇、语法、听说读写等语言技能。
+
+### 知识结构
+
+本部分内容按以下结构组织：
+
+1. **重点词汇**
+2. **核心句型**
+3. **语法要点**
+4. **对话范例**
+
+### 关键概念
+
+- has /hæz/ 有（第三人称单数）
+- get /ɡet/ 去取（或带来）
+- play /pleɪ/ 参加（比赛或运动）
+
+### 学习要点
+
+- 在语境中学习词汇和语法
+- 注重听说读写的综合训练
+- 多读多听，培养语感

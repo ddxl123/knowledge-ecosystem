@@ -1,31 +1,17 @@
 # Unit 18 短语搭配
 
-- native language 母语
-- navigate through 穿越
-- a negative attitude 消极态度
-- in the negative 否定地
-- neglect one's duty 玩忽职守
-- negotiate with 与…谈判
-- neutral position 中立立场
-- social norms 社会规范
-- a notable achievement 显著成就
-- a novel idea 新颖的想法
-- nuclear weapons 核武器
-- numerous times 许多次
-- obey the rules 遵守规则
-- achieve one's objective 实现目标
-- be under an obligation to do sth. 有义务做某事
-- feel obliged to do sth. 觉得有必要做某事
-- observe the rules 遵守规则
-- an obstacle to …的障碍
-- overcome an obstacle 克服障碍
-- obtain information 获得信息
-- it is obvious that 很明显
-- be occupied with 忙于
-- it occurs to sb. that 某人想到
-- against all odds 尽管困难重重
-- offend against 违犯
-- offset the losses 抵消损失
-- an ongoing process 一个持续的过程
-- seize the opportunity 抓住机会
-- oppose doing sth. 反对做某事
+
+## 核心概念
+
+### 条目描述
+2026红宝书考研英语词汇中基础词 Unit18的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

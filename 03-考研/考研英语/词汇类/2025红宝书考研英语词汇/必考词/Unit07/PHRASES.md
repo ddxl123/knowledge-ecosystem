@@ -1,48 +1,17 @@
 # Unit 07 短语搭配
 
-- cultivate one's mind 陶冶心智
-- a cure for …的治疗方法
-- out of curiosity 出于好奇心
-- be curious about 对…好奇
-- current affairs 时事
-- the current situation 当前形势
-- curriculum vitae (CV) 简历
-- customs and traditions 风俗与传统
-- business cycle 商业周期
-- do/cause damage to 对…造成损害
-- dash one's hopes 使某人的希望破灭
-- data analysis 数据分析
-- at dawn 在黎明时分
-- meet the deadline 赶在截止日期前
-- beyond the deadline 超过截止期限
-- a heated debate 激烈的辩论
-- debate on/about 就…辩论
-- for decades 数十年来
-- fall into decay 衰败
-- deceive sb. into doing sth. 骗某人做某事
-- a decent salary 像样的薪水
-- declare war on 对…宣战
-- decline to do sth. 拒绝做某句
-- on the decline 在下降中
-- decorate…with 用…装饰
-- on the decrease 在减少中
-- dedicate oneself to 献身于
-- defeat the purpose 达不到目的
-- defend against 防御；保卫
-- define…as 把…定义为
-- in defiance of 无视；不顾
-- without delay 立即；毫不耽搁
-- a deliberate attempt 故意的企图
-- a delicate balance 微妙的平衡
-- deliver a speech 发表演讲
-- deliver on one's promises 兑现承诺
-- in demand 有需求的
-- meet the demand 满足需求
-- demonstrate against 示威反对
-- deny doing sth. 否认做某事
-- depart from 离开；背离
-- depend on 依赖；取决于
-- that depends 视情况而定
-- deploy resources 配置资源
-- deposit account 定期存款账户
-- depress the economy 使经济萧条
+
+## 核心概念
+
+### 条目描述
+2025红宝书考研英语词汇中必考词 Unit07的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

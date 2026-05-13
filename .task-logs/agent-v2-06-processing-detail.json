@@ -1,0 +1,1105 @@
+{
+  "summary": {
+    "A": 182,
+    "B": 35,
+    "C": 2,
+    "errors": 0
+  },
+  "entries": [
+    {
+      "file": "09-计算机IT/INDEX.md",
+      "type": "C",
+      "action": "optimized"
+    },
+    {
+      "file": "09-计算机IT/Linux/2025鸟哥的Linux私房菜/01-文件权限.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/Linux/2025鸟哥的Linux私房菜/02-进程管理.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/Linux/2025鸟哥的Linux私房菜/03-网络.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/Linux/2025鸟哥的Linux私房菜/04-Shell.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/Linux/2025鸟哥的Linux私房菜/05-服务.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/Linux/2025鸟哥的Linux私房菜/BOOK-INFO.md",
+      "type": "B",
+      "action": "no_change"
+    },
+    {
+      "file": "09-计算机IT/云计算/2025Docker容器化实战/01-镜像.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/云计算/2025Docker容器化实战/02-容器.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/云计算/2025Docker容器化实战/03-网络.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/云计算/2025Docker容器化实战/04-存储.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/云计算/2025Docker容器化实战/05-Compose.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/云计算/2025Docker容器化实战/06-K8s.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/云计算/2025Docker容器化实战/BOOK-INFO.md",
+      "type": "B",
+      "action": "no_change"
+    },
+    {
+      "file": "09-计算机IT/人工智能/2025深度学习入门/01-神经网络.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/人工智能/2025深度学习入门/02-CNN.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/人工智能/2025深度学习入门/03-RNN.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/人工智能/2025深度学习入门/04-Transformer.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/人工智能/2025深度学习入门/05-PyTorch.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/人工智能/2025深度学习入门/BOOK-INFO.md",
+      "type": "B",
+      "action": "no_change"
+    },
+    {
+      "file": "09-计算机IT/前端开发/2025React实战/01-组件.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/前端开发/2025React实战/02-Hook.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/前端开发/2025React实战/03-路由.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/前端开发/2025React实战/04-状态管理.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/前端开发/2025React实战/05-Next.js.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/前端开发/2025React实战/BOOK-INFO.md",
+      "type": "B",
+      "action": "no_change"
+    },
+    {
+      "file": "09-计算机IT/前端开发/2025Vue.js实战/01-模板语法.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/前端开发/2025Vue.js实战/02-组件.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/前端开发/2025Vue.js实战/03-路由.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/前端开发/2025Vue.js实战/04-状态管理.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/前端开发/2025Vue.js实战/05-构建.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/前端开发/2025Vue.js实战/BOOK-INFO.md",
+      "type": "B",
+      "action": "no_change"
+    },
+    {
+      "file": "09-计算机IT/前端开发/2026Vue.js实战/01-模板语法.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/前端开发/2026Vue.js实战/02-组件.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/前端开发/2026Vue.js实战/03-路由.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/前端开发/2026Vue.js实战/04-状态管理.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/前端开发/2026Vue.js实战/05-构建.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/前端开发/2026Vue.js实战/BOOK-INFO.md",
+      "type": "B",
+      "action": "enhanced"
+    },
+    {
+      "file": "09-计算机IT/后端开发/2025Django实战/01-模型.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/后端开发/2025Django实战/02-视图.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/后端开发/2025Django实战/03-模板.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/后端开发/2025Django实战/04-表单.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/后端开发/2025Django实战/05-REST.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/后端开发/2025Django实战/06-部署.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/后端开发/2025Django实战/BOOK-INFO.md",
+      "type": "B",
+      "action": "no_change"
+    },
+    {
+      "file": "09-计算机IT/后端开发/2025Node.js实战/01-Express.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/后端开发/2025Node.js实战/02-数据库.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/后端开发/2025Node.js实战/03-认证.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/后端开发/2025Node.js实战/04-实时.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/后端开发/2025Node.js实战/05-测试.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/后端开发/2025Node.js实战/BOOK-INFO.md",
+      "type": "B",
+      "action": "no_change"
+    },
+    {
+      "file": "09-计算机IT/后端开发/2025Spring Boot实战/01-核心概念.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/后端开发/2025Spring Boot实战/02-数据访问.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/后端开发/2025Spring Boot实战/03-安全.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/后端开发/2025Spring Boot实战/04-REST.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/后端开发/2025Spring Boot实战/05-测试.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/后端开发/2025Spring Boot实战/BOOK-INFO.md",
+      "type": "B",
+      "action": "no_change"
+    },
+    {
+      "file": "09-计算机IT/后端开发/2026Spring Boot实战/01-核心.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/后端开发/2026Spring Boot实战/02-数据访问.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/后端开发/2026Spring Boot实战/03-安全.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/后端开发/2026Spring Boot实战/04-REST.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/后端开发/2026Spring Boot实战/05-测试.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/后端开发/2026Spring Boot实战/BOOK-INFO.md",
+      "type": "B",
+      "action": "enhanced"
+    },
+    {
+      "file": "09-计算机IT/数据库/2025MySQL从入门到精通/01-SQL语法.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/数据库/2025MySQL从入门到精通/02-索引.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/数据库/2025MySQL从入门到精通/03-事务.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/数据库/2025MySQL从入门到精通/04-锁.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/数据库/2025MySQL从入门到精通/05-优化.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/数据库/2025MySQL从入门到精通/06-备份.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/数据库/2025MySQL从入门到精通/BOOK-INFO.md",
+      "type": "B",
+      "action": "no_change"
+    },
+    {
+      "file": "09-计算机IT/数据科学/2025数据分析实战/01-Pandas.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/数据科学/2025数据分析实战/02-可视化.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/数据科学/2025数据分析实战/03-统计.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/数据科学/2025数据分析实战/04-机器学习.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/数据科学/2025数据分析实战/05-实战项目.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/数据科学/2025数据分析实战/BOOK-INFO.md",
+      "type": "B",
+      "action": "no_change"
+    },
+    {
+      "file": "09-计算机IT/游戏开发/2025Unity游戏开发/01-CSharp.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/游戏开发/2025Unity游戏开发/02-场景.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/游戏开发/2025Unity游戏开发/03-物理.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/游戏开发/2025Unity游戏开发/04-动画.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/游戏开发/2025Unity游戏开发/05-UI.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/游戏开发/2025Unity游戏开发/06-发布.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/游戏开发/2025Unity游戏开发/BOOK-INFO.md",
+      "type": "B",
+      "action": "no_change"
+    },
+    {
+      "file": "09-计算机IT/算法/2025算法导论精要/01-排序.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/算法/2025算法导论精要/02-搜索.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/算法/2025算法导论精要/03-图算法.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/算法/2025算法导论精要/04-动态规划.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/算法/2025算法导论精要/05-贪心.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/算法/2025算法导论精要/06-NP完全.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/算法/2025算法导论精要/BOOK-INFO.md",
+      "type": "B",
+      "action": "no_change"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025C++从入门到精通/01-基础语法.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025C++从入门到精通/02-面向对象.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025C++从入门到精通/03-STL.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025C++从入门到精通/04-模板.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025C++从入门到精通/05-异常.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025C++从入门到精通/06-文件.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025C++从入门到精通/BOOK-INFO.md",
+      "type": "B",
+      "action": "no_change"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025Go语言从入门到精通/01-基础语法.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025Go语言从入门到精通/02-并发编程.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025Go语言从入门到精通/03-网络编程.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025Go语言从入门到精通/04-Web开发.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025Go语言从入门到精通/05-微服务.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025Go语言从入门到精通/BOOK-INFO.md",
+      "type": "B",
+      "action": "no_change"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025JavaScript从入门到精通/01-基础语法.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025JavaScript从入门到精通/02-DOM.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025JavaScript从入门到精通/03-BOM.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025JavaScript从入门到精通/04-ES6+.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025JavaScript从入门到精通/05-异步.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025JavaScript从入门到精通/06-模块.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025JavaScript从入门到精通/BOOK-INFO.md",
+      "type": "B",
+      "action": "no_change"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025Java从入门到精通/01-基础语法.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025Java从入门到精通/02-面向对象.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025Java从入门到精通/03-集合.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025Java从入门到精通/04-IO.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025Java从入门到精通/05-多线程.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025Java从入门到精通/06-网络.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025Java从入门到精通/BOOK-INFO.md",
+      "type": "B",
+      "action": "no_change"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025Kotlin实战/01-基础语法.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025Kotlin实战/02-协程.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025Kotlin实战/03-Android.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025Kotlin实战/04-Ktor.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025Kotlin实战/BOOK-INFO.md",
+      "type": "B",
+      "action": "no_change"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025PHP从入门到精通/01-基础语法.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025PHP从入门到精通/02-面向对象.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025PHP从入门到精通/03-Web.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025PHP从入门到精通/04-数据库.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025PHP从入门到精通/05-Laravel.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025PHP从入门到精通/BOOK-INFO.md",
+      "type": "B",
+      "action": "no_change"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025Rust编程之道/01-所有权.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025Rust编程之道/02-生命周期.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025Rust编程之道/03-并发.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025Rust编程之道/04-智能指针.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025Rust编程之道/05-错误处理.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025Rust编程之道/BOOK-INFO.md",
+      "type": "B",
+      "action": "no_change"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025Swift编程指南/01-基础语法.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025Swift编程指南/02-面向对象.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025Swift编程指南/03-UIKit.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025Swift编程指南/04-SwiftUI.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025Swift编程指南/05-网络.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025Swift编程指南/BOOK-INFO.md",
+      "type": "B",
+      "action": "no_change"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025黑马程序员Python教程/BOOK-INFO.md",
+      "type": "B",
+      "action": "no_change"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025黑马程序员Python教程/函数.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025黑马程序员Python教程/基础语法.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025黑马程序员Python教程/异常处理.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025黑马程序员Python教程/文件操作.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025黑马程序员Python教程/模块.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2025黑马程序员Python教程/面向对象.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2026Java从入门到精通/01-基础语法.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2026Java从入门到精通/02-面向对象.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2026Java从入门到精通/03-集合.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2026Java从入门到精通/04-IO.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2026Java从入门到精通/05-多线程.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2026Java从入门到精通/06-网络.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2026Java从入门到精通/BOOK-INFO.md",
+      "type": "B",
+      "action": "enhanced"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2026Python从入门到精通/01-基础语法.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2026Python从入门到精通/02-函数.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2026Python从入门到精通/03-面向对象.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2026Python从入门到精通/04-文件.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2026Python从入门到精通/05-异常.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2026Python从入门到精通/06-模块.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/编程语言/2026Python从入门到精通/BOOK-INFO.md",
+      "type": "B",
+      "action": "no_change"
+    },
+    {
+      "file": "09-计算机IT/网络安全/2025Web安全攻防/01-SQL注入.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/网络安全/2025Web安全攻防/02-XSS.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/网络安全/2025Web安全攻防/03-CSRF.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/网络安全/2025Web安全攻防/04-文件上传.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/网络安全/2025Web安全攻防/05-渗透测试.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/网络安全/2025Web安全攻防/06-安全防御.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "09-计算机IT/网络安全/2025Web安全攻防/BOOK-INFO.md",
+      "type": "B",
+      "action": "no_change"
+    },
+    {
+      "file": "07-日语/INDEX.md",
+      "type": "C",
+      "action": "optimized"
+    },
+    {
+      "file": "07-日语/JLPT/N1/2025红宝书N1词汇/BOOK-INFO.md",
+      "type": "B",
+      "action": "no_change"
+    },
+    {
+      "file": "07-日语/JLPT/N1/2025红宝书N1词汇/单元1-社会与政治.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N1/2025红宝书N1词汇/单元2-文化与艺术.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N1/2025红宝书N1词汇/单元3-科学与技术.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N1/2025红宝书N1词汇/单元4-情感与心理.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N1/2025红宝书N1词汇/单元5-抽象概念与高频动词.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N1/2025蓝宝书N1语法/BOOK-INFO.md",
+      "type": "B",
+      "action": "no_change"
+    },
+    {
+      "file": "07-日语/JLPT/N1/2025蓝宝书N1语法/单元1-基础语法接续.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N1/2025蓝宝书N1语法/单元2-原因理由表达.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N1/2025蓝宝书N1语法/单元3-时间场合表达.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N1/2025蓝宝书N1语法/单元4-程度范围表达.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N1/2025蓝宝书N1语法/单元5-立场观点表达.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N1/2025蓝宝书N1语法/单元6-可能否定限定表达.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N1/2025蓝宝书N1语法/单元7-敬语与书面表达.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N2/2025新完全掌握N2听力/BOOK-INFO.md",
+      "type": "B",
+      "action": "no_change"
+    },
+    {
+      "file": "07-日语/JLPT/N2/2025新完全掌握N2听力/场景训练.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N2/2025新完全掌握N2听力/技巧总结.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N2/2025新完全掌握N2听力/题型训练.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N2/2025新完全掌握N2阅读/BOOK-INFO.md",
+      "type": "B",
+      "action": "no_change"
+    },
+    {
+      "file": "07-日语/JLPT/N2/2025新完全掌握N2阅读/信息检索.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N2/2025新完全掌握N2阅读/短文阅读.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N2/2025新完全掌握N2阅读/长文阅读.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N2/2025红宝书N2词汇/BOOK-INFO.md",
+      "type": "B",
+      "action": "no_change"
+    },
+    {
+      "file": "07-日语/JLPT/N2/2025红宝书N2词汇/单元01-社会生活.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N2/2025红宝书N2词汇/单元02-科技信息.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N2/2025红宝书N2词汇/单元03-文化教育.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N2/2025红宝书N2词汇/单元04-情感心理.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N2/2025红宝书N2词汇/单元05-复合动词.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N2/2025蓝宝书N2语法/BOOK-INFO.md",
+      "type": "B",
+      "action": "no_change"
+    },
+    {
+      "file": "07-日语/JLPT/N2/2025蓝宝书N2语法/单元01-原因理由.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N2/2025蓝宝书N2语法/单元02-条件表达.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N2/2025蓝宝书N2语法/单元03-限定追加.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N2/2025蓝宝书N2语法/单元04-可能不可能.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N2/2025蓝宝书N2语法/单元05-倾向状态.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N2/2025蓝宝书N2语法/单元06-敬语表达.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N2/2025蓝宝书N2语法/单元07-书面语.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N2/2026蓝宝书N2语法/BOOK-INFO.md",
+      "type": "B",
+      "action": "no_change"
+    },
+    {
+      "file": "07-日语/JLPT/N2/2026蓝宝书N2语法/单元1-基础语法接续.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N2/2026蓝宝书N2语法/单元2-原因理由表达.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N2/2026蓝宝书N2语法/单元3-时间场合表达.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N2/2026蓝宝书N2语法/单元4-程度范围表达.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N2/2026蓝宝书N2语法/单元5-立场观点表达.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N2/2026蓝宝书N2语法/单元6-可能否定限定表达.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N2/2026蓝宝书N2语法/单元7-敬语与书面表达.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N3/2025新版标准日本语中级/BOOK-INFO.md",
+      "type": "B",
+      "action": "no_change"
+    },
+    {
+      "file": "07-日语/JLPT/N3/2025新版标准日本语中级/上册/上册总览.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N3/2025新版标准日本语中级/下册/下册总览.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N5-N4/2025新版标准日本语初级/BOOK-INFO.md",
+      "type": "B",
+      "action": "no_change"
+    },
+    {
+      "file": "07-日语/JLPT/N5-N4/2025新版标准日本语初级/上册/上册总览.md",
+      "type": "A",
+      "action": "upgraded"
+    },
+    {
+      "file": "07-日语/JLPT/N5-N4/2025新版标准日本语初级/下册/下册总览.md",
+      "type": "A",
+      "action": "upgraded"
+    }
+  ]
+}

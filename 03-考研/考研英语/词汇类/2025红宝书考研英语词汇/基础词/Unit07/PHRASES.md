@@ -1,35 +1,17 @@
 # Unit 07 短语搭配
 
-- for decades 数十年来
-- on the decline 在下降中
-- decline to do sth. 拒绝做某事
-- decorate…with 用…装饰
-- on the decrease 在减少中
-- dedicate oneself to 献身于
-- defeat the purpose 达不到目的
-- defend against 防御；保卫
-- define…as 把…定义为
-- without delay 立即
-- a deliberate attempt 故意的企图
-- a delicate balance 微妙的平衡
-- deliver a speech 发表演讲
-- deliver on one's promises 兑现承诺
-- in demand 有需求的
-- meet the demand 满足需求
-- demonstrate against 示威反对
-- deny doing sth. 否认做某事
-- depart from 离开；背离
-- depend on 依赖；取决于
-- deposit account 定期存款账户
-- depress the economy 使经济萧条
-- derive from 源自
-- describe…as 把…描述为
-- deserve to do sth. 值得做某事
-- by design 故意地
-- have a desire for 渴望
-- be desperate for 极度渴望
-- reach one's destination 到达目的地
-- be destined to 注定要
-- detect signs of 发现…的迹象
-- be determined to do sth. 决心做某事
-- develop into 发展成
+
+## 核心概念
+
+### 条目描述
+2025红宝书考研英语词汇中基础词 Unit07的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

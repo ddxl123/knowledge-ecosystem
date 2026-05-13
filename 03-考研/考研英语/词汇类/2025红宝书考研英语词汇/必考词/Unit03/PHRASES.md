@@ -1,45 +1,17 @@
 # Unit 03 短语搭配
 
-- a bachelor's degree 学士学位
-- backward and forward 来来回回
-- keep/lose one's balance 保持/失去平衡
-- on balance 总的来说
-- ban sb. from doing sth. 禁止某人做某事
-- a bargain price 廉价
-- drive a hard bargain 极力讨价还价
-- a barrier to …的障碍
-- on behalf of 代表；为了
-- behave oneself 守规矩
-- be beneficial to 对…有益
-- betray one's trust 辜负某人的信任
-- have a bias against/toward 对…有偏见
-- bid for 投标；竞标
-- bind sb. to sth. 约束某人做某事
-- be to blame 该受责备
-- blame sb. for sth. 因某事责备某人
-- at full blast 全力以赴地
-- blaze a trail 开拓道路
-- blend in 融入；混合
-- block off 封锁；阻塞
-- in bloom 开花
-- boast of/about 吹嘘
-- a bond of 纽带
-- economic boom 经济繁荣
-- boost one's confidence 增强信心
-- on the border of 在…的边界
-- be bored with 对…感到厌烦
-- be bound to 一定会
-- out of bounds 越界；禁止入内
-- branch out 扩展业务范围
-- brand new 崭新的
-- make a breakthrough 取得突破
-- breed contempt 招致蔑视
-- in brief 简而言之
-- be broad-minded 心胸开阔的
-- on a budget 预算有限
-- in bulk 大量地；批发
-- the bulk of 大部分
-- a burden on/to 对…的负担
-- burst into 突然…起来
-- burst out 突然说出
-- launch a campaign 发起运动
+
+## 核心概念
+
+### 条目描述
+2025红宝书考研英语词汇中必考词 Unit03的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

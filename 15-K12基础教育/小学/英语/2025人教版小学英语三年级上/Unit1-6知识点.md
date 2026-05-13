@@ -142,3 +142,26 @@ B: Thank you! How old are you?
 A: I'm nine.
 B: I'm eight. How many gifts do you have?
 A: I have ten!
+
+## 核心概念
+
+### 概述
+
+**小学英语三年级上 Unit 1-6 知识点** 是英语学科中的语言知识模块，涉及词汇、语法、听说读写等语言技能。
+
+### 知识结构
+
+本部分内容按以下结构组织：
+
+1. **Unit 1: Hello!**
+2. **Unit 2: Colours**
+3. **Unit 3: Look at me**
+4. **Unit 4: We love animals**
+5. **Unit 5: Let's eat**
+6. **Unit 6: Happy birthday**
+
+### 学习要点
+
+- 在语境中学习词汇和语法
+- 注重听说读写的综合训练
+- 多读多听，培养语感

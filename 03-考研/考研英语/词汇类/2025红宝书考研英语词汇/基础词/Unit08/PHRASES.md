@@ -1,35 +1,17 @@
 # Unit 08 短语搭配
 
-- devote oneself to 献身于
-- be devoted to 致力于；深爱
-- with dignity 有尊严地
-- the third dimension 第三维
-- diploma in …的文凭
-- direct at/against 针对
-- under the direction of 在…的指导下
-- maintain discipline 维持纪律
-- at a discount 打折
-- dismiss…as 认为…而不予理会
-- on display 展出
-- settle a dispute 解决争端
-- beyond/without dispute 无可争辩
-- dissolve in 溶解于
-- be distinct from 与…不同
-- distinguish between 区分
-- distinguish…from 把…与…区分开
-- distribute…to/among 分配给
-- do not disturb 请勿打扰
-- cultural diversity 文化多样性
-- domestic market 国内市场
-- domestic violence 家庭暴力
-- dominant position 主导地位
-- donate…to 捐赠给
-- a rough draft 粗略的草稿
-- dramatic change 巨大的变化
-- due to 由于；因为
-- in due course 在适当的时候
-- dull pain 隐痛
-- durable goods 耐用品
-- dwell on 详述；细想
-- dynamic economy 动态经济
-- be eager to do sth. 渴望做某事
+
+## 核心概念
+
+### 条目描述
+2025红宝书考研英语词汇中基础词 Unit08的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

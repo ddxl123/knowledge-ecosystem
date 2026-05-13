@@ -1,51 +1,17 @@
 # Unit 02 短语搭配
 
-- by/from all accounts 据大家所说
-- on an annual basis 每年一次地
-- anticipate doing sth. 预期做某事
-- be apparent to sb. 对某人来说很明显
-- appeal to 呼吁；吸引；上诉
-- appeal for 恳求；请求
-- applaud sb. for sth. 因…而称赞某人
-- apply to 适用于；应用于
-- apply for 申请
-- apply oneself to 致力于
-- appoint sb. as/to be 任命某人为
-- appreciate doing sth. 感激做某事
-- approach to …的方法
-- at the approach of 在…快到的时候
-- be appropriate for/to 适合于
-- approve of 赞成；同意
-- arise from/out of 由…引起；产生于
-- arouse one's interest/curiosity 激起兴趣/好奇心
-- arrange for 安排
-- come to an arrangement 达成安排
-- under arrest 被逮捕
-- artificial intelligence 人工智能
-- in all aspects 在各方面
-- from every aspect 从每个方面
-- assault on 对…的攻击
-- assemble in/at 在…集合
-- assert oneself 坚持自己的权利
-- assess sth. at 评估…为
-- assign sth. to sb. 把…分配给某人
-- assist sb. in/with sth. 帮助某人做某事
-- associate with 与…交往；与…联系
-- be associated with 与…有关联
-- assume responsibility 承担责任
-- on the assumption that 假设
-- assure sb. of sth. 向某人保证某事
-- be attached to 附属于；依恋于
-- attach importance to 重视
-- attain one's goal 达到目标
-- in an attempt to 试图
-- attend to 处理；照料
-- attend on/upon 伺候；照料
-- attribute sth. to sth. 把…归因于
-- be attributed to 归因于
-- the authorities concerned 有关当局
-- have authority over 对…有管辖权
-- be available to/for 可供…使用
-- avoid doing sth. 避免做某事
-- be aware of 意识到
-- raise awareness 提高意识
+
+## 核心概念
+
+### 条目描述
+2025红宝书考研英语词汇中必考词 Unit02的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

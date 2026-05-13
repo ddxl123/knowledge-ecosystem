@@ -1,24 +1,17 @@
 # 高频词汇 List10 - 短语搭配
 
-| 短语 | 释义 | 例句 |
-|------|------|------|
-| have an effect on | 对…有影响 | The weather has an effect on our mood. |
-| put...into effect | 使…生效 | The new law was put into effect last month. |
-| elaborate on | 详细阐述 | Could you elaborate on this point? |
-| eliminate...from... | 从…中消除 | We need to eliminate errors from the data. |
-| embrace the opportunity | 抓住机会 | She embraced the opportunity to study abroad. |
-| emerge from | 从…出现 | The sun emerged from behind the clouds. |
-| place/lay emphasis on | 强调 | The school lays emphasis on practical skills. |
-| be employed in | 从事于 | She is employed in the financial sector. |
-| enable sb. to do | 使某人能够做 | The scholarship enabled her to attend college. |
-| encounter difficulties | 遇到困难 | We may encounter difficulties along the way. |
-| encourage sb. to do | 鼓励某人做 | The teacher encouraged students to ask questions. |
-| engage in | 从事；参与 | He engages in volunteer work on weekends. |
-| be engaged to | 与…订婚 | She is engaged to her college sweetheart. |
-| ensure that | 确保 | Ensure that you have all the documents ready. |
-| entertain the idea of | 考虑…的想法 | He entertained the idea of moving abroad. |
-| be essential for/to | 对…必不可少 | Sleep is essential for good health. |
-| be equal to | 等于；胜任 | He is equal to the task. |
-| on equal terms | 在平等的条件下 | The two teams competed on equal terms. |
-| be equipped with | 装备有 | The lab is equipped with modern instruments. |
-| escape from | 从…逃脱 | The bird escaped from the cage. |
+
+## 核心概念
+
+### 条目描述
+2025恋练有词中高频词汇 List10的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

@@ -1,35 +1,17 @@
 # Unit 15 短语搭配
 
-- gain insight into 深入了解
-- insist on/upon 坚持
-- inspect…for 检查…是否有
-- draw inspiration from 从…获取灵感
-- install confidence 树立信心
-- for instance 例如
-- by instinct 凭本能
-- an institution of higher learning 高等院校
-- instruct sb. to do sth. 指示某人做某事
-- play an instrument 演奏乐器
-- be instrumental in 在…方面起关键作用
-- add insult to injury 雪上加霜
-- health insurance 健康保险
-- intellectual property 知识产权
-- artificial intelligence 人工智能
-- have the intention of 有…的打算
-- with the intention of 抱着…的目的
-- intense competition 激烈的竞争
-- interact with 与…互动
-- interfere with/in 干涉；妨碍
-- internal affairs 内部事务
-- interpret…as 把…理解为
-- at intervals 每隔一段时间
-- at regular intervals 以固定的间隔
-- intimate knowledge 深入的了解
-- invade one's privacy 侵犯隐私
-- investigate into 调查
-- invest in 投资于
-- be involved in 参与；涉及
-- in isolation 孤立地
-- raise the issue 提出问题
-- issue a statement 发表声明
-- be keen on 热衷于
+
+## 核心概念
+
+### 条目描述
+2026红宝书考研英语词汇中基础词 Unit15的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

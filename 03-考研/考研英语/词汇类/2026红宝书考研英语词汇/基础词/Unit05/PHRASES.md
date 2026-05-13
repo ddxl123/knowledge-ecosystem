@@ -1,37 +1,17 @@
 # Unit 05 短语搭配
 
-- comprehensive review 全面审查
-- reach a compromise 达成妥协
-- compulsory education 义务教育
-- concentrate on 集中精力于
-- as far as…is concerned 就…而言
-- be concerned about 关心；担忧
-- in conclusion 总之
-- draw a conclusion 得出结论
-- concrete measures 具体措施
-- conduct a survey 进行调查
-- confess to doing sth. 承认做了某事
-- have confidence in 对…有信心
-- with confidence 自信地
-- confirm one's reservation 确认预订
-- in conflict with 与…冲突
-- confront sb. with sth. 使某人面对某事
-- confuse A with B 把A和B混淆
-- be conscious of 意识到
-- in consequence of 由于…的缘故
-- take the consequences 承担后果
-- a considerable number of 相当多的
-- consist of 由…组成
-- consist in 在于
-- be consistent with 与…一致
-- at a constant speed 以恒定速度
-- be composed of 由…组成
-- under construction 在建设中
-- consult with sb. 与某人商量
-- consumer goods 消费品
-- be in contact with 与…有联系
-- contain oneself 克制自己
-- contemporary art 当代艺术
-- be content with 对…满足
-- sign a contract 签订合同
-- contribute to 有助于；促成
+
+## 核心概念
+
+### 条目描述
+2026红宝书考研英语词汇中基础词 Unit05的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

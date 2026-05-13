@@ -1,32 +1,17 @@
 # Unit 30 短语搭配
 
-- political discourse 政治话语
-- discrete categories 离散类别
-- racial discrimination 种族歧视
-- displace people 迫使人们流离失所
-- dispose of 处理；丢弃
-- disrupt the system 扰乱系统
-- dissolve in 溶解于
-- be distinct from 与…不同
-- distort the truth 歪曲真相
-- distribute…to 分配给
-- cultural diversity 文化多样性
-- religious doctrine 宗教教义
-- in the domain of 在…领域
-- domestic market 国内市场
-- dominant position 主导地位
-- donate…to 捐赠给
-- in doses of 以…的剂量
-- a rough draft 粗略草稿
-- dramatic change 巨大的变化
-- for the duration of 在…期间
-- dynamic economy 动态经济
-- elaborate on 详细阐述
-- eliminate…from 从…中消除
-- embrace change 拥抱变化
-- empirical evidence 经验证据
-- enact a law 颁布法律
-- an encounter with 与…的相遇
-- endorse a candidate 支持候选人
-- enhance competitiveness 提高竞争力
-- entail risks 带来风险
+
+## 核心概念
+
+### 条目描述
+2025红宝书考研英语词汇中必考词 Unit30的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

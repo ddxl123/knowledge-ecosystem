@@ -1,34 +1,17 @@
 # Unit 23 短语搭配
 
-- in recognition of 为表彰
-- recommend sth. to sb. 向某人推荐某物
-- recover from 从…恢复
-- recruit new members 招募新成员
-- reduce…to 把…减少到
-- refer to 提到；参考
-- reflect on/upon 思考；反省
-- carry out reforms 实施改革
-- refuse to do sth. 拒绝做某事
-- with regard to 关于
-- regardless of 不管；不顾
-- register for 登记；注册
-- regulations on 关于…的规定
-- reject a proposal 拒绝提议
-- be related to 与…有关
-- in relation to 关于；涉及
-- release a statement 发表声明
-- be relevant to 与…相关
-- a reliable source 可靠的消息来源
-- to one's relief 令某人欣慰的是
-- be reluctant to do sth. 不情愿做某事
-- rely on 依赖；信赖
-- remain silent 保持沉默
-- a remarkable achievement 了不起的成就
-- a remedy for …的治疗方法
-- in remote areas 在偏远地区
-- render…useless 使…无用
-- renew one's subscription 续订
-- replace…with 用…代替
-- represent…as 把…描绘成
-- have a reputation for 以…闻名
-- make a request for 请求
+
+## 核心概念
+
+### 条目描述
+2025红宝书考研英语词汇中基础词 Unit23的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

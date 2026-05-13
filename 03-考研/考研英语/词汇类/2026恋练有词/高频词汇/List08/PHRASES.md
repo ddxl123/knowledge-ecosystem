@@ -1,24 +1,17 @@
 # 高频词汇 List08 - 短语搭配
 
-| 短语 | 释义 | 例句 |
-|------|------|------|
-| depart from | 离开；背离 | The new policy departs from tradition. |
-| depend on/upon | 依赖；取决于 | The outcome depends on your effort. |
-| be dependent on | 依赖于 | Children are dependent on their parents. |
-| deprive sb. of sth. | 剥夺某人某物 | The war deprived them of their homeland. |
-| derive from | 源自于 | The custom derives from ancient traditions. |
-| be described as | 被描述为 | He is described as a genius. |
-| deserve to do | 值得做 | You deserve to be happy. |
-| be designed for | 为…而设计 | The course is designed for beginners. |
-| be desperate for | 极度渴望 | She was desperate for a chance to prove herself. |
-| in detail | 详细地 | Please explain the plan in detail. |
-| detect a difference | 发现不同 | It's hard to detect the difference between the two. |
-| be determined to do | 下定决心做 | She is determined to succeed. |
-| devote...to... | 把…奉献给… | He devoted all his energy to the project. |
-| differ from | 与…不同 | His opinion differs from mine. |
-| in disguise | 伪装 | The blessing came in disguise. |
-| at a discount | 打折 | Tickets are available at a discount. |
-| disclose...to... | 向…披露 | He refused to disclose the details to the press. |
-| a moral dilemma | 道德困境 | The issue presents a moral dilemma. |
-| in all dimensions | 在各个方面 | The problem needs to be addressed in all dimensions. |
-| beyond one's dignity | 有失尊严 | Such behavior is beyond his dignity. |
+
+## 核心概念
+
+### 条目描述
+2026恋练有词中高频词汇 List08的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

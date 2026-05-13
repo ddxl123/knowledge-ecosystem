@@ -1,49 +1,17 @@
 # Unit 05 短语搭配
 
-- commit suicide 自杀
-- commit oneself to 致力于；承诺
-- make a commitment to 对…做出承诺
-- communicate with 与…交流
-- communicate sth. to sb. 把…传达给某人
-- the international community 国际社会
-- in company with 与…一起
-- comparable to/with 可与…相比
-- compel sb. to do sth. 迫使某人做某事
-- compensate for 弥补；补偿
-- compete with/against 与…竞争
-- compete for 为…竞争
-- compile a list 编制清单
-- complain about/of 抱怨；投诉
-- complement each other 相辅相成
-- a complex system 复杂系统
-- comply with 遵守；服从
-- be composed of 由…组成
-- reach a compromise 达成妥协
-- compulsory education 义务教育
-- conceal sth. from sb. 对某人隐瞒某事
-- conceive of 想象；构想
-- concentrate on 集中精力于
-- as far as…is concerned 就…而言
-- be concerned about 关心；担忧
-- to conclude 最后
-- in conclusion 总之
-- draw a conclusion 得出结论
-- concrete measures 具体措施
-- condemn sb. for sth. 因…谴责某人
-- conduct a survey 进行调查
-- conduct oneself 为人；表现
-- confer with sb. on/about sth. 与某人商议某事
-- confess to doing sth. 承认做了某事
-- have confidence in 对…有信心
-- with confidence 自信地
-- confine…to 把…限制在
-- confirm one's reservation 确认预订
-- in conflict with 与…冲突
-- come into conflict 发生冲突
-- confront sb. with sth. 使某人面对某事
-- confuse A with B 把A和B混淆
-- be conscious of 意识到
-- by common consent 经一致同意
-- in consequence of 由于…的缘故
-- take the consequences 承担后果
-- conservation of energy 能量守恒
+
+## 核心概念
+
+### 条目描述
+2025红宝书考研英语词汇中必考词 Unit05的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

@@ -1,53 +1,17 @@
 # Unit 09 短语搭配
 
-- a rough draft 粗略的草稿
-- draft a bill 起草法案
-- drag on 拖延
-- dramatic change 巨大的变化
-- draw a conclusion 得出结论
-- draw attention to 引起对…的注意
-- draw on 利用；依靠
-- drift apart 渐行渐远
-- due to 由于；因为
-- in due course 在适当的时候
-- dull pain 隐痛
-- dump on 把…倾倒在
-- a duplicate of …的副本
-- durable goods 耐用品
-- dwell on 详述；细想
-- dynamic economy 动态经济
-- be eager to do sth. 渴望做某事
-- in earnest 认真地；诚挚地
-- at ease 轻松自在
-- with ease 轻而易举地
-- ease one's pain 减轻痛苦
-- echo chamber 回音室（信息茧房）
-- have the edge over 比…有优势
-- on edge 紧张不安
-- the latest edition 最新版
-- educate sb. about 就…教育某人
-- have an effect on 对…有影响
-- in effect 实际上；生效
-- take effect 生效；起作用
-- efficient use of 对…的高效利用
-- elaborate on 详细阐述
-- an element of 一点；少许
-- eliminate…from 从…中消除
-- embrace change 拥抱变化
-- emerge from 从…中浮现
-- emotional intelligence 情商
-- place emphasis on 强调
-- lay emphasis on 着重于
-- employ sb. as 雇用某人担任
-- enable sb. to do sth. 使某人能够做某事
-- an encounter with 与…的相遇
-- encourage sb. to do sth. 鼓励某人做某事
-- endure hardship 忍受艰难
-- be engaged in 从事于
-- be engaged to 与…订婚
-- an enormous amount of 大量的
-- ensure that 确保
-- a state enterprise 国有企业
-- entertain the idea of 怀有…的想法
-- with enthusiasm 热情地
-- the entire world 全世界
+
+## 核心概念
+
+### 条目描述
+2026红宝书考研英语词汇中必考词 Unit09的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分

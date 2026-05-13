@@ -1,34 +1,17 @@
 # Unit 06 短语搭配
 
-- a controversial issue 有争议的问题
-- conventional methods 传统方法
-- convert…into 把…转换成
-- convey a message 传达信息
-- convince sb. of sth. 使某人相信某事
-- cooperate with 与…合作
-- cope with 应对；处理
-- at the core of 在…的核心
-- corporate culture 企业文化
-- correspond to 与…对应
-- correspond with 与…通信；与…一致
-- corrupt practices 腐败行为
-- count on 依靠；指望
-- counterpart in 在…方面的对应者
-- have the courage to do sth. 有勇气做某事
-- crash into 撞上
-- give sb. credit for 为…称赞某人
-- on credit 赊账
-- a crisis of confidence 信心危机
-- be critical of 对…持批评态度
-- at a crucial moment 在关键时刻
-- cultivate one's mind 陶冶心智
-- a cure for …的治疗方法
-- out of curiosity 出于好奇心
-- current affairs 时事
-- the current situation 当前形势
-- customs and traditions 风俗与传统
-- business cycle 商业周期
-- do/cause damage to 对…造成损害
-- data analysis 数据分析
-- meet the deadline 赶在截止日期前
-- a heated debate 激烈的辩论
+
+## 核心概念
+
+### 条目描述
+2026红宝书考研英语词汇中基础词 Unit06的短语搭配列表，收录该单元核心词汇的常见固定搭配和词组。
+
+### 知识结构
+- **搭配类型**：动词+介词、形容词+介词、名词+介词、动词+副词等
+- **短语释义**：短语的中文含义
+- **例句**：典型语境例句
+
+### 待收集原子知识点
+- 短语清单：本单元所有常考短语及其释义
+- 搭配用法：短语的典型语境和搭配方式
+- 易混短语辨析：含义相近短语的区分
