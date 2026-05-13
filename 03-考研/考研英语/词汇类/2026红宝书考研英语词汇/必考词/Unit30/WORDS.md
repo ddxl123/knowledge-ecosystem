@@ -1,0 +1,239 @@
+# Unit 30 单词
+
+## discourse
+- **音标**: /ˈdɪskɔːrs/
+- **词性**: n. v.
+- **释义**: 论述；演讲；话语
+- **例句**: The discourse on climate change has intensified.
+- **近义词**: discussion, conversation, dialogue
+- **派生词**: discursive (adj.)
+
+## discrete
+- **音标**: /dɪˈskriːt/
+- **词性**: adj.
+- **释义**: 分离的；不相关的
+- **例句**: The data can be divided into discrete categories.
+- **近义词**: separate, distinct, individual
+- **派生词**: discretely (adv.), discretion (n.)
+
+## discrimination
+- **音标**: /dɪˌskrɪmɪˈneɪʃn/
+- **词性**: n.
+- **释义**: 歧视；辨别力
+- **例句**: Racial discrimination is prohibited by law.
+- **近义词**: prejudice, bias, differentiation
+- **派生词**: discriminate (v.), discriminatory (adj.)
+
+## displace
+- **音标**: /dɪsˈpleɪs/
+- **词性**: v.
+- **释义**: 取代；迫使离开
+- **例句**: The war displaced millions of people from their homes.
+- **近义词**: replace, remove, relocate
+- **派生词**: displacement (n.), displaced (adj.)
+
+## dispose
+- **音标**: /dɪˈspoʊz/
+- **词性**: v.
+- **释义**: 处理；处置；使倾向于
+- **例句**: How do you dispose of household waste?
+- **近义词**: discard, remove, arrange
+- **派生词**: disposal (n.), disposable (adj.), disposition (n.)
+
+## disrupt
+- **音标**: /dɪsˈrʌpt/
+- **词性**: v.
+- **释义**: 扰乱；破坏
+- **例句**: The storm disrupted transportation across the region.
+- **近义词**: disturb, interrupt, disrupt
+- **派生词**: disruption (n.), disruptive (adj.)
+
+## dissolve
+- **音标**: /dɪˈzɑːlv/
+- **词性**: v.
+- **释义**: 溶解；解散；消失
+- **例句**: Sugar dissolves easily in hot water.
+- **近义词**: melt, disintegrate, break up
+- **派生词**: dissolution (n.)
+
+## distinct
+- **音标**: /dɪˈstɪŋkt/
+- **词性**: adj.
+- **释义**: 明显的；独特的；有区别的
+- **例句**: There is a distinct difference between the two products.
+- **近义词**: clear, obvious, different
+- **派生词**: distinction (n.), distinctive (adj.), distinctly (adv.)
+
+## distort
+- **音标**: /dɪˈstɔːrt/
+- **词性**: v.
+- **释义**: 歪曲；扭曲
+- **例句**: The media sometimes distorts the truth.
+- **近义词**: twist, misrepresent, warp
+- **派生词**: distortion (n.), distorted (adj.)
+
+## distribute
+- **音标**: /dɪˈstrɪbjuːt/
+- **词性**: v.
+- **释义**: 分配；分发；分布
+- **例句**: The charity distributed food to the homeless.
+- **近义词**: allocate, dispense, spread
+- **派生词**: distribution (n.), distributor (n.)
+
+## diverse
+- **音标**: /daɪˈvɜːrs/
+- **词性**: adj.
+- **释义**: 多样的；不同的
+- **例句**: The city has a diverse population from many cultures.
+- **近义词**: varied, different, assorted
+- **派生词**: diversity (n.), diversify (v.)
+
+## doctrine
+- **音标**: /ˈdɑːktrɪn/
+- **词性**: n.
+- **释义**: 教义；学说；主义
+- **例句**: The political doctrine influenced the country's policies.
+- **近义词**: belief, principle, ideology
+- **派生词**: doctrinal (adj.)
+
+## domain
+- **音标**: /doʊˈmeɪn/
+- **词性**: n.
+- **释义**: 领域；领地；域名
+- **例句**: This topic is outside my domain of expertise.
+- **近义词**: field, area, territory
+
+## domestic
+- **音标**: /dəˈmestɪk/
+- **词性**: adj.
+- **释义**: 国内的；家庭的；驯养的
+- **例句**: The domestic economy has shown signs of improvement.
+- **近义词**: internal, national, household
+- **派生词**: domesticate (v.), domestically (adv.)
+
+## dominant
+- **音标**: /ˈdɑːmɪnənt/
+- **词性**: adj.
+- **释义**: 占主导地位的；支配的
+- **例句**: English is the dominant language in international business.
+- **近义词**: prevailing, chief, predominant
+- **派生词**: dominate (v.), dominance (n.)
+
+## donate
+- **音标**: /ˈdoʊneɪt/
+- **词性**: v.
+- **释义**: 捐赠；捐献
+- **例句**: She donated a large sum of money to the charity.
+- **近义词**: give, contribute, bestow
+- **派生词**: donation (n.), donor (n.)
+
+## dose
+- **音标**: /doʊs/
+- **词性**: n.
+- **释义**: 剂量；一剂
+- **例句**: The doctor prescribed a low dose of the medication.
+- **近义词**: dosage, amount, portion
+- **派生词**: dosage (n.)
+
+## draft
+- **音标**: /dræft/
+- **词性**: n. v.
+- **释义**: 草稿；草案；起草
+- **例句**: She submitted the first draft of her essay.
+- **近义词**: sketch, outline, compose
+- **派生词**: drafting (n.), drafter (n.)
+
+## dramatic
+- **音标**: /drəˈmætɪk/
+- **词性**: adj.
+- **释义**: 戏剧性的；引人注目的
+- **例句**: There has been a dramatic change in the weather.
+- **近义词**: striking, impressive, theatrical
+- **派生词**: dramatically (adv.), drama (n.)
+
+## duration
+- **音标**: /duˈreɪʃn/
+- **词性**: n.
+- **释义**: 持续时间
+- **例句**: The duration of the flight is about three hours.
+- **近义词**: length, period, span
+- **派生词**: durable (adj.), during (prep.)
+
+## dynamic
+- **音标**: /daɪˈnæmɪk/
+- **词性**: adj. n.
+- **释义**: 动态的；有活力的；动力
+- **例句**: The company needs a dynamic leader to drive growth.
+- **近义词**: energetic, vigorous, active
+- **派生词**: dynamics (n.), dynamically (adv.)
+
+## elaborate
+- **音标**: /ɪˈlæbərət/
+- **词性**: adj. v.
+- **释义**: 精心制作的；详细阐述
+- **例句**: Could you elaborate on your proposal?
+- **近义词**: detailed, complex, explain
+- **派生词**: elaboration (n.), elaborately (adv.)
+
+## eliminate
+- **音标**: /ɪˈlɪmɪneɪt/
+- **词性**: v.
+- **释义**: 消除；淘汰；排除
+- **例句**: We need to eliminate unnecessary expenses.
+- **近义词**: remove, eradicate, abolish
+- **派生词**: elimination (n.)
+
+## embrace
+- **音标**: /ɪmˈbreɪs/
+- **词性**: v. n.
+- **释义**: 拥抱；接受；包含
+- **例句**: The company decided to embrace new technology.
+- **近义词**: hug, accept, adopt
+- **派生词**: embraceable (adj.)
+
+## empirical
+- **音标**: /ɪmˈpɪrɪkl/
+- **词性**: adj.
+- **释义**: 经验主义的；以实验为根据的
+- **例句**: The theory is supported by empirical evidence.
+- **近义词**: experimental, observed, practical
+- **派生词**: empirically (adv.), empiricism (n.)
+
+## enact
+- **音标**: /ɪˈnækt/
+- **词性**: v.
+- **释义**: 颁布；制定；演出
+- **例句**: The government enacted new legislation to protect the environment.
+- **近义词**: pass, legislate, implement
+- **派生词**: enactment (n.)
+
+## encounter
+- **音标**: /ɪnˈkaʊntər/
+- **词性**: v. n.
+- **释义**: 遇到；遭遇
+- **例句**: We encountered many difficulties during the trip.
+- **近义词**: meet, face, confront
+
+## endorse
+- **音标**: /ɪnˈdɔːrs/
+- **词性**: v.
+- **释义**: 赞同；认可；背书
+- **例句**: The celebrity endorsed the new product.
+- **近义词**: support, approve, recommend
+- **派生词**: endorsement (n.)
+
+## enhance
+- **音标**: /ɪnˈhæns/
+- **词性**: v.
+- **释义**: 提高；增强；改善
+- **例句**: The new software will enhance productivity.
+- **近义词**: improve, boost, increase
+- **派生词**: enhancement (n.)
+
+## entail
+- **音标**: /ɪnˈteɪl/
+- **词性**: v.
+- **释义**: 需要；使承担
+- **例句**: The project entails a lot of hard work.
+- **近义词**: involve, require, necessitate
+- **派生词**: entailment (n.)

@@ -1,0 +1,32 @@
+# Unit 02 短语搭配
+
+- a male/female ancestor 男/女祖先
+- from a different angle 从不同的角度
+- make an announcement 发布通知
+- an annual report 年度报告
+- anxiety about 对…的焦虑
+- it is apparent that 很明显
+- appeal to 呼吁；吸引
+- lose one's appetite 食欲不振
+- a household appliance 家用电器
+- a job application 求职申请
+- make an appointment 预约
+- appreciate doing sth. 感激做某事
+- approach to …的方法
+- be appropriate for 适合于
+- with approval 赞同地
+- arise from 由…引起
+- make arrangements for 为…做安排
+- artificial intelligence 人工智能
+- assess the situation 评估形势
+- a valuable asset 宝贵的资产
+- assign sth. to sb. 把…分配给某人
+- assist sb. in/with 帮助某人
+- be associated with 与…有关联
+- on the assumption that 假设
+- assure sb. of sth. 向某人保证某事
+- a friendly atmosphere 友好的气氛
+- attach importance to 重视
+- attain one's goal 达到目标
+- in an attempt to 试图
+- a positive attitude 积极的态度

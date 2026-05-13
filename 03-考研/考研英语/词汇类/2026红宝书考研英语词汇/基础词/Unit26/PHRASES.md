@@ -1,0 +1,29 @@
+# Unit 26 短语搭配
+
+- be similar to 与…相似
+- simplify the process 简化流程
+- simulate real conditions 模拟真实条件
+- construction site 建筑工地
+- be skeptical about 对…持怀疑态度
+- skip breakfast 不吃早饭
+- a slim chance 渺茫的机会
+- a steep slope 陡坡
+- smart phone 智能手机
+- a smooth transition 平稳过渡
+- snap out of 迅速从…中恢复
+- soar to new heights 创新高
+- the sole purpose 唯一目的
+- a solemn promise 庄严的承诺
+- show solidarity 表示团结
+- find a solution 找到解决办法
+- sophisticated technology 先进技术
+- all sorts of 各种各样的
+- a reliable source 可靠来源
+- be specific about 对…具体说明
+- speculate on/about 推测；投机
+- in every sphere 在各个领域
+- spill the beans 泄露秘密
+- spin a story 编故事
+- spiritual growth 精神成长
+- split up 分开；分手
+- sponsor a program 赞助一个项目

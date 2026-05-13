@@ -1,0 +1,37 @@
+# Unit 19 短语搭配
+
+- be optimistic about 对…持乐观态度
+- have no option but to do 除了…别无选择
+- in orbit 在轨道上
+- the origin of …的起源
+- the outcome of …的结果
+- in outline 概略地
+- the economic outlook 经济前景
+- overcome difficulties 克服困难
+- be overcome with emotion 被情绪所淹没
+- overlook a mistake 忽视错误
+- overwhelming majority 压倒性多数
+- owe…to 把…归功于
+- keep pace with 与…并驾齐驱
+- set the pace 定步速；起带头作用
+- a panel of experts 专家组
+- run parallel to 与…平行
+- parallel to/with 与…平行/类似
+- a partial view 偏见
+- participate in 参与
+- in particular 特别；尤其
+- be passionate about 对…充满热情
+- passive smoking 被动吸烟
+- hold a patent 持有专利
+- a pattern of …的模式
+- without pause 不停地
+- at one's peak 在鼎盛时期
+- peak hours 高峰时段
+- be peculiar to 为…所特有
+- peer pressure 同伴压力
+- the death penalty 死刑
+- perceive…as 把…看作
+- a high percentage of 高比例的
+- perform a task 执行任务
+- perform an operation 做手术
+- a permanent job 永久性工作

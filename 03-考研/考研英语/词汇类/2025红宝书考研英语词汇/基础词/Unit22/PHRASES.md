@@ -1,0 +1,38 @@
+# Unit 22 短语搭配
+
+- launch a project 启动项目
+- play a prominent role 发挥重要作用
+- promote economic growth 促进经济增长
+- promote sb. to 提升某人为
+- a prompt response 迅速的回应
+- be prone to 易于
+- in proportion to 与…成比例
+- out of proportion 不成比例
+- propose a plan 提出计划
+- the prospects for …的前景
+- in protest 抗议
+- protest against 抗议
+- provide sb. with sth. 向某人提供某物
+- provide for 赡养；为…做准备
+- provoke sb. into doing sth. 激怒某人做某事
+- pursue a career 从事职业
+- in pursuit of 追求
+- be qualified for 有资格担任
+- quote from 引用自
+- radical changes 根本性的变化
+- at random 随机地
+- a wide range of 范围广泛的
+- rank first 名列前茅
+- at a rapid pace 以飞快的速度
+- rare species 稀有物种
+- at any rate 无论如何
+- at this rate 照此速度
+- a rational decision 理性的决定
+- raw materials 原材料
+- react to 对…做出反应
+- a realistic goal 切实可行的目标
+- in the realm of 在…领域
+- a reasonable price 合理的价格
+- rebel against 反抗
+- beyond recall 记不起来的
+- economic recession 经济衰退

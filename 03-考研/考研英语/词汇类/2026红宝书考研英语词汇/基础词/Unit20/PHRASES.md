@@ -1,0 +1,39 @@
+# Unit 20 短语搭配
+
+- permit sb. to do sth. 允许某人做某事
+- with your permission 如果你允许的话
+- persist in 坚持
+- from one's perspective 从某人的角度来看
+- gain perspective 获得视角
+- persuade sb. to do sth. 说服某人做某事
+- a natural phenomenon 自然现象
+- a philosophy of life 人生哲学
+- physical exercise 体育锻炼
+- physical education 体育课
+- a pile of 一大堆
+- in plain English 用简单明了的英语
+- it is plain that 很明显
+- a plausible explanation 合理的解释
+- make a pledge 做出承诺
+- keep one's pledge 信守誓言
+- the plot thickens 情节变得复杂
+- plunge into 投入；陷入
+- a policy on 关于…的政策
+- public opinion polls 民意调查
+- be popular with/among 受…欢迎
+- pose a threat 构成威胁
+- pose a question 提出问题
+- a positive attitude 积极的态度
+- be possessed of 具有
+- postpone doing sth. 推迟做某事
+- potential risk 潜在风险
+- pour into 大量投入
+- in poverty 在贫困中
+- power of attorney 委托书
+- practical experience 实践经验
+- as a precaution 作为预防措施
+- take precautions 采取预防措施
+- be preceded by 在…之前
+- set a precedent 开先例
+- precious metals 贵金属
+- to be precise 确切地说

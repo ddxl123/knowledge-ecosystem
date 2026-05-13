@@ -1,0 +1,36 @@
+# Unit 09 短语搭配
+
+- in earnest 认真地；诚挚地
+- at ease 轻松自在
+- with ease 轻而易举地
+- have the edge over 比…有优势
+- on edge 紧张不安
+- the latest edition 最新版
+- educate sb. about 就…教育某人
+- have an effect on 对…有影响
+- in effect 实际上；生效
+- take effect 生效；起作用
+- efficient use of 对…的高效利用
+- elaborate on 详细阐述
+- an element of 一点；少许
+- eliminate…from 从…中消除
+- embrace change 拥抱变化
+- emerge from 从…中浮现
+- emotional intelligence 情商
+- place emphasis on 强调
+- employ sb. as 雇用某人担任
+- enable sb. to do sth. 使某人能够做某事
+- an encounter with 与…的相遇
+- encourage sb. to do sth. 鼓励某人做某事
+- endure hardship 忍受艰难
+- be engaged in 从事于
+- be engaged to 与…订婚
+- an enormous amount of 大量的
+- ensure that 确保
+- a state enterprise 国有企业
+- entertain the idea of 怀有…的想法
+- with enthusiasm 热情地
+- the entire world 全世界
+- a legal entity 法律实体
+- environmental protection 环境保护
+- be equal to 等于；胜任

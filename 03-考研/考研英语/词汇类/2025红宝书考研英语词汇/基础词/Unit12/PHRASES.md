@@ -1,0 +1,36 @@
+# Unit 12 短语搭配
+
+- a flood of 大量的
+- in full flourish 在全盛时期
+- flow into 流入
+- be fluent in 精通
+- focus on 集中于
+- forbid sb. from doing sth. 禁止某人做某事
+- the weather forecast 天气预报
+- forge ahead 稳步前进
+- forge a relationship 建立关系
+- the former…the latter… 前者…后者…
+- apply a formula 应用公式
+- make a fortune 发财
+- foster growth 促进增长
+- lay a foundation 奠定基础
+- a fraction of 一小部分
+- fragment of …的碎片
+- a framework for …的框架
+- commit fraud 犯欺诈罪
+- frequent flyer 飞行常客
+- friction between …之间的摩擦
+- push back the frontier 拓展前沿
+- be frustrated at/by 对…感到沮丧
+- fulfill one's dream 实现梦想
+- fulfill one's duty 履行职责
+- perform a function 执行功能
+- function as 起…的作用
+- raise funds 筹集资金
+- be fundamental to 对…至关重要
+- furnish sb. with sth. 向某人提供某物
+- gain access to 获得进入
+- gain weight 增重
+- bridge the gap 弥补差距
+- generate electricity 发电
+- generate income 产生收入

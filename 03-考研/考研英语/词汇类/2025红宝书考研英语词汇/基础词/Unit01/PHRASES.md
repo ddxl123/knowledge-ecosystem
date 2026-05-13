@@ -1,0 +1,33 @@
+# Unit 01 短语搭配
+
+- an absolute majority 绝大多数
+- be absorbed in 全神贯注于
+- an abstract concept 抽象概念
+- academic achievement 学术成就
+- be acceptable to 对…来说可以接受
+- by accident 意外地
+- make accommodations for 为…提供膳宿
+- be accurate in 在…方面准确
+- a great achievement 伟大的成就
+- acknowledge doing sth. 承认做了某事
+- language acquisition 语言习得
+- in addition 此外
+- in addition to 除…之外
+- be adequate for 足够的
+- the administration of 管理
+- adopt a policy 采取政策
+- in advance 预先；提前
+- take advantage of 利用
+- have an effect on 对…有影响
+- affordable housing 经济适用房
+- item on the agenda 议程上的项目
+- aggressive behavior 攻击性行为
+- the agriculture industry 农业产业
+- alcohol abuse 酗酒
+- an alternative to …的替代品
+- an amateur photographer 业余摄影师
+- be amazed at 对…感到惊奇
+- have the ambition to do 有做…的雄心
+- a large amount of 大量的
+- amuse oneself 自娱自乐
+- analyze the data 分析数据

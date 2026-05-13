@@ -1,0 +1,320 @@
+# Unit 03 单词
+
+## bachelor
+- **音标**: /ˈbætʃələr/
+- **词性**: n.
+- **释义**: 学士；单身汉
+- **例句**: He got a bachelor's degree in computer science.
+- **近义词**: single man
+- **派生词**: bachelorhood (n.)
+
+## backward
+- **音标**: /ˈbækwərd/
+- **词性**: adj. adv.
+- **释义**: 向后的；落后的
+- **例句**: The region is economically backward compared to the coast.
+- **近义词**: reverse, behind, underdeveloped
+- **派生词**: backwards (adv.), backwardness (n.)
+
+## balance
+- **音标**: /ˈbæləns/
+- **词性**: n. v.
+- **释义**: 平衡；余额；权衡
+- **例句**: It's important to maintain a balance between work and life.
+- **近义词**: equilibrium, stability, harmony
+- **派生词**: balanced (adj.), imbalance (n.)
+
+## ban
+- **音标**: /bæn/
+- **词性**: v. n.
+- **释义**: 禁止；禁令
+- **例句**: The government banned smoking in public places.
+- **近义词**: prohibit, forbid, bar
+- **派生词**: banned (adj.)
+
+## bargain
+- **音标**: /ˈbɑːrɡən/
+- **词性**: n. v.
+- **释义**: 便宜货；交易；讨价还价
+- **例句**: This jacket is a real bargain at half price.
+- **近义词**: deal, agreement, negotiate
+- **派生词**: bargaining (n.)
+
+## barrier
+- **音标**: /ˈbæriər/
+- **词性**: n.
+- **释义**: 障碍；屏障；壁垒
+- **例句**: Language can be a barrier to effective communication.
+- **近义词**: obstacle, hindrance, barricade
+- **派生词**: barricade (n. v.)
+
+## behalf
+- **音标**: /bɪˈhæf/
+- **词性**: n.
+- **释义**: 代表；利益
+- **例句**: The lawyer spoke on behalf of his client.
+- **近义词**: benefit, interest, support
+
+## behave
+- **音标**: /bɪˈheɪv/
+- **词性**: v.
+- **释义**: 表现；举止；行为
+- **例句**: The children behaved well during the ceremony.
+- **近义词**: act, conduct, perform
+- **派生词**: behavior (n.), behavioral (adj.)
+
+## beneficial
+- **音标**: /ˌbenɪˈfɪʃl/
+- **词性**: adj.
+- **释义**: 有益的；有利的
+- **例句**: Regular exercise is beneficial to health.
+- **近义词**: helpful, advantageous, favorable
+- **派生词**: benefit (n. v.), beneficiary (n.)
+
+## betray
+- **音标**: /bɪˈtreɪ/
+- **词性**: v.
+- **释义**: 背叛；泄露；辜负
+- **例句**: He betrayed his country by selling state secrets.
+- **近义词**: deceive, double-cross, desert
+- **派生词**: betrayal (n.), betrayer (n.)
+
+## bias
+- **音标**: /ˈbaɪəs/
+- **词性**: n. v.
+- **释义**: 偏见；偏爱；使有偏见
+- **例句**: The report showed a clear bias against the defendant.
+- **近义词**: prejudice, partiality, favoritism
+- **派生词**: biased (adj.), unbiased (adj.)
+
+## bid
+- **音标**: /bɪd/
+- **词性**: v. n.
+- **释义**: 出价；投标；命令
+- **例句**: She bid $500 for the painting at the auction.
+- **近义词**: offer, tender, command
+- **派生词**: bidder (n.), bidding (n.)
+
+## bind
+- **音标**: /baɪnd/
+- **词性**: v. n.
+- **释义**: 捆绑；约束；装订
+- **例句**: The contract binds both parties to the agreement.
+- **近义词**: tie, fasten, obligate
+- **派生词**: binding (n. adj.), bond (n.)
+
+## blame
+- **音标**: /bleɪm/
+- **词性**: v. n.
+- **释义**: 责备；归咎于
+- **例句**: Don't blame me for your mistakes.
+- **近义词**: accuse, condemn, fault
+- **派生词**: blameless (adj.), blameworthy (adj.)
+
+## blast
+- **音标**: /blæst/
+- **词性**: n. v.
+- **释义**: 爆炸；冲击波；猛攻
+- **例句**: The blast destroyed several buildings in the area.
+- **近义词**: explosion, burst, bang
+- **派生词**: blasting (n.)
+
+## blaze
+- **音标**: /bleɪz/
+- **词性**: n. v.
+- **释义**: 火焰；光辉；燃烧
+- **例句**: The fire blaze was visible from miles away.
+- **近义词**: fire, flame, glow
+- **派生词**: blazing (adj.)
+
+## bleak
+- **音标**: /bliːk/
+- **词性**: adj.
+- **释义**: 阴冷的；荒凉的；无望的
+- **例句**: The future looks bleak for the struggling company.
+- **近义词**: gloomy, desolate, hopeless
+- **派生词**: bleakly (adv.), bleakness (n.)
+
+## blend
+- **音标**: /blend/
+- **词性**: v. n.
+- **释义**: 混合；融合
+- **例句**: Blend the ingredients together until smooth.
+- **近义词**: mix, combine, merge
+- **派生词**: blender (n.)
+
+## block
+- **音标**: /blɑːk/
+- **词性**: n. v.
+- **释义**: 街区；块；阻塞
+- **例句**: A fallen tree blocked the road.
+- **近义词**: obstruct, barrier, hinder
+- **派生词**: blockade (n. v.), blockage (n.)
+
+## bloom
+- **音标**: /bluːm/
+- **词性**: n. v.
+- **释义**: 花；开花；繁盛
+- **例句**: The flowers bloom in spring.
+- **近义词**: blossom, flower, flourish
+- **派生词**: blooming (adj.)
+
+## boast
+- **音标**: /boʊst/
+- **词性**: v. n.
+- **释义**: 吹嘘；自夸；以…为荣
+- **例句**: He boasted about his achievement to everyone.
+- **近义词**: brag, show off, vaunt
+- **派生词**: boastful (adj.)
+
+## bond
+- **音标**: /bɑːnd/
+- **词性**: n. v.
+- **释义**: 纽带；债券；结合
+- **例句**: The bond between mother and child is very strong.
+- **近义词**: connection, tie, link
+- **派生词**: bonding (n.)
+
+## boom
+- **音标**: /buːm/
+- **词性**: n. v.
+- **释义**: 繁荣；隆隆声；激增
+- **例句**: The economy experienced a boom in the 1990s.
+- **近义词**: surge, prosperity, expansion
+- **派生词**: booming (adj.)
+
+## boost
+- **音标**: /buːst/
+- **词性**: v. n.
+- **释义**: 促进；提高；增强
+- **例句**: The new policy will boost the economy.
+- **近义词**: increase, enhance, promote
+- **派生词**: booster (n.)
+
+## border
+- **音标**: /ˈbɔːrdər/
+- **词性**: n. v.
+- **释义**: 边界；国境；接壤
+- **例句**: They crossed the border into the neighboring country.
+- **近义词**: boundary, frontier, edge
+- **派生词**: bordering (adj.), borderline (n. adj.)
+
+## bore
+- **音标**: /bɔːr/
+- **词性**: v. n.
+- **释义**: 使厌烦；钻孔；令人讨厌的人
+- **例句**: The long speech bored the audience.
+- **近义词**: tire, weary, annoy
+- **派生词**: boredom (n.), boring (adj.), bored (adj.)
+
+## bound
+- **音标**: /baʊnd/
+- **词性**: adj. v. n.
+- **释义**: 一定的；受约束的；跳跃
+- **例句**: He is bound to succeed with his talent and hard work.
+- **近义词**: certain, destined, obliged
+- **派生词**: boundary (n.), boundless (adj.)
+
+## boundary
+- **音标**: /ˈbaʊndri/
+- **词性**: n.
+- **释义**: 边界；界限；范围
+- **例句**: The river forms the boundary between the two countries.
+- **近义词**: border, limit, edge
+- **派生词**: bounded (adj.), unbounded (adj.)
+
+## branch
+- **音标**: /bræntʃ/
+- **词性**: n. v.
+- **释义**: 分支；树枝；分部
+- **例句**: The company has branches all over the world.
+- **近义词**: division, subdivision, department
+- **派生词**: branching (n. adj.)
+
+## brand
+- **音标**: /brænd/
+- **词性**: n. v.
+- **释义**: 品牌；商标；烙印
+- **例句**: This brand is known for its high quality products.
+- **近义词**: label, trademark, make
+- **派生词**: branding (n.), brand-new (adj.)
+
+## breakthrough
+- **音标**: /ˈbreɪkθruː/
+- **词性**: n.
+- **释义**: 突破；重大进展
+- **例句**: Scientists made a breakthrough in cancer research.
+- **近义词**: advance, discovery, leap
+- **派生词**: groundbreaking (adj.)
+
+## breed
+- **音标**: /briːd/
+- **词性**: v. n.
+- **释义**: 繁殖；培育；品种
+- **例句**: These animals breed in the spring.
+- **近义词**: reproduce, raise, kind
+- **派生词**: breeding (n.)
+
+## brief
+- **音标**: /briːf/
+- **词性**: adj. n. v.
+- **释义**: 简短的；简要的
+- **例句**: He gave a brief summary of the meeting.
+- **近义词**: short, concise, succinct
+- **派生词**: briefly (adv.), briefing (n.)
+
+## brilliant
+- **音标**: /ˈbrɪliənt/
+- **词性**: adj.
+- **释义**: 辉煌的；杰出的；明亮的
+- **例句**: She is a brilliant scientist with many achievements.
+- **近义词**: outstanding, excellent, magnificent
+- **派生词**: brilliance (n.), brilliantly (adv.)
+
+## broad
+- **音标**: /brɔːd/
+- **词性**: adj.
+- **释义**: 宽阔的；广泛的；概括的
+- **例句**: The course covers a broad range of topics.
+- **近义词**: wide, extensive, expansive
+- **派生词**: broaden (v.), broadly (adv.), broadness (n.)
+
+## budget
+- **音标**: /ˈbʌdʒɪt/
+- **词性**: n. v.
+- **释义**: 预算；编预算
+- **例句**: The government announced a new budget for education.
+- **近义词**: allowance, financial plan
+- **派生词**: budgetary (adj.)
+
+## bulk
+- **音标**: /bʌlk/
+- **词性**: n.
+- **释义**: 大量；大部分；体积
+- **例句**: The bulk of the work has been completed.
+- **近义词**: majority, mass, volume
+- **派生词**: bulky (adj.)
+
+## burden
+- **音标**: /ˈbɜːrdn/
+- **词性**: n. v.
+- **释义**: 负担；重担；使负担
+- **例句**: The tax burden on the middle class is increasing.
+- **近义词**: load, weight, obligation
+- **派生词**: burdensome (adj.)
+
+## burst
+- **音标**: /bɜːrst/
+- **词性**: v. n.
+- **释义**: 爆裂；突然发生
+- **例句**: The balloon burst with a loud bang.
+- **近义词**: explode, erupt, pop
+- **派生词**: bursting (adj.)
+
+## campaign
+- **音标**: /kæmˈpeɪn/
+- **词性**: n. v.
+- **释义**: 运动；战役；竞选活动
+- **例句**: The advertising campaign was very successful.
+- **近义词**: drive, movement, crusade
+- **派生词**: campaigner (n.)

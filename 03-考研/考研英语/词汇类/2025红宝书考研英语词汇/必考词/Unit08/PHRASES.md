@@ -1,0 +1,50 @@
+# Unit 08 短语搭配
+
+- deprive sb. of sth. 剥夺某人某物
+- derive from 源自；来源于
+- describe…as 把…描述为
+- beyond description 无法形容
+- deserve to do sth. 值得做某事
+- by design 故意地
+- have a desire for 渴望
+- be desperate for 极度渴望
+- in desperation 在绝望中
+- reach one's destination 到达目的地
+- be destined to 注定要
+- detect signs of 发现…的迹象
+- be determined to do sth. 决心做某事
+- with determination 坚定地
+- develop into 发展成
+- devote oneself to 献身于
+- be devoted to 致力于；深爱
+- diagnose sb. with 诊断某人患有
+- in a dilemma 处于进退两难
+- the third dimension 第三维
+- to some/a certain extent 在某种程度上
+- diploma in …的文凭
+- direct at/against 针对
+- under the direction of 在…的指导下
+- maintain discipline 维持纪律
+- at a discount 打折
+- discriminate against 歧视
+- dismiss…as 认为…而不予理会
+- on display 展出
+- at one's disposal 由某人处理
+- dispose of 处理；丢弃
+- settle a dispute 解决争端
+- beyond/without dispute 无可争辩
+- dissolve in 溶解于
+- be distinct from 与…不同
+- distinguish between 区分
+- distinguish…from 把…与…区分开
+- distribute…to/among 分配给
+- do not disturb 请勿打扰
+- be diverse in 在…方面多样化
+- cultural diversity 文化多样性
+- domestic market 国内市场
+- domestic violence 家庭暴力
+- dominant position 主导地位
+- dominate over 支配
+- donate…to 捐赠给
+- make a donation to 向…捐款
+- in doses of 以…的剂量

@@ -1,0 +1,40 @@
+# Unit 14 短语搭配
+
+- input into 对…的投入
+- gain insight into 深入了解
+- insist on/upon 坚持
+- inspect…for 检查…是否有
+- draw inspiration from 从…获取灵感
+- install confidence 树立信心
+- for instance 例如
+- by instinct 凭本能
+- an institution of higher learning 高等院校
+- instruct sb. to do sth. 指示某人做某事
+- play an instrument 演奏乐器
+- be instrumental in 在…方面起关键作用
+- add insult to injury 雪上加霜
+- health insurance 健康保险
+- intellectual property 知识产权
+- artificial intelligence 人工智能
+- have the intention of 有…的打算
+- with the intention of 抱着…的目的
+- intense competition 激烈的竞争
+- interact with 与…互动
+- interfere with/in 干涉；妨碍
+- internal affairs 内部事务
+- interpret…as 把…理解为
+- at intervals 每隔一段时间
+- at regular intervals 以固定的间隔
+- intimate knowledge 深入的了解
+- invade one's privacy 侵犯隐私
+- investigate into 调查
+- invest in 投资于
+- be involved in 参与；涉及
+- in isolation 孤立地
+- raise the issue 提出问题
+- issue a statement 发表声明
+- be keen on 热衷于
+- label…as 把…称为
+- for lack of 因缺乏
+- lack of confidence 缺乏信心
+- the political landscape 政治格局

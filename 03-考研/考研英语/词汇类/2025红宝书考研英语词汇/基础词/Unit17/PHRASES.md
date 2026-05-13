@@ -1,0 +1,37 @@
+# Unit 17 短语搭配
+
+- a mature decision 成熟的决定
+- by no means 决不
+- by all means 尽一切办法
+- by means of 借助于
+- take measures 采取措施
+- beyond measure 无法衡量
+- mental health 心理健康
+- mental illness 精神疾病
+- on one's merits 按其本身条件
+- a method for/of …的方法
+- migrate to 迁移到
+- mild weather 温和的天气
+- military service 兵役
+- minimize the risk 最小化风险
+- a minor detail 次要细节
+- a minority of 少数
+- work miracles 创造奇迹
+- a mirror of …的反映
+- feel miserable 感到痛苦
+- accomplish a mission 完成任务
+- moderate views 温和的观点
+- modify one's behavior 改变行为
+- monitor the situation 监控局势
+- in a good mood 心情好
+- moral standards 道德标准
+- moral dilemma 道德困境
+- in motion 运动中
+- set…in motion 使…开始运转
+- motivate sb. to do sth. 激励某人做某事
+- mounting pressure 日益增加的压力
+- multiple choices 多项选择
+- mutual respect 相互尊重
+- solve a mystery 解开谜团
+- the naked eye 肉眼
+- a compelling narrative 引人入胜的叙述

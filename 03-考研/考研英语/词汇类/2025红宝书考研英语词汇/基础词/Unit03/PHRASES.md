@@ -1,0 +1,31 @@
+# Unit 03 短语搭配
+
+- the authorities concerned 有关当局
+- be available to/for 可供…使用
+- on average 平均
+- avoid doing sth. 避免做某事
+- be aware of 意识到
+- raise awareness 提高意识
+- educational background 教育背景
+- keep/lose one's balance 保持/失去平衡
+- on balance 总的来说
+- a barrier to …的障碍
+- behave oneself 守规矩
+- be beneficial to 对…有益
+- be to blame 该受责备
+- block off 封锁；阻塞
+- a bond of 纽带
+- boost one's confidence 增强信心
+- be bound to 一定会
+- branch out 扩展业务范围
+- brand new 崭新的
+- in brief 简而言之
+- on a budget 预算有限
+- in bulk 大量地
+- a burden on/to 对…的负担
+- launch a campaign 发起运动
+- cancel out 抵消
+- be capable of 有能力做
+- to capacity 满负荷地
+- capture one's attention 吸引注意力
+- career development 职业发展

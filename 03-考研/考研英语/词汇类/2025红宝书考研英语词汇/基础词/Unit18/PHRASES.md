@@ -1,0 +1,31 @@
+# Unit 18 短语搭配
+
+- native language 母语
+- navigate through 穿越
+- a negative attitude 消极态度
+- in the negative 否定地
+- neglect one's duty 玩忽职守
+- negotiate with 与…谈判
+- neutral position 中立立场
+- social norms 社会规范
+- a notable achievement 显著成就
+- a novel idea 新颖的想法
+- nuclear weapons 核武器
+- numerous times 许多次
+- obey the rules 遵守规则
+- achieve one's objective 实现目标
+- be under an obligation to do sth. 有义务做某事
+- feel obliged to do sth. 觉得有必要做某事
+- observe the rules 遵守规则
+- an obstacle to …的障碍
+- overcome an obstacle 克服障碍
+- obtain information 获得信息
+- it is obvious that 很明显
+- be occupied with 忙于
+- it occurs to sb. that 某人想到
+- against all odds 尽管困难重重
+- offend against 违犯
+- offset the losses 抵消损失
+- an ongoing process 一个持续的过程
+- seize the opportunity 抓住机会
+- oppose doing sth. 反对做某事

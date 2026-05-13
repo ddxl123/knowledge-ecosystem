@@ -1,0 +1,48 @@
+# Unit 26 短语搭配
+
+- fall into a trap 落入陷阱
+- a hidden treasure 隐藏的宝藏
+- a tremendous achievement 巨大的成就
+- a growing trend 日益增长的趋势
+- on trial 在受审
+- trigger a response 引发反应
+- triumph over 战胜
+- a trivial matter 琐碎小事
+- troop movement 部队调动
+- trust in 信任
+- college tuition 大学学费
+- in tune with 与…协调
+- out of tune 走调
+- twist and turn 曲折迂回
+- a typical example 典型例子
+- the ultimate goal 最终目标
+- ultimately 最终
+- undergo changes 经历变化
+- undertake a task 承担任务
+- school uniform 校服
+- be unique to 为…所特有
+- national unity 国家统一
+- universal truth 普遍真理
+- update the system 更新系统
+- upgrade to 升级到
+- an upright person 正直的人
+- be upset about 对…感到不安
+- urge sb. to do sth. 敦促某人做某事
+- in urgent need of 急需
+- utilize resources 利用资源
+- a valid reason 吐理的理由
+- for a valid period 在有效期内
+- vanish from 从…消失
+- variable costs 可变成本
+- a vast majority 绝大多数
+- a joint venture 合资企业
+- a verbal agreement 口头协议
+- verify the information 核实信息
+- the latest version 最新版本
+- vertical integration 纵向整合
+- via email 通过电子邮件
+- fall victim to 成为…的受害者
+- in view of 鉴于；考虑到
+- with a view to 为了；着眼于
+- violate the law 违法
+- a violation of 对…的违反

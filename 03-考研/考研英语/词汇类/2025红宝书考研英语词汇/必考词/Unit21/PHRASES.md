@@ -1,0 +1,41 @@
+# Unit 21 短语搭配
+
+- release a statement 发表声明
+- be relevant to 与…相关
+- a reliable source 可靠的消息来源
+- to one's relief 令某人欣慰的是
+- be reluctant to do sth. 不情愿做某事
+- rely on 依赖；信赖
+- remain silent 保持沉默
+- a remarkable achievement 了不起的成就
+- a remedy for …的治疗方法
+- in remote areas 在偏远地区
+- render…useless 使…无用
+- renew one's subscription 续订
+- replace…with 用…代替
+- represent…as 把…描绘成
+- have a reputation for 以…闻名
+- make a request for 请求
+- require sb. to do sth. 要求某人做某事
+- conduct research 进行研究
+- bear a resemblance to 与…相似
+- in reserve 储备；留出
+- without reservation 毫无保留地
+- reside in 居住于；存在于
+- resign from 辞去
+- resist the temptation 抵制诱惑
+- resolve a conflict 解决冲突
+- resort to 诉诸；求助于
+- natural resources 自然资源
+- respond to 对…做出反应
+- in response to 作为对…的回应
+- restore…to 恢复到
+- restrain oneself 克制自己
+- be restricted to 限制在
+- retain one's composure 保持镇静
+- it is revealed that 据透露
+- government revenue 政府收入
+- in reverse 反过来
+- revise one's opinion 修正看法
+- the Industrial Revolution 工业革命
+- a rigid structure 刚性结构

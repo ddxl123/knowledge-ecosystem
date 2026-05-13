@@ -1,0 +1,34 @@
+# Unit 25 短语搭配
+
+- a sample of …的样本
+- satisfy one's needs 满足需求
+- on a large scale 大规模地
+- to a certain extent 在一定程度上
+- a political scandal 政治丑闻
+- make oneself scarce 溜走
+- scatter…over 把…撒在
+- ahead of schedule 提前
+- behind schedule 落后于计划
+- on schedule 按时
+- within the scope of 在…范围内
+- start from scratch 从零开始
+- screen out 筛选掉
+- secure a job 获得工作
+- seek advice 寻求建议
+- a market segment 细分市场
+- be senior to 比…年长/职位高
+- a sensible decision 明智的决定
+- be sensitive to 对…敏感
+- in sequence 依次；按顺序
+- a severe punishment 严厉的惩罚
+- in the shade 在阴凉处
+- cast a shadow over 给…蒙上阴影
+- shallow water 浅水
+- in bad/good shape 状况不好/好
+- shape one's future 塑造未来
+- a sharp increase 急剧上升
+- take shelter 避难
+- a shift in 在…方面的转变
+- the night shift 夜班
+- shrink from 退缩；回避
+- a significant achievement 重大成就

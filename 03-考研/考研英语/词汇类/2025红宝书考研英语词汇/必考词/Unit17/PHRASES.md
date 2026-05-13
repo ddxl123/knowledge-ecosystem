@@ -1,0 +1,43 @@
+# Unit 17 短语搭配
+
+- achieve one's objective 实现目标
+- be under an obligation to do sth. 有义务做某事
+- feel obliged to do sth. 觉得有必要做某事
+- observe the rules 遵守规则
+- an obstacle to …的障碍
+- overcome an obstacle 克服障碍
+- obtain information 获得信息
+- it is obvious that 很明显
+- be occupied with 忙于
+- it occurs to sb. that 某人想到
+- against all odds 尽管困难重重
+- offend against 违犯
+- offset the losses 抵消损失
+- an ongoing process 一个持续的过程
+- seize the opportunity 抓住机会
+- oppose doing sth. 反对做某事
+- be optimistic about 对…持乐观态度
+- have no option but to do 除了…别无选择
+- in orbit 在轨道上
+- the origin of …的起源
+- the outcome of …的结果
+- in outline 概略地
+- the economic outlook 经济前景
+- overcome difficulties 克服困难
+- be overcome with emotion 被情绪所淹没
+- overlook a mistake 忽视错误
+- overwhelming majority 压倒性多数
+- owe…to 把…归功于
+- keep pace with 与…并驾齐驱
+- set the pace 定步速；起带头作用
+- a panel of experts 专家组
+- run parallel to 与…平行
+- parallel to/with 与…平行/类似
+- a partial view 偏见
+- participate in 参与
+- in particular 特别；尤其
+- be passionate about 对…充满热情
+- passive smoking 被动吸烟
+- hold a patent 持有专利
+- a pattern of …的模式
+- follow a pattern 遵循模式

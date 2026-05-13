@@ -1,0 +1,46 @@
+# Unit 20 短语搭配
+
+- propose a plan 提出计划
+- the prospects for …的前景
+- in protest 抗议
+- protest against 抗议
+- provide sb. with sth. 向某人提供某物
+- provide for 赡养；为…做准备
+- provoke sb. into doing sth. 激怒某人做某事
+- pursue a career 从事职业
+- in pursuit of 追求
+- be qualified for 有资格担任
+- quote from 引用自
+- radical changes 根本性的变化
+- at random 随机地
+- a wide range of 夿围广泛的
+- rank first 名列前茅
+- at a rapid pace 以飞快的速度
+- rare species 稀有物种
+- at any rate 无论如何
+- at this rate 照此速度
+- a rational decision 理性的决定
+- raw materials 原材料
+- react to 对…做出反应
+- a realistic goal 切实可行的目标
+- in the realm of 在…领域
+- a reasonable price 合理的价格
+- rebel against 反抗
+- beyond recall 记不起来的
+- economic recession 经济衰退
+- in recognition of 为表彰
+- recommend sth. to sb. 向某人推荐某物
+- recover from 从…恢复
+- recruit new members 招募新成员
+- reduce…to 把…减少到
+- refer to 提到；参考
+- reflect on/upon 思考；反省
+- carry out reforms 实施改革
+- refuse to do sth. 拒绝做某事
+- with regard to 关于
+- regardless of 不管；不顾
+- register for 登记；注册
+- regulations on 关于…的规定
+- reject a proposal 拒绝提议
+- be related to 与…有关
+- in relation to 关于；涉及

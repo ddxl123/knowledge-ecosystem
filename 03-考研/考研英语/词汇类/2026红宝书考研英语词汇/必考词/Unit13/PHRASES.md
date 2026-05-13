@@ -1,0 +1,47 @@
+# Unit 13 短语搭配
+
+- a good harvest 丰收
+- in haste 匆忙地
+- a fire hazard 火灾隐患
+- highlight the importance of 强调…的重要性
+- take a hint 领会暗示
+- a hollow promise 空洞的承诺
+- in honor of 向…表示敬意
+- on one's honor 以名誉担保
+- broaden one's horizons 开阔眼界
+- be hostile to/toward 对…有敌意
+- household chores 家务事
+- a humble background 卑微的出身
+- be identical to/with 与…完全相同
+- identify with 认同；与…产生共鸣
+- idle away 虚度（光阴）
+- be ignorant of 对…无知
+- illustrate the point 说明观点
+- public image 公众形象
+- immediate effect 立即生效
+- immune system 免疫系统
+- be immune to 对…免疫；不受影响
+- have an impact on 对…有影响
+- implement a plan 实施计划
+- have implications for 对…有影响
+- impose…on 把…强加于
+- on impulse 一时冲动
+- the incidence of …的发生率
+- be inclined to do sth. 倾向于做某事
+- disposable income 可支配收入
+- incorporate…into 把…纳入
+- be indicative of 表明；暗示
+- individual effort 个人努力
+- induce sb. to do sth. 劝诱某人做某事
+- the inevitable result 必然结果
+- in one's infancy 在初期
+- inflation rate 通货膨胀率
+- have influence on/over 对…有影响
+- inform sb. of/about sth. 通知某人某事
+- be well informed 消息灵通
+- key ingredient 关键成分
+- the initial stage 初始阶段
+- take the initiative 采取主动
+- on one's own initiative 主动地
+- declare sb. innocent 宣布某人无罪
+- an innovation in …方面的创新

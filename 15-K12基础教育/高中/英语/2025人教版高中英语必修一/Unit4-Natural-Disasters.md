@@ -1,0 +1,85 @@
+# Unit 4: Natural Disasters
+
+## 单元主题
+探讨自然灾害话题，包括地震、洪水、台风等自然灾害及防灾减灾知识。
+
+## 核心词汇
+
+### 重点单词
+| 单词 | 词性 | 释义 |
+|------|------|------|
+| disaster | n. | 灾难 |
+| earthquake | n. | 地震 |
+| flood | n./v. | 洪水；淹没 |
+| drought | n. | 干旱 |
+| hurricane | n. | 飓风 |
+| rescue | v./n. | 救援 |
+| destroy | v. | 破坏 |
+| damage | n./v. | 损害 |
+| survive | v. | 幸存 |
+| shelter | n. | 庇护所 |
+| emergency | n. | 紧急情况 |
+| supply | n./v. | 供应 |
+| summary | n. | 总结 |
+| effect | n. | 影响 |
+| strike | v. | 袭击 |
+
+### 重点短语
+- as if：好像
+- in ruins：成为废墟
+- in shock：震惊
+- come to an end：结束
+- sweep away：冲走
+- in the open air：在露天
+- dig out：挖出
+- a great number of：大量的
+
+## 语法：定语从句（关系代词）
+
+### 关系代词
+| 关系代词 | 先行词 | 在从句中作 |
+|----------|--------|------------|
+| who | 人 | 主语/宾语 |
+| whom | 人 | 宾语 |
+| whose | 人/物 | 定语 |
+| which | 物 | 主语/宾语 |
+| that | 人/物 | 主语/宾语 |
+
+### 例句
+- The man who/that helped me is my teacher.（帮助我的那个人是我的老师。）
+- The book which/that I bought is interesting.（我买的那本书很有趣。）
+- The girl whose father is a doctor is my classmate.（父亲是医生的那个女孩是我的同学。）
+
+### 只能用that的情况
+1. 先行词被序数词或最高级修饰
+2. 先行词被all, every, any, no等修饰
+3. 先行词是something, anything, everything, nothing等
+4. 先行词既有人又有物
+
+### 不能用that的情况
+1. 介词后面
+2. 非限制性定语从句中
+
+## 写作：新闻报道
+
+### 写作模板
+```
+[Headline]
+
+[Location], [Date] — A [disaster] struck [place] on [date].
+
+According to [source], the disaster caused [damage]. 
+[Number] people were affected.
+
+Rescue workers are working hard to [action]. 
+The government has [response].
+
+Experts suggest that people should [advice].
+```
+
+### 常用句型
+- A [disaster] struck [place] on [date].
+- According to..., the disaster caused...
+- [Number] people were affected/injured/killed.
+- Rescue workers are working hard to...
+- The government has taken measures to...

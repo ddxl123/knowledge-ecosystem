@@ -1,0 +1,33 @@
+# Unit 27 短语搭配
+
+- virtual reality 虚拟现实
+- be visible to 对…可见
+- play a vital role 起至关重要的作用
+- a vivid description 生动的描述
+- a large volume of 大量的
+- voluntary work 志愿工作
+- vote for 投票支持
+- be vulnerable to 易受…的伤害
+- earn a wage 挚工资
+- wander around 闲逛
+- warn sb. about sth. 警告某人某事
+- waste time 浪费时间
+- a wave of 一波
+- a fatal weakness 致命弱点
+- a wealth of 大量的
+- welfare state 福利国家
+- widespread concern 普遍关注
+- be willing to do sth. 愿意做某事
+- wisdom tooth 智齿
+- withdraw from 退出；撤回
+- bear witness to 为…作证
+- no wonder 难怪
+- It's a wonder that …真是个奇迹
+- wrap up 包好；完成
+- yield to 屈服于
+- yield results 产生成果
+- a residential zone 住宅区
+- abolish slavery 废除奴隶制
+- abstract art 抽象艺术
+- accelerate the pace 加快速度
+- accommodate to 适应

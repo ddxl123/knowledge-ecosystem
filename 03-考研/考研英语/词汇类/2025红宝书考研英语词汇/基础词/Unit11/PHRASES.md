@@ -1,0 +1,36 @@
+# Unit 11 短语搭配
+
+- social fabric 社会结构
+- facilitate communication 促进交流
+- a key factor 关键因素
+- faculty member 教职员工
+- fade away 逐渐消失
+- fail to do sth. 未能做某事
+- without fail 务必；一定
+- have faith in 对…有信心
+- be familiar with 熟悉
+- be fascinated by 对…着迷
+- meet one's fate 遭遇命运
+- at fault 有过错
+- find fault with 挑剔；找茬
+- in favor of 赞同；支持
+- do sb. a favor 帮某人一个忙
+- facial features 面部特征
+- federal government 联邦政府
+- fertile soil 肥沃的土壤
+- fierce competition 激烈的竞争
+- figure out 弄清楚；想出
+- a public figure 公众人物
+- file a lawsuit 提起诉讼
+- finance minister 财政部长
+- fine art 美术
+- a firm belief 坚定的信念
+- keep fit 保持健康
+- fit in 融入
+- fix one's eyes on 注视
+- go up in flames 化为灰烬
+- a flash of inspiration 灵光一闪
+- a flat tire 爆胎
+- a fatal flaw 致命缺陷
+- flee from 逃离
+- be flexible about 对…灵活变通

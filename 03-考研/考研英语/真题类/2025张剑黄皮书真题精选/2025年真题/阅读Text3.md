@@ -1,0 +1,64 @@
+# 2025年真题 — 阅读理解 Text 3
+
+## Text 3 精析
+
+### 文章主旨
+（2025年 Text 3 探讨了远程办公对城市经济结构和房地产市场的深远影响。）
+
+### 文章结构
+
+| 段落 | 功能 | 关键信息 |
+|------|------|----------|
+| 第1段 | 现象描述 | 后疫情时代远程办公的普及趋势 |
+| 第2段 | 影响分析 | 商业地产需求下降 |
+| 第3段 | 连锁反应 | 城市中心经济模式转变 |
+| 第4段 | 不同观点 | 乐观派 vs 悲观派 |
+| 第5段 | 结论 | 新的混合模式可能成为常态 |
+
+### 逐题解析
+
+#### 第31题（细节题）
+- **定位**：第1段
+- **关键**：注意时间限定词（since, during, after）
+
+#### 第32题（推断题）
+- **定位**：第2-3段
+- **技巧**：从数据趋势推断未来走向
+
+#### 第33题（词义题）
+- **定位**：上下文语境
+- **技巧**：代入选项验证，看哪个最符合语境
+
+#### 第34题（细节题）
+- **定位**：第4段不同观点对比
+- **注意**：区分不同人的观点，不要混淆
+
+#### 第35题（主旨题）
+- **解题思路**：文章核心论点——远程办公重塑城市经济
+
+## 长难句分析
+
+> *"What began as a temporary necessity during the pandemic has evolved into a permanent shift in work culture, one that has prompted companies to reconsider their real estate strategies and forced municipal governments to reimagine the purpose of urban centers."*
+
+结构：
+- What 引导主语从句
+- has evolved into 为主句谓语
+- one that... 为同位语，包含两个并列的 that 从句
+
+## 高频词汇
+
+| 词汇 | 含义 |
+|------|------|
+| hybrid | 混合的 |
+| commuting | 通勤 |
+| commercial real estate | 商业房地产 |
+| municipal | 市政的 |
+| paradigm shift | 范式转变 |
+| demographic | 人口统计的 |
+| revitalization | 复兴 |
+
+## 易错点 ⚠️
+
+1. **区分事实与观点**：作者陈述的事实 ≠ 作者的观点
+2. **注意不同人群的观点**：文中可能引用多方观点，不要混淆
+3. **词义题要代入验证**：不能只看词根猜词

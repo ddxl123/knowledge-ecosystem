@@ -1,0 +1,32 @@
+# Unit 28 短语搭配
+
+- acknowledge doing sth. 承认做了某事
+- be adequate for 足够的
+- advocate doing sth. 提倡做某事
+- in the aggregate 总共
+- allocate…to 把…分配给
+- an ambiguous statement 含糊的声明
+- draw an analogy between 在…之间作类比
+- anticipate doing sth. 预期做某事
+- scientific apparatus 科学仪器
+- an arbitrary decision 武断的决定
+- assert oneself 坚持自己的权利
+- an authentic document 真实的文件
+- autonomous region 自治区
+- on behalf of 代表
+- have a bias against 对…有偏见
+- red tape and bureaucracy 繁文缛节和官僚主义
+- without cease 不停地
+- chronic disease 慢性病
+- a coherent argument 连贯的论点
+- by coincidence 碰巧
+- collaborate with 与…合作
+- a commodity market 商品市场
+- be compatible with 与…兼容
+- compensate for 弥补
+- compile a report 编写报告
+- complement each other 相辅相成
+- comply with 遵守
+- conceive of 想象
+- be confined to 限制在
+- conform to 遵守；符合

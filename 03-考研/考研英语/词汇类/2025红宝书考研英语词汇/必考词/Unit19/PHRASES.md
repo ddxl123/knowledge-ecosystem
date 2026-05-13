@@ -1,0 +1,42 @@
+# Unit 19 短语搭配
+
+- be preceded by 在…之前
+- set a precedent 开先例
+- without precedent 史无前例的
+- precious metals 贵金属
+- to be precise 确切地说
+- predict the future 预测未来
+- be predominant in 在…占主导地位
+- have a preference for 偏爱
+- racial prejudice 种族偏见
+- preliminary results 初步结果
+- on the premise that 以…为前提
+- preserve…from 保护…免受
+- press for 敦促；迫切要求
+- under pressure 在压力下
+- a prestigious university 名牌大学
+- presume that 假定
+- prevail over 胜过；压倒
+- prevent…from 防止…做
+- prior to 在…之前
+- give priority to 优先考虑
+- a privilege to do sth. 做某事的荣幸
+- probe into 调查；探究
+- proceed with 继续进行
+- proceed to 进入；着手
+- in the process of 在…的过程中
+- proclaim independence 宣布独立
+- produce results 产生成果
+- a professional career 职业生涯
+- a high profile 高调；引人注目
+- make a profit 获利
+- a profound impact 深远的影响
+- prohibit sb. from doing sth. 禁止某人做某事
+- launch a project 启动项目
+- play a prominent role 发挥重要作用
+- promote economic growth 促进经济增长
+- promote sb. to 提升某人为
+- a prompt response 迅速的回应
+- be prone to 易于
+- in proportion to 与…成比例
+- out of proportion 不成比例

@@ -1,0 +1,36 @@
+# Unit 27 短语搭配
+
+- a spontaneous reaction 自发的反应
+- on the spot 在现场；当场
+- spot the difference 找出不同
+- spread knowledge 传播知识
+- squeeze in 挤进；抽时间
+- a stable relationship 稳定的关系
+- staff meeting 员工会议
+- at stake 在危险中
+- have a stake in 与…有利害关系
+- set a standard 设定标准
+- up to standard 达到标准
+- stare at 盯着看
+- crime statistics 犯罪统计
+- social status 社会地位
+- steady growth 稳步增长
+- a steep learning curve 陡峭的学习曲线
+- stem from 起源于
+- break stereotypes 打破刻板印象
+- stimulate economic growth 刺激经济增长
+- stock market 股票市场
+- in stock 有现货
+- out of stock 缺货
+- put a strain on 给…带来压力
+- a strategic decision 战略决策
+- build strength 增强力量
+- under stress 在压力下
+- strict rules 严格的规定
+- make great strides 取得巨大进步
+- go on strike 罢工
+- strike a balance 取得平衡
+- strive for 为…而奋斗
+- struggle with 与…作斗争
+- be subject to 受…支配；易遭受
+- submit to 屈服于；提交

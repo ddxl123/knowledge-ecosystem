@@ -1,0 +1,35 @@
+# Unit 07 短语搭配
+
+- for decades 数十年来
+- on the decline 在下降中
+- decline to do sth. 拒绝做某事
+- decorate…with 用…装饰
+- on the decrease 在减少中
+- dedicate oneself to 献身于
+- defeat the purpose 达不到目的
+- defend against 防御；保卫
+- define…as 把…定义为
+- without delay 立即
+- a deliberate attempt 故意的企图
+- a delicate balance 微妙的平衡
+- deliver a speech 发表演讲
+- deliver on one's promises 兑现承诺
+- in demand 有需求的
+- meet the demand 满足需求
+- demonstrate against 示威反对
+- deny doing sth. 否认做某事
+- depart from 离开；背离
+- depend on 依赖；取决于
+- deposit account 定期存款账户
+- depress the economy 使经济萧条
+- derive from 源自
+- describe…as 把…描述为
+- deserve to do sth. 值得做某事
+- by design 故意地
+- have a desire for 渴望
+- be desperate for 极度渴望
+- reach one's destination 到达目的地
+- be destined to 注定要
+- detect signs of 发现…的迹象
+- be determined to do sth. 决心做某事
+- develop into 发展成

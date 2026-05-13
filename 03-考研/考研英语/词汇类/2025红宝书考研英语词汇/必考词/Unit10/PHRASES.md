@@ -1,0 +1,49 @@
+# Unit 10 短语搭配
+
+- a legal entity 法律实体
+- environmental protection 环境保护
+- an epidemic of …的流行
+- be equal to 等于；胜任
+- be equipped with 配备有
+- be equivalent to 等同于
+- erode trust 腐蚀信任
+- make an error 犯错误
+- by error 由于错误
+- escape from 从…逃脱
+- a narrow escape 死里逃生
+- essential to/for 对…必不可少
+- in essence 本质上
+- establish a relationship 建立关系
+- estimate…at 估计…为
+- evaluate the effectiveness 评估有效性
+- provide evidence 提供证据
+- in evidence 显而易见
+- the theory of evolution 进化论
+- exaggerate the importance of 夸大…的重要性
+- examine into 调查；审查
+- exceed the speed limit 超速
+- with the exception of 除…之外
+- take exception to 反对；对…不满
+- in excess of 超过
+- to excess 过度地
+- in exchange for 作为…的交换
+- exchange rate 汇率
+- exclude…from 把…排除在外
+- exclusive of 不包括
+- execute a plan 执行计划
+- be exempt from 免除；豁免
+- exert influence/pressure on 对…施加影响/压力
+- exhaust one's patience 使某人失去耐心
+- be exhausted from 因…而筋疲力尽
+- exhibit signs of 表现出…的迹象
+- on exhibition 在展出中
+- expand one's horizons 拓展视野
+- exploit natural resources 开发自然资源
+- explore the possibilities 探索可能性
+- be exposed to 接触到；暴露于
+- extend an invitation to 向…发出邀请
+- to a great extent 在很大程度上
+- external pressure 外部压力
+- extract…from 从…提取
+- go to extremes 走极端
+- in the extreme 极其；非常

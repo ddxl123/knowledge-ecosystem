@@ -1,0 +1,32 @@
+# Unit 30 短语搭配
+
+- political discourse 政治话语
+- discrete categories 离散类别
+- racial discrimination 种族歧视
+- displace people 迫使人们流离失所
+- dispose of 处理；丢弃
+- disrupt the system 扰乱系统
+- dissolve in 溶解于
+- be distinct from 与…不同
+- distort the truth 歪曲真相
+- distribute…to 分配给
+- cultural diversity 文化多样性
+- religious doctrine 宗教教义
+- in the domain of 在…领域
+- domestic market 国内市场
+- dominant position 主导地位
+- donate…to 捐赠给
+- in doses of 以…的剂量
+- a rough draft 粗略草稿
+- dramatic change 巨大的变化
+- for the duration of 在…期间
+- dynamic economy 动态经济
+- elaborate on 详细阐述
+- eliminate…from 从…中消除
+- embrace change 拥抱变化
+- empirical evidence 经验证据
+- enact a law 颁布法律
+- an encounter with 与…的相遇
+- endorse a candidate 支持候选人
+- enhance competitiveness 提高竞争力
+- entail risks 带来风险

@@ -1,0 +1,32 @@
+# Unit 28 短语搭配
+
+- subsequent to 在…之后
+- in substance 实质上
+- a substitute for …的替代品
+- a subtle difference 微妙的差异
+- be sufficient for 对…来说足够
+- it is suggested that 有人建议
+- be suitable for 适合于
+- summarize the situation 总结形势
+- a supplement to …的补充
+- supply and demand 供求关系
+- be supposed to do sth. 应该做某事
+- the Supreme Court 最高法院
+- a surge in …的激增
+- a trade surplus 贸易顺差
+- surrender to 屈服于
+- survive on 靠…存活
+- be suspected of 有…嫌疑
+- suspend operations 暂停运营
+- sustain growth 维持增长
+- a sustainable development 可持续发展
+- swap…for 用…交换
+- a swift response 迅速的反应
+- swing between 在…之间摇摆
+- switch to 转换到
+- a symbol of …的象征
+- sympathize with 同情
+- flu symptoms 流感症状
+- tackle a problem 解决问题
+- set a target 设定目标
+- a target audience 目标受众
