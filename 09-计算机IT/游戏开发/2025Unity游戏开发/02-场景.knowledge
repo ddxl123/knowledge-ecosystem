@@ -1,0 +1,178 @@
+# 02-场景
+
+
+## 收集指南
+
+> ⚠️ **严格范围限定：** 仅收集本章（第2章 场景）相关内容，禁止跨章节引用。例如：不得将其他章节的知识点混入本章。
+
+### 条目描述
+本文件是《2025Unity游戏开发》中关于「02-场景」的知识原子文件，属于游戏开发方向。
+
+### 知识结构
+- 核心知识点
+
+### 待收集原子知识点
+- 核心知识点：核心概念、关键术语、原理机制、实践用法
+
+## 核心知识点
+
+### 一、GameObject与Transform
+
+```csharp
+public class ObjectManipulation : MonoBehaviour
+{
+    public GameObject target;
+
+    void Start()
+    {
+        // 创建对象
+        GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        cube.name = "MyCube";
+        cube.transform.position = new Vector3(0, 1, 0);
+
+        // 查找对象
+        GameObject player = GameObject.Find("Player");
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+
+        // 销毁对象
+        Destroy(target, 3f); // 3秒后销毁
+    }
+
+    void Update()
+    {
+        // 移动
+        transform.Translate(Vector3.forward * Time.deltaTime);
+        transform.position = Vector3.Lerp(startPos, endPos, t);
+
+        // 旋转
+        transform.Rotate(Vector3.up, 90 * Time.deltaTime);
+        transform.LookAt(target.transform);
+
+        // 缩放
+        transform.localScale = new Vector3(2, 2, 2);
+    }
+}
+```
+
+### 二、Prefab
+
+```csharp
+public class Spawner : MonoBehaviour
+{
+    public GameObject enemyPrefab;
+    public Transform[] spawnPoints;
+
+    void Start()
+    {
+        InvokeRepeating("SpawnEnemy", 1f, 2f);
+    }
+
+    void SpawnEnemy()
+    {
+        Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
+        GameObject enemy = Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
+        enemy.GetComponent<Enemy>().Initialize(100, 5);
+    }
+}
+```
+
+### 三、组件系统
+
+```csharp
+public class ComponentExample : MonoBehaviour
+{
+    void Start()
+    {
+        // 获取组件
+        Rigidbody rb = GetComponent<Rigidbody>();
+        Renderer renderer = GetComponent<Renderer>();
+        Collider col = GetComponent<Collider>();
+
+        // 添加组件
+        AudioSource audio = gameObject.AddComponent<AudioSource>();
+
+        // 检查组件
+        if (TryGetComponent<Rigidbody>(out Rigidbody rigidbody))
+        {
+            rigidbody.AddForce(Vector3.up * 10f);
+        }
+
+        // 启用/禁用组件
+        renderer.enabled = false;
+        col.enabled = true;
+    }
+}
+```
+
+### 四、场景管理
+
+```csharp
+using UnityEngine.SceneManagement;
+
+public class SceneController : MonoBehaviour
+{
+    // 加载场景
+    public void LoadScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+    }
+
+    // 异步加载
+    public void LoadSceneAsync(string sceneName)
+    {
+        StartCoroutine(LoadSceneCoroutine(sceneName));
+    }
+
+    IEnumerator LoadSceneCoroutine(string sceneName)
+    {
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
+        asyncLoad.allowSceneActivation = false;
+
+        while (!asyncLoad.isDone)
+        {
+            float progress = Mathf.Clamp01(asyncLoad.progress / 0.9f);
+            progressBar.value = progress;
+
+            if (asyncLoad.progress >= 0.9f)
+            {
+                asyncLoad.allowSceneActivation = true;
+            }
+            yield return null;
+        }
+    }
+
+    // 重新加载当前场景
+    public void RestartScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+}
+```
+
+### 五、父子关系
+
+```csharp
+public class ParentChild : MonoBehaviour
+{
+    public Transform parent;
+
+    void Start()
+    {
+        // 设置父对象
+        transform.SetParent(parent);
+
+        // 获取子对象
+        Transform child = transform.GetChild(0);
+        Transform found = transform.Find("ChildName");
+
+        // 遍历子对象
+        foreach (Transform child in transform)
+        {
+            Debug.Log(child.name);
+        }
+
+        // 解除父子关系
+        transform.SetParent(null);
+    }
+}
+```

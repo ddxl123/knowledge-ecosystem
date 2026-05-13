@@ -1,0 +1,65 @@
+# 三角恒等变换
+
+## 收集指南
+
+> ⚠️ **严格范围限定：** 仅收集「三角恒等变换」章节，禁止引用同书其他章节或其他书籍。
+
+### 条目描述
+本书2025王后雄高考数学中「三角恒等变换」章节的知识点梳理，涵盖核心概念、公式定理、典型题型与易错点。
+
+### 知识结构
+- 题型1：求值问题
+- 题型2：化简三角函数式
+- 题型3：辅助角公式应用
+
+### 待收集原子知识点
+- 任意角与弧度制：角度与弧度的换算
+- 三角函数定义：单位圆定义、坐标定义
+- 三角函数图象与性质：周期、振幅、相位变换
+- 三角恒等变换：和差公式、倍角公式、半角公式
+- 解三角形：正弦定理、余弦定理及其应用
+
+## 基本性质
+1. 万能公式：$\sin 2\alpha = \frac{2\tan\alpha}{1+\tan^2\alpha}$，$\cos 2\alpha = \frac{1-\tan^2\alpha}{1+\tan^2\alpha}$
+2. 积化和差与和差化积（了解即可，高考较少直接考）
+3. $\sin\alpha + \cos\alpha$ 与 $\sin\alpha \cos\alpha$ 的关系：$(\sin\alpha + \cos\alpha)^2 = 1 + 2\sin\alpha\cos\alpha$
+4. $1 + \sin 2\alpha = (\sin\alpha + \cos\alpha)^2$
+
+## 典型题型
+### 题型1：求值问题
+**解题步骤**:
+1. 观察角的关系（是否互余、互补、二倍等）
+2. 选择合适的公式
+3. 化简求值
+
+**例题**: 已知 $\sin\alpha = \frac{3}{5}$，$\alpha \in (\frac{\pi}{2}, \pi)$，求 $\sin 2\alpha$、$\cos 2\alpha$、$\tan 2\alpha$
+**解析**: $\cos\alpha = -\frac{4}{5}$，$\sin 2\alpha = 2 \times \frac{3}{5} \times (-\frac{4}{5}) = -\frac{24}{25}$，$\cos 2\alpha = 1 - 2 \times \frac{9}{25} = \frac{7}{25}$，$\tan 2\alpha = -\frac{24}{7}$
+
+### 题型2：化简三角函数式
+**解题步骤**:
+1. 统一角度（化为同一角）
+2. 切化弦或弦化切
+3. 利用公式化简
+
+**例题**: 化简 $\frac{\sin 2\alpha}{1 + \cos 2\alpha} \cdot \frac{\cos\alpha}{1 + \cos\alpha}$
+**解析**: $\frac{2\sin\alpha\cos\alpha}{2\cos^2\alpha} \cdot \frac{\cos\alpha}{1+\cos\alpha} = \frac{\sin\alpha}{1+\cos\alpha} = \tan\frac{\alpha}{2}$
+
+### 题型3：辅助角公式应用
+**解题步骤**:
+1. 将 $a\sin x + b\cos x$ 合一
+2. 求最值或单调区间
+3. 确定 $\varphi$ 的值
+
+**例题**: 求 $f(x) = \sin x + \sqrt{3}\cos x$ 的最大值及取得最大值时的 x 值
+**解析**: $f(x) = 2\sin(x + \frac{\pi}{3})$，最大值为2，此时 $x + \frac{\pi}{3} = \frac{\pi}{2} + 2k\pi$，$x = \frac{\pi}{6} + 2k\pi$
+
+## 高考真题
+- 2024年全国甲卷：三角恒等变换与求值综合
+- 2023年新高考I卷：辅助角公式求最值
+- 2022年全国乙卷：二倍角公式与三角函数性质结合
+
+## 易错点与易混点
+1. 两角和差公式中，$\cos(\alpha - \beta)$ 展开时中间是"+"，$\cos(\alpha + \beta)$ 中间是"−"（与sin相反）
+2. 二倍角公式中 $\cos 2\alpha$ 有三种形式，根据需要选择
+3. 辅助角公式中 $\varphi$ 的象限由 $a$、$b$ 的符号决定
+4. 化简时注意定义域，不能随意约分（如 $\frac{\sin x}{\cos x}$ 在 $\cos x = 0$ 处无意义）

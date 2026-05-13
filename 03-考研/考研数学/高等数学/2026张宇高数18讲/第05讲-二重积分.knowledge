@@ -1,0 +1,52 @@
+# 第05讲：二重积分
+
+
+## 知识点1：二重积分的概念与性质
+
+**定义**:
+$$\iint_D f(x,y) d\sigma = \lim_{\lambda \to 0} \sum_{i=1}^{n} f(\xi_i, \eta_i) \Delta \sigma_i$$
+
+**性质**:
+1. 线性性
+2. 区域可加性
+3. 保号性：若 $f(x,y) \geq 0$，则 $\iint_D f(x,y) d\sigma \geq 0$
+4. **估值定理**: $m \cdot S_D \leq \iint_D f d\sigma \leq M \cdot S_D$
+5. **中值定理**: 存在 $(\xi, \eta) \in D$，使 $\iint_D f d\sigma = f(\xi, \eta) \cdot S_D$
+
+**几何意义**: $f(x,y) \geq 0$ 时，$\iint_D f(x,y) d\sigma$ 表示曲顶柱体的体积
+
+---
+
+## 知识点2：利用对称性简化计算
+
+**公式**:
+- 若 $D$ 关于 $x$ 轴对称且 $f(x,-y) = -f(x,y)$（关于 $y$ 为奇函数），则 $\iint_D f d\sigma = 0$
+- 若 $D$ 关于 $x$ 轴对称且 $f(x,-y) = f(x,y)$（关于 $y$ 为偶函数），则 $\iint_D f d\sigma = 2\iint_{D_1} f d\sigma$
+- 若 $D$ 关于 $y=x$ 对称，则 $\iint_D f(x,y) d\sigma = \iint_D f(y,x) d\sigma$
+
+---
+
+## 知识点3：二重积分的计算
+
+**直角坐标系**:
+$$\iint_D f(x,y) dxdy = \int_a^b dx \int_{\varphi_1(x)}^{\varphi_2(x)} f(x,y) dy \quad \text{（X型区域）}$$
+$$\iint_D f(x,y) dxdy = \int_c^d dy \int_{\psi_1(y)}^{\psi_2(y)} f(x,y) dx \quad \text{（Y型区域）}$$
+
+**极坐标系**:
+$$\iint_D f(x,y) dxdy = \int_\alpha^\beta d\theta \int_{r_1(\theta)}^{r_2(\theta)} f(r\cos\theta, r\sin\theta) \cdot r \, dr$$
+
+**适用极坐标的情形**:
+- 积分区域为圆域或圆域的一部分
+- 被积函数含 $x^2 + y^2$
+
+**常考题型**:
+- 交换积分次序
+- 选择合适的坐标系计算
+- 利用对称性简化计算
+
+**易错点**: 
+- 交换积分次序时必须先画出积分区域
+- 极坐标下别忘了乘以 $r$（雅可比行列式）
+- 确定积分限时注意区域边界
+
+**真题链接**: 二重积分计算是高频考点，尤其交换积分次序和极坐标变换

@@ -1,0 +1,64 @@
+# Derivatives
+
+## 收集指南
+
+> ⚠️ **严格范围限定：** 仅收集本文件内容，禁止跨文件、跨目录引用。例如本文件对应「衍生品」部分，收集时只限于该部分的知识点，不得混入其他章节（如其他编号文件）的内容。
+
+### 条目描述
+本文件是CFA考试中「衍生品」章节的原子知识文件。仅包含本章节的核心知识点框架和待收集的原子知识点，不涉及其他章节或文件的内容。
+
+### 知识结构
+- Derivative Markets
+- Forward Contracts
+- Futures Contracts
+- Options
+- Swaps
+
+### 待收集原子知识点
+- Derivative Markets
+- Forward Contracts
+- Futures Contracts
+- Options
+- Swaps
+
+## Core Knowledge Points
+
+### 一、Derivative Markets
+1. **Forward commitments**: forwards, futures, swaps
+2. **Contingent claims**: options
+
+### 二、Forward Contracts
+1. **Pricing**: F₀ = S₀ × (1+r)^T
+2. **Valuation**: V = S - PV(F)
+3. **Credit risk in forwards**
+
+### 三、Futures Contracts
+1. **Standardization**
+2. **Margin requirements**
+3. **Marking to market**
+4. **Forwards vs futures**
+
+### 四、Options
+1. **Call and put options**
+2. **Option payoff diagrams**
+3. **Put-call parity**: C + PV(X) = P + S
+4. **Option pricing factors**
+   - Underlying price, strike, time, volatility, interest rate, dividends
+
+### 五、Swaps
+1. **Interest rate swaps**
+2. **Currency swaps**
+3. **Credit default swaps**
+
+## 2025 Updates
+- New content on cryptocurrency derivatives
+- Updated swap valuation methods
+
+## Exam Tips
+- **High-frequency topics**: Put-call parity, option payoffs, forward pricing
+- **Weight**: 5-8% of exam
+
+## Common Mistakes
+1. ⚠️ Forward vs futures: forwards are OTC, futures are exchange-traded
+2. ⚠️ Put-call parity applies to European options only
+3. ⚠️ Options have asymmetric payoff

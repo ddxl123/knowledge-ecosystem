@@ -1,0 +1,84 @@
+# 第13讲：曲线积分
+
+
+## 知识点1：第一类曲线积分（对弧长的曲线积分）
+
+**定义**:
+$$\int_L f(x,y) ds = \lim_{\lambda \to 0} \sum f(\xi_i, \eta_i) \Delta s_i$$
+
+**性质**:
+1. 与路径方向无关
+2. 可加性
+
+**计算方法**:
+- 参数方程 $x = x(t), y = y(t)$，$t \in [\alpha, \beta]$：
+$$\int_L f ds = \int_\alpha^\beta f(x(t), y(t)) \sqrt{x'^2(t) + y'^2(t)} \, dt$$
+
+- $y = y(x)$，$x \in [a,b]$：
+$$\int_L f ds = \int_a^b f(x, y(x)) \sqrt{1 + y'^2(x)} \, dx$$
+
+- 极坐标 $r = r(\theta)$：
+$$\int_L f ds = \int_\alpha^\beta f(r\cos\theta, r\sin\theta) \sqrt{r^2 + r'^2} \, d\theta$$
+
+**常考题型**:
+- 计算第一类曲线积分
+- 利用对称性简化计算
+
+---
+
+## 知识点2：第二类曲线积分（对坐标的曲线积分）
+
+**定义**:
+$$\int_L P dx + Q dy = \lim_{\lambda \to 0} \sum [P(\xi_i, \eta_i) \Delta x_i + Q(\xi_i, \eta_i) \Delta y_i]$$
+
+**性质**:
+1. 与路径方向有关：$\int_{-L} = -\int_L$
+2. 可加性
+
+**计算方法（参数化）**: 
+$$\int_L P dx + Q dy = \int_\alpha^\beta [P(x(t), y(t)) x'(t) + Q(x(t), y(t)) y'(t)] dt$$
+
+**两类曲线积分的关系**:
+$$\int_L P dx + Q dy = \int_L (P\cos\alpha + Q\cos\beta) ds$$
+其中 $(\cos\alpha, \cos\beta)$ 是曲线 $L$ 的单位切向量
+
+---
+
+## 知识点3：格林公式
+
+**公式**: 设 $D$ 为平面有界闭区域，$L = \partial D$ 取正向（逆时针），$P, Q$ 在 $D$ 上有连续偏导数，则
+$$\oint_L P dx + Q dy = \iint_D \left(\frac{\partial Q}{\partial x} - \frac{\partial P}{\partial y}\right) dxdy$$
+
+**应用**:
+1. 计算平面区域面积：$S = \frac{1}{2} \oint_L x dy - y dx$
+2. 简化曲线积分的计算
+
+**常考题型**:
+- 利用格林公式计算曲线积分
+- 补线后利用格林公式
+
+---
+
+## 知识点4：平面上曲线积分与路径无关的条件
+
+**等价条件**（在单连通区域内）:
+1. $\int_L P dx + Q dy$ 与路径无关
+2. $\oint_L P dx + Q dy = 0$（沿任意闭曲线）
+3. 存在 $u(x,y)$ 使 $du = P dx + Q dy$
+4. $\frac{\partial P}{\partial y} = \frac{\partial Q}{\partial x}$
+
+**求原函数**:
+$$u(x,y) = \int_{(x_0, y_0)}^{(x, y)} P dx + Q dy$$
+可选择折线路径计算
+
+**常考题型**:
+- 判断曲线积分是否与路径无关
+- 求原函数
+- 利用路径无关简化计算
+
+**易错点**: 
+- 格林公式要求 $P, Q$ 在 $D$ 内有连续偏导数（注意奇点）
+- 路径无关条件要求单连通区域
+- 正向为逆时针方向
+
+**真题链接**: 格林公式和路径无关是高频考点，常需补线构造闭曲线

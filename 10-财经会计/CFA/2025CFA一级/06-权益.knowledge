@@ -1,0 +1,58 @@
+# Equity Investments
+
+## 收集指南
+
+> ⚠️ **严格范围限定：** 仅收集本文件内容，禁止跨文件、跨目录引用。例如本文件对应「权益」部分，收集时只限于该部分的知识点，不得混入其他章节（如其他编号文件）的内容。
+
+### 条目描述
+本文件是CFA考试中「权益」章节的原子知识文件。仅包含本章节的核心知识点框架和待收集的原子知识点，不涉及其他章节或文件的内容。
+
+### 知识结构
+- Market Organization and Structure
+- Security Market Indices
+- Equity Valuation
+- Industry and Company Analysis
+
+### 待收集原子知识点
+- Market Organization and Structure
+- Security Market Indices
+- Equity Valuation
+- Industry and Company Analysis
+
+## Core Knowledge Points
+
+### 一、Market Organization and Structure
+1. **Market types**: exchange, OTC
+2. **Order types**: market, limit, stop
+3. **Market efficiency**: weak, semi-strong, strong
+
+### 二、Security Market Indices
+1. **Price-weighted, market-cap-weighted, equal-weighted**
+2. **Rebalancing and reconstitution**
+
+### 三、Equity Valuation
+1. **DDM (Dividend Discount Model)**
+   - Gordon Growth Model: P₀ = D₁ / (r - g)
+   - Two-stage DDM
+2. **Free Cash Flow Models**
+   - FCFF, FCFE
+3. **Market-based Valuation**
+   - P/E, P/B, P/S, EV/EBITDA
+
+### 四、Industry and Company Analysis
+1. **Industry life cycle**
+2. **Porter's Five Forces**
+3. **Competitive advantages**
+
+## 2025 Updates
+- New content on digital economy valuations
+- Updated ESG integration in equity analysis
+
+## Exam Tips
+- **High-frequency topics**: DDM, P/E ratio, market efficiency
+- **Weight**: 10-12% of exam
+
+## Common Mistakes
+1. ⚠️ Gordon Growth Model assumes constant growth forever
+2. ⚠️ Trailing P/E vs leading P/E
+3. ⚠️ Market-cap-weighted indices have momentum bias
