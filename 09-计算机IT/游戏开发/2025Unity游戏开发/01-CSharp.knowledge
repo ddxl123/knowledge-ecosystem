@@ -1,12 +1,36 @@
-# CSharp
+# C# for Unity
 
-## CSharp的定义与基本概念
+## 变量与类型
+- 值类型：int、float、double、bool、struct、enum
+- 引用类型：class、string、interface、delegate、array
+- var类型推断：var x = 10; 编译器推断类型
+- 可空类型：int? nullableInt = null;
+- 常量：const int MAX = 100; 编译时常量；readonly运行时常量
 
-## CSharp的核心原理与工作机制
+## 面向对象
+- 类与对象：class Player { public int hp; }
+- 继承：class Enemy : Entity { }
+- 接口：interface IDamageable { void TakeDamage(int amount); }
+- 抽象类：abstract class Animal { abstract void Speak(); }
+- 多态：虚方法virtual/override，接口实现
 
-## CSharp的分类与类型体系
+## 集合
+- List<T>：动态数组，Add/Remove/Contains/Count
+- Dictionary<TKey,TV>：键值对，TryGetValue/ContainsKey
+- Queue<T>：队列，Enqueue/Dequeue
+- Stack<T>：栈，Push/Pop
+- HashSet<T>：集合，自动去重
 
-## CSharp的常见用法与实践场景
+## 委托与事件
+- 委托：delegate void MyDelegate(int x);
+- Action/Func：内置委托类型
+- 事件：event Action OnDeath; 触发：OnDeath?.Invoke();
+- Lambda表达式：(x) => x * 2
+- UnityEvent：Inspector可配置的事件
 
-## CSharp的注意事项与最佳实践
-
+## 协程
+- IEnumerator Method() { yield return new WaitForSeconds(1f); }
+- StartCoroutine()：启动协程
+- StopCoroutine()：停止协程
+- yield return null：下一帧继续
+- 适合：延迟操作、异步加载、动画序列

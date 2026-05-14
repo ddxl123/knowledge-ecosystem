@@ -1,12 +1,36 @@
-# 并发
+# 并发编程
 
-## 并发的定义与基本概念
+## 线程
+- std::thread::spawn：创建新线程，传入闭包
+- JoinHandle：join()等待线程完成，返回Result
+- move闭包：move || {} 将变量所有权转移到线程
+- 线程局部存储：thread_local!宏
+- 线程池：rayon库的par_iter()并行迭代
 
-## 并发的核心原理与工作机制
+## 消息传递
+- mpsc::channel：多生产者单消费者通道
+- tx.send(value)：发送值（move语义）
+- rx.recv()：阻塞接收；rx.try_recv()：非阻塞
+- 多个发送端：tx.clone()克隆发送端
+- 通道关闭：所有发送端drop后，接收端收到错误
 
-## 并发的分类与类型体系
+## 共享状态
+- Mutex<T>：互斥锁，lock()获取锁，返回MutexGuard（RAII自动释放）
+- Arc<T>：原子引用计数，线程安全的Rc
+- Arc<Mutex<T>>：多线程共享可变状态的惯用模式
+- RwLock<T>：读写锁，允许多个读或一个写
+- 死锁预防：注意锁的获取顺序，避免嵌套锁
 
-## 并发的常见用法与实践场景
+## Send与Sync trait
+- Send：可以安全地在线程间转移所有权
+- Sync：可以安全地在线程间共享引用（&T是Send）
+- 大多数类型自动实现Send和Sync
+- Rc<T>不是Send（非原子引用计数），用Arc<T>替代
+- RefCell<T>不是Sync（运行时借用检查非线程安全）
 
-## 并发的注意事项与最佳实践
-
+## 无畏并发
+- 编译器在编译期防止数据竞争（借用检查器+Send/Sync）
+- rayon：数据并行库，.par_iter()一行代码实现并行
+- crossbeam：高级并发工具，作用域线程、无锁数据结构
+- async/await：异步运行时（tokio），适合IO密集型任务
+- 原子类型：AtomicBool/AtomicUsize等，无锁并发操作

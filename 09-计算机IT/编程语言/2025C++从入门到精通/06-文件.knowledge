@@ -1,12 +1,36 @@
-# 文件
+# 文件与IO操作
 
-## 文件的定义与基本概念
+## 标准IO流
+- cin/cout：标准输入输出流，可重定向
+- cerr/clog：标准错误流，cerr无缓冲，clog有缓冲
+- 流操纵符：setw、setprecision、fixed、scientific、hex、oct
+- 格式化输出：printf风格（cstdio）vs 流风格（iostream）
+- 同步：std::ios::sync_with_stdio(false)关闭同步提升性能
 
-## 文件的核心原理与工作机制
+## 文件流
+- ifstream：文件输入流，读文件
+- ofstream：文件输出流，写文件
+- fstream：文件输入输出流，读写文件
+- 打开模式：ios::in、ios::out、ios::app、ios::binary、ios::trunc
+- 文件指针：seekg（读位置）、seekp（写位置）、tellg、tellp
 
-## 文件的分类与类型体系
+## 字符串流
+- stringstream：字符串流，格式化读写
+- istringstream：从字符串读取，解析数据
+- ostringstream：写入字符串，构建复杂字符串
+- 用途：类型转换（int↔string）、日志构建、数据解析
+- str()方法：获取/设置底层字符串
 
-## 文件的常见用法与实践场景
+## 文件系统（C++17）
+- <filesystem>头文件：path、directory_entry、file_status
+- path类：构造、拼接（/运算符）、分解（stem、extension、parent_path）
+- 文件操作：exists、copy、rename、remove、create_directory
+- 目录遍历：directory_iterator、recursive_directory_iterator
+- 文件属性：file_size、last_write_time、is_regular_file、is_directory
 
-## 文件的注意事项与最佳实践
-
+## 二进制文件与序列化
+- 二进制读写：read()、write()，sizeof确定大小
+- 结构体直接写入：注意内存对齐和跨平台兼容性
+- 文本vs二进制：文本可读性好，二进制效率高
+- 序列化方案：Protocol Buffers、MessagePack、JSON（nlohmann/json）
+- 大文件处理：mmap内存映射，分块读取

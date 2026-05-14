@@ -1,12 +1,36 @@
 # 组件
 
-## 组件的定义与基本概念
+## 函数组件
+- 函数组件：const Button = ({ onClick, children }) => <button onClick={onClick}>{children}</button>
+- Props：组件的输入参数，只读不可修改
+- Children：特殊prop，组件标签之间的内容
+- 默认参数：const Button = ({ size = 'medium' }) => ...
+- 组件组合：小组件组合成大组件，优于继承
 
-## 组件的核心原理与工作机制
+## JSX语法
+- JSX是JavaScript的语法扩展，编译为React.createElement()
+- 表达式嵌入：{variable}、{condition ? a : b}、{list.map(...)}
+- 属性：className（替代class）、htmlFor（替代for）、style={{}}
+- 列表渲染：list.map(item => <li key={item.id}>{item.name}</li>)
+- 条件渲染：{condition && <Component />} 或 三元表达式
 
-## 组件的分类与类型体系
+## 生命周期（类组件）
+- Mounting：constructor→render→componentDidMount
+- Updating：shouldComponentUpdate→render→componentDidUpdate
+- Unmounting：componentWillUnmount
+- 错误处理：componentDidCatch、static getDerivedStateFromError
+- 函数组件用useEffect替代生命周期方法
 
-## 组件的常见用法与实践场景
+## Refs与DOM
+- useRef：创建可变引用，不触发重新渲染
+- 访问DOM：ref={inputRef}，inputRef.current.focus()
+- 转发Ref：forwardRef包装组件，允许父组件访问子组件DOM
+- useImperativeHandle：自定义暴露给父组件的方法
+- Ref避免过度使用，优先用state管理数据
 
-## 组件的注意事项与最佳实践
-
+## 性能优化
+- React.memo：缓存组件，props不变时跳过渲染
+- useMemo：缓存计算结果，避免重复计算
+- useCallback：缓存函数引用，避免子组件不必要渲染
+- 虚拟列表：react-window/react-window-infinite-loader
+- 代码分割：React.lazy + Suspense按需加载组件

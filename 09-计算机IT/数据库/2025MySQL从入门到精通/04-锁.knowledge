@@ -1,12 +1,36 @@
-# 锁
+# 锁机制
 
-## 锁的定义与基本概念
+## 锁类型
+- 表级锁：锁定整张表，MyISAM使用，开销小并发低
+- 行级锁：锁定单行，InnoDB使用，开销大并发高
+- 页级锁：锁定一页，BDB引擎使用
+- 共享锁(S锁)：读锁，多个事务可同时持有
+- 排他锁(X锁)：写锁，独占，其他事务不能读写
 
-## 锁的核心原理与工作机制
+## InnoDB行锁
+- 记录锁(Record Lock)：锁定索引记录
+- 间隙锁(Gap Lock)：锁定索引记录之间的间隙，防止幻读
+- 临键锁(Next-Key Lock)：记录锁+间隙锁，InnoDB默认
+- 插入意向锁：插入操作的间隙锁
+- 行锁基于索引：无索引时退化为表锁
 
-## 锁的分类与类型体系
+## 死锁
+- 死锁条件：互斥、持有并等待、不可剥夺、循环等待
+- 检测：innodb_deadlock_detect=ON
+- 超时：innodb_lock_wait_timeout（默认50秒）
+- 预防：固定加锁顺序、减少事务持有时间、降低隔离级别
+- 处理：InnoDB自动回滚代价最小的事务
 
-## 锁的常见用法与实践场景
+## 锁优化
+- 尽量使用索引：避免行锁升级为表锁
+- 缩小事务范围：减少锁持有时间
+- 乐观锁：版本号机制，update where version=?
+- 悲观锁：SELECT FOR UPDATE，适合写多读少
+- 读写分离：主库写，从库读
 
-## 锁的注意事项与最佳实践
-
+## 锁监控
+- SHOW ENGINE INNODB STATUS：查看InnoDB锁信息
+- performance_schema：锁等待和死锁信息
+- information_schema.INNODB_LOCKS/WAITS：锁详情
+- 慢查询日志：分析锁等待时间
+- SHOW PROCESSLIST：查看当前连接和锁等待

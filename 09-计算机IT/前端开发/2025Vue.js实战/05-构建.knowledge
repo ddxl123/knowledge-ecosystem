@@ -1,12 +1,37 @@
-# 构建
+# Vue工程化
 
-## 构建的定义与基本概念
+## Vite
+- 下一代前端构建工具，基于ESM的开发服务器
+- 开发时无需打包：ESM原生加载，启动极快
+- HMR热更新：精确更新变更模块，秒级刷新
+- 生产构建：Rollup打包，tree-shaking优化
+- 插件系统：@vitejs/plugin-vue、vite-plugin-svg等
 
-## 构建的核心原理与工作机制
+## 项目结构
+- src/components：可复用组件
+- src/views：页面级组件
+- src/composables：组合式函数
+- src/stores：Pinia状态管理
+- src/router：路由配置
+- src/assets：静态资源（会被构建处理）
 
-## 构建的分类与类型体系
+## TypeScript集成
+- <script setup lang="ts">
+- defineProps<{ title: string; count?: number }>()
+- defineEmits<{ (e: 'update', id: number): void }>()
+- ref<string>('')、ref<number[]>([])
+- 类型化的Pinia store
 
-## 构建的常见用法与实践场景
+## 测试
+- Vitest：Vite原生测试框架，兼容Jest API
+- Vue Test Utils：Vue组件测试工具
+- mount(Component, { props: { ... } })：挂载组件
+- 触发事件：wrapper.find('button').trigger('click')
+- 断言：expect(wrapper.text()).toContain('Hello')
 
-## 构建的注意事项与最佳实践
-
+## 部署与优化
+- 环境变量：.env文件，VITE_前缀暴露给客户端
+- 代码分割：动态import()自动分包
+- 预构建依赖：Vite自动优化node_modules
+- CDN部署：配置base路径
+- PWA：vite-plugin-pwa，离线访问支持

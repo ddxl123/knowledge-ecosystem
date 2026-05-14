@@ -1,12 +1,37 @@
-# 实时
+# 实时通信
 
-## 实时的定义与基本概念
+## Socket.IO
+- 服务端：const io = new Server(httpServer)
+- 客户端：const socket = io('http://server')
+- 事件通信：socket.emit('event', data)、socket.on('event', handler)
+- 广播：io.emit()广播所有、socket.broadcast.emit()排除发送者
+- 命名空间：io.of('/chat')分组通信
+- 房间：socket.join('room')、io.to('room').emit()
 
-## 实时的核心原理与工作机制
+## WebSocket
+- ws库：轻量级WebSocket实现
+- WebSocket.Server：创建WebSocket服务器
+- ws.on('connection')、ws.on('message')
+- 二进制数据：支持ArrayBuffer和Buffer
+- 心跳检测：ping/pong保持连接
 
-## 实时的分类与类型体系
+## 实时应用场景
+- 聊天系统：私聊、群聊、消息历史
+- 实时通知：推送消息、系统通知
+- 协同编辑：Operational Transformation、CRDT
+- 实时数据：股票行情、体育比分
+- 在线状态：用户在线/离线状态管理
 
-## 实时的常见用法与实践场景
+## Server-Sent Events (SSE)
+- res.writeHead(200, { 'Content-Type': 'text/event-stream' })
+- res.write('data: ' + JSON.stringify(data) + '\n\n')
+- 客户端：new EventSource('/events')
+- 单向推送：服务端到客户端的实时数据流
+- 自动重连：EventSource内置重连机制
 
-## 实时的注意事项与最佳实践
-
+## 消息队列集成
+- Bull/BullMQ：基于Redis的任务队列
+- 任务调度：延迟任务、定时任务、重试机制
+- Socket.IO + Redis Adapter：多实例广播
+- 发布订阅模式：解耦消息发送和处理
+- 流量削峰：高并发时消息队列缓冲

@@ -1,12 +1,36 @@
 # 组件
 
-## 组件的定义与基本概念
+## 组合式API
+- <script setup>语法糖，自动暴露顶层变量
+- ref/reactive：响应式数据
+- computed：计算属性
+- watch/watchEffect：侦听器
+- 生命周期钩子：onMounted、onUpdated、onUnmounted
 
-## 组件的核心原理与工作机制
+## Props与Emits
+- defineProps：声明组件props，支持类型验证和默认值
+- defineEmits：声明组件可触发的事件
+- 单向数据流：Props只读，修改需通过emit通知父组件
+- Props解构陷阱：解构会丢失响应性，使用toRefs
+- Boolean类型特殊转换规则
 
-## 组件的分类与类型体系
+## 组件通信模式
+- Props/Emits：父子组件通信（推荐）
+- Provide/Inject：跨层级通信
+- Pinia：全局状态管理
+- Event Bus（mitt库）：任意组件通信（慎用）
+- ref+defineExpose：父组件直接访问子组件方法
 
-## 组件的常见用法与实践场景
+## 插槽
+- 默认插槽：<slot>默认内容</slot>
+- 具名插槽：<slot name="header">，#header
+- 作用域插槽：<slot :data="data">，#default="{ data }"
+- 动态插槽名：#[dynamicSlotName]
+- 无渲染组件：仅提供逻辑，通过作用域插槽暴露
 
-## 组件的注意事项与最佳实践
-
+## 高级组件模式
+- 异步组件：defineAsyncComponent(() => import('./Comp.vue'))
+- KeepAlive：缓存组件状态，避免重复创建
+- Teleport：将组件渲染到DOM其他位置（如模态框）
+- Transition/TransitionGroup：组件过渡动画
+- Suspense：等待异步组件加载（实验性）

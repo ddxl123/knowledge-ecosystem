@@ -1,12 +1,35 @@
-# 集合
+# 集合框架
 
-## 集合的定义与基本概念
+## Collection体系
+- List：有序可重复，常用ArrayList（数组实现，查询O(1)）和LinkedList（链表，增删O(1)）
+- Set：无序不可重复，HashSet（哈希表）、LinkedHashSet（保持插入顺序）、TreeSet（红黑树，有序）
+- Queue：队列接口，LinkedList实现、PriorityQueue（优先级队列/堆）
+- Deque：双端队列，ArrayDeque（循环数组实现，推荐替代Stack）
 
-## 集合的核心原理与工作机制
+## Map体系
+- HashMap：哈希表实现，允许null键值，初始容量16，负载因子0.75
+- HashMap冲突解决：链表+红黑树（JDK 8+，链表长度>8转红黑树）
+- LinkedHashMap：保持插入/访问顺序，可用于实现LRU缓存
+- TreeMap：红黑树实现，按键排序，不允许null键
+- ConcurrentHashMap：线程安全，JDK 8+使用CAS+synchronized锁桶
 
-## 集合的分类与类型体系
+## 迭代器与工具类
+- Iterator接口：hasNext()、next()、remove()，fail-fast机制
+- ListIterator：List专用，支持双向遍历和add/set操作
+- Collections工具类：sort()、reverse()、shuffle()、unmodifiableList()
+- Comparable接口：自然排序（compareTo方法），Comparator接口：定制排序
+- 增强for循环底层使用Iterator，遍历时不能直接删除元素
 
-## 集合的常见用法与实践场景
+## 泛型
+- 泛型类：class Box<T> { T item; }
+- 泛型方法：public <T> T method(T t)，类型参数在返回类型前
+- 通配符：? extends T（上界，只读）、? super T（下界，只写）——PECS原则
+- 类型擦除：编译后泛型信息被擦除，运行时为原始类型
+- 不能用基本类型作泛型参数，需用包装类（Integer而非int）
 
-## 集合的注意事项与最佳实践
-
+## Stream API（JDK 8+）
+- 创建流：collection.stream()、Arrays.stream()、Stream.of()、Stream.iterate()
+- 中间操作：filter、map、flatMap、sorted、distinct、limit、skip（惰性求值）
+- 终端操作：collect、forEach、reduce、count、anyMatch、allMatch
+- Collectors工具：toList()、groupingBy()、partitioningBy()、joining()
+- 并行流：parallelStream()，注意线程安全问题

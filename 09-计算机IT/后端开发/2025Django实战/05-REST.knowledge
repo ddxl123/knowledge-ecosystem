@@ -1,12 +1,35 @@
-# REST
+# Django REST Framework
 
-## REST的定义与基本概念
+## 序列化器
+- Serializer：手动定义字段
+- ModelSerializer：基于模型自动生成字段
+- 嵌套序列化器：嵌套其他Serializer
+- 只读字段：read_only=True
+- 自定义字段：SerializerMethodField
 
-## REST的核心原理与工作机制
+## 视图与ViewSet
+- APIView：基础类视图
+- GenericAPIView + Mixins：ListModelMixin等
+- ListCreateAPIView/RetrieveUpdateDestroyAPIView：组合视图
+- ViewSet/ModelViewSet：路由自动绑定CRUD
+- 自定义action：@action(detail=True, methods=['post'])
 
-## REST的分类与类型体系
+## 路由与分页
+- DefaultRouter/ SimpleRouter：自动注册ViewSet路由
+- 分页：PageNumberPagination、LimitOffsetPagination、CursorPagination
+- 过滤：DjangoFilterBackend、SearchFilter、OrderingFilter
+- 自定义过滤器：FilterSet类
 
-## REST的常见用法与实践场景
+## 认证与权限
+- 认证：SessionAuthentication、TokenAuthentication、JWTAuthentication
+- 权限：IsAuthenticated、IsAdminUser、DjangoModelPermissions
+- 自定义权限：BasePermission子类
+- 节流(Throttling)：AnonRateThrottle、UserRateThrottle
+- 限流策略：用户级、IP级、端点级
 
-## REST的注意事项与最佳实践
-
+## 高级功能
+- 嵌套路由：drf-nested-routers
+- API文档：drf-spectacular（OpenAPI 3）
+- 版本控制：URLPathVersioning、AcceptHeaderVersioning
+- 缓存：drf-extensions缓存
+- 异步视图：async def（Django 4.1+）

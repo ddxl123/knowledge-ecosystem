@@ -1,12 +1,36 @@
 # 基础语法
 
-## 基础语法的定义与基本概念
+## 变量与数据类型
+- 基本数据类型：byte(8位,-128~127)、short(16位)、int(32位)、long(64位)
+- 浮点类型：float(32位)、double(64位)，注意浮点数精度问题
+- 字符类型：char(16位Unicode)，布尔类型：boolean(true/false)
+- 引用数据类型：类(Class)、接口(Interface)、数组(Array)、枚举(Enum)
+- 类型转换：自动类型转换(小→大)和强制类型转换(大→小，可能丢失精度)
 
-## 基础语法的核心原理与工作机制
+## 运算符与表达式
+- 算术运算符：+、-、*、/、%、++、--（前缀先运算后取值，后缀反之）
+- 比较运算符：==、!=、>、<、>=、<=，结果为boolean
+- 逻辑运算符：&&（短路与）、||（短路或）、!（非）、&、|、^
+- 位运算符：&、|、^、~、<<、>>、>>>（无符号右移）
+- 三元运算符：条件 ? 表达式1 : 表达式2
 
-## 基础语法的分类与类型体系
+## 流程控制
+- if-else、switch-case（支持String类型，JDK 7+）
+- for循环、增强for循环（for-each）、while、do-while
+- break（跳出当前循环）、continue（跳过本次迭代）、return
+- 标签跳转：break label、continue label（用于多层循环控制）
+- switch表达式（JDK 14+预览，JDK 17正式）：yield返回值
 
-## 基础语法的常见用法与实践场景
+## 数组与字符串
+- 一维数组：int[] arr = new int[5] 或 int[] arr = {1,2,3}
+- 二维数组：int[][] matrix = new int[3][4]，支持不规则数组
+- Arrays工具类：sort()、binarySearch()、copyOf()、fill()、equals()
+- String不可变性：每次修改创建新对象，拼接用StringBuilder
+- String常用方法：length()、charAt()、substring()、indexOf()、split()、trim()
 
-## 基础语法的注意事项与最佳实践
-
+## 方法定义与使用
+- 方法签名：访问修饰符 + 返回类型 + 方法名 + 参数列表
+- 参数传递：Java只有值传递，引用类型传递的是引用的副本
+- 方法重载(Overload)：同名不同参数列表（类型、个数、顺序）
+- 可变参数：void method(int... args)，本质是数组
+- static方法属于类，非static方法属于对象

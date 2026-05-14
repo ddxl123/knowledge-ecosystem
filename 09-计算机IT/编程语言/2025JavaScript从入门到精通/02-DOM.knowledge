@@ -1,12 +1,37 @@
-# DOM
+# DOM操作
 
-## DOM的定义与基本概念
+## DOM基础
+- DOM：Document Object Model，文档对象模型，树形结构
+- document对象：代表整个HTML文档，是DOM操作的入口
+- 节点类型：元素节点(1)、属性节点(2)、文本节点(3)、注释节点(8)
+- nodeType/nodeName/nodeValue：判断节点类型和获取信息
+- parentNode/childNodes/firstChild/lastChild/nextSibling
 
-## DOM的核心原理与工作机制
+## 元素选择
+- getElementById：ID选择，返回单个元素
+- getElementsByClassName/TagName：返回HTMLCollection（动态）
+- querySelector：CSS选择器，返回第一个匹配元素
+- querySelectorAll：CSS选择器，返回NodeList（静态）
+- matches()：检查元素是否匹配选择器
 
-## DOM的分类与类型体系
+## DOM操作
+- createElement/createTextNode/createDocumentFragment
+- appendChild/insertBefore/removeChild/replaceChild/cloneNode
+- innerHTML：获取/设置元素HTML内容（XSS风险）
+- textContent：获取/设置纯文本内容（安全）
+- classList：add/remove/toggle/contains，操作CSS类
 
-## DOM的常见用法与实践场景
+## 属性与样式
+- getAttribute/setAttribute/removeAttribute：操作HTML属性
+- dataset：操作data-*自定义属性，element.dataset.xxx
+- style：操作内联样式，element.style.color = 'red'
+- getComputedStyle：获取计算后的样式（只读）
+- classList比className字符串操作更优雅
 
-## DOM的注意事项与最佳实践
-
+## 事件处理
+- addEventListener/removeEventListener：事件监听
+- 事件对象Event：target（触发元素）、currentTarget（绑定元素）
+- 事件冒泡：从目标元素向上传播（默认行为）
+- 事件捕获：从document向目标传播，第三个参数true
+- event.preventDefault()：阻止默认行为；event.stopPropagation()：阻止冒泡
+- 事件委托：利用冒泡机制，在父元素上监听子元素事件

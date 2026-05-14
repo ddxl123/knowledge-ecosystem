@@ -1,12 +1,36 @@
 # 模板
 
-## 模板的定义与基本概念
+## 模板语言
+- 变量：{{ variable }}，支持点号访问属性和方法
+- 标签：{% tag %}，控制逻辑
+- 过滤器：{{ value|filter:"arg" }}，数据格式化
+- 注释：{# comment #} 或 {% comment %}...{% endcomment %}
 
-## 模板的核心原理与工作机制
+## 控制标签
+- 条件：{% if condition %}...{% elif %}...{% else %}...{% endif %}
+- 循环：{% for item in list %}...{% endfor %}
+- 循环变量：forloop.counter、forloop.first、forloop.last
+- 空处理：{% empty %}...{% endfor %}
+- {% with %}：创建临时变量
 
-## 模板的分类与类型体系
+## 模板继承
+- {% extends "base.html" %}：继承父模板
+- {% block content %}...{% endblock %}：定义/覆盖块
+- {{ block.super }}：保留父模板内容
+- {% include "partial.html" %}：包含子模板
+- {% include "partial.html" with var=value %}：传递变量
 
-## 模板的常见用法与实践场景
+## 过滤器
+- 文本：lower、upper、title、truncatewords、linebreaksbr
+- 数字：floatformat、add、filesizeformat
+- 日期：date:"Y-m-d H:i:s"
+- 列表：first、last、length、join:", "
+- 安全：escape、safe、striptags
+- 自定义过滤器：@register.filter装饰器
 
-## 模板的注意事项与最佳实践
-
+## 模板配置
+- TEMPLATES配置：DIRS、APP_DIRS、OPTIONS
+- 上下文处理器：TEMPLATE_CONTEXT_PROCESSORS
+- 自定义标签库：templatetags目录，{% load custom_tags %}
+- inclusion_tag：渲染子模板的自定义标签
+- simple_tag：返回字符串的自定义标签

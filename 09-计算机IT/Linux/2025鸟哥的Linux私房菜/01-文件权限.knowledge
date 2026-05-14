@@ -1,12 +1,35 @@
 # 文件权限
 
-## 文件权限的定义与基本概念
+## 权限基础
+- 三组权限：所有者(u)、所属组(g)、其他用户(o)
+- 三种权限：读(r=4)、写(w=2)、执行(x=1)
+- ls -l查看权限：-rwxr-xr-- 表示文件类型+三组权限
+- 文件类型：-普通文件、d目录、l链接、b块设备、c字符设备
+- 目录权限：r列出内容、w创建/删除文件、x进入目录
 
-## 文件权限的核心原理与工作机制
+## 权限管理
+- chmod：修改权限，chmod 755 file 或 chmod u+x file
+- chown：修改所有者，chown user:group file
+- chgrp：修改所属组，chgrp group file
+- umask：默认权限掩码，文件666-umask，目录777-umask
+- 递归修改：chmod -R、chown -R
 
-## 文件权限的分类与类型体系
+## 特殊权限
+- SUID(4)：文件执行时以文件所有者身份运行（如/usr/bin/passwd）
+- SGID(2)：文件执行时以文件所属组身份运行；目录下新文件继承组
+- Sticky Bit(1)：目录中只有文件所有者能删除自己的文件（如/tmp）
+- 设置：chmod 4755（SUID）、chmod 2755（SGID）、chmod 1755（Sticky）
 
-## 文件权限的常见用法与实践场景
+## 文件系统
+- 目录结构：/（根）、/home（用户目录）、/etc（配置）、/var（日志）
+- /bin和/sbin：系统命令
+- /usr：用户程序（/usr/local本地安装）
+- /tmp：临时文件
+- /proc和/sys：虚拟文件系统，内核信息
 
-## 文件权限的注意事项与最佳实践
-
+## 文件操作
+- 文件查找：find / -name "filename" -type f
+- locate：基于数据库的快速查找，updatedb更新
+- which/whereis：查找命令位置
+- 文件链接：ln硬链接（同一inode）、ln -s软链接（符号链接）
+- 文件压缩：tar、gzip、bzip2、xz、zip

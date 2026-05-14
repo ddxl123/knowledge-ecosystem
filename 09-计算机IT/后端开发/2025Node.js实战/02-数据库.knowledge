@@ -1,12 +1,36 @@
-# 数据库
+# 数据库操作
 
-## 数据库的定义与基本概念
+## MongoDB与Mongoose
+- Schema定义：new Schema({ name: String, age: Number })
+- Model：mongoose.model('User', schema)
+- CRUD：create、find、findById、findByIdAndUpdate、findByIdAndDelete
+- 验证：required、enum、min/max、自定义验证器
+- 中间件：pre/post钩子（save、remove）
 
-## 数据库的核心原理与工作机制
+## 关系与嵌入
+- 嵌入式：将关联数据嵌入文档
+- 引用式：ObjectId引用其他集合，populate()填充
+- 虚拟属性：schema.virtual('fullName').get(function() { ... })
+- 索引：schema.index({ email: 1 }, { unique: true })
+- 聚合管道：Model.aggregate([{ $match: ... }, { $group: ... }])
 
-## 数据库的分类与类型体系
+## SQL数据库
+- Sequelize：支持MySQL/PostgreSQL/SQLite
+- 模型定义：sequelize.define('User', { name: DataTypes.STRING })
+- 关联：hasOne、hasMany、belongsTo、belongsToMany
+- 迁移：sequelize-cli创建和执行迁移
+- 原始查询：sequelize.query('SELECT * FROM users')
 
-## 数据库的常见用法与实践场景
+## Prisma ORM
+- Schema定义：prisma/schema.prisma文件
+- prisma generate：生成类型安全的客户端
+- CRUD：prisma.user.create/findMany/update/delete
+- 关系：@relation定义模型关系
+- 迁移：prisma migrate dev，自动SQL迁移
 
-## 数据库的注意事项与最佳实践
-
+## 缓存与Redis
+- ioredis：Redis客户端
+- 缓存策略：查询结果缓存、Session存储
+- 发布订阅：redis.subscribe/publish
+- 限流：滑动窗口、令牌桶实现
+- 分布式锁：Redlock算法

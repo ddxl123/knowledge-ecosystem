@@ -1,12 +1,36 @@
 # Next.js
 
-## Next.js的定义与基本概念
+## 页面与路由
+- 文件系统路由：app/目录结构即路由
+- 页面：page.tsx定义页面组件
+- 布局：layout.tsx定义共享布局，嵌套布局
+- 加载状态：loading.tsx，错误处理：error.tsx
+- 动态路由：[id]/page.tsx，use(params)获取参数
 
-## Next.js的核心原理与工作机制
+## 渲染策略
+- SSR（服务端渲染）：每次请求在服务端渲染，适合动态内容
+- SSG（静态生成）：构建时生成HTML，适合静态页面
+- ISR（增量静态再生）：静态生成+定期重新验证
+- RSC（React Server Components）：默认服务端组件，减少客户端JS
+- 'use client'指令：标记客户端组件
 
-## Next.js的分类与类型体系
+## 数据获取
+- Server Components：直接async/await获取数据，无需useEffect
+- Route Handlers：app/api/下的API路由，GET/POST等处理函数
+- Server Actions：'use server'标记的函数，表单直接调用服务端
+- 缓存：fetch默认缓存，revalidate控制重新验证
+- 数据库：Prisma/Drizzle ORM集成
 
-## Next.js的常见用法与实践场景
+## 样式与优化
+- CSS Modules：.module.css文件作用域隔离
+- Tailwind CSS：原子化CSS框架，Next.js官方支持
+- next/image：自动优化图片，懒加载、响应式、WebP转换
+- next/font：自动优化字体加载，消除CLS
+- Metadata API：导出metadata对象，优化SEO
 
-## Next.js的注意事项与最佳实践
-
+## 部署与高级
+- Vercel：Next.js官方部署平台，零配置部署
+- 中间件：middleware.ts，在请求到达页面前执行逻辑
+- 国际化：i18n路由，自动语言检测
+- 认证：NextAuth.js/Auth.js，支持多种Provider
+- Edge Runtime：边缘运行时，更低延迟

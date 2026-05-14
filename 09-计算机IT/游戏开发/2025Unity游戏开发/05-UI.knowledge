@@ -1,12 +1,38 @@
-# UI
+# Unity UI系统
 
-## UI的定义与基本概念
+## Canvas
+- Screen Space - Overlay：覆盖在屏幕上，不受相机影响
+- Screen Space - Camera：绑定相机，受相机影响
+- World Space：世界空间中的UI，3D场景中的UI元素
+- Canvas Scaler：UI缩放模式（Constant Pixel/Scale With Screen Size）
+- 渲染模式选择：2D游戏用Overlay，3D游戏用Camera
 
-## UI的核心原理与工作机制
+## 基础UI组件
+- Text/TextMeshPro：文本显示，TMP更推荐（清晰、功能多）
+- Image：图片显示，支持Sprite和颜色
+- Button：按钮，onClick事件
+- InputField：文本输入
+- Slider：滑动条
+- Toggle：开关
+- Dropdown：下拉选择
 
-## UI的分类与类型体系
+## 布局组件
+- Horizontal Layout Group：水平排列子元素
+- Vertical Layout Group：垂直排列子元素
+- Grid Layout Group：网格排列
+- Content Size Fitter：根据内容自动调整大小
+- Layout Element：控制布局元素的首选大小
 
-## UI的常见用法与实践场景
+## 滚动与列表
+- Scroll Rect：滚动区域
+- Scrollbar：滚动条
+- 动态列表：对象池+Scroll Rect实现大量数据滚动
+- 对象池(Object Pool)：复用UI元素，减少GC
+- 虚拟列表：只渲染可见区域的元素
 
-## UI的注意事项与最佳实践
-
+## UI交互
+- EventSystem：UI事件系统核心
+- IPointerClickHandler等接口：自定义交互
+- 拖拽：IDragHandler、IBeginDragHandler、IEndDragHandler
+- 导航：键盘/手柄UI导航
+- 遮罩(Mask)：限制子元素显示区域

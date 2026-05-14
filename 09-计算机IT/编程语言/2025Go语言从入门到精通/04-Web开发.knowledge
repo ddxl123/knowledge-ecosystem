@@ -1,12 +1,36 @@
 # Web开发
 
-## Web开发的定义与基本概念
+## Gin框架
+- 路由：r.GET/POST/PUT/DELETE("/path", handler)
+- 参数获取：c.Param()（路径参数）、c.Query()（查询参数）、c.Bind()（请求体）
+- 中间件：r.Use(middleware)，自定义中间件链
+- 路由分组：r.Group("/api")，共享中间件和前缀
+- 响应：c.JSON()、c.String()、c.HTML()、c.File()
 
-## Web开发的核心原理与工作机制
+## 数据库操作
+- database/sql：Go标准库数据库接口
+- 驱动：go-sql-driver/mysql、lib/pq（PostgreSQL）、go-sqlite3
+- 连接池：sql.Open()配置MaxOpenConns、MaxIdleConns、ConnMaxLifetime
+- 预编译语句：db.Prepare()，防止SQL注入
+- ORM：GORM，自动迁移、关联、钩子、事务
 
-## Web开发的分类与类型体系
+## 认证与授权
+- JWT：JSON Web Token，无状态认证，header.payload.signature
+- 中间件验证：解析Token、验证签名、提取用户信息
+- OAuth2.0：授权码模式、客户端模式、密码模式
+- bcrypt：密码哈希，GenerateFromPassword/CompareHashAndPassword
+- Session：基于Cookie的会话管理（Gin中间件）
 
-## Web开发的常见用法与实践场景
+## 测试
+- testing包：func TestXxx(t *testing.T) {}
+- 表驱动测试：tests := []struct{name string; input int; want int}{...}
+- HTTP测试：httptest.NewServer()、httptest.NewRecorder()
+- 基准测试：func BenchmarkXxx(b *testing.B) { for i := 0; i < b.N; i++ {} }
+- 模拟依赖：接口+mock实现
 
-## Web开发的注意事项与最佳实践
-
+## 配置与日志
+- 配置管理：viper库，支持YAML/JSON/TOML/env/环境变量
+- 日志：zerolog（零分配JSON日志）、zap（Uber高性能日志）
+- 结构化日志：键值对形式，便于日志分析系统处理
+- 环境变量：os.Getenv()，12-Factor App推荐配置方式
+- 优雅关闭：signal.Notify捕获SIGTERM，http.Shutdown()等待请求完成

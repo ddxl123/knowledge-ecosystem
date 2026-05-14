@@ -1,12 +1,36 @@
 # 测试
 
-## 测试的定义与基本概念
+## 单元测试
+- JUnit 5：@Test、@BeforeEach、@AfterEach、@DisplayName
+- 断言：assertEquals、assertTrue、assertThrows
+- 参数化测试：@ParameterizedTest + @ValueSource/@CsvSource
+- Mockito：@Mock、@InjectMocks、when().thenReturn()
+- @ExtendWith(MockitoExtension.class)：启用Mockito
 
-## 测试的核心原理与工作机制
+## 集成测试
+- @SpringBootTest：启动完整Spring上下文
+- @WebMvcTest：仅加载Web层（Controller测试）
+- @DataJpaTest：仅加载数据层，使用嵌入式数据库
+- TestRestTemplate / MockMvc：发送测试请求
+- @Transactional + @Rollback：测试后自动回滚
 
-## 测试的分类与类型体系
+## MockMvc
+- MockMvcBuilders.standaloneSetup(controller).build()
+- get/post/put/delete：模拟HTTP请求
+- andExpect：验证响应状态码、内容、头信息
+- andDo：打印请求和响应详情
+- JSON路径：jsonPath("$.name").value("Tom")
 
-## 测试的常见用法与实践场景
+## 测试数据库
+- H2：嵌入式数据库，开发和测试环境
+- @Sql：执行SQL脚本初始化测试数据
+- Testcontainers：Docker容器运行真实数据库
+- @DataJpaTest + @AutoConfigureTestDatabase：自动配置
+- 数据工厂：TestFixtures创建测试数据
 
-## 测试的注意事项与最佳实践
-
+## 测试最佳实践
+- AAA模式：Arrange（准备）→Act（执行）→Assert（断言）
+- 测试命名：should_预期行为_when_条件
+- 测试金字塔：单元测试多、集成测试适中、E2E测试少
+- 测试覆盖率：行覆盖+分支覆盖，目标80%+
+- CI/CD集成：Maven/Gradle测试阶段自动运行

@@ -1,12 +1,36 @@
-# 备份
+# 备份与恢复
 
-## 备份的定义与基本概念
+## 备份类型
+- 物理备份：直接复制数据文件，速度快
+- 逻辑备份：导出SQL语句，可移植性好
+- 全量备份：备份所有数据
+- 增量备份：只备份上次备份后变化的数据
+- 差异备份：备份上次全量备份后变化的数据
 
-## 备份的核心原理与工作机制
+## mysqldump
+- 全库备份：mysqldump -u root -p --all-databases > backup.sql
+- 单库备份：mysqldump -u root -p dbname > dbname.sql
+- 表备份：mysqldump -u root -p dbname table1 table2 > tables.sql
+- 恢复：mysql -u root -p dbname < backup.sql
+- 参数：--single-transaction（InnoDB一致性备份）、--routines、--triggers
 
-## 备份的分类与类型体系
+## MySQL Enterprise Backup
+- 物理备份工具，支持热备份
+- 增量备份：只备份变化的数据页
+- 压缩备份：减少备份文件大小
+- 并行备份：多线程加速
+- 恢复速度快：直接复制文件
 
-## 备份的常见用法与实践场景
+## Percona XtraBackup
+- 开源物理备份工具，支持InnoDB热备份
+- 全量备份：xtrabackup --backup
+- 增量备份：--incremental-basedir
+- 恢复：--prepare + --copy-back
+- 流式备份：--stream=tar通过SSH传输
 
-## 备份的注意事项与最佳实践
-
+## 备份策略
+- 定期全量+增量备份：如每日增量+每周全量
+- 备份验证：定期恢复测试
+- 异地备份：备份文件存储在不同物理位置
+- 保留策略：保留最近N天的备份
+- 自动化：cron定时任务自动备份

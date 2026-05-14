@@ -1,12 +1,36 @@
-# 优化
+# 性能优化
 
-## 优化的定义与基本概念
+## 查询优化
+- EXPLAIN分析：查看执行计划，type/key/rows/Extra
+- 避免SELECT *：只查询需要的字段
+- 合理使用索引：覆盖索引、联合索引
+- 避免子查询：改用JOIN
+- 分页优化：深分页用延迟关联
 
-## 优化的核心原理与工作机制
+## 慢查询
+- 慢查询日志：slow_query_log=ON，long_query_time=1
+- mysqldumpslow：分析慢查询日志
+- pt-query-digest：Percona慢查询分析工具
+- 常见原因：全表扫描、索引失效、锁等待、返回数据量大
+- 优化步骤：定位慢SQL→EXPLAIN分析→优化索引/SQL
 
-## 优化的分类与类型体系
+## 表结构优化
+- 选择合适的数据类型：INT vs BIGINT，VARCHAR vs CHAR
+- 范式化设计：减少数据冗余
+- 适度反范式化：减少JOIN，提升查询性能
+- 垂直拆分：大表拆分为多表
+- 水平拆分：数据量大时分表
 
-## 优化的常见用法与实践场景
+## 配置优化
+- innodb_buffer_pool_size：缓冲池大小，建议物理内存的70-80%
+- innodb_log_file_size：Redo Log大小
+- max_connections：最大连接数
+- query_cache：MySQL 8.0已移除
+- 连接池：应用层使用连接池减少连接开销
 
-## 优化的注意事项与最佳实践
-
+## 架构优化
+- 读写分离：主库写，从库读
+- 分库分表：垂直分库（业务拆分）、水平分表（数据拆分）
+- 中间件：ShardingSphere、MyCat
+- 缓存层：Redis缓存热点数据
+- CDN：静态资源CDN加速

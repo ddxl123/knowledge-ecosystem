@@ -1,12 +1,36 @@
-# BOM
+# BOM浏览器对象模型
 
-## BOM的定义与基本概念
+## window对象
+- window是全局对象，全局变量和函数都是window的属性
+- innerWidth/innerHeight：视口尺寸
+- outerWidth/outerHeight：浏览器窗口尺寸
+- scrollTo/scrollBy：页面滚动控制
+- open/close：打开和关闭浏览器窗口
 
-## BOM的核心原理与工作机制
+## 定时器
+- setTimeout：延迟执行一次，返回定时器ID
+- setInterval：周期性执行，返回定时器ID
+- clearTimeout/clearInterval：取消定时器
+- requestAnimationFrame：浏览器优化的动画定时器，60fps
+- 注意闭包陷阱：循环中使用setTimeout需用let或IIFE
 
-## BOM的分类与类型体系
+## location对象
+- href：完整URL，赋值可跳转页面
+- protocol/host/hostname/port/pathname/search/hash：URL各部分
+- assign()：加载新页面（可后退）；replace()：替换当前页面（不可后退）
+- reload()：重新加载页面
+- search解析：URLSearchParams对象处理查询参数
 
-## BOM的常见用法与实践场景
+## navigator对象
+- userAgent：浏览器标识字符串（不可靠，可伪造）
+- geolocation：地理定位API，getCurrentPosition()
+- clipboard：剪贴板API，readText/writeText
+- onLine：网络状态检测
+- language：用户首选语言
 
-## BOM的注意事项与最佳实践
-
+## storage与历史
+- localStorage：持久化存储，同源策略，约5-10MB
+- sessionStorage：会话级存储，标签页关闭后清除
+- 存储API：setItem/getItem/removeItem/clear
+- history对象：back()、forward()、go()、pushState()、replaceState()
+- History API：SPA路由的基础，无刷新修改URL

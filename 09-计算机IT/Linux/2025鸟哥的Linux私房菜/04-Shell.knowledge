@@ -1,12 +1,36 @@
-# Shell
+# Shell编程
 
-## Shell的定义与基本概念
+## Shell基础
+- Bash：最常用的Shell
+- 脚本开头：#!/bin/bash
+- 执行方式：bash script.sh 或 ./script.sh（需执行权限）
+- 变量：VAR=value（等号两边无空格），$VAR引用
+- 环境变量：export VAR=value，子进程继承
 
-## Shell的核心原理与工作机制
+## 变量与字符串
+- 字符串：'单引号不解析变量'、"双引号解析变量"
+- 字符串操作：${#str}长度、${str:pos:len}截取
+- 特殊变量：$0脚本名、$1-$9参数、$#参数个数、$@所有参数
+- 数组：arr=(a b c)、${arr[0]}、${arr[@]}所有元素
+- 命令替换：$(command) 或 `command`
 
-## Shell的分类与类型体系
+## 流程控制
+- if-elif-else：if [ condition ]; then ... fi
+- 条件测试：-f文件存在、-d目录存在、-z空字符串、-eq等于
+- for循环：for i in list; do ... done
+- while循环：while [ condition ]; do ... done
+- case语句：case $var in pattern) ... ;; esac
 
-## Shell的常见用法与实践场景
+## 函数与正则
+- 函数定义：function name() { commands; return value; }
+- 局部变量：local var=value
+- grep：正则搜索，-E扩展正则、-i忽略大小写、-r递归
+- sed：流编辑器，sed 's/old/new/g'替换
+- awk：文本处理，awk '{print $1}'打印第一列
 
-## Shell的注意事项与最佳实践
-
+## 实用技巧
+- 管道：command1 | command2，前一个的输出作为后一个的输入
+- 重定向：>覆盖写、>>追加写、2>错误重定向、&>全部重定向
+- 后台运行：command &
+- 信号处理：trap 'command' SIGINT
+- 调试：bash -x script.sh

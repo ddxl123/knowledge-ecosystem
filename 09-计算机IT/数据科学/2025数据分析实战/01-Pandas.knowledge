@@ -1,12 +1,36 @@
 # Pandas
 
-## Pandas的定义与基本概念
+## 数据结构
+- Series：一维标签数组，pd.Series([1,2,3], index=['a','b','c'])
+- DataFrame：二维表格，pd.DataFrame({'col1': [1,2], 'col2': [3,4]})
+- 索引：行索引(index)和列索引(columns)
+- 数据类型：int64、float64、object、datetime64、category
+- 创建：字典、列表、NumPy数组、CSV/Excel读取
 
-## Pandas的核心原理与工作机制
+## 数据读写
+- CSV：pd.read_csv('file.csv')、df.to_csv('file.csv')
+- Excel：pd.read_excel('file.xlsx')、df.to_excel('file.xlsx')
+- SQL：pd.read_sql('SELECT...', connection)
+- JSON：pd.read_json('file.json')
+- Parquet：高效列式存储格式
 
-## Pandas的分类与类型体系
+## 数据选择与过滤
+- 列选择：df['col']、df[['col1','col2']]
+- 行选择：df.loc[label]（标签）、df.iloc[position]（位置）
+- 条件过滤：df[df['age'] > 18]
+- 多条件：df[(df['age'] > 18) & (df['name'] == 'Tom')]
+- query方法：df.query('age > 18 and name == "Tom"')
 
-## Pandas的常见用法与实践场景
+## 数据清洗
+- 缺失值：isnull()、dropna()、fillna(value)
+- 重复值：duplicated()、drop_duplicates()
+- 类型转换：astype()、pd.to_datetime()、pd.to_numeric()
+- 字符串操作：df['col'].str.lower()、str.contains()、str.extract()
+- 异常值：基于统计（Z-score）或业务规则处理
 
-## Pandas的注意事项与最佳实践
-
+## 数据转换与聚合
+- 分组聚合：df.groupby('col').agg({'col2': 'sum', 'col3': 'mean'})
+- 透视表：df.pivot_table(values, index, columns, aggfunc)
+- 合并：pd.merge()（SQL JOIN）、pd.concat()（上下/左右拼接）
+- apply：df.apply(func)逐行/逐列应用函数
+- 排序：sort_values()、sort_index()

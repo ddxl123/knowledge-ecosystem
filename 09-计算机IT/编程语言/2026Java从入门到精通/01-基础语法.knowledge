@@ -1,12 +1,36 @@
 # 基础语法
 
-## 基础语法的定义与基本概念
+## 变量与数据类型
+- 基本数据类型：byte(8位)、short(16位)、int(32位)、long(64位)、float、double、char、boolean
+- 引用类型：类、接口、数组、记录(Record)、密封类(Sealed Class)
+- 类型推断：var关键字（JDK 10+），仅限局部变量，编译器推断类型
+- 模式匹配instanceof（JDK 16+）：if (obj instanceof String s) 直接绑定变量
+- 文本块（JDK 15+）：三引号包裹多行字符串，保留格式，适合JSON/SQL/HTML
 
-## 基础语法的核心原理与工作机制
+## 运算符与表达式
+- 算术运算符：+、-、*、/、%、++、--
+- 逻辑运算符：&&（短路与）、||（短路或）、!
+- 位运算符：&、|、^、~、<<、>>、>>>
+- 字符串拼接：+运算符和String.format()，避免循环中用+拼接
+- 模式匹配switch（JDK 21+）：case String s when s.length() > 3 ->
 
-## 基础语法的分类与类型体系
+## 流程控制
+- switch表达式（JDK 14+正式）：支持箭头语法和yield返回值
+- 增强for循环：for (var item : collection)
+- 模式匹配在switch中的应用：类型判断+解构一步到位
+- 作用域规则：变量在声明时可见，块作用域
+- 模式变量作用域：switch中模式变量仅在对应分支可见
 
-## 基础语法的常见用法与实践场景
+## 方法与函数式编程
+- 方法引用：ClassName::methodName，四种形式（静态、实例、构造器、任意对象）
+- Lambda表达式：(参数) -> 表达式，本质是函数式接口的实现
+- 常用函数式接口：Function、Predicate、Consumer、Supplier、BiFunction
+- Optional类：优雅处理null，map/flatMap/filter/orElse
+- 链式调用与函数组合：andThen()、compose()、and()、or()
 
-## 基础语法的注意事项与最佳实践
-
+## 模块化与新特性预览
+- 模块系统（JDK 9+）：module-info.java，exports/opens/requires
+- Record类（JDK 16+）：不可变数据载体，自动生成equals/hashCode/toString
+- 密封类（JDK 17+）：sealed class permits 子类1, 子类2，限制继承
+- 虚拟线程（JDK 21+正式）：Thread.ofVirtual()，轻量级并发
+- String模板（JDK 21+预览）：STR模板处理器，内嵌表达式

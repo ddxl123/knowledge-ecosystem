@@ -1,12 +1,36 @@
 # 基础语法
 
-## 基础语法的定义与基本概念
+## 变量与类型
+- val不可变变量（推荐）：val x = 10 或 val x: Int = 10
+- var可变变量：var x = 10，可重新赋值
+- 基本类型：Int、Long、Short、Byte、Float、Double、Char、Boolean
+- 类型推断：编译器自动推断类型，不必显式声明
+- 字符串模板："Hello $name" 或 "Result: ${a + b}"
 
-## 基础语法的核心原理与工作机制
+## 空安全
+- 非空类型：String，不能赋null，编译器保证
+- 可空类型：String?，可以为null，必须安全调用
+- 安全调用：obj?.method()，null时返回null
+- Elvis运算符：val x = y ?: defaultValue，y为null时取默认值
+- 非空断言：obj!!.method()，null时抛NPE（慎用）
 
-## 基础语法的分类与类型体系
+## 函数
+- 语法：fun add(a: Int, b: Int): Int = a + b
+- 表达式函数体：fun add(a: Int, b: Int) = a + b（返回类型推断）
+- 默认参数：fun greet(name: String = "World") {}
+- 命名参数：greet(name = "Kotlin")，可不按顺序
+- 可变参数：fun f(vararg args: Int) {}，展开：f(*array)
 
-## 基础语法的常见用法与实践场景
+## 类与对象
+- 类定义：class Person(val name: var age: Int)
+- 主构造器：class Person(val name: String) { init { } }
+- 次构造器：constructor(name: String, age: Int) : this(name) { }
+- 数据类：data class User(val name: String, val age: Int)，自动生成equals/hashCode/toString/copy
+- object声明：单例模式，object Singleton { }
 
-## 基础语法的注意事项与最佳实践
-
+## 控制流与Lambda
+- when表达式：替代switch，支持任意表达式匹配
+- when(x) { 1 -> ... 2,3 -> ... in 4..10 -> ... else -> ... }
+- 区间：1..10（闭区间）、1 until 10（半开）、10 downTo 1
+- Lambda：{ x: Int -> x * 2 }，最后一个表达式为返回值
+- 高阶函数：fun f(g: (Int) -> Int) {}，函数作为参数

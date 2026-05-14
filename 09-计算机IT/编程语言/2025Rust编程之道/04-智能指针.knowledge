@@ -1,12 +1,36 @@
 # 智能指针
 
-## 智能指针的定义与基本概念
+## Box<T>
+- 堆上分配值，栈上存储指针，零成本抽象
+- 用途：递归类型（链表、树）、大数据避免栈溢出、trait对象
+- 解引用：*box获取内部值，自动Deref解引用
+- 创建：Box::new(value)
+- drop时自动释放堆内存
 
-## 智能指针的核心原理与工作机制
+## Rc<T>与Arc<T>
+- Rc<T>：引用计数智能指针，单线程共享所有权
+- Rc::clone(&rc)：增加引用计数（深拷贝用T::clone()）
+- Rc::try_unwrap()：引用计数为1时取出内部值
+- Weak<T>：弱引用，不增加引用计数，防止循环引用
+- Arc<T>：原子引用计数，线程安全版本的Rc
 
-## 智能指针的分类与类型体系
+## RefCell<T>
+- 运行时借用检查：borrow()不可变借用，borrow_mut()可变借用
+- 内部可变性：即使外部引用不可变，也能修改内部数据
+- 运行时panic：违反借用规则时panic（而非编译错误）
+- Rc<RefCell<T>>：共享可变数据（单线程）
+- Cell<T>：Copy类型专用，get/set无借用检查开销
 
-## 智能指针的常见用法与实践场景
+## Deref与Drop trait
+- Deref trait：自定义解引用行为，实现*运算符重载
+- Deref强制转换：&String自动转为&str（Deref coercion）
+- Drop trait：自定义drop行为，值离开作用域时调用
+- std::mem::drop：提前释放资源
+- drop顺序：局部变量逆序drop，字段按声明顺序drop
 
-## 智能指针的注意事项与最佳实践
-
+## Cow<T>与Pin<T>
+- Cow<T>：写时复制，Clone on Write，避免不必要的深拷贝
+- Cow::Borrowed：持有引用，不分配内存
+- Cow::Owned：需要修改时才克隆为拥有的数据
+- Pin<T>：固定值在内存中的位置，防止移动
+- Pin用于自引用结构（async/await生成的Future）

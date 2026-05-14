@@ -1,12 +1,36 @@
-# 安全
+# Spring Security
 
-## 安全的定义与基本概念
+## 认证架构
+- SecurityFilterChain：安全过滤器链
+- AuthenticationManager：认证管理器
+- UserDetailsService：加载用户信息
+- PasswordEncoder：密码编码（BCrypt推荐）
+- Authentication：认证对象，存储认证信息
 
-## 安全的核心原理与工作机制
+## 授权机制
+- @PreAuthorize：方法级权限控制
+- @Secured：角色控制
+- hasRole/hasAuthority：URL级别权限
+- RBAC模型：用户-角色-权限三层结构
+- 表达式：hasRole('ADMIN')、hasPermission('user','edit')
 
-## 安全的分类与类型体系
+## JWT认证
+- Token生成：JJWT库，设置过期时间、签名算法
+- 过滤器：OncePerRequestFilter，拦截请求验证Token
+- Token刷新：双Token机制（Access Token + Refresh Token）
+- 无状态：服务端不存储会话，每次请求携带Token
+- 安全考虑：HTTPS传输、Token过期、黑名单机制
 
-## 安全的常见用法与实践场景
+## OAuth2
+- 授权码模式：用户授权→获取code→换取Token
+- 客户端模式：服务间认证
+- 密码模式：用户直接提供凭证（不推荐）
+- Spring Authorization Server：OAuth2授权服务器
+- 资源服务器：@EnableResourceServer，验证Token
 
-## 安全的注意事项与最佳实践
-
+## 安全防护
+- CSRF防护：Token验证（前后端分离可禁用）
+- CORS配置：@CrossOrigin或WebMvcConfigurer
+- XSS防护：输出编码、Content-Security-Policy
+- SQL注入：预编译语句、ORM框架
+- 限流：RateLimiter、Sentinel

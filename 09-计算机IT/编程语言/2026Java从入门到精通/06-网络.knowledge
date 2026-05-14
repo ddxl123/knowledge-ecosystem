@@ -1,12 +1,36 @@
-# 网络
+# 网络编程
 
-## 网络的定义与基本概念
+## 网络基础
+- TCP/IP四层模型：应用层、传输层、网络层、网络接口层
+- TCP：面向连接、可靠传输、字节流、流量控制、拥塞控制
+- UDP：无连接、不可靠、数据报、速度快
+- HTTP/1.1 vs HTTP/2 vs HTTP/3：多路复用、头部压缩、QUIC协议
+- DNS解析：域名→IP地址，递归查询和迭代查询
 
-## 网络的核心原理与工作机制
+## Socket编程
+- ServerSocket/Socket：BIO模型，一个连接一个线程
+- NIO ServerSocketChannel/SocketChannel：非阻塞，Selector多路复用
+- AIO（AsynchronousSocketChannel）：异步IO，回调通知
+- 编解码：处理粘包拆包，定长、分隔符、长度字段
+- 超时设置：setSoTimeout()、connect(socketAddress, timeout)
 
-## 网络的分类与类型体系
+## HttpClient（JDK 11+）
+- HttpClient.newBuilder()构建，支持HTTP/1.1和HTTP/2
+- 同步：client.send(request, BodyHandlers.ofString())
+- 异步：client.sendAsync(request, handler).thenApply(...)
+- 请求构建：HttpRequest.newBuilder().uri().GET().header().build()
+- BodyPublisher/BodyHandler：多种内置处理器（字符串、文件、流、JSON）
 
-## 网络的常见用法与实践场景
+## Netty框架
+- 核心组件：EventLoopGroup、Channel、ChannelPipeline、ChannelHandler
+- 线程模型：Boss Group接受连接，Worker Group处理IO
+- 编解码器：ByteToMessageDecoder、MessageToByteEncoder
+- 粘包处理：LineBasedFrameDecoder、LengthFieldBasedFrameDecoder
+- 零拷贝：FileRegion、CompositeByteBuf，减少内存拷贝
 
-## 网络的注意事项与最佳实践
-
+## 高级网络特性
+- HTTP/2支持：多路复用、服务器推送、头部压缩HPACK
+- WebSocket：全双工通信，适合实时应用
+- gRPC：基于HTTP/2的RPC框架，Protocol Buffers序列化
+- 反应式网络：Project Reactor + Spring WebFlux
+- 虚拟线程+网络IO：虚拟线程在阻塞IO时自动让出CPU

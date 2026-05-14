@@ -1,12 +1,36 @@
-# 网络
+# 网络编程
 
-## 网络的定义与基本概念
+## URLSession基础
+- URLSession.shared：共享会话，使用系统配置
+- URLSessionDataTask：GET请求获取数据
+- URLSessionUploadTask：上传数据
+- URLSessionDownloadTask：下载文件
+- URLSessionConfiguration：default、ephemeral、background
 
-## 网络的核心原理与工作机制
+## async/await网络请求
+- let (data, response) = try await URLSession.shared.data(from: url)
+- 自动解码：JSONDecoder配合Codable协议
+- URLRequest：自定义请求头、HTTP方法、请求体
+- 错误处理：URLError、HTTPURLResponse状态码检查
+- 超时配置：timeoutIntervalForRequest、timeoutIntervalForResource
 
-## 网络的分类与类型体系
+## JSON编解码
+- Codable协议：Decodable+Encodable
+- JSONDecoder：JSON→对象，支持自定义键映射CodingKeys
+- JSONEncoder：对象→JSON，支持日期格式、Key策略
+- 嵌套类型：自动递归编解码
+- 自定义编解码：实现init(from:)和encode(to:)
 
-## 网络的常见用法与实践场景
+## 第三方网络库
+- Alamofire：URLSession封装，链式调用、请求重试
+- Moya：基于Alamofire的网络抽象层，API枚举定义请求
+- Combine框架：URLSession.dataTaskPublisher响应式网络请求
+- Kingfisher/SDWebImage：图片下载和缓存
+- 网络层封装：统一错误处理、Token刷新、请求重试
 
-## 网络的注意事项与最佳实践
-
+## 实时通信
+- URLSessionWebSocketTask（iOS 13+）：原生WebSocket
+- 发送/接收：send(.string/.data)和receive()
+- WebSocket第三方库：Starscream
+- Server-Sent Events：单向实时推送
+- Push Notifications：APNs推送通知

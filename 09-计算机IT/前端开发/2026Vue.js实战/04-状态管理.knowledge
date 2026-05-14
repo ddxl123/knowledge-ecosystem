@@ -1,12 +1,35 @@
-# 状态管理
+# Pinia状态管理
 
-## 状态管理的定义与基本概念
+## Store定义
+- Option Store：defineStore('id', { state, getters, actions })
+- Setup Store：defineStore('id', () => { ... return exposed })
+- Setup Store更灵活：可使用所有组合式API
+- Store间可相互引用和组合
+- TypeScript类型推断完善
 
-## 状态管理的核心原理与工作机制
+## 响应式状态
+- state是响应式对象，直接修改触发更新
+- $patch批量更新：store.$patch({ count: 5, name: 'new' })
+- $patch函数式：store.$patch(state => { state.list.push(item) })
+- $reset重置状态（仅Option Store）
+- $subscribe：监听状态变化
 
-## 状态管理的分类与类型体系
+## Getters与派生状态
+- getters计算属性：缓存结果，依赖变化时重新计算
+- 访问其他getter：this.otherGetter
+- Setup Store用computed：const double = computed(() => count.value * 2)
+- 返回函数的getter：getUserById: (state) => (id) => ...
 
-## 状态管理的常见用法与实践场景
+## Actions异步操作
+- 同步/异步action：直接定义async函数
+- 访问state/getters：this.state / this.getter
+- 错误处理：try-catch，抛出让组件处理
+- 组合action：action间互相调用
+- Setup Store中直接暴露函数
 
-## 状态管理的注意事项与最佳实践
-
+## 持久化与插件
+- pinia-plugin-persistedstate：状态持久化到localStorage/sessionStorage
+- 自定义插件：pinia.use(({ store }) => { ... })
+- $onAction：监听action调用
+- $onPatch：监听$patch调用
+- SSR：服务端序列化+客户端水合

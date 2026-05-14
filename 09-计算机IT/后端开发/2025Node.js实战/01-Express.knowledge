@@ -1,12 +1,36 @@
-# Express
+# Express框架
 
-## Express的定义与基本概念
+## 基础路由
+- const app = express()：创建应用实例
+- app.get/post/put/delete：定义路由处理函数
+- 路由参数：app.get('/user/:id', (req, res) => { req.params.id })
+- 路由分组：express.Router()创建模块化路由
+- 中间件挂载：app.use('/api', router)
 
-## Express的核心原理与工作机制
+## 中间件
+- 中间件函数：(req, res, next) => { ... next() }
+- 应用级：app.use()，所有请求经过
+- 路由级：router.use()，特定路由前缀
+- 内置：express.json()、express.static()、express.urlencoded()
+- 第三方：cors、helmet、morgan、compression
 
-## Express的分类与类型体系
+## 请求与响应
+- req对象：params、query、body、headers、cookies
+- req.body：需express.json()中间件解析
+- res对象：send()、json()、status()、redirect()
+- res.locals：请求级别的数据传递
+- 错误处理：(err, req, res, next) 四参数中间件
 
-## Express的常见用法与实践场景
+## 模板引擎
+- EJS：嵌入式JavaScript模板，<%= variable %>
+- Pug(Jade)：缩进语法模板引擎
+- Handlebars：逻辑较少的模板引擎
+- app.set('view engine', 'ejs')
+- res.render('index', { title: 'Hello' })
 
-## Express的注意事项与最佳实践
-
+## Express最佳实践
+- 环境变量：process.env.PORT，dotenv包
+- 错误处理：集中错误处理中间件
+- 安全：helmet设置安全头、express-rate-limit限流
+- 日志：morgan、winston
+- CORS：cors中间件处理跨域

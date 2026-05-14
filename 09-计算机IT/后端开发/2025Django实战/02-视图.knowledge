@@ -1,12 +1,36 @@
 # 视图
 
-## 视图的定义与基本概念
+## 函数视图
+- def article_list(request): return HttpResponse/JsonResponse
+- request对象：method、GET、POST、body、headers、user
+- 装饰器：@require_GET、@require_POST、@login_required
+- JsonResponse：返回JSON响应
+- HttpResponse：自定义状态码、头信息
 
-## 视图的核心原理与工作机制
+## 类视图
+- View基类：get()、post()等方法对应HTTP方法
+- TemplateView：渲染模板
+- ListView：对象列表，自动分页
+- DetailView：对象详情
+- CreateView/UpdateView/DeleteView：表单处理
 
-## 视图的分类与类型体系
+## Django REST Framework
+- Serializer：数据序列化/反序列化
+- ModelSerializer：基于模型自动生成序列化器
+- ViewSet：组合CRUD操作
+- Router：自动生成URL配置
+- 权限：IsAuthenticated、IsAdminUser、自定义权限
 
-## 视图的常见用法与实践场景
+## 中间件
+- MiddlewareMixin：process_request、process_response
+- 请求预处理：认证、日志、跨域
+- 响应后处理：添加头信息、压缩
+- 自定义中间件：class MyMiddleware(MiddlewareMixin)
+- 中间件顺序：MIDDLEWARE列表中的顺序很重要
 
-## 视图的注意事项与最佳实践
-
+## URL路由
+- path()：简单路径匹配
+- re_path()：正则表达式匹配
+- include()：URL分模块组织
+- 命名空间：app_name + namespace
+- 路径转换器：int、str、slug、uuid、path

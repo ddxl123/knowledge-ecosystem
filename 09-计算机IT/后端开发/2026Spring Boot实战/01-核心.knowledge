@@ -1,12 +1,36 @@
-# 核心
+# 核心概念
 
-## 核心的定义与基本概念
+## Spring Boot 3.x+特性
+- 基于Spring Framework 6，要求JDK 17+
+- GraalVM原生编译：AOT编译，启动毫秒级，内存占用低
+- 虚拟线程支持：JDK 21虚拟线程集成，高并发低资源
+- Jakarta EE：javax.*迁移到jakarta.*命名空间
+- Observability：Micrometer集成，可观测性一等公民
 
-## 核心的核心原理与工作机制
+## 自动配置增强
+- AutoConfiguration.imports替代spring.factories（Spring Boot 3.0+）
+- @AutoConfiguration注解：新的自动配置类声明方式
+- 条件注解增强：@ConditionalOnClass更精确的类检测
+- 配置元数据：additional-spring-configuration-metadata.json
+- 配置迁移：spring-boot-properties-migrator自动迁移
 
-## 核心的分类与类型体系
+## 依赖注入增强
+- 构造器注入（推荐）：@Autowired可省略
+- @Qualifier和@Primary：解决多Bean冲突
+- 作用域：singleton、prototype、request、session
+- 条件Bean：@Conditional系列注解
+- Bean生命周期：@PostConstruct、@PreDestroy、InitializingBean
 
-## 核心的常见用法与实践场景
+## Web增强
+- ProblemDetail（RFC 7807）：标准化错误响应
+- HTTP接口声明（Spring 6.1+）：@HttpExchange声明式HTTP客户端
+- RestClient（Spring 6.1+）：替代RestTemplate的现代HTTP客户端
+- 响应式Web：WebFlux响应式编程模型
+- 虚拟线程：spring.threads.virtual.enabled=true
 
-## 核心的注意事项与最佳实践
-
+## 配置增强
+- 配置文件：application.yml、application.properties
+- 配置组：@ConfigurationPropertiesScan批量扫描
+- 配置元数据：IDE自动提示和验证
+- 多文档YAML：---分隔多个配置段
+- Profile激活：spring.profiles.active/group

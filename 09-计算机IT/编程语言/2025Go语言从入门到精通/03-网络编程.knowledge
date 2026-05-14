@@ -1,12 +1,36 @@
 # 网络编程
 
-## 网络编程的定义与基本概念
+## net/http基础
+- HTTP服务端：http.ListenAndServe(":8080", handler)
+- Handler接口：ServeHTTP(ResponseWriter, *Request)
+- http.HandlerFunc：适配器，将普通函数转为Handler
+- DefaultServeMux：默认路由器，http.Handle/注册路由
+- http.Get/Post：HTTP客户端请求
 
-## 网络编程的核心原理与工作机制
+## HTTP进阶
+- 中间件模式：func(next http.Handler) http.Handler，洋葱模型
+- 请求解析：r.FormValue()、r.URL.Query()、json.NewDecoder(r.Body)
+- 响应构建：w.WriteHeader()、w.Header().Set()、json.NewEncoder(w)
+- 静态文件：http.FileServer(http.Dir("./static"))
+- 超时控制：Server.ReadTimeout、WriteTimeout、IdleTimeout
 
-## 网络编程的分类与类型体系
+## TCP/UDP编程
+- net.Listen("tcp", ":8080")：创建TCP监听器
+- conn.Read/Write：TCP连接读写
+- net.Dial("tcp", "host:port")：TCP客户端连接
+- net.ListenPacket("udp", ":8080")：UDP监听
+- 自定义协议：消息头（长度）+消息体，处理粘包
 
-## 网络编程的常见用法与实践场景
+## WebSocket
+- gorilla/websocket：最流行的Go WebSocket库
+- Upgrader：HTTP升级为WebSocket连接
+- ReadMessage/WriteMessage：读写消息（TextMessage/BinaryMessage）
+- Ping/Pong：心跳检测，保持连接
+- 广播模式：维护连接集合，遍历发送
 
-## 网络编程的注意事项与最佳实践
-
+## RPC与gRPC
+- net/rpc：Go内置RPC框架，基于Gob编码
+- gRPC：基于HTTP/2和Protocol Buffers的高性能RPC
+- 四种通信模式：一元、服务端流、客户端端流、双向流
+- 拦截器：UnaryInterceptor、StreamInterceptor，实现认证/日志
+- protobuf定义：.proto文件生成Go代码，protoc工具

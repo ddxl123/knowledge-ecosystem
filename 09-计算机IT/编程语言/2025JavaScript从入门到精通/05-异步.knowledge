@@ -1,12 +1,36 @@
-# 异步
+# 异步编程
 
-## 异步的定义与基本概念
+## 异步基础
+- JavaScript单线程：主线程+事件循环+任务队列
+- 同步任务：在主线程上立即执行
+- 异步任务：回调函数放入任务队列，等待主线程空闲执行
+- 宏任务：setTimeout、setInterval、I/O、UI渲染
+- 微任务：Promise.then/catch/finally、MutationObserver、queueMicrotask
 
-## 异步的核心原理与工作机制
+## 事件循环
+- 执行顺序：同步代码→微任务队列→宏任务队列
+- 每个宏任务执行后清空所有微任务
+- requestAnimationFrame：在渲染前执行，优先级介于宏任务和微任务之间
+- Node.js事件循环：额外阶段（timers、poll、check等）
+- 理解事件循环是掌握异步编程的关键
 
-## 异步的分类与类型体系
+## 回调地狱与Promise
+- 回调地狱：多层嵌套回调，代码难读难维护
+- Promise解决：链式调用.then()，扁平化异步流程
+- 错误处理：.catch()捕获链中任一环节的错误
+- Promise链中返回值传递给下一个.then()
+- finally()无论成功失败都执行，适合清理操作
 
-## 异步的常见用法与实践场景
+## async/await
+- async函数：返回Promise，await暂停执行等待Promise完成
+- 错误处理：try-catch捕获await的错误
+- 并发执行：await Promise.all([p1, p2, p3])避免串行等待
+- for await...of：异步迭代器，遍历异步数据流
+- 顶层await：ES2022模块顶层直接await
 
-## 异步的注意事项与最佳实践
-
+## 高级异步模式
+- 并发控制：限制同时执行的异步任务数量
+- 取消异步操作：AbortController（Fetch API内置支持）
+- 竞态处理：Promise.race实现超时控制
+- 异步迭代器：Symbol.asyncIterator，next()返回Promise
+- 异步生成器：async function* yield等待异步数据

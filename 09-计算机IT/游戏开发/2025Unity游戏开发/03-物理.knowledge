@@ -1,12 +1,36 @@
-# 物理
+# Unity物理系统
 
-## 物理的定义与基本概念
+## 刚体(Rigidbody)
+- Rigidbody组件：让GameObject受物理引擎控制
+- 质量(Mass)：影响碰撞和力的效果
+- 阻力(Drag)：线性阻力，减慢移动
+- 角阻力(Angular Drag)：旋转阻力
+- 重力：useGravity控制是否受重力影响
 
-## 物理的核心原理与工作机制
+## 碰撞器(Collider)
+- BoxCollider、SphereCollider、CapsuleCollider、MeshCollider
+- Is Trigger：触发器模式，不产生物理碰撞，只检测穿过
+- 物理材质(Physics Material)：摩擦力和弹性
+- 复合碰撞器：多个简单碰撞器组合
+- MeshCollider：精确但性能开销大
 
-## 物理的分类与类型体系
+## 碰撞检测
+- OnCollisionEnter/Stay/Exit：物理碰撞事件
+- OnTriggerEnter/Stay/Exit：触发器事件
+- Collision参数：碰撞信息（接触点、法线、相对速度）
+- 层碰撞矩阵：Physics设置中控制哪些层互相碰撞
+- 射线检测：Physics.Raycast检测前方物体
 
-## 物理的常见用法与实践场景
+## 力与运动
+- AddForce：施加力，ForceMode（Force/Impulse/Acceleration）
+- MovePosition/MoveRotation：Kinematic模式下移动
+- 速度控制：velocity直接设置速度
+- 关节(Joint)：HingeJoint、SpringJoint、FixedJoint
+- 布娃娃(Ragdoll)：角色死亡时的物理模拟
 
-## 物理的注意事项与最佳实践
-
+## 2D物理
+- Rigidbody2D：2D刚体
+- 2D碰撞器：BoxCollider2D、CircleCollider2D、PolygonCollider2D
+- 2D物理材质：摩擦力和弹性
+- 射线检测2D：Physics2D.Raycast
+- 触发器2D：OnTriggerEnter2D

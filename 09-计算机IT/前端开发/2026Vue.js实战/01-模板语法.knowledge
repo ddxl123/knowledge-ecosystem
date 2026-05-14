@@ -1,12 +1,37 @@
 # 模板语法
 
-## 模板语法的定义与基本概念
+## 插值与表达式
+- 文本插值：{{ message }}，响应式数据自动更新
+- v-once：一次性插值，静态内容优化
+- v-html：输出原始HTML，注意XSS风险
+- 模板表达式：{{ ok ? 'Yes' : 'No' }}、{{ message.split('').reverse().join('') }}
+- Vue 3.4+：更高效的解析器，编译时优化
 
-## 模板语法的核心原理与工作机制
+## 指令系统
+- v-bind:attr → :attr，动态属性绑定
+- v-on:event → @event，事件监听
+- v-model：双向绑定，支持自定义组件defineModel()（Vue 3.4+）
+- v-if/v-show：条件渲染（销毁vs隐藏）
+- v-for：列表渲染，:key使用唯一标识
+- v-slot → #，插槽缩写
 
-## 模板语法的分类与类型体系
+## Class与Style绑定
+- 对象语法：:class="{ active: isActive }"
+- 数组语法：:class="[activeClass, errorClass]"
+- 组件class合并：自动合并到根元素
+- 样式绑定：:style="{ color: colorVar }"
+- 响应式class：配合computed动态计算
 
-## 模板语法的常见用法与实践场景
+## 事件处理
+- 方法处理器：@click="handleClick"
+- 内联处理器：@click="count++"
+- 事件对象：$event或自动传递
+- 修饰符链：@click.stop.prevent="handler"
+- 按键/系统修饰符：@keyup.enter、@click.ctrl
 
-## 模板语法的注意事项与最佳实践
-
+## 模板引用与v-model增强
+- 模板ref：ref="inputRef"，const inputRef = ref(null)
+- v-model在组件上：defineModel()双向绑定（Vue 3.4+原生支持）
+- v-model修饰符：.lazy、.number、.trim
+- 自定义v-model修饰符：defineModel({ get, set })
+- 多v-model：v-model:title v-model:content

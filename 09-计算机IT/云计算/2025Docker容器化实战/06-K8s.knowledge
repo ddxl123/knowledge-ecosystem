@@ -1,12 +1,36 @@
-# K8s
+# Kubernetes基础
 
-## K8s的定义与基本概念
+## 核心概念
+- Pod：最小部署单元，一个或多个容器
+- Deployment：声明式管理Pod副本
+- Service：Pod的网络访问抽象
+- Namespace：资源隔离
+- Node：集群中的工作节点
 
-## K8s的核心原理与工作机制
+## Pod与Deployment
+- Pod：共享网络和存储的容器组
+- Deployment：管理Pod副本数、滚动更新、回滚
+- 水平扩展：kubectl scale deployment app --replicas=3
+- 滚动更新：maxSurge、maxUnavailable控制更新策略
+- 回滚：kubectl rollout undo deployment/app
 
-## K8s的分类与类型体系
+## Service
+- ClusterIP：集群内部访问（默认）
+- NodePort：通过节点端口外部访问
+- LoadBalancer：云厂商负载均衡器
+- ExternalName：CNAME映射
+- 标签选择器：匹配后端Pod
 
-## K8s的常见用法与实践场景
+## 配置与存储
+- ConfigMap：非敏感配置数据
+- Secret：敏感数据（密码、证书）
+- PersistentVolume(PV)：集群存储资源
+- PersistentVolumeClaim(PVC)：存储请求
+- StorageClass：动态存储供给
 
-## K8s的注意事项与最佳实践
-
+## 应用部署
+- kubectl apply -f：声明式部署
+- YAML配置：apiVersion、kind、metadata、spec
+- Helm Chart：K8s应用包管理器
+- Ingress：HTTP路由规则
+- HPA：水平Pod自动扩缩容

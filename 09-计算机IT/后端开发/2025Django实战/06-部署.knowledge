@@ -1,12 +1,37 @@
 # 部署
 
-## 部署的定义与基本概念
+## WSGI/ASGI
+- Gunicorn：WSGI HTTP服务器，多Worker进程
+- Uvicorn：ASGI服务器，支持异步
+- Daphne：Django Channels ASGI服务器
+- Worker配置：workers = CPU核数 * 2 + 1
+- 超时设置：timeout = 120
 
-## 部署的核心原理与工作机制
+## Nginx配置
+- 反向代理：proxy_pass到Gunicorn/Uvicorn
+- 静态文件：alias直接服务静态资源
+- 负载均衡：upstream多后端
+- HTTPS：SSL证书配置
+- Gzip压缩：减少传输大小
 
-## 部署的分类与类型体系
+## Docker部署
+- Dockerfile：python:3.x-slim基础镜像
+- 多阶段构建：构建阶段+运行阶段
+- docker-compose：应用+数据库+Redis+Nginx
+- 环境变量：DJANGO_SECRET_KEY、DATABASE_URL
+- 健康检查：HEALTHCHECK指令
 
-## 部署的常见用法与实践场景
+## 静态文件与媒体
+- collectstatic：收集所有静态文件到STATIC_ROOT
+- WhiteNoise：Django直接服务静态文件
+- CDN：AWS CloudFront、阿里云CDN
+- 媒体文件：用户上传文件存储
+- S3存储：django-storages + boto3
 
-## 部署的注意事项与最佳实践
-
+## 生产环境优化
+- DEBUG=False：关闭调试模式
+- ALLOWED_HOSTS：限制允许的主机
+- 数据库连接池：django-db-connection-pool
+- 缓存：Redis缓存框架
+- 日志：结构化日志，集中收集
+- 监控：Sentry错误追踪，Prometheus指标

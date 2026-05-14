@@ -1,12 +1,36 @@
-# 存储
+# Docker存储
 
-## 存储的定义与基本概念
+## 数据卷(Volume)
+- docker volume create：创建命名卷
+- -v volume_name:/container/path：挂载卷
+- 卷由Docker管理，独立于容器生命周期
+- 多容器共享同一卷
+- 卷驱动：本地、NFS、云存储
 
-## 存储的核心原理与工作机制
+## 绑定挂载(Bind Mount)
+- -v /host/path:/container/path：挂载宿主机目录
+- 开发环境常用：代码实时同步
+- 宿主机路径必须存在
+- 权限问题：UID/GID映射
+- 精确控制挂载内容
 
-## 存储的分类与类型体系
+## tmpfs挂载
+- --tmpfs /container/path：内存文件系统
+- 数据不持久化，容器停止即丢失
+- 适合敏感数据：密码、密钥
+- 性能好：直接读写内存
+- 大小限制：--tmpfs size=100m
 
-## 存储的常见用法与实践场景
+## 存储驱动
+- overlay2（推荐）：性能好，稳定
+- devicemapper：块设备级存储
+- btrfs/zfs：文件系统级存储
+- 存储驱动选择：根据宿主机文件系统和性能需求
+- 层共享：相同层的镜像共享存储
 
-## 存储的注意事项与最佳实践
-
+## 存储最佳实践
+- 数据持久化用Volume，开发用Bind Mount
+- 数据库数据必须用Volume
+- 备份Volume：docker run --volumes-from
+- 多主机存储：NFS、云存储CSI驱动
+- 监控存储使用：docker system df

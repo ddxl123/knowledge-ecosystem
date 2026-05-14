@@ -1,12 +1,36 @@
-# Android
+# Android开发
 
-## Android的定义与基本概念
+## Activity生命周期
+- onCreate→onStart→onResume→onPause→onStop→onDestroy
+- onSaveInstanceState：保存临时状态
+- onRestoreInstanceState：恢复临时状态
+- 启动模式：standard、singleTop、singleTask、singleInstance
+- Intent：显式Intent（指定组件）和隐式Intent（指定Action）
 
-## Android的核心原理与工作机制
+## UI组件
+- View系统：TextView、Button、EditText、ImageView、RecyclerView
+- ConstraintLayout：约束布局，灵活高效的布局方式
+- RecyclerView：列表展示，ViewHolder复用、LayoutManager、Adapter
+- Fragment：可复用的UI组件，生命周期与Activity关联
+- Navigation Component：Jetpack导航组件，管理Fragment切换
 
-## Android的分类与类型体系
+## Jetpack组件
+- ViewModel：管理UI相关数据，配置变更时保留
+- LiveData：可观察的数据持有者，自动感知生命周期
+- Room：SQLite抽象层，@Entity、@Dao、@Database
+- DataBinding：声明式绑定数据到XML布局
+- WorkManager：后台任务调度，保证任务执行
 
-## Android的常见用法与实践场景
+## 架构模式
+- MVVM：Model-View-ViewModel，数据绑定驱动UI更新
+- MVI：Model-View-Intent，单向数据流，状态管理
+- Repository模式：数据层抽象，统一数据来源
+- 依赖注入：Hilt（推荐）、Koin、Dagger
+- Clean Architecture：分层架构，依赖规则（外层依赖内层）
 
-## Android的注意事项与最佳实践
-
+## Compose基础
+- 声明式UI：@Composable函数描述UI状态
+- 状态管理：remember、mutableStateOf、State<T>
+- 组合：可组合函数可嵌套组合，构建UI树
+- 副作用：LaunchedEffect、DisposableEffect、SideEffect
+- 主题：MaterialTheme自定义颜色、字体、形状

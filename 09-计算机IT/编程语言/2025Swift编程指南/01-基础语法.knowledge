@@ -1,12 +1,38 @@
 # 基础语法
 
-## 基础语法的定义与基本概念
+## 变量与常量
+- let声明常量（不可变），var声明变量（可变）
+- 类型推断：let x = 42 自动推断为Int
+- 显式类型：let x: Double = 42
+- 类型别名：typealias AudioSample = UInt16
+- 字符串插值："Hello \(name)"
 
-## 基础语法的核心原理与工作机制
+## 数据类型
+- 整型：Int（平台相关，推荐使用）、Int8/16/32/64、UInt
+- 浮点型：Float(32位)、Double(64位，推荐)
+- Bool：true/false
+- Character：单个字符
+- String：字符串，值类型（复制而非引用）
 
-## 基础语法的分类与类型体系
+## 集合类型
+- Array：有序集合，var arr = [Int]() 或 [1, 2, 3]
+- Dictionary：键值对，var dict = [String: Int]() 或 ["key": 1]
+- Set：无序不重复集合，var s = Set<Int>()
+- 元组：(Int, String)，可命名元素 (name: "Tom", age: 18)
+- 集合是值类型，赋值和传参时复制
 
-## 基础语法的常见用法与实践场景
+## 控制流
+- if-else：条件不需要括号，支持let绑定 if let x = optional {}
+- switch：支持任意类型，必须穷尽（exhaustive），不用break
+- switch支持区间匹配、元组匹配、值绑定、where子句
+- for-in：for item in collection / for i in 0..<10
+- guard：提前退出，guard let x = optional else { return }
+- defer：作用域结束时执行，类似Go的defer
 
-## 基础语法的注意事项与最佳实践
-
+## 函数
+- 语法：func add(_ a: Int, to b: Int) -> Int { return a + b }
+- 参数标签：func greet(person name: String)，调用时greet(person: "Tom")
+- 默认参数：func f(x: Int = 10) {}
+- 可变参数：func f(_ numbers: Int...) {}
+- inout参数：func f(_ x: inout Int) { x += 1 }，传引用
+- 多返回值：func f() -> (min: Int, max: Int) {}

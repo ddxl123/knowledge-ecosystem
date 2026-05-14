@@ -1,12 +1,36 @@
 # 组件
 
-## 组件的定义与基本概念
+## 组件基础
+- 定义：const Comp = { template: '<div>{{ msg }}</div>', props: ['msg'] }
+- 注册：app.component('my-comp', Comp) 全局注册
+- 使用：<my-comp msg="hello" />
+- 单文件组件（SFC）：.vue文件，template+script+style
+- setup语法糖：<script setup>简化Composition API
 
-## 组件的核心原理与工作机制
+## Props
+- 声明：defineProps({ title: String, count: { type: Number, default: 0 } })
+- 单向数据流：Props只读，子组件不能直接修改
+- 类型验证：String、Number、Boolean、Array、Object、Function
+- 必填：required: true；验证器：validator: (value) => value > 0
+- 非Prop属性：自动继承到根元素，inheritAttrs: false禁用
 
-## 组件的分类与类型体系
+## 自定义事件
+- defineEmits(['update', 'delete'])
+- 子组件触发：emit('update', payload)
+- 父组件监听：<comp @update="handleUpdate" />
+- 事件验证：emits: { update: (payload) => payload > 0 }
+- v-model组件：defineModel()（Vue 3.4+）
 
-## 组件的常见用法与实践场景
+## 插槽
+- 默认插槽：<slot>默认内容</slot>
+- 具名插槽：<slot name="header">，template v-slot:header
+- 作用域插槽：<slot :item="item">，template v-slot="{ item }"
+- 动态插槽：<slot :name="dynamicName">
+- 缩写：#header 替代 v-slot:header
 
-## 组件的注意事项与最佳实践
-
+## Provide/Inject
+- provide('key', value)：祖先组件提供数据
+- inject('key')：后代组件注入数据
+- 响应式provide：provide('key', ref(value))
+- 适用场景：深层嵌套组件通信，替代props逐层传递
+- 优先使用Props，provide/inject作为最后手段

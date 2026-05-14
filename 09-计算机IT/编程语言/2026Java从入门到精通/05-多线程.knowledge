@@ -1,12 +1,36 @@
 # 多线程
 
-## 多线程的定义与基本概念
+## 线程基础
+- 创建方式：Thread、Runnable、Callable+FutureTask、线程池
+- 线程生命周期：NEW→RUNNABLE→BLOCKED/WAITING/TIMED_WAITING→TERMINATED
+- 虚拟线程（JDK 21+正式）：Thread.ofVirtual().start(runnable)，轻量级
+- 虚拟线程vs平台线程：虚拟线程由JVM调度，百万级并发
+- 结构化并发（JDK 21+预览）：StructuredTaskScope管理相关子任务
 
-## 多线程的核心原理与工作机制
+## 锁与同步
+- synchronized：偏向锁→轻量级锁→重量级锁，自动升级
+- ReentrantLock：tryLock(timeout)、lockInterruptibly()、公平锁
+- ReadWriteLock：读写分离，读共享写独占
+- StampedLock：乐观读+悲观读写，JDK 8+引入
+- Condition：精确唤醒等待线程，替代wait/notify
 
-## 多线程的分类与类型体系
+## 并发集合
+- ConcurrentHashMap：JDK 8+ CAS+synchronized，size()精确计算
+- ConcurrentLinkedQueue：无锁非阻塞队列，CAS实现
+- CopyOnWriteArrayList：写时复制，适合读多写少
+- ConcurrentSkipListMap：跳表实现的并发有序Map
+- BlockingQueue：ArrayBlockingQueue、LinkedBlockingQueue、PriorityBlockingQueue
 
-## 多线程的常见用法与实践场景
+## 原子类与并发工具
+- AtomicInteger/AtomicLong/AtomicReference：CAS无锁操作
+- LongAdder/LongAccumulator（JDK 8+）：分段CAS，高并发下优于AtomicLong
+- CountDownLatch：等待N个任务完成
+- CyclicBarrier：N个线程同步到达屏障点
+- Semaphore：控制并发资源访问数量
 
-## 多线程的注意事项与最佳实践
-
+## 异步编程
+- CompletableFuture：supplyAsync/thenApply/thenCompose/thenCombine
+- allOf/anyOf：等待多个异步任务全部/任一完成
+- 虚拟线程简化异步：直接用同步代码风格获得异步性能
+- Flow API（JDK 9+）：Publisher/Subscriber/Subscription/Processor
+- 背压处理：Subscription.request(n)控制消费速率

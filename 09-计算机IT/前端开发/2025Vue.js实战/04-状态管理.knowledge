@@ -1,12 +1,35 @@
-# 状态管理
+# Pinia状态管理
 
-## 状态管理的定义与基本概念
+## Pinia基础
+- 官方推荐状态管理库，替代Vuex
+- defineStore('id', { state, getters, actions })
+- Setup Store语法：defineStore('id', () => { ... return { } })
+- 无mutations：直接修改state
+- TypeScript友好：完善的类型推断
 
-## 状态管理的核心原理与工作机制
+## State
+- state返回函数：state: () => ({ count: 0, list: [] })
+- 访问：store.count，store.list
+- 修改：store.count++ 或 store.$patch({ count: 5 })
+- 批量更新：store.$patch(state => { state.count++; state.list.push(item) })
+- 重置：store.$reset() 恢复初始状态
 
-## 状态管理的分类与类型体系
+## Getters
+- 计算属性：getters: { doubleCount: (state) => state.count * 2 }
+- 访问其他getter：doublePlusOne() { return this.doubleCount + 1 }
+- Setup Store中用computed：const doubleCount = computed(() => count.value * 2)
+- 可返回函数：getUserById: (state) => (id) => state.users.find(u => u.id === id)
 
-## 状态管理的常见用法与实践场景
+## Actions
+- 异步操作：actions: { async fetchData() { this.data = await api.get() } }
+- 访问state和getters：通过this
+- 组合actions：一个action调用另一个action
+- Setup Store中直接定义函数
+- 错误处理：try-catch包裹异步操作
 
-## 状态管理的注意事项与最佳实践
-
+## 高级用法
+- 插件：pinia.use(({ store }) => { store.$onAction(...) })
+- 持久化：pinia-plugin-persistedstate
+- Store组合：一个store使用另一个store
+- HMR：热模块替换，开发时保持状态
+- SSR支持：服务端渲染时状态序列化和水合

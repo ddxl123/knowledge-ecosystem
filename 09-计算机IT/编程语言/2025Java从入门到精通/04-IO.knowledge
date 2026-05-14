@@ -1,12 +1,35 @@
-# IO
+# IO流
 
-## IO的定义与基本概念
+## IO流体系
+- 按方向：输入流(InputStream/Reader)和输出流(OutputStream/Writer)
+- 按数据：字节流(Stream)和字符流(Reader/Writer)
+- 按功能：节点流（直接操作数据源）和处理流/包装流（增强功能）
+- 装饰器模式：处理流包装节点流，增强功能而不改变接口
 
-## IO的核心原理与工作机制
+## 文件操作
+- File类：表示文件或目录路径，常用方法exists()、mkdir()、listFiles()
+- FileInputStream/FileOutputStream：字节文件流，适合二进制文件
+- FileReader/FileWriter：字符文件流，适合文本文件
+- try-with-resources（JDK 7+）：自动关闭实现了AutoCloseable的资源
+- NIO.2（JDK 7+）：Files、Path、Paths工具类，更强大的文件操作
 
-## IO的分类与类型体系
+## 缓冲流与转换流
+- BufferedInputStream/BufferedOutputStream：字节缓冲流，默认8KB缓冲区
+- BufferedReader/BufferedWriter：字符缓冲流，readLine()和newLine()方法
+- InputStreamReader/OutputStreamWriter：字节流转字符流，指定编码
+- 编码问题：统一使用UTF-8，避免乱码
+- PrintWriter：带自动刷新的字符输出流，print/println/format方法
 
-## IO的常见用法与实践场景
+## 对象序列化
+- Serializable接口：标记接口，无方法，表示类可被序列化
+- ObjectOutputStream/ObjectOutputStream：对象的序列化与反序列化
+- serialVersionUID：版本控制，反序列化时验证类是否兼容
+- transient关键字：修饰不想序列化的字段
+- Externalizable接口：自定义序列化逻辑，性能更好
 
-## IO的注意事项与最佳实践
-
+## NIO（New IO）
+- Buffer：ByteBuffer、CharBuffer等，capacity/limit/position三个核心属性
+- Channel：FileChannel、SocketChannel，双向数据传输
+- Selector：多路复用器，一个线程管理多个Channel（事件驱动）
+- NIO适合高并发网络编程，传统IO适合简单文件操作
+- 内存映射文件：MappedByteBuffer，大文件处理利器

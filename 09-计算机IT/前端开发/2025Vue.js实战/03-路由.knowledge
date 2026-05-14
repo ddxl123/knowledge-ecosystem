@@ -1,12 +1,36 @@
-# 路由
+# Vue Router
 
-## 路由的定义与基本概念
+## 基础配置
+- createRouter()：创建路由器实例
+- createWebHistory()：HTML5 History模式
+- createWebHashHistory()：Hash模式
+- routes配置：{ path: '/user/:id', component: User }
+- app.use(router)：安装路由插件
 
-## 路由的核心原理与工作机制
+## 动态路由与参数
+- 路径参数：path: '/user/:id'，useRoute().params.id
+- 查询参数：useRoute().query.key
+- 路由props：props: true，将params作为组件props
+- 通配符：path: '/:pathMatch(.*)*' 匹配所有（404页面）
+- 嵌套路由：children属性定义子路由
 
-## 路由的分类与类型体系
+## 导航
+- 声明式：<router-link to="/about">About</router-link>
+- 编程式：useRouter().push('/about')、router.push({ name: 'user', params: { id: 1 } })
+- 替换：router.replace() 不产生历史记录
+- 前进/后退：router.go(1)、router.back()
+- 导航激活状态：router-link-active、router-link-exact-active
 
-## 路由的常见用法与实践场景
+## 导航守卫
+- 全局守卫：router.beforeEach((to, from) => { })
+- 路由独享：beforeEnter: (to, from) => { }
+- 组件内：onBeforeRouteLeave、onBeforeRouteUpdate
+- 返回值：true放行、false取消、路径/路由对象重定向
+- 元信息：meta: { requiresAuth: true }，to.meta.requiresAuth
 
-## 路由的注意事项与最佳实践
-
+## 高级功能
+- 路由懒加载：component: () => import('./User.vue')
+- 路由别名：alias: '/u'，访问/u等同于/user
+- 路由重定向：redirect: '/new-path'
+- 滚动行为：scrollBehavior自定义路由切换时滚动位置
+- 过渡动画：<router-view v-slot="{ Component }"> + <transition>

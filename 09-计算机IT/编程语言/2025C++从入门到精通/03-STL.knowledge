@@ -1,12 +1,36 @@
-# STL
+# STL标准模板库
 
-## STL的定义与基本概念
+## 容器概览
+- 序列容器：vector、deque、list、forward_list、array
+- 关联容器：set、multiset、map、multimap（基于红黑树）
+- 无序容器：unordered_set、unordered_map（基于哈希表）
+- 容器适配器：stack、queue、priority_queue
+- 选择原则：随机访问用vector，频繁插入删除用list，键值对用map
 
-## STL的核心原理与工作机制
+## vector详解
+- 底层实现：动态数组，连续内存，支持随机访问O(1)
+- 扩容机制：容量不足时重新分配（通常2倍），拷贝/移动元素
+- 常用方法：push_back、emplace_back（C++11）、reserve、resize、shrink_to_fit
+- 迭代器失效：扩容后所有迭代器失效，删除元素后后续迭代器失效
+- emplace_back vs push_back：前者原地构造，后者拷贝/移动
 
-## STL的分类与类型体系
+## 关联容器详解
+- set/multiset：有序集合，基于红黑树，O(logN)查找
+- map/multimap：有序键值对，[]运算符自动插入，at()抛异常
+- unordered_map：哈希表实现，平均O(1)查找，需自定义hash
+- 自定义比较：传入Compare函数对象或重载operator<
+- lower_bound/upper_bound：二分查找边界
 
-## STL的常见用法与实践场景
+## 算法
+- 非修改算法：find、count、for_each、equal、mismatch、search
+- 修改算法：transform、copy、replace、fill、generate、remove
+- 排序算法：sort（快排）、stable_sort（稳定排序）、partial_sort、nth_element
+- 集合算法：set_union、set_intersection、set_difference
+- 数值算法：accumulate、inner_product、partial_sum、adjacent_difference
 
-## STL的注意事项与最佳实践
-
+## 迭代器与函数对象
+- 迭代器类别：输入、输出、前向、双向、随机访问、连续（C++20）
+- 迭代器适配器：back_inserter、front_inserter、inserter
+- 函数对象（仿函数）：重载operator()的类，可携带状态
+- std::function（C++11）：通用函数包装器，可存储任何可调用对象
+- std::bind（C++11）：绑定参数，创建新可调用对象

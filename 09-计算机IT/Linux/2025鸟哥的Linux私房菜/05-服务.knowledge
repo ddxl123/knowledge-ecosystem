@@ -1,12 +1,36 @@
-# 服务
+# 系统服务管理
 
-## 服务的定义与基本概念
+## systemd
+- systemctl start/stop/restart/status：管理服务
+- systemctl enable/disable：设置开机启动
+- systemctl list-units --type=service：列出所有服务
+- journalctl -u service：查看服务日志
+- systemd unit文件：/etc/systemd/system/
 
-## 服务的核心原理与工作机制
+## 常见系统服务
+- SSH服务：sshd，端口22，配置/etc/ssh/sshd_config
+- Web服务器：Nginx/Apache，配置虚拟主机
+- 数据库服务：MySQL/PostgreSQL，安全初始化
+- 防火墙：firewalld/iptables
+- 日志服务：rsyslog、journal
 
-## 服务的分类与类型体系
+## Nginx配置
+- 主配置：/etc/nginx/nginx.conf
+- 虚拟主机：/etc/nginx/conf.d/xxx.conf
+- 反向代理：proxy_pass http://backend
+- 负载均衡：upstream + server列表
+- SSL配置：证书和私钥路径
 
-## 服务的常见用法与实践场景
+## 系统安全加固
+- 用户管理：useradd/usermod/userdel，最小权限原则
+- SSH安全：禁用root登录、密钥认证、修改默认端口
+- 文件权限：关键目录权限检查
+- 系统更新：yum update/apt upgrade定期更新
+- 日志审计：auditd审计守护进程
 
-## 服务的注意事项与最佳实践
-
+## 性能优化
+- 内核参数：sysctl.conf优化网络、内存参数
+- 文件描述符：ulimit -n调整限制
+- Swap管理：swapon/swapoff，vm.swappiness
+- IO调度器：deadline/noop
+- 系统监控：top/htop、iotop、nmon

@@ -1,12 +1,36 @@
 # 面向对象
 
-## 面向对象的定义与基本概念
+## 类与对象
+- class vs struct：默认访问权限不同（private vs public）
+- 构造函数：默认、参数化、拷贝构造、移动构造（C++11）
+- 析构函数：~ClassName()，资源释放，RAII原则
+- this指针：指向当前对象实例的指针
+- 初始化列表：ClassName() : member(value) {}，推荐用于const成员
 
-## 面向对象的核心原理与工作机制
+## 继承与多态
+- 继承方式：public、protected、private，默认private（class）/public（struct）
+- 虚函数：virtual关键字，实现运行时多态，通过vtable调用
+- override关键字（C++11）：明确表示重写基类虚函数
+- final关键字（C++11）：阻止类被继承或方法被重写
+- 纯虚函数：virtual void f() = 0，含纯虚函数的类为抽象类
 
-## 面向对象的分类与类型体系
+## 多重继承与菱形继承
+- 多重继承：class Derived : public Base1, public Base2 {}
+- 虚继承：class Derived : virtual public Base，解决菱形继承问题
+- 虚基类：共享基类子对象，避免数据冗余和二义性
+- 基类构造顺序：虚基类→非虚基类→成员变量→构造函数体
+- 菱形继承问题：两个父类继承同一祖父类，导致数据重复
 
-## 面向对象的常见用法与实践场景
+## 运算符重载
+- 成员函数重载：ClassName operator+(const ClassName& other)
+- 友元函数重载：friend ostream& operator<<(ostream& os, const ClassName& obj)
+- 特殊运算符：=、[]、()、->、new、delete可重载
+- 自增自减：operator++()（前缀）、operator++(int)（后缀）
+- 赋值运算符：必须处理自赋值，返回*this引用
 
-## 面向对象的注意事项与最佳实践
-
+## RAII与资源管理
+- RAII原则：资源获取即初始化，构造时获取，析构时释放
+- 适用场景：文件句柄、网络连接、锁、内存
+- 智能指针实现RAII：unique_ptr（独占）、shared_ptr（共享引用计数）
+- lock_guard/unique_lock：互斥锁的RAII封装
+- 异常安全：RAII确保异常发生时资源正确释放

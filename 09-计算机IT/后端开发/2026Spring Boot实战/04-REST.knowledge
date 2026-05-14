@@ -1,12 +1,36 @@
-# REST
+# RESTful API
 
-## REST的定义与基本概念
+## 声明式HTTP接口（Spring 6.1+）
+- @HttpExchange：声明式HTTP客户端接口
+- @GetExchange/@PostExchange：HTTP方法绑定
+- 自动代理：HttpServiceProxyFactory创建代理实现
+- RestClient/WebClient后端：灵活选择底层实现
+- 与OpenFeign类似但Spring原生支持
 
-## REST的核心原理与工作机制
+## RestClient（Spring 6.1+）
+- RestClient restClient = RestClient.create(baseUrl)
+- GET/POST/PUT/DELETE链式调用
+- 自动序列化/反序列化JSON
+- 错误处理：defaultStatusHandler
+- 拦截器：请求/响应拦截
 
-## REST的分类与类型体系
+## ProblemDetail错误响应
+- RFC 7807标准：{ type, title, status, detail, instance }
+- @ControllerAdvice异常处理返回ProblemDetail
+- 自定义错误类型：扩展ProblemDetail
+- 国际化：错误消息多语言支持
+- 一致性：所有API统一错误格式
 
-## REST的常见用法与实践场景
+## API版本与文档
+- URL版本：/api/v1/users
+- SpringDoc OpenAPI 3：@Tag、@Operation注解
+- Swagger UI：交互式文档测试
+- 接口分组：按模块/版本分组
+- API测试：RestAssured集成测试
 
-## REST的注意事项与最佳实践
-
+## 高级API特性
+- 分页排序：Pageable自动解析
+- 过滤与搜索：Specification动态查询
+- 批量操作：批量创建/更新/删除
+- 异步接口：DeferredResult/Callable返回
+- SSE推送：SseEmitter实时推送

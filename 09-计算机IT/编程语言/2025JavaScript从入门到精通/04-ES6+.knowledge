@@ -1,12 +1,36 @@
-# ES6+
+# ES6+新特性
 
-## ES6+的定义与基本概念
+## ES6核心特性
+- let/const：块级作用域变量声明
+- 箭头函数：简洁语法，词法this绑定
+- 模板字面量：多行字符串和插值
+- 解构赋值：从对象/数组中提取值
+- 展开运算符：...展开数组/对象（浅拷贝）
 
-## ES6+的核心原理与工作机制
+## 类与模块
+- class语法：constructor、方法、静态方法、getter/setter
+- 继承：extends + super()，调用父类构造器和方法
+- 私有成员（ES2022）：#前缀声明私有字段和方法
+- 静态类块（ES2022）：static { } 初始化静态私有字段
+- ES Modules：import/export，编译时确定依赖，支持tree-shaking
 
-## ES6+的分类与类型体系
+## Promise与异步
+- Promise：三种状态pending/fulfilled/rejected，then/catch/finally
+- Promise.all：全部成功才成功；Promise.allSettled：等待全部完成
+- Promise.race：取最先完成的；Promise.any：取最先成功的
+- async/await（ES2017）：异步代码同步写法，本质是Promise语法糖
+- 顶层await（ES2022）：模块顶层可直接使用await
 
-## ES6+的常见用法与实践场景
+## 新数据结构
+- Map：键值对集合，键可以是任意类型，保持插入顺序
+- Set：值的集合，自动去重，值唯一
+- WeakMap/WeakSet：弱引用，键为对象，不阻止垃圾回收
+- Symbol：唯一标识符，用于对象属性的私有键
+- BigInt（ES2020）：任意精度整数，123n
 
-## ES6+的注意事项与最佳实践
-
+## 实用新特性
+- 可选链（?.）：安全访问嵌套属性（ES2020）
+- 空值合并（??）：null/undefined时取右值（ES2020）
+- 逻辑赋值（ES2021）：??=、||=、&&=
+- Object.fromEntries：从键值对数组创建对象
+- Array.at()（ES2022）：支持负索引，arr.at(-1)取最后一个元素

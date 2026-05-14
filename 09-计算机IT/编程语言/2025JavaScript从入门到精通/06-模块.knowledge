@@ -1,12 +1,36 @@
-# 模块
+# 模块化
 
-## 模块的定义与基本概念
+## 模块化发展历程
+- 全局变量：早期方式，命名冲突、依赖混乱
+- IIFE：立即执行函数，创建私有作用域
+- CommonJS：Node.js模块规范，require/module.exports，同步加载
+- AMD（RequireJS）：异步模块定义，浏览器端异步加载
+- UMD：通用模块定义，兼容CommonJS和AMD
 
-## 模块的核心原理与工作机制
+## ES Modules
+- export导出：命名导出export { name }、默认导出export default
+- import导入：import { name } from './module'、import defaultName from './module'
+- import()动态导入：返回Promise，实现按需加载/代码分割
+- 静态分析：编译时确定依赖关系，支持tree-shaking
+- 严格模式：ES Modules默认使用严格模式
 
-## 模块的分类与类型体系
+## CommonJS模块
+- require()：加载模块，返回module.exports对象
+- module.exports：导出值，可以是任意类型
+- exports是module.exports的引用，不要直接赋值exports
+- 模块缓存：require同一模块只执行一次
+- 循环依赖：CommonJS返回部分完成的模块
 
-## 模块的常见用法与实践场景
+## 模块打包
+- Webpack：模块打包器，将ES Modules/CommonJS打包为浏览器可用的bundle
+- Vite：基于ES Modules的开发服务器，开发时无需打包，速度快
+- Rollup：库打包工具，tree-shaking效果好
+- esbuild：Go语言实现，打包速度极快
+- 代码分割：动态import()实现按需加载，减少初始加载时间
 
-## 模块的注意事项与最佳实践
-
+## 模块化最佳实践
+- 一个文件一个模块，职责单一
+- 优先使用ES Modules，兼容性用构建工具处理
+- 避免循环依赖，设计清晰的模块依赖图
+- 使用barrel文件（index.js）统一导出模块
+- package.json的type字段：module（ESM）或commonjs（CJS）

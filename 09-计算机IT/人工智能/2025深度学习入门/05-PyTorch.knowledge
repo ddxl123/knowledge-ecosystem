@@ -1,12 +1,36 @@
 # PyTorch
 
-## PyTorch的定义与基本概念
+## 张量操作
+- torch.tensor()：创建张量
+- 形状操作：reshape、view、transpose、permute
+- 数学运算：加减乘除、矩阵乘法（@、matmul）
+- GPU加速：tensor.to('cuda')、tensor.cuda()
+- 自动求导：requires_grad=True，backward()计算梯度
 
-## PyTorch的核心原理与工作机制
+## 模型构建
+- nn.Module：模型基类，__init__定义层，forward定义前向传播
+- nn.Linear：全连接层
+- nn.Conv2d：卷积层
+- nn.LSTM：循环层
+- nn.Sequential：顺序容器，按顺序堆叠层
 
-## PyTorch的分类与类型体系
+## 训练流程
+- 数据加载：Dataset + DataLoader，批量加载和打乱
+- 损失函数：CrossEntropyLoss、MSELoss、BCELoss
+- 优化器：torch.optim.Adam、SGD
+- 训练循环：for epoch → for batch → forward → loss → backward → step
+- 模型保存：torch.save(model.state_dict(), 'model.pth')
 
-## PyTorch的常见用法与实践场景
+## 高级特性
+- 自定义Dataset：继承Dataset，实现__len__和__getitem__
+- DataLoader：batch_size、shuffle、num_workers、pin_memory
+- 混合精度训练：torch.cuda.amp自动混合精度
+- 分布式训练：DistributedDataParallel
+- TorchScript：模型导出和部署
 
-## PyTorch的注意事项与最佳实践
-
+## 生态工具
+- torchvision：图像模型和数据增强
+- Hugging Face Transformers：预训练NLP模型
+- PyTorch Lightning：简化训练代码
+- ONNX：模型格式转换，跨框架部署
+- TorchServe：模型服务化部署

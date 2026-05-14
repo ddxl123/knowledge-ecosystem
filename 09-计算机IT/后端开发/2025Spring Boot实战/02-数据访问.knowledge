@@ -1,12 +1,36 @@
 # 数据访问
 
-## 数据访问的定义与基本概念
+## Spring Data JPA
+- 实体映射：@Entity、@Table、@Id、@GeneratedValue、@Column
+- Repository接口：JpaRepository<Entity, ID>，继承即获得CRUD方法
+- 方法名查询：findByUsername(String username)，自动派生SQL
+- @Query自定义查询：JPQL或原生SQL
+- 分页排序：Pageable和Page<T>，PageRequest.of(0, 10)
 
-## 数据访问的核心原理与工作机制
+## MyBatis集成
+- @Mapper接口：定义数据访问方法
+- XML映射文件：SQL语句和结果映射
+- 注解方式：@Select、@Insert、@Update、@Delete
+- 动态SQL：MyBatis-Plus的QueryWrapper/LambdaQueryWrapper
+- 分页插件：PageHelper或MyBatis-Plus分页
 
-## 数据访问的分类与类型体系
+## 事务管理
+- @Transactional：声明式事务管理
+- 传播行为：REQUIRED（默认）、REQUIRES_NEW、NESTED、SUPPORTS
+- 隔离级别：READ_COMMITTED、REPEATABLE_READ、SERIALIZABLE
+- 回滚规则：默认RuntimeException回滚，rollbackFor指定
+- 注意事项：同类方法调用不生效、异常被catch不回滚
 
-## 数据访问的常见用法与实践场景
+## 缓存
+- @Cacheable：方法结果缓存
+- @CachePut：更新缓存
+- @CacheEvict：删除缓存
+- 缓存管理器：RedisCacheManager、CaffeineCacheManager
+- 缓存策略：TTL过期、LRU淘汰、缓存穿透/击穿/雪崩防护
 
-## 数据访问的注意事项与最佳实践
-
+## 数据库迁移
+- Flyway：SQL迁移脚本，版本化管理
+- Liquibase：XML/YAML/SQL迁移，支持回滚
+- 初始化脚本：schema.sql、data.sql
+- 多数据源：@Primary + @Qualifier区分
+- 读写分离：主从架构，AbstractRoutingDataSource

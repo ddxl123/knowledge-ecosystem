@@ -1,12 +1,36 @@
-# Ktor
+# Ktor框架
 
-## Ktor的定义与基本概念
+## Ktor基础
+- Kotlin原生异步Web框架，基于协程和Netty/Jetty
+- 服务端：嵌入式服务器，轻量级配置
+- 客户端：多平台HTTP客户端
+- 插件系统：可插拔的功能模块（认证、序列化、压缩等）
+- 类型安全：充分利用Kotlin类型系统
 
-## Ktor的核心原理与工作机制
+## 服务端路由
+- routing { get("/path") { call.respondText("Hello") } }
+- 路径参数：get("/user/{id}") { val id = call.parameters["id"] }
+- 路由分组：route("/api") { /users, /posts }
+- HTTP方法：get、post、put、delete、patch
+- 嵌套路由：支持多层级路由组织
 
-## Ktor的分类与类型体系
+## 请求与响应
+- 请求体：call.receive<T>()，自动反序列化
+- 查询参数：call.request.queryParameters["key"]
+- 请求头：call.request.headers["Authorization"]
+- 响应类型：respondText、respond、respondBytes
+- 状态码：call.response.status(HttpStatusCode.OK)
 
-## Ktor的常见用法与实践场景
+## 插件系统
+- ContentNegotiation：自动JSON序列化/反序列化（Jackson/kotlinx.serialization）
+- Authentication：JWT、Basic、OAuth、Session认证
+- CORS：跨域资源共享配置
+- Compression：gzip/deflate响应压缩
+- StatusPages：统一异常处理
 
-## Ktor的注意事项与最佳实践
-
+## 测试与部署
+- 测试：testApplication { client.get("/path") }，无需启动真实服务器
+- Fat JAR：构建可执行JAR，包含所有依赖
+- Docker部署：multi-stage build，精简镜像
+- 配置：HOCON/YAML/环境变量
+- 监控：Micrometer指标、健康检查端点

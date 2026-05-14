@@ -1,12 +1,35 @@
 # 状态管理
 
-## 状态管理的定义与基本概念
+## 本地状态
+- useState/useReducer：组件内部状态
+- 提升状态：将状态提升到最近的公共父组件
+- 状态下沉：将状态放到实际需要的最近组件
+- 原则：能用本地状态解决就不用全局状态
 
-## 状态管理的核心原理与工作机制
+## Context + useReducer
+- createContext + useReducer：轻量级全局状态
+- Provider包裹应用，useContext消费状态
+- dispatch通过Context传递，实现跨组件更新
+- 适用：中等规模应用，状态变更不频繁
+- 缺点：值变化时所有消费者重新渲染
 
-## 状态管理的分类与类型体系
+## Redux
+- 单一数据源：整个应用状态存储在一个store中
+- 纯函数reducer：(state, action) => newState
+- 不可变更新：永远返回新state对象
+- Action：描述状态变化的普通对象 { type, payload }
+- Redux Toolkit（推荐）：createSlice、configureStore简化开发
 
-## 状态管理的常见用法与实践场景
+## Redux Toolkit
+- createSlice：定义reducer和action一体，内置Immer不可变更新
+- configureStore：自动配置中间件和DevTools
+- createAsyncThunk：异步操作，pending/fulfilled/rejected
+- RTK Query：数据获取和缓存，替代手动thunk
+- 配合React-Redux：useSelector读取状态，useDispatch派发action
 
-## 状态管理的注意事项与最佳实践
-
+## 其他状态方案
+- Zustand：极简状态库，set/get API，无boilerplate
+- Jotai：原子化状态，类似Recoil但更轻量
+- React Query/TanStack Query：服务端状态管理，缓存+同步
+- Recoil：Facebook出品，原子化状态，selector派生状态
+- MobX：可观察状态，自动追踪依赖，自动更新

@@ -1,12 +1,36 @@
-# UIKit
+# UIKit开发
 
-## UIKit的定义与基本概念
+## 视图层次
+- UIView：所有视图的基类，管理矩形区域
+- UIWindow：应用窗口，一个应用通常一个主窗口
+- 视图树：addSubview/removeFromSuperview管理父子关系
+- frame vs bounds：frame相对于父视图，bounds相对于自身
+- autoresizingMask：自动调整大小（旧版）
 
-## UIKit的核心原理与工作机制
+## 自动布局Auto Layout
+- NSLayoutConstraint：代码创建约束
+- Visual Format Language：可视化约束描述
+- Safe Area：安全区域，避免遮挡刘海和Home条
+- Content Hugging/Compression Resistance：内容优先级
+- Stack View：UIStackView简化线性布局
 
-## UIKit的分类与类型体系
+## 视图控制器
+- UIViewController：视图控制器基类
+- 生命周期：viewDidLoad→viewWillAppear→viewDidAppear→viewWillDisappear→viewDidDisappear
+- 容器控制器：UINavigationController、UITabBarController
+- 模态呈现：present/dismiss
+- 页面间传值：属性、闭包、代理、通知
 
-## UIKit的常见用法与实践场景
+## 列表与集合
+- UITableView：表格视图，DataSource和Delegate模式
+- UITableViewCell：系统cell和自定义cell
+- UICollectionView：集合视图，支持网格和自定义布局
+- Diffable Data Source（iOS 13+）：声明式数据源，自动计算差异
+- Compositional Layout（iOS 13+）：组合式布局
 
-## UIKit的注意事项与最佳实践
-
+## 手势与动画
+- 手势识别器：UITapGestureRecognizer、UIPanGestureRecognizer等
+- UIView动画：UIView.animate(withDuration:) { }
+- 关键帧动画：UIView.animateKeyframes(withDuration:)
+- Core Animation：CALayer级别动画，CABasicAnimation
+- 弹簧动画：UIView.animate(withDuration:delay:usingSpringWithDamping:)

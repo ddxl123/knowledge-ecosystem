@@ -1,12 +1,36 @@
-# 数据库
+# 数据库操作
 
-## 数据库的定义与基本概念
+## PDO详解
+- 连接：new PDO("mysql:host=localhost;dbname=test", $user, $pass)
+- 错误模式：setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION)
+- 查询：query()直接执行，prepare()+execute()预处理
+- 获取结果：fetch()、fetchAll()、fetchColumn()
+- 最后插入ID：lastInsertId()
 
-## 数据库的核心原理与工作机制
+## MySQL优化
+- 索引：CREATE INDEX idx_name ON table(column)
+- EXPLAIN分析查询：type、key、rows、Extra
+- 慢查询日志：slow_query_log，分析执行时间长的SQL
+- 连接池：持久连接PDO::ATTR_PERSISTENT
+- 分页优化：LIMIT offset,size 大偏移量用子查询优化
 
-## 数据库的分类与类型体系
+## 数据库设计
+- 范式：1NF（原子性）、2NF（消除部分依赖）、3NF（消除传递依赖）
+- 反范式：适当冗余提升查询性能
+- 外键约束：FOREIGN KEY引用完整性
+- 索引设计：主键索引、唯一索引、复合索引、全文索引
+- 字符集：utf8mb4支持完整Unicode（含emoji）
 
-## 数据库的常见用法与实践场景
+## Redis
+- 数据类型：String、List、Hash、Set、Sorted Set
+- Predis/phpredis：PHP Redis客户端
+- 缓存策略：Cache-Aside、Write-Through、Write-Behind
+- 常用场景：Session存储、缓存、计数器、排行榜、消息队列
+- 过期策略：EXPIRE设置过期时间，惰性删除+定期删除
 
-## 数据库的注意事项与最佳实践
-
+## 数据库迁移
+- 迁移文件：版本化数据库结构变更
+- Schema Builder：代码定义表结构，up()/down()方法
+- 数据填充：Seed填充测试数据
+- 团队协作：迁移文件纳入版本控制
+- 工具：Doctrine Migrations、Laravel Migrations
