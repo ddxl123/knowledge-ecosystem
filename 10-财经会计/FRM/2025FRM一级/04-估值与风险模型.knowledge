@@ -1,0 +1,23 @@
+{{知识点名称}}一、Value at Risk (VaR){{知识点内容}}1. **Definition**: Maximum loss at a given confidence level over a given time horizon
+2. **Methods**
+- Parametric (variance-covariance)
+- Historical simulation
+- Monte Carlo simulation
+3. **VaR vs Expected Shortfall (ES)**
+- ES: average loss beyond VaR
+- ES is coherent; VaR is not▮{{知识点名称}}二、Market Risk{{知识点内容}}1. **Bond VaR**
+- Duration-based approximation
+2. **Portfolio VaR**
+- Aggregation and diversification
+3. **Backtesting VaR**
+- Kupiec test, traffic light approach▮{{知识点名称}}三、Credit Risk Models{{知识点内容}}1. **Credit scoring models**
+2. **Structural models** (Merton model)
+- Firm value = debt + equity
+- Default when firm value < debt at maturity
+3. **Reduced-form models**
+4. **CreditMetrics**
+5. **Credit Risk+**▮{{知识点名称}}四、Operational Risk{{知识点内容}}1. **Loss distribution approach**
+2. **Scenario analysis**
+3. **Key risk indicators**▮{{知识点名称}}五、Stress Testing{{知识点内容}}1. **Historical scenarios**
+2. **Hypothetical scenarios**
+3. **Reverse stress testing**

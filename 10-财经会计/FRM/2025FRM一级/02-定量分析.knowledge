@@ -1,0 +1,15 @@
+{{知识点名称}}一、Probability and Statistics{{知识点内容}}1. **Descriptive statistics**
+2. **Probability distributions**
+- Normal, lognormal, t-distribution, chi-square, F
+3. **Bayes' theorem**
+4. **Hypothesis testing**▮{{知识点名称}}二、Regression Analysis{{知识点内容}}1. **Simple linear regression**
+2. **Multiple regression**
+3. **Assumptions and diagnostics**
+4. **Heteroskedasticity, multicollinearity**▮{{知识点名称}}三、Monte Carlo Simulation{{知识点内容}}1. **Random number generation**
+2. **Simulation methodology**
+3. **Applications in risk management**▮{{知识点名称}}四、Volatility Estimation{{知识点内容}}1. **EWMA** (Exponentially Weighted Moving Average)
+2. **GARCH models**
+3. **Implied volatility**▮{{知识点名称}}五、Correlation and Copulas{{知识点内容}}1. **Pearson correlation**
+2. **Rank correlation**
+3. **Copula functions**
+4. **Tail dependence**

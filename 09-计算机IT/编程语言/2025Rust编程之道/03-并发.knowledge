@@ -1,36 +1,26 @@
-# 并发编程
-
-## 线程
-- std::thread::spawn：创建新线程，传入闭包
-- JoinHandle：join()等待线程完成，返回Result
-- move闭包：move || {} 将变量所有权转移到线程
-- 线程局部存储：thread_local!宏
-- 线程池：rayon库的par_iter()并行迭代
-
-## 消息传递
-- mpsc::channel：多生产者单消费者通道
-- tx.send(value)：发送值（move语义）
-- rx.recv()：阻塞接收；rx.try_recv()：非阻塞
-- 多个发送端：tx.clone()克隆发送端
-- 通道关闭：所有发送端drop后，接收端收到错误
-
-## 共享状态
-- Mutex<T>：互斥锁，lock()获取锁，返回MutexGuard（RAII自动释放）
-- Arc<T>：原子引用计数，线程安全的Rc
-- Arc<Mutex<T>>：多线程共享可变状态的惯用模式
-- RwLock<T>：读写锁，允许多个读或一个写
-- 死锁预防：注意锁的获取顺序，避免嵌套锁
-
-## Send与Sync trait
-- Send：可以安全地在线程间转移所有权
-- Sync：可以安全地在线程间共享引用（&T是Send）
-- 大多数类型自动实现Send和Sync
-- Rc<T>不是Send（非原子引用计数），用Arc<T>替代
-- RefCell<T>不是Sync（运行时借用检查非线程安全）
-
-## 无畏并发
-- 编译器在编译期防止数据竞争（借用检查器+Send/Sync）
-- rayon：数据并行库，.par_iter()一行代码实现并行
-- crossbeam：高级并发工具，作用域线程、无锁数据结构
-- async/await：异步运行时（tokio），适合IO密集型任务
-- 原子类型：AtomicBool/AtomicUsize等，无锁并发操作
+{{知识点名称}}线程{{知识点内容}}- 创建线程：`std::thread::spawn(|| { 线程代码 })` 返回JoinHandle
+- 等待线程：`handle.join().unwrap()` 阻塞等待线程完成
+- move闭包：`move || { 使用外部变量 }` 将变量所有权转移到线程
+- 线程安全：Rust编译器通过所有权和类型系统保证线程安全
+- scoped线程（std::thread::scope）：可以借用父线程的变量，自动join▮{{知识点名称}}消息传递{{知识点内容}}- Channel通道：`mpsc::channel()` 创建发送端和接收端（多生产者单消费者）
+- 发送：`tx.send(value)`，接收：`rx.recv()` 阻塞、`rx.try_recv()` 非阻塞
+- 多生产者：`tx.clone()` 克隆发送端，多个线程可同时发送
+- channel在所有发送端被丢弃后关闭，recv返回Err
+- 交叉beam：`crossbeam-channel` 提供更丰富的channel实现
+- 消息传递优于共享内存："Do not communicate by sharing memory; share memory by communicating"▮{{知识点名称}}共享状态{{知识点内容}}- Mutex<T>：互斥锁，`lock()`获取锁返回MutexGuard（自动释放）
+- Arc<Mutex<T>>：多线程共享可变数据，Arc是线程安全的Rc
+- 死锁预防：Rust的类型系统可防止数据竞争，但逻辑死锁仍需注意
+- RwLock<T>：读写锁，多个读锁可同时持有，写锁独占
+- Atomic类型：AtomicBool、AtomicI32、AtomicUsize等，无锁原子操作
+- Ordering：Relaxed、Acquire、Release、AcqRel、SeqCst 内存顺序▮{{知识点名称}}Send与Sync trait{{知识点内容}}- Send：类型的所有权可以在线程间转移，几乎所有类型都实现Send
+- Sync：类型的引用可以被多个线程安全持有，`T: Sync` 意味着 `&T: Send`
+- 不是Send的类型：Rc<T>、*const T、*mut T
+- 不是Sync的类型：RefCell<T>、Cell<T>（内部可变性不安全）
+- 自动实现：如果类型的所有字段都是Send/Sync，该类型自动实现Send/Sync
+- 手动实现：unsafe impl Send/Sync，需要程序员自行保证安全▮{{知识点名称}}async/await异步编程{{知识点内容}}- async fn：异步函数，返回Future，调用时不立即执行
+- .await：在异步函数中等待Future完成
+- 异步运行时：Rust标准库不包含运行时，需要第三方库如tokio、async-std
+- tokio：`#[tokio::main]` 注解、`tokio::spawn()` 任务、`tokio::select!` 多路复用
+- Pin：确保Future在内存中不被移动，因为async/await生成的状态机包含自引用
+- Stream：异步迭代器，类似同步的Iterator但异步产生值
+- 异步与同步桥接：运行时提供阻塞接口如`tokio::task::spawn_blocking()`

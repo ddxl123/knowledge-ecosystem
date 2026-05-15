@@ -1,0 +1,5 @@
+{{知识点名称}}GameObject与Transform{{知识点内容}}GameObject是Unity场景中所有对象的基类。Transform组件控制对象的位置、旋转和缩放。创建对象用GameObject.CreatePrimitive()，查找用GameObject.Find()和FindGameObjectsWithTag()，销毁用Destroy(target, delay)。移动用transform.Translate()和Vector3.Lerp()插值，旋转用transform.Rotate()和LookAt()，缩放用localScale
+{{知识点名称}}Prefab预制体{{知识点内容}}Prefab是可复用的游戏对象模板。通过public GameObject声明引用，在Inspector中拖入预制体。用Instantiate(prefab, position, rotation)在运行时实例化。适合用于敌人生成、子弹发射等需要重复创建对象的场景，配合InvokeRepeating可实现定时生成
+{{知识点名称}}组件系统{{知识点内容}}Unity采用组件化架构，功能通过挂载组件实现。获取组件用GetComponent<T>()，添加用AddComponent<T>()，检查用TryGetComponent<T>()。常用组件有Rigidbody（物理）、Renderer（渲染）、Collider（碰撞）、AudioSource（音频）。组件可通过enabled属性启用或禁用
+{{知识点名称}}场景管理{{知识点内容}}使用UnityEngine.SceneManagement命名空间。SceneManager.LoadScene()同步加载场景，LoadSceneAsync()异步加载（可显示进度条）。异步加载时asyncLoad.progress最大到0.9，需设置allowSceneActivation=true才能激活。重新加载当前场景用SceneManager.GetActiveScene().name
+{{知识点名称}}父子关系{{知识点内容}}通过transform.SetParent(parent)设置父子关系，设为null则解除。获取子对象用GetChild(index)或Find("name")。可用foreach遍历所有子对象。子对象会跟随父对象移动、旋转和缩放，形成层级结构

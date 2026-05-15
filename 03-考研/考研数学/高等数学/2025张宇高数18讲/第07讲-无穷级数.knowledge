@@ -1,9 +1,4 @@
-# 第07讲：无穷级数
-
-
-## 知识点1：数项级数的概念与性质
-
-**定义**: $\sum_{n=1}^{\infty} a_n$ 的部分和 $S_n = a_1 + a_2 + \cdots + a_n$，若 $\lim_{n \to \infty} S_n = S$ 存在，则级数收敛
+{{知识点名称}}知识点1：数项级数的概念与性质{{知识点内容}}**定义**: $\sum_{n=1}^{\infty} a_n$ 的部分和 $S_n = a_1 + a_2 + \cdots + a_n$，若 $\lim_{n \to \infty} S_n = S$ 存在，则级数收敛
 
 **性质**:
 1. 级数收敛的必要条件：$\lim_{n \to \infty} a_n = 0$（反之不成立）
@@ -17,18 +12,14 @@
 
 **易错点**: $\lim a_n = 0$ 只是收敛的必要条件，不是充分条件（如调和级数）
 
----
-
-## 知识点2：正项级数的审敛法
-
-**比较审敛法**: 设 $0 \leq a_n \leq b_n$
+---▮{{知识点名称}}知识点2：正项级数的审敛法{{知识点内容}}**比较审敛法**: 设 $0 \leq a_n \leq b_n$
 - $\sum b_n$ 收敛 $\Rightarrow$ $\sum a_n$ 收敛
 - $\sum a_n$ 发散 $\Rightarrow$ $\sum b_n$ 发散
 
 **极限比较审敛法**: 若 $\lim_{n \to \infty} \frac{a_n}{b_n} = l > 0$，则 $\sum a_n$ 与 $\sum b_n$ 同敛散
 
 **比值审敛法（达朗贝尔）**: 
-$$\lim_{n \to \infty} \frac{a_{n+1}}{a_n} = \rho \begin{cases} < 1 & \text{收敛} \\ > 1 & \text{发散} \\ = 1 & \text{不确定} \end{cases}$$
+$$\lim_{n \to \infty} \frac{a_{n+1}{a_n} = \rho \begin{cases} < 1 & \text{收敛} \\ > 1 & \text{发散} \\ = 1 & \text{不确定} \end{cases}$$
 
 **根值审敛法（柯西）**: 
 $$\lim_{n \to \infty} \sqrt[n]{a_n} = \rho \begin{cases} < 1 & \text{收敛} \\ > 1 & \text{发散} \\ = 1 & \text{不确定} \end{cases}$$
@@ -41,11 +32,7 @@ $$\lim_{n \to \infty} \sqrt[n]{a_n} = \rho \begin{cases} < 1 & \text{收敛} \\ 
 - 判断正项级数的敛散性
 - 选择合适的审敛法
 
----
-
-## 知识点3：交错级数与任意项级数
-
-**莱布尼茨判别法**: 交错级数 $\sum (-1)^{n-1} a_n$（$a_n > 0$），若 $a_n$ 单调递减趋于 $0$，则收敛
+---▮{{知识点名称}}知识点3：交错级数与任意项级数{{知识点内容}}**莱布尼茨判别法**: 交错级数 $\sum (-1)^{n-1} a_n$（$a_n > 0$），若 $a_n$ 单调递减趋于 $0$，则收敛
 
 **绝对收敛与条件收敛**:
 - $\sum |a_n|$ 收敛 $\Rightarrow$ $\sum a_n$ 收敛（绝对收敛）
@@ -55,14 +42,10 @@ $$\lim_{n \to \infty} \sqrt[n]{a_n} = \rho \begin{cases} < 1 & \text{收敛} \\ 
 - 判断交错级数的敛散性
 - 区分绝对收敛与条件收敛
 
----
-
-## 知识点4：幂级数
-
-**阿贝尔定理**: 若 $\sum a_n x^n$ 在 $x = x_0$ 处收敛，则 $|x| < |x_0|$ 时绝对收敛
+---▮{{知识点名称}}知识点4：幂级数{{知识点内容}}**阿贝尔定理**: 若 $\sum a_n x^n$ 在 $x = x_0$ 处收敛，则 $|x| < |x_0|$ 时绝对收敛
 
 **收敛半径**:
-$$R = \lim_{n \to \infty} \left|\frac{a_n}{a_{n+1}}\right| \quad \text{或} \quad R = \lim_{n \to \infty} \frac{1}{\sqrt[n]{|a_n|}}$$
+$$R = \lim_{n \to \infty} \left|\frac{a_n}{a_{n+1}\right| \quad \text{或} \quad R = \lim_{n \to \infty} \frac{1}{\sqrt[n]{|a_n|}$$
 
 **收敛区间**: $(-R, R)$，端点处单独判断
 
@@ -78,17 +61,13 @@ $$\int_0^x \left(\sum_{n=0}^{\infty} a_n t^n\right) dt = \sum_{n=0}^{\infty} \fr
 
 **易错点**: 收敛域必须检验端点；逐项求导/积分后收敛半径不变但端点敛散性可能变
 
----
-
-## 知识点5：函数展开为幂级数
-
-**公式（麦克劳林展开）**:
+---▮{{知识点名称}}知识点5：函数展开为幂级数{{知识点内容}}**公式（麦克劳林展开）**:
 $$f(x) = \sum_{n=0}^{\infty} \frac{f^{(n)}(0)}{n!} x^n$$
 
 **常用展开式**:
 $$e^x = \sum_{n=0}^{\infty} \frac{x^n}{n!}, \quad |x| < \infty$$
-$$\sin x = \sum_{n=0}^{\infty} \frac{(-1)^n x^{2n+1}}{(2n+1)!}, \quad |x| < \infty$$
-$$\cos x = \sum_{n=0}^{\infty} \frac{(-1)^n x^{2n}}{(2n)!}, \quad |x| < \infty$$
+$$\sin x = \sum_{n=0}^{\infty} \frac{(-1)^n x^{2n+1}{(2n+1)!}, \quad |x| < \infty$$
+$$\cos x = \sum_{n=0}^{\infty} \frac{(-1)^n x^{2n}{(2n)!}, \quad |x| < \infty$$
 $$\frac{1}{1-x} = \sum_{n=0}^{\infty} x^n, \quad |x| < 1$$
 $$\frac{1}{1+x} = \sum_{n=0}^{\infty} (-1)^n x^n, \quad |x| < 1$$
 $$\ln(1+x) = \sum_{n=1}^{\infty} \frac{(-1)^{n-1} x^n}{n}, \quad -1 < x \leq 1$$

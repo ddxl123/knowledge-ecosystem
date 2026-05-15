@@ -1,9 +1,4 @@
-# 第03讲：一元函数积分学
-
-
-## 知识点1：不定积分的概念与性质
-
-**定义**: 若 $F'(x) = f(x)$，则 $\int f(x) dx = F(x) + C$
+{{知识点名称}}知识点1：不定积分的概念与性质{{知识点内容}}**定义**: 若 $F'(x) = f(x)$，则 $\int f(x) dx = F(x) + C$
 
 **性质**:
 1. $\int [f(x) + g(x)] dx = \int f(x) dx + \int g(x) dx$
@@ -11,19 +6,15 @@
 3. 不定积分是原函数的全体
 
 **基本积分公式**:
-$$\int x^n dx = \frac{x^{n+1}}{n+1} + C \quad (n \neq -1)$$
+$$\int x^n dx = \frac{x^{n+1}{n+1} + C \quad (n \neq -1)$$
 $$\int \frac{1}{x} dx = \ln|x| + C$$
 $$\int e^x dx = e^x + C, \quad \int a^x dx = \frac{a^x}{\ln a} + C$$
 $$\int \sin x dx = -\cos x + C, \quad \int \cos x dx = \sin x + C$$
 $$\int \sec^2 x dx = \tan x + C, \quad \int \csc^2 x dx = -\cot x + C$$
-$$\int \frac{1}{\sqrt{1-x^2}} dx = \arcsin x + C$$
+$$\int \frac{1}{\sqrt{1-x^2} dx = \arcsin x + C$$
 $$\int \frac{1}{1+x^2} dx = \arctan x + C$$
 
----
-
-## 知识点2：不定积分的计算方法
-
-**方法**:
+---▮{{知识点名称}}知识点2：不定积分的计算方法{{知识点内容}}**方法**:
 1. **第一类换元法（凑微分法）**: $\int f(g(x)) g'(x) dx = \int f(u) du$
 2. **第二类换元法**: 三角代换、倒代换、根号代换
 3. **分部积分法**: $\int u dv = uv - \int v du$
@@ -44,11 +35,7 @@ $$\int \frac{1}{1+x^2} dx = \arctan x + C$$
 
 **易错点**: 别忘了 $+C$；分部积分选错 $u$ 会导致越积越复杂
 
----
-
-## 知识点3：定积分的定义与性质
-
-**定义（黎曼积分）**:
+---▮{{知识点名称}}知识点3：定积分的定义与性质{{知识点内容}}**定义（黎曼积分）**:
 $$\int_a^b f(x) dx = \lim_{\lambda \to 0} \sum_{i=1}^{n} f(\xi_i) \Delta x_i$$
 
 **性质**:
@@ -63,11 +50,7 @@ $$\int_a^b f(x) dx = \lim_{\lambda \to 0} \sum_{i=1}^{n} f(\xi_i) \Delta x_i$$
 - 比较定积分大小
 - 定积分的估值
 
----
-
-## 知识点4：变限积分与牛顿-莱布尼茨公式
-
-**公式（变限积分求导）**:
+---▮{{知识点名称}}知识点4：变限积分与牛顿-莱布尼茨公式{{知识点内容}}**公式（变限积分求导）**:
 $$\frac{d}{dx} \int_a^{g(x)} f(t) dt = f(g(x)) \cdot g'(x)$$
 $$\frac{d}{dx} \int_{h(x)}^{g(x)} f(t) dt = f(g(x)) g'(x) - f(h(x)) h'(x)$$
 
@@ -81,18 +64,14 @@ $$\int_a^b f(x) dx = F(b) - F(a)$$
 
 **易错点**: 变限积分求导时，被积函数中不能含有 $x$（若含有需先提出）
 
----
-
-## 知识点5：定积分的计算方法
-
-**方法**:
+---▮{{知识点名称}}知识点5：定积分的计算方法{{知识点内容}}**方法**:
 1. 牛顿-莱布尼茨公式
 2. 换元积分法（注意换上下限）
 3. 分部积分法
 4. 利用奇偶性与周期性简化
 
 **公式（华里士公式/点火公式）**:
-$$\int_0^{\frac{\pi}{2}} \sin^n x dx = \int_0^{\frac{\pi}{2}} \cos^n x dx = \begin{cases} \frac{(n-1)!!}{n!!} \cdot \frac{\pi}{2} & n \text{ 为偶数} \\ \frac{(n-1)!!}{n!!} & n \text{ 为奇数} \end{cases}$$
+$$\int_0^{\frac{\pi}{2} \sin^n x dx = \int_0^{\frac{\pi}{2} \cos^n x dx = \begin{cases} \frac{(n-1)!!}{n!!} \cdot \frac{\pi}{2} & n \text{ 为偶数} \\ \frac{(n-1)!!}{n!!} & n \text{ 为奇数} \end{cases}$$
 
 **公式**:
 $$\int_0^{\pi} x f(\sin x) dx = \frac{\pi}{2} \int_0^{\pi} f(\sin x) dx$$

@@ -1,0 +1,28 @@
+{{知识点名称}}一、Time Value of Money{{知识点内容}}1. **Present Value & Future Value**
+- FV = PV × (1+r)^n
+- PV = FV / (1+r)^n
+2. **Annuities**
+- Ordinary annuity vs annuity due
+- Perpetuity: PV = PMT / r
+3. **Effective Annual Rate**
+- EAR = (1 + r/m)^m - 1▮{{知识点名称}}二、Statistical Concepts{{知识点内容}}1. **Descriptive Statistics**
+- Mean, median, mode
+- Variance, standard deviation
+- Skewness, kurtosis
+2. **Probability Concepts**
+- Multiplication rule, addition rule
+- Conditional probability, Bayes' formula
+3. **Probability Distributions**
+- Binomial distribution
+- Normal distribution
+- Lognormal distribution▮{{知识点名称}}三、Sampling and Estimation{{知识点内容}}1. **Sampling Methods**
+2. **Central Limit Theorem**
+3. **Confidence Intervals**
+4. **Hypothesis Testing**
+- Type I and Type II errors
+- p-value
+- t-test, z-test, chi-square test, F-test▮{{知识点名称}}四、Linear Regression{{知识点内容}}1. **Simple Linear Regression**
+- Y = b₀ + b₁X + ε
+- R², standard error of estimate
+2. **Assumptions**
+3. **Hypothesis testing of coefficients**

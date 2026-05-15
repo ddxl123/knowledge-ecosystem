@@ -1,0 +1,10 @@
+{{知识点名称}}Python简介与环境{{知识点内容}}Python是解释型、面向对象、动态数据类型的高级语言，由Guido van Rossum于1991年创建。特点：简洁易读、跨平台、丰富的库。应用领域：Web开发、数据分析、人工智能、自动化运维。IDE推荐PyCharm、VS Code、Jupyter Notebook
+{{知识点名称}}变量与数据类型{{知识点内容}}变量命名规则：字母、数字、下划线，不能以数字开头。基本类型：int整数、float浮点数、str字符串、bool布尔值（True/False）、None空值。类型转换用int()、float()、str()、bool()。查看类型用type()
+{{知识点名称}}运算符{{知识点内容}}算术：+、-、*、/、//（整除）、%（取余）、**（幂）。比较：==、!=、>、<、>=、<=。逻辑：and、or、not。赋值：=、+=、-=、*=、/=。成员：in、not in。身份：is、is not
+{{知识点名称}}字符串操作{{知识点内容}}定义用单引号、双引号、三引号（多行）。拼接用+和f-string。常用方法：upper()、lower()、strip()、split()、join()、replace()、find()。索引和切片：s[0]、s[-1]、s[1:5]、s[::-1]反转。格式化：%格式化、format()、f-string
+{{知识点名称}}条件语句{{知识点内容}}if条件:代码块。if-else二选一。if-elif-else多条件分支。三元表达式：x if 条件 else y
+{{知识点名称}}循环语句{{知识点内容}}for循环遍历可迭代对象：for 变量 in 可迭代对象。while循环条件为真时执行。range(start, stop, step)生成数字序列。break跳出循环，continue跳过本次。支持for-else和while-else（循环正常结束执行else）。支持嵌套循环
+{{知识点名称}}列表list{{知识点内容}}用方括号[]定义，特点：有序、可变、可重复。常用方法：append()末尾添加、insert()指定位置插入、remove()删除指定元素、pop()删除指定索引、sort()排序、reverse()反转、extend()合并、index()查找索引、count()统计次数。列表推导式：[表达式 for 变量 in 可迭代对象 if 条件]
+{{知识点名称}}元组tuple{{知识点内容}}用圆括号()定义，特点：有序、不可变、可重复。方法：count()、index()。解包：a, b, c = (1, 2, 3)
+{{知识点名称}}字典dict{{知识点内容}}用花括号{}定义，键值对形式。特点：Python 3.7+有序、可变、键唯一。方法：get()获取值、keys()所有键、values()所有值、items()所有键值对、update()更新、pop()删除。字典推导式：{key: value for 变量 in 可迭代对象}
+{{知识点名称}}集合set{{知识点内容}}用花括号{}或set()定义，特点：无序、不可重复。方法：add()添加、remove()删除、union()并集、intersection()交集、difference()差集。集合推导式：{表达式 for 变量 in 可迭代对象}

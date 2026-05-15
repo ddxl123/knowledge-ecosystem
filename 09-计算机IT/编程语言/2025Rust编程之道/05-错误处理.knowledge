@@ -1,36 +1,34 @@
-# 错误处理
-
-## Result与Option
-- Result<T, E>：Ok(T)表示成功，Err(E)表示错误
-- Option<T>：Some(T)表示有值，None表示无值
-- unwrap()/expect()：快速获取值，失败时panic（仅用于原型/测试）
-- 模式匹配：match result { Ok(v) => ..., Err(e) => ... }
-- if let / while let：简化的模式匹配
-
-## 错误传播
-- ?运算符：result?，错误时提前返回Err（自动From转换）
-- 链式调用：file.read_to_string(&mut s)?简洁传播错误
-- 函数签名：fn f() -> Result<T, Box<dyn Error>> 返回任意错误
-- map_err：转换错误类型，.map_err(|e| MyError::from(e))
-- and_then：链式Result操作，类似flatMap
-
-## 自定义错误类型
-- 实现std::fmt::Display和std::error::Error trait
-- 枚举错误：enum MyError { Io(io::Error), Parse(ParseError) }
-- thiserror库：派生宏自动实现Error trait
-- #[error("描述{0}")]：自定义错误消息
-- #[from]：自动实现From转换
-
-## 错误处理策略
-- 顶层（main/入口）：统一处理所有错误，打印用户友好的消息
-- 库代码：返回Result，不panic，让调用者决定如何处理
-- 不可恢复错误：panic!宏，如数组越界、逻辑错误
-- 可恢复错误：Result类型，如文件不存在、网络超时
-- anyhow库：应用级错误处理，anyhow::Result简化错误传播
-
-## 错误处理最佳实践
-- 优先使用?运算符而非unwrap()，保持代码简洁
-- 为每个模块/crate定义自己的错误枚举类型
-- 使用thiserror（库）和anyhow（应用）简化错误处理
-- 错误信息要有上下文，帮助调试
-- 不要吞掉错误（忽略Err），至少记录日志
+{{知识点名称}}Result与Option{{知识点内容}}- Result<T, E>：可恢复错误，Ok(T)表示成功，Err(E)表示失败
+- Option<T>：可能不存在的值，Some(T)表示有值，None表示无值
+- unwrap()：取出值，失败时panic，仅用于原型或确定不会失败的场景
+- expect("msg")：类似unwrap但可自定义panic信息
+- 组合器：map()、and_then()、or_else()、unwrap_or()、unwrap_or_else()
+- ?运算符：`let value = some_operation()?;` 错误时自动返回Err，正确时取出Ok值▮{{知识点名称}}自定义错误类型{{知识点内容}}- 实现Display和Error trait：`impl fmt::Display for MyError { fn fmt(...) }`
+- 错误枚举：`enum AppError { IoError(io::Error), ParseError(num::ParseIntError), Custom(String) }`
+- 实现From trait：`impl From<io::Error> for AppError` 支持?运算符自动转换
+- thiserror库：`#[derive(thiserror::Error)]` 自动实现Error trait
+  ```rust
+  #[derive(thiserror::Error, Debug)]
+  enum MyError {
+      #[error("IO error: {0}")]
+      Io(#[from] std::io::Error),
+  }
+  ```
+- anyhow库：`anyhow::Result<T>` 提供动态错误类型，适合应用程序
+- 错误上下文：`anyhow::Context` trait 的`.context("msg")` 添加上下文信息▮{{知识点名称}}panic与不可恢复错误{{知识点内容}}- panic!宏：程序遇到不可恢复错误时终止执行
+- 默认行为：展开栈（清理资源）或中止进程（通过Cargo.toml配置）
+- RUST_BACKTRACE=1：环境变量设置后panic时打印完整调用栈
+- catch_unwind：`std::panic::catch_unwind(|| { ... })` 捕获panic（不推荐滥用）
+- 何时panic：代码逻辑错误、违反不变量、不可能到达的代码
+- 何时Result：预期可能发生的错误、外部输入错误、IO操作失败▮{{知识点名称}}错误传播模式{{知识点内容}}- ?运算符链式调用：`file.read_to_string(&mut content)?; let data: Data = serde_json::from_str(&content)?;`
+- 函数返回类型：`fn process() -> Result<Data, AppError> { ... }`
+- main函数返回Result：`fn main() -> Result<(), Box<dyn Error>> { ... }`
+- map_err：转换错误类型，`io_result.map_err(AppError::Io)`
+- and_then：链式操作，每步都可能失败
+- 错误处理策略：传播（?）、转换（map_err）、忽略（unwrap_or）、记录并继续▮{{知识点名称}}错误处理最佳实践{{知识点内容}}- 库代码：使用具体的自定义错误类型，不要用anyhow
+- 应用代码：可以使用anyhow简化错误处理
+- 不要过度unwrap：对可能失败的操作使用Result和?
+- 错误信息要有意义：包含足够的上下文帮助调试
+- 区分可恢复和不可恢复错误：IO失败→Result，数组越界→panic
+- 使用thiserror减少样板代码，使用anyhow简化应用错误处理
+- 错误文档：在函数文档中说明可能返回的错误类型
