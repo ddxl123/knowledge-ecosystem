@@ -1,7 +1,0 @@
-{{知识点名称}}文件打开与关闭{{知识点内容}}open('文件路径', '模式', encoding='utf-8')打开文件。模式：'r'只读（默认）、'w'写入（覆盖）、'a'追加、'b'二进制、'+'读写。close()关闭文件。推荐with语句自动关闭：with open('路径', 'r', encoding='utf-8') as f: 内容 = f.read()
-{{知识点名称}}文件读取{{知识点内容}}read()读取全部内容返回字符串；readline()读取一行；readlines()读取所有行返回列表。推荐for循环逐行读取，内存友好：for line in f: print(line.strip())
-{{知识点名称}}文件写入{{知识点内容}}write()写入字符串；writelines()写入字符串列表。写入示例：with open('文件.txt', 'w', encoding='utf-8') as f: f.write('Hello\n')
-{{知识点名称}}文件与目录操作os模块{{知识点内容}}os.path.exists()判断是否存在、isfile()判断是否为文件、isdir()判断是否为目录、join()拼接路径、basename()获取文件名、dirname()获取目录名、splitext()分离扩展名。os.makedirs()创建多级目录、listdir()列出目录、remove()删除文件、rename()重命名。shutil模块：copy()复制、move()移动、rmtree()删除目录
-{{知识点名称}}CSV文件操作{{知识点内容}}csv模块：csv.reader()读取返回行列表、csv.writer()写入、csv.DictReader()字典方式读取、csv.DictWriter()字典方式写入
-{{知识点名称}}JSON文件操作{{知识点内容}}json模块：json.load()从文件读取JSON、json.dump()将JSON写入文件、json.loads()字符串转Python对象、json.dumps()Python对象转JSON字符串
-{{知识点名称}}最佳实践{{知识点内容}}使用with语句管理文件资源；指定编码格式通常为utf-8；处理文件不存在的异常；大文件逐行读取避免内存溢出

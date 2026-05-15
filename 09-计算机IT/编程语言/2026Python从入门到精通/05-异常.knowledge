@@ -1,5 +1,0 @@
-{{知识点名称}}异常机制基础{{知识点内容}}try-except捕获异常：try: 可能出错的代码 except ErrorType as e: 处理。多个except分别捕获不同类型。通用except Exception as e捕获所有非系统退出异常（不推荐裸except）。try-except-else没有异常时执行else块。try-except-finally无论是否异常都执行finally块（清理资源）。异常对象：e.args异常参数、str(e)错误信息、type(e)异常类型
-{{知识点名称}}常见异常类型{{知识点内容}}ValueError值错误如int('abc')；TypeError类型错误如1+'a'；KeyError字典键不存在；IndexError列表索引越界；AttributeError对象属性不存在；FileNotFoundError文件不存在；ZeroDivisionError除以零；ImportError/ModuleNotFoundError导入失败；IOError/OSError IO和操作系统错误；RuntimeError运行时错误
-{{知识点名称}}抛出与自定义异常{{知识点内容}}raise语句抛出异常：raise ValueError("invalid input")。except: raise捕获后重新抛出。自定义异常继承Exception类：class MyError(Exception): def __init__(self, message, code): super().__init__(message); self.code = code。异常链：raise NewError("msg") from original_error保留原始异常。assert断言：assert x > 0, "x must be positive"开发阶段检查
-{{知识点名称}}异常处理最佳实践{{知识点内容}}精确捕获具体异常类型而非Exception。不要忽略异常，至少记录日志。EAFP原则：Python风格"先做再说"（Easier to Ask Forgiveness than Permission）。try块尽量小，只包裹可能出错的代码。资源清理用with语句。不处理的异常让调用者知道。为项目定义有意义的异常类层次
-{{知识点名称}}上下文管理器{{知识点内容}}with语句自动管理资源获取和释放。自定义：实现__enter__和__exit__方法。contextlib模块的@contextmanager装饰器简化创建：用yield分隔进入和退出逻辑。suppress：with suppress(FileNotFoundError): 忽略指定异常
