@@ -1,0 +1,41 @@
+# Java从入门到精通（2026版）
+# 领域: 计算机IT
+# 学科: 编程语言
+# 来源: Java从入门到精通（2026版）
+# 描述: Java最新版本核心知识与现代开发实践，涵盖虚拟线程、模式匹配、ZGC、GraalVM及AI集成
+
+{{Java 21-23新特性}}{{Java 21 LTS关键特性：虚拟线程(Virtual Threads)正式发布、switch模式匹配(Pattern Matching)正式、Record Patterns记录模式、Sequenced Collections有序集合、Scoped Values作用域值。Java 22：无名变量/模式Unnamed Variables & Patterns、Launch Multi-File Source-Files。Java 23：Markdown文档注释、Flexible Constructor Bodies。Java正快速现代化。}}
+
+{{虚拟线程深度}}{{虚拟线程由JVM管理而非OS，极其轻量(几KB)。Thread.ofVirtual().start(task)创建。VirtualThreadExecutor配合Executors.newVirtualThreadPerTaskExecutor()。阻塞操作自动让出载体线程。不适合：CPU密集型任务、频繁synchronized(会pin载体线程)。与平台线程对比：百万级并发vs千级。ThreadLocal使用注意(百万线程内存问题)。StructuredTaskScope(结构化任务作用域)。}}
+
+{{模式匹配(Pattern Matching)}}{{instanceof模式匹配：if (obj instanceof String s) {}。switch模式匹配：switch(obj) { case Integer i -> ...; case String s when s.length() > 5 -> ...; }。Record Patterns：case Point(int x, int y) ->解构记录。Guarded Patterns：when条件守卫。嵌套模式解构。模式匹配使Java代码更简洁、安全、表达力更强。}}
+
+{{Records与Sealed Classes}}{{Record不可变数据类：record Point(int x, int y) {}。自动生成构造函数、访问器、equals/hashCode/toString。Compact构造函数验证参数。Record可实现接口。局部Record(Java 16+)。Sealed Classes密封类：permits指定允许的子类。配合switch模式匹配实现穷举检查。interface和class都可密封。替代了传统的Visitor模式。}}
+
+{{ZGC与Shenandoah GC}}{{ZGC(Z Garbage Collector)：亚毫秒级暂停、支持TB级堆。-XX:+UseZGC启用。分代ZGC(Java 21+)：提升吞吐量。Shenandoah：Red Hat开发的低延迟GC。适合延迟敏感应用(实时交易、游戏)。ZGC vs G1：ZGC延迟更低，G1吞吐量更高。GC选择指南。JFR监控GC行为。GC调优参数详解。堆外内存管理。}}
+
+{{GraalVM与Native Image}}{{GraalVM高性能JDK发行版。Native Image将Java应用编译为原生可执行文件。AOT编译：启动快(<100ms)、内存低(<50MB)。Spring Boot 3+原生支持。Buildpacks构建。Truffle框架支持多语言(Python/Ruby/RJS)。PGO(Profile-Guided Optimization)优化。与传统JVM对比：启动时间、内存占用、峰值吞吐量。适用场景：Serverless、CLI、容器。}}
+
+{{Spring Boot 3.4+高级}}{{Spring Boot 3.4+增强：虚拟线程支持、GraalVM Native Image优化、Observability可观测性(结构化日志/指标/追踪)、Docker Compose集成、RestClient/HTTP Interface。Spring Modulith模块化单体。Spring Authorization Server。测试改进：TestContainers增强。CI/CD最佳实践。云原生部署：Kubernetes/Docker。}}
+
+{{Spring AI与LLM集成}}{{Spring AI统一AI/LLM集成框架。ChatClient调用多种LLM(OpenAI/Anthropic/Ollama)。Prompt Template模板化提示。Function Calling让LLM调用Java方法。RAG(检索增强生成)：文档加载→分块→嵌入→向量存储→检索→问答。向量数据库：PgVector/Redis/Milvus。Embedding模型。图像生成。AI应用架构模式。安全与隐私。}}
+
+{{响应式与虚拟线程选型}}{{Spring WebFlux响应式vs Spring MVC虚拟线程。响应式：非阻塞IO、背压、函数式、学习曲线陡。虚拟线程：阻塞式编程、简单直观。数据库：R2DBC(响应式)vs JDBC(虚拟线程)。性能对比：IO密集场景虚拟线程表现优异。选型建议：新项目首选虚拟线程，已有响应式栈保持。混合架构方案。Spring 6对两种模式的统一抽象。}}
+
+{{Project Loom高级特性}}{{StructuredTaskScope：结构化并发，管理一组相关虚拟线程。ShutdownOnFailure/ShutdownOnSuccess策略。Scoped Values(作用域值)：替代ThreadLocal，不可变，虚拟线程友好。ThreadLocal虚拟线程注意事项：百万线程×ThreadLocal=内存爆炸。JFR增强追踪虚拟线程。虚拟线程池调优。Carrier线程池配置。Pinning检测和解决。}}
+
+{{Java模块系统(JPMS)}}{{module-info.java定义模块。exports导出包。requires声明依赖模块。opens开放反射访问。provides/uses服务接口。jlink创建自定义运行时镜像(精简JRE)。模块化与Maven/Gradle集成。自动模块(无module-info的旧库)。强封装(Java 16+默认)。模块化对反射的影响。Spring Boot模块化最佳实践。}}
+
+{{现代Java并发}}{{ConcurrentHashMap增强。StampedLock高效读写锁。CompletableFuture组合异步操作：thenApply/thenCompose/thenCombine/allOf/anyOf。Flow API(Reactive Streams)：Publisher/Subscriber/Subscription。Semaphore、CountDownLatch、CyclicBarrier、Phaser。虚拟线程下的并发模式。Actor模型(Akka/Pekko)。Lock-free数据结构。}}
+
+{{Java与容器化}}{{JVM容器感知：-XX:+UseContainerSupport(默认开启)。CPU份额和限制感知。内存限制：-XX:MaxRAMPercentage。GC选择：容器中ZGC或G1。分层编译优化。Docker多阶段构建。JLink精简镜像。CRIU(Checkpoint/Restore)快速启动。GraalVM Native Image容器优势。Kubernetes健康检查(Readiness/Liveness)。优雅停机。}}
+
+{{Java性能调优}}{{JMH微基准测试。JFR(Java Flight Recorder)+JMC(Java Mission Control)持续低开销监控。async-profiler CPU/内存分析。Arthas在线诊断。GC调优：选择合适收集器、堆大小、新生代比例。JIT编译优化：方法内联、逃逸分析、标量替换。线程池调优。数据库连接池(HikariCP)。缓存策略(Caffeine)。序列化优化(Protobuf)。}}
+
+{{测试现代化}}{{JUnit 5核心：@Test/@ParameterizedTest/@Nested/@Tag。AssertJ流式断言。Mockito：Mock/Spy/Verify。TestContainers集成真实数据库/中间件容器测试。@SpringBootTest切片测试。契约测试(Spring Cloud Contract)。混沌工程(Chaos Monkey)。代码覆盖率：JaCoCo。E2E测试：Selenium/Playwright。CI集成：GitHub Actions。}}
+
+{{Java与微服务}}{{Spring Cloud微服务全家桶：Nacos(注册/配置)、Gateway(网关)、OpenFeign(HTTP客户端)、Sentinel(限流熔断)、Seata(分布式事务)。gRPC-Java高性能RPC。服务网格集成。API设计：OpenAPI/Swagger。分布式追踪：Micrometer Tracing。配置中心。服务降级策略。蓝绿/金丝雀部署。微服务拆分原则。}}
+
+{{Quarkus与Micronaut}}{{Quarkus：Red Hat云原生Java框架，启动快、内存低、GraalVM原生支持。基于CDI/JAX-RS标准。Micronaut：编译时依赖注入、AOT处理。反射使用少→GraalVM友好。两者vs Spring Boot：启动时间、内存占用、原生编译支持。适用场景：Serverless、微服务、边缘计算。GraalVM Native Image优化。Quarkus Extensions生态。}}
+
+{{Java生态趋势}}{{Java快速演进：6个月一个版本、3年一个LTS。Valhalla项目：值类型(Value Types)提升性能。Panama项目：外部函数和内存API(替代JNI)。Loom项目：虚拟线程。Amber项目：语言特性增强(模式匹配、记录类等)。Babylon项目：GPU/加速器编程。Java在AI时代的定位：企业级AI应用、微服务后端、数据处理管道。}}

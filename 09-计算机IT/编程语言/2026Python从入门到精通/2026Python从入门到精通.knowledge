@@ -1,0 +1,41 @@
+# Python从入门到精通（2026版）
+# 领域: 计算机IT
+# 学科: 编程语言
+# 来源: Python从入门到精通（2026版）
+# 描述: Python最新版本核心知识与现代开发实践，涵盖Python 3.13+新特性、AI编程、异步生态及工程化
+
+{{Python 3.13+新特性}}{{Python 3.13重要更新：实验性JIT编译器(提升执行速度)、实验性无GIL模式(PEP 703 free-threaded CPython)、改进的交互式解释器(基于PyREPL)、更好的错误信息和traceback。Python 3.14：PEP 649延迟标注求值、模板字符串(t-string)。无GIL模式是历史性突破，多线程可真正并行执行CPU密集型任务。}}
+
+{{无GIL模式(free-threaded)}}{{GIL(Global Interpreter Lock)长期限制Python多线程并行。free-threaded CPython移除GIL，多线程真正并发。PYTHON_GIL=0启用。适用场景：CPU密集型多线程任务(图像处理、科学计算、数据处理)。注意事项：线程安全问题需自行处理、第三方库兼容性逐步提升。与multiprocessing对比：无进程开销、共享内存。仍处于实验阶段。}}
+
+{{JIT编译器}}{{Python 3.13引入实验性JIT(Just-In-Time)编译器。copy-and-patch JIT：热点代码编译为机器码。CPython启动后逐步优化执行速度。对长期运行的服务效果显著。预计5-30%性能提升(视工作负载)。启用：--enable-experimental-jit编译选项。与PyPy对比：CPython JIT兼容性更好。未来版本将持续优化JIT性能。}}
+
+{{类型系统增强}}{{Python类型系统持续增强。TypeVar泛型。ParamSpec(参数规范)。TypeAlias类型别名。TypeGuard类型守卫。@overload重载签名。Protocol结构化子类型(鸭子类型的类型化)。TypedDict类型化字典。Literal字面量类型。Never类型。类型系统对IDE自动补全和错误检测至关重要。mypy/pyright类型检查器。运行时类型检查：beartype/typeguard。}}
+
+{{异步编程深度}}{{asyncio标准库异步IO。async/await语法。asyncio.gather并行执行。TaskGroup(Python 3.11+)结构化并发。异步上下文管理器：async with。异步迭代器：async for。异步生成器：async yield。anyio异步兼容层(兼容asyncio和trio)。异步队列/信号量/锁。异步文件IO：aiofiles。异步数据库：asyncpg/aiomysql。异步Web框架：FastAPI/Starlette。}}
+
+{{Pydantic数据验证}}{{Pydantic是Python数据验证库。BaseModel定义数据模型。字段类型自动验证和转换。Field()定义字段约束(gt/lt/min_length/regex)。嵌套模型。模型验证器：@field_validator/@model_validator。序列化：model_dump/model_dump_json。Settings管理环境变量配置。FastAPI深度集成。Pydantic V2性能大幅提升(Rust核心)。自定义类型。}}
+
+{{uv包管理器}}{{uv是Rust实现的超快Python包管理器(比pip快10-100倍)。uv pip install替代pip。uv venv创建虚拟环境。uv run运行脚本。uv lock锁定依赖。pyproject.toml统一项目配置。替代pip/pip-tools/virtualenv/venv。兼容PyPI生态。uv tool安装CLI工具。支持Python版本管理(uv python install)。Astral团队维护(ruff同团队)。}}
+
+{{Ruff代码工具}}{{Ruff是Rust实现的超快Python linter和formatter。替代flake8/isort/black/pyupgrade(速度提升100倍)。ruff check代码检查。ruff format代码格式化。pyproject.toml配置规则。自动修复：ruff check --fix。规则集：E/W/F/I/UP/B等。与pre-commit集成。VS Code/PyCharm插件。Ruff已成为Python代码质量工具的事实标准。}}
+
+{{Python与AI编程}}{{Python是AI/ML首选语言。NumPy数组计算。Pandas数据处理。Scikit-learn机器学习。PyTorch/TensorFlow深度学习。Hugging Face Transformers预训练模型。LangChain LLM应用开发框架。OpenAI/Anthropic API调用。向量数据库(Pinecone/Weaviate/Chroma)。RAG(检索增强生成)实现。AI Agent开发。Prompt Engineering。MLOps。}}
+
+{{FastAPI现代API开发}}{{FastAPI基于Starlette和Pydantic。自动生成OpenAPI文档。类型提示驱动参数验证。依赖注入(Depends)。异步原生支持(async def)。后台任务。WebSocket。安全：OAuth2/JWT/API Key。中间件：CORS/GZip。文件上传。响应模型过滤数据。测试：TestClient/httpx。生产部署：Gunicorn+Uvicorn。FastAPI已成为Python API开发首选。}}
+
+{{数据工程(Polars/DuckDB)}}{{Polars是Rust实现的高性能DataFrame库(比Pandas快10-100倍)。惰性执行(Lazy API)优化查询计划。表达式API：col()/when()/then()。零拷贝读取。DuckDB嵌入式分析数据库(OLAP)。SQL直接查询CSV/Parquet/DataFrame。Apache Arrow内存格式。与Pandas对比：大数据场景Polars/DuckDB优势明显。数据管道：Polars处理→DuckDB分析→可视化。}}
+
+{{Python脚本与自动化}}{{Python自动化能力强大。文件处理：pathlib/os/shutil。Excel：openpyxl/readxl。PDF：PyPDF2/pdfplumber。邮件：smtplib/email。Web自动化：Playwright/Selenium。系统管理：subprocess/psutil。定时任务：APScheduler/schedule。API调用：requests/httpx。数据处理：pandas。CLI工具：click/typer/argparse。构建工具：PyInstaller/Nuitka打包。}}
+
+{{测试与质量保障}}{{pytest：Python最流行的测试框架。fixture提供测试数据。参数化：@pytest.mark.parametrize。插件：pytest-cov(覆盖率)/pytest-asyncio(异步)/pytest-mock(Mocker)。hypothesis属性测试(自动发现边缘情况)。tox多环境测试。mypy/pyright静态类型检查。ruff代码风格。coverage.py覆盖率。CI集成：GitHub Actions。E2E测试：Playwright。}}
+
+{{Docker与部署}}{{Docker化Python应用：多阶段构建减小镜像。python:3.13-slim基础镜像。requirements.txt/uv.lock安装依赖。Gunicorn+Uvicorn ASGI服务器(生产)。健康检查端点。环境变量配置。Docker Compose编排。Kubernetes部署：Deployment/Service/HPA。Serverless：AWS Lambda/Azure Functions。边缘部署。CI/CD流水线。}}
+
+{{Web开发全栈}}{{后端：FastAPI/Django/Flask。前端：React/Vue(前后端分离)。数据库：PostgreSQL(SQLAlchemy/SQLModel)/Redis。ORM：SQLAlchemy 2.0(新式API)/Prisma/Drizzle。实时通信：WebSocket(FastAPI原生支持)。认证：JWT/OAuth2。模板渲染：Jinja2。全栈框架：Django+HTMX/FastAPI+Inertia.js。API设计：REST/GraphQL。}}
+
+{{Python工程化实践}}{{项目结构：src layout vs flat layout。pyproject.toml统一配置(setuptools/poetry/hatch/uv)。虚拟环境：uv venv/venv。依赖管理：uv lock。代码质量：ruff+mypy。测试：pytest+coverage。CI/CD：GitHub Actions/GitLab CI。日志：structlog/loguru。配置：pydantic-settings。文档：MkDocs/Sphinx。发布：uv publish/twine。Monorepo支持。}}
+
+{{性能优化}}{{性能分析：cProfile/profile/line_profiler/py-spy(采样分析)。优化策略：算法优化、内置函数优于自定义、生成器替代列表、__slots__减少内存、C扩展(Cython/Numba/cffi)。PyPy替代解释器(适合长运行服务)。Rust扩展(PyO3/maturin)。异步IO替代同步阻塞。数据库查询优化。缓存：functools.lru_cache/cachetools/Redis。并发策略选择。}}
+
+{{Python 3.14前瞻}}{{Python 3.14预计特性：模板字符串(t-string，PEP 750)、延迟标注求值(PEP 649)、改进的错误消息、性能优化(JIT迭代)。未来方向：无GIL稳定化、JIT成熟化、类型系统完善。Python在AI时代的地位稳固。社区治理：PEP流程、Python指导委员会。年度发布节奏(每年10月)。向后兼容性承诺。}}

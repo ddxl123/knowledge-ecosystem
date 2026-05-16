@@ -1,0 +1,45 @@
+# 鸟哥的Linux私房菜
+# 领域: 计算机IT
+# 学科: Linux系统管理
+# 来源: 鸟哥的Linux私房菜（2025版）
+# 描述: Linux系统管理与运维的权威教程，涵盖基础命令、文件系统、Shell脚本、网络配置及服务器架设
+
+{{Linux哲学与历史}}{{Linux起源于1991年Linus Torvalds的个人项目，基于Minix开发，采用GPL开源协议。Linux是类Unix操作系统内核，常见发行版包括Ubuntu、CentOS、Debian、Fedora等。Linux的设计哲学是"一切皆文件"，通过简单的文本流处理复杂任务，遵循POSIX标准。}}
+
+{{文件系统层次结构}}{{Linux采用树状目录结构，根目录为/。/home存放用户主目录，/etc存放配置文件，/var存放可变数据（日志、缓存），/usr存放用户程序，/tmp存放临时文件，/boot存放启动文件，/dev存放设备文件，/proc和/sys为虚拟文件系统。FHS（Filesystem Hierarchy Standard）规范了目录布局。}}
+
+{{基本文件操作命令}}{{ls列出目录内容（-l详细、-a隐藏文件、-h人类可读大小）；cp复制文件（-r递归、-p保留属性）；mv移动/重命名；rm删除（-rf强制递归）；mkdir创建目录（-p递归创建）；touch创建空文件/更新时间戳；cat/less/more查看文件内容；head/tail查看首尾内容；grep文本搜索。}}
+
+{{文件权限管理}}{{Linux权限分为读(r=4)、写(w=2)、执行(x=1)三类，对应文件所有者(u)、所属组(g)、其他用户(o)三个层级。chmod修改权限（数字法如755，符号法如u+x）；chown修改所有者；chgrp修改所属组。特殊权限包括SUID(4)、SGID(2)、Sticky Bit(1)。umask控制默认权限掩码。}}
+
+{{用户与组管理}}{{useradd添加用户（-d指定主目录、-s指定shell）；userdel删除用户（-r连同主目录）；usermod修改用户属性；passwd设置密码。groupadd/groupdel/groupmod管理组。/etc/passwd存储用户信息，/etc/shadow存储加密密码，/etc/group存储组信息。su切换用户，sudo以管理员权限执行命令。}}
+
+{{磁盘与文件系统管理}}{{fdisk/parted进行磁盘分区；mkfs创建文件系统（ext4、xfs等）；mount/umount挂载/卸载；df查看磁盘使用（-h人类可读）；du查看目录大小。/etc/fstab配置自动挂载。LVM（逻辑卷管理）提供灵活的存储管理：PV→VG→LV三层架构。RAID提供磁盘冗余，常见级别有RAID0/1/5/6/10。}}
+
+{{进程管理}}{{ps查看进程（aux或-ef）；top/htop实时监控；kill发送信号（-9强制终止）；nice/renice调整优先级；nohup后台运行；&放入后台；jobs查看后台任务；fg/bg切换前后台。进程状态包括R(运行)、S(睡眠)、D(不可中断)、Z(僵尸)、T(停止)。systemd是现代Linux的初始化系统和服务管理器。}}
+
+{{Shell脚本编程}}{{Bash是Linux默认Shell。变量赋值(无空格)、$引用、${}花括号界定。条件判断使用if/elif/else/fi，[ ]或[[ ]]进行测试。循环包括for、while、until。函数定义function name() {}。特殊变量$0(脚本名)、$#(参数个数)、$@(所有参数)、$?(上一条命令退出码)。管道|连接命令，重定向>输出、>>追加、<输入、2>&1合并错误流。正则表达式配合grep/sed/awk进行文本处理。}}
+
+{{软件包管理}}{{Debian/Ubuntu使用apt（apt install/remove/update/upgrade）；RHEL/CentOS使用yum或dnf。源码编译安装三步骤：./configure、make、make install。snap和flatpak提供跨发行版包管理。软件仓库(repository)是软件包的集中存储，通过GPG密钥验证安全性。}}
+
+{{网络配置}}{{ip命令取代ifconfig进行网络配置（ip addr/show/link/route）。NetworkManager是主流网络管理工具。/etc/resolv.conf配置DNS，/etc/hosts配置本地主机名解析。ping测试连通性，traceroute追踪路由，netstat/ss查看网络连接，curl/wget下载文件，scp/rsync远程复制。防火墙使用firewalld或iptables/nftables。}}
+
+{{SSH远程管理}}{{SSH（Secure Shell）提供加密远程登录，默认端口22。ssh user@host连接，-p指定端口。密钥认证：ssh-keygen生成密钥对，ssh-copy-id分发公钥，比密码认证更安全。/etc/ssh/sshd_config配置服务端（禁用root登录、修改端口、限制用户）。scp和sftp用于安全文件传输。ssh-agent管理密钥代理。}}
+
+{{Cron定时任务}}{{crontab -e编辑定时任务，-l列出，-r删除。格式：分 时 日 月 周 命令。常见示例：0 2 * * * (每天凌晨2点)、*/5 * * * * (每5分钟)。/etc/cron.d/和/etc/crontab为系统级配置。anacron适用于非持续运行的系统。at命令用于一次性定时任务。systemd timer是现代替代方案。}}
+
+{{日志管理}}{{systemd系统使用journalctl查看日志（-u指定服务、-f实时跟踪、--since时间过滤）。传统日志由rsyslog管理，配置在/etc/rsyslog.conf。/var/log/syslog或/messages为系统日志，/var/log/auth.log为认证日志，/var/log/kern.log为内核日志。logrotate进行日志轮转，防止单个日志文件过大。}}
+
+{{Shell环境变量与配置文件}}{{环境变量PATH定义命令搜索路径，HOME为用户主目录，SHELL为当前Shell。export导出变量使其子进程可见。~/.bashrc为交互式Shell配置，~/.bash_profile为登录Shell配置，/etc/profile为全局配置。source命令重新加载配置。alias定义命令别名。PS1自定义命令提示符。}}
+
+{{文本处理三剑客}}{{grep：文本搜索利器，支持正则表达式（-i忽略大小写、-v反向匹配、-r递归搜索、-n显示行号、-E扩展正则）。sed：流编辑器，sed 's/old/new/g'替换，sed -i原地修改，支持地址范围和正则匹配。awk：文本分析工具，awk '{print $1}'按列处理，支持BEGIN/END块、条件判断、内置变量(NR/NF/FS/OFS)。}}
+
+{{Vim编辑器}}{{Vim有三种模式：普通模式(移动、删除、复制)、插入模式(i/I/a/A/o/O进入)、命令模式(:进入)。常用操作：dd删除行、yy复制行、p粘贴、u撤销、/搜索、:%s/old/new/g全局替换。可视模式(v/V/Ctrl+v)用于选择。:w保存、:q退出、:wq保存退出、:q!强制退出。~/.vimrc配置文件。}}
+
+{{系统启动流程}}{{Linux启动流程：BIOS/UEFI→引导加载器(GRUB2)→内核加载→initramfs→systemd初始化。GRUB2配置在/boot/grub2/grub.cfg。systemd使用target替代运行级别：multi-user.target(文本模式)、graphical.target(图形模式)。systemctl管理服务：start/stop/enable/disable/status。bootchart分析启动性能。}}
+
+{{性能监控与调优}}{{top/htop查看CPU和内存使用；vmstat报告虚拟内存统计；iostat查看磁盘I/O；free查看内存(-h人类可读)；sar收集系统活动信息。/proc文件系统提供内核运行时信息。ulimit限制用户资源。内核参数通过sysctl调整。性能瓶颈通常在CPU、内存、磁盘I/O、网络四方面。}}
+
+{{ACL与SELinux}}{{ACL(Access Control List)提供比传统权限更细粒度的访问控制：setfacl设置，getfacl查看，-m修改，-x删除。SELinux(Security-Enhanced Linux)是强制访问控制(MAC)安全模块，模式包括enforcing(强制)、permissive(警告)、disabled(关闭)。安全上下文标签控制进程对资源的访问。semanage管理SELinux策略。}}
+
+{{备份与恢复}}{{常用备份工具：tar打包压缩（-czf创建gzip压缩包、-xzf解压、-C指定目录）；rsync增量同步（-a归档、-v详细、-z压缩、--delete同步删除）；dd低级磁盘复制。备份策略：完全备份、增量备份、差异备份。3-2-1原则：3份副本、2种介质、1份异地。dump/restore用于ext文件系统备份。}}

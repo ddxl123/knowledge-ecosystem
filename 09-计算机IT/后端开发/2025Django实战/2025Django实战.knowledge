@@ -1,0 +1,45 @@
+# Django实战
+# 领域: 计算机IT
+# 学科: 后端开发
+# 来源: Django实战（2025版）
+# 描述: Django Web框架核心概念与实战应用，涵盖MTV架构、ORM、REST API、认证授权及生产部署
+
+{{Django框架概述}}{{Django是Python高级Web框架，遵循"电池全包"理念。MTV架构：Model(数据模型)、Template(模板)、View(视图/业务逻辑)。URL路由分发请求到对应视图。内置ORM、表单处理、认证系统、Admin后台、缓存框架。遵循DRY(Don't Repeat Yourself)原则。支持多种数据库(PostgreSQL、MySQL、SQLite)。}}
+
+{{项目结构与配置}}{{django-admin startproject创建项目。settings.py核心配置：INSTALLED_APPS(已安装应用)、DATABASES(数据库配置)、MIDDLEWARE(中间件)、TEMPLATES(模板配置)、STATIC_URL/MEDIA_URL(静态/媒体文件)。python manage.py startapp创建应用。SECRET_KEY必须保密。DEBUG=False用于生产环境。ALLOWED_HOSTS配置允许的域名。}}
+
+{{URL路由系统}}{{urls.py定义URL模式。path()匹配路径，re_path()支持正则表达式。路径转换器：str、int、slug、uuid、path。include()实现URL模块化。命名URL：name参数，reverse()反向解析。URL参数传递：路径参数和查询参数。命名空间：app_name避免URL命名冲突。Django 5+改进的路径匹配性能。}}
+
+{{模型与ORM}}{{Django ORM将数据库表映射为Python类。字段类型：CharField、IntegerField、DateTimeField、TextField、BooleanField、FileField、ForeignKey(一对多)、ManyToManyField(多对多)、OneToOneField(一对一)。字段选项：max_length、null、blank、default、unique、choices、db_index。Meta类定义排序(ordering)、表名(db_table)等。}}
+
+{{QuerySet API}}{{QuerySet是惰性求值的数据库查询集。链式调用：Model.objects.filter().exclude().order_by().annotate().aggregate()。查询操作：filter(精确/模糊查询)、exclude(排除)、get(获取单个)、all(全部)。Q对象实现复杂查询逻辑(AND/OR/NOT)。F对象引用字段值进行比较。聚合：Count、Sum、Avg、Max、Min。分页：Paginator。select_related/prefetch_related优化关联查询(N+1问题)。}}
+
+{{数据库迁移}}{{makemigrations生成迁移文件。migrate执行迁移到数据库。迁移文件记录模型变更(创建表、添加字段、修改字段)。RunPython/RunSQL执行自定义迁移操作。迁移冲突处理：--merge选项。数据库索引和约束在迁移中定义。多数据库迁移支持。迁移最佳实践：小步迁移、测试迁移、避免数据丢失。}}
+
+{{视图与模板}}{{函数视图(FBV)：接收request返回HttpResponse。类视图(CBV)：继承View类，对应HTTP方法(get/post)。通用视图：ListView、DetailView、CreateView、UpdateView、DeleteView简化CRUD。模板语言：{{ }}变量、{% %}标签、{{|filter}}过滤器。模板继承：{% extends "base.html" %}、{% block content %}。include包含子模板。CSRF保护：{% csrf_token %}。}}
+
+{{表单处理}}{{Form类定义表单字段和验证规则。ModelForm基于模型自动生成表单。表单处理流程：GET显示空表单→POST处理提交。form.is_valid()验证数据。clean_<field>()自定义字段验证。clean()跨字段验证。错误处理：form.errors。表单渲染：{{ form.as_p }}或手动渲染字段。Widget自定义表单外观。文件上传：request.FILES。}}
+
+{{认证与授权}}{{Django内置认证系统。User模型：username、password、email、is_staff、is_superuser。创建用户：create_user()/create_superuser()。密码处理：make_password()/check_password()，PBKDF2算法。登录/注销：LoginView/LogoutView。权限系统：Permission、Group。装饰器：@login_required、@permission_required。自定义用户模型：继承AbstractUser或AbstractBaseUser。}}
+
+{{Django REST Framework(DRF)}}{{DRF是Django最流行的REST API框架。序列化器(Serializer)：数据验证和转换。ModelSerializer自动基于模型生成。ViewSet+Router自动生成CRUD API。认证：Token、Session、JWT(django-rest-framework-simplejwt)。权限：IsAuthenticated、IsAdminUser、自定义权限。分页、过滤、排序。限流(Throttling)。API文档自动生成(Swagger/ReDoc)。}}
+
+{{中间件}}{{中间件是请求/响应的处理钩子。process_request(请求预处理)→process_view(视图前)→process_template_response(模板响应)→process_response(响应后)→process_exception(异常处理)。自定义中间件：定义类并在MIDDLEWARE中注册。常用中间件：SecurityMiddleware、SessionMiddleware、CsrfViewMiddleware、AuthenticationMiddleware。中间件顺序很重要。}}
+
+{{缓存框架}}{{Django缓存支持多后端：内存(LocMemCache)、Redis(redis-py)、Memcached、数据库、文件。缓存级别：全站缓存(中间件)、视图缓存(@cache_page)、模板片段缓存({% cache %})、低级API(cache.get/set)。缓存键策略和过期时间(TTL)。缓存失效：信号触发更新。Redis作为缓存和消息队列。}}
+
+{{Celery异步任务}}{{Celery是Python分布式任务队列。@shared_task装饰器定义异步任务。delay()/apply_async()调用任务。Broker：Redis/RabbitMQ传递消息。Beat调度器：定时任务(crontab)。任务状态：PENDING→STARTED→SUCCESS/FAILURE。任务重试：autoretry_for、retry_backoff。结果后端存储任务返回值。工作流：chain(链式)、group(并行)、chord(先并后回调)。}}
+
+{{信号机制}}{{Django信号在特定事件发生时发送通知。内置信号：pre_save/post_save(模型保存前后)、pre_delete/post_delete(删除前后)、request_started/request_finished(请求生命周期)、m2m_changed(多对多关系变更)。@receiver装饰器连接信号处理器。信号处理器中避免复杂逻辑影响性能。自定义信号：Signal()创建和send()发送。}}
+
+{{文件上传与媒体文件}}{{FileField/ImageField模型字段存储文件。request.FILES获取上传文件。MEDIA_ROOT配置媒体文件存储路径。MEDIA_URL配置访问URL。文件存储后端：FileSystemStorage(本地)、S3Boto3(AWS S3)、GoogleCloudStorage。文件大小限制：DATA_UPLOAD_MAX_MEMORY_SIZE。图片处理：Pillow库裁剪、缩放。Django Storages抽象存储后端。}}
+
+{{国际化与本地化}}{{Django国际化(i18n)和本地化(l10n)框架。gettext/gettext_lazy标记可翻译字符串。{% trans "text" %}模板翻译。makemessages生成.po翻译文件。compilemessages编译为.mo文件。LANGUAGE_CODE设置默认语言。LocaleMiddleware根据请求自动切换语言。日期/数字本地化格式。时区处理：TIME_ZONE、USE_TZ。}}
+
+{{安全防护}}{{Django内置安全机制：CSRF防护(CsrfViewMiddleware)、XSS防护(模板自动转义)、SQL注入防护(ORM参数化查询)、点击劫持防护(XFrameOptionsMiddleware)、HTTPS支持(SECURE_SSL_REDIRECT)、安全Cookie(SESSION_COOKIE_SECURE)、密码哈希(PBKDF2+SHA256)。Content Security Policy中间件。安全最佳实践：SECRET_KEY保密、DEBUG=False、依赖更新。}}
+
+{{测试框架}}{{Django TestCase继承unittest.TestCase。Client类模拟HTTP请求。TestCase自动创建测试数据库(每个测试后回滚)。Factory Boy创建测试数据。pytest-django：pytest的Django集成。覆盖率：coverage.py。测试类型：模型测试、视图测试、表单测试、API测试。fixture提供测试数据。Selenium进行浏览器端集成测试。}}
+
+{{生产部署}}{{WSGI服务器：Gunicorn(推荐)、uWSGI。Nginx作为反向代理和静态文件服务器。Docker容器化部署。静态文件：collectstatic收集，WhiteNoise或CDN服务。数据库：PostgreSQL(推荐)。日志：LOGGING配置。性能优化：数据库索引、查询优化、缓存、CDN。监控：Sentry(错误追踪)、Prometheus+Grafana(指标)。CI/CD自动化部署。}}
+
+{{Django 5新特性}}{{Django 5主要更新：字段默认值支持callable、Field.choices支持映射类型、GeneratedField(数据库生成的计算字段)、ValidationError改进。表单改进：ModelForm的字段验证增强。性能：数据库查询优化。异步视图和中间件改进。数据库默认改为PostgreSQL。持续改进的管理后台UI。}}

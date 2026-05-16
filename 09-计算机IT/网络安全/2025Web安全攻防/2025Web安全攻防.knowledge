@@ -1,0 +1,45 @@
+# Web安全攻防
+# 领域: 计算机IT
+# 学科: 网络安全
+# 来源: Web安全攻防（2025版）
+# 描述: Web安全攻防核心知识，涵盖常见漏洞原理与利用、防御技术、安全工具及渗透测试方法论
+
+{{Web安全概述}}{{Web安全是网络安全的重要分支。OWASP Top 10是最权威的Web安全风险清单(Broken Access Control/Injection/Cryptographic Failures等)。攻击面：输入点(表单、URL、Cookie、HTTP头)。安全三要素：机密性(Confidentiality)、完整性(Integrity)、可用性(Availability)。纵深防御原则。安全左移(Shift Left Security)。DevSecOps。}}
+
+{{SQL注入(SQLi)}}{{SQL注入将恶意SQL代码插入查询。类型：联合注入(UNION SELECT)、布尔盲注(AND 1=1/1=2)、时间盲注(SLEEP/BENCHMARK)、报错注入(EXTRACTVALUE/UPDATEXML)、堆叠注入(多条SQL)。利用：绕过登录、数据窃取、文件读写、命令执行。防御：参数化查询/预编译语句、ORM框架、输入验证、WAF、最小数据库权限、错误信息不泄露细节。}}
+
+{{跨站脚本(XSS)}}{{XSS将恶意脚本注入Web页面。类型：反射型(非持久化，URL参数注入)、存储型(持久化，数据库存储)、DOM型(客户端JS处理)。危害：Cookie窃取、会话劫持、钓鱼、键盘记录、页面篡改。利用：<script>标签、事件属性(onerror/onload)、javascript:伪协议。防御：输出编码/转义、CSP内容安全策略、HttpOnly Cookie、输入验证、DOMPurify库。}}
+
+{{跨站请求伪造(CSRF)}}{{CSRF利用用户已认证的会话发送伪造请求。攻击原理：用户已登录→访问恶意页面→浏览器自动携带Cookie发送请求→服务端认为合法。危害：修改密码、转账、发帖。防御：CSRF Token(每个表单/请求附带随机Token)、SameSite Cookie属性(Strict/Lax)、检查Referer/Origin头、二次确认敏感操作、自定义请求头。}}
+
+{{文件上传漏洞}}{{文件上传漏洞允许上传恶意文件(如Webshell)。绕过方法：修改Content-Type、文件后缀双写(php.jpg)、大小写绕过(pHp)、%00截断、.htaccess覆盖、图片马(图片+PHP代码)。利用：上传Webshell获取服务器权限。防御：白名单后缀校验、文件内容检测(魔数)、重命名文件、独立存储域名、禁止执行权限、文件大小限制。}}
+
+{{命令注入}}{{命令注入通过用户输入执行系统命令。利用：; ls、| cat /etc/passwd、`whoami`、$(id)。PHP中的exec/system/passthru/shell_exec。Python中的os.system/subprocess。危害：服务器完全控制。防御：避免调用系统命令、白名单输入验证、参数化命令(不拼接字符串)、最小权限运行、禁用危险函数、WAF。}}
+
+{{SSRF(Server-Side Request Forgery)}}{{SSRF让服务器发起对内部/外部网络的请求。利用：访问内网服务(127.0.0.1/内网IP)、读取文件(file:///etc/passwd)、云元数据服务(169.254.169.254)、端口扫描。绕过技巧：IP十进制/十六进制编码、DNS重绑定、URL解析差异。防御：白名单URL、禁止访问内网IP、禁用非HTTP协议、URL解析严格校验、网络隔离。}}
+
+{{身份认证攻击}}{{攻击方式：暴力破解(Brute Force)、撞库(Credential Stuffing)、Session固定、JWT伪造/泄露、OAuth配置错误。防御：强密码策略、多因素认证(MFA/2FA)、账户锁定(渐进式延迟)、安全的密码存储(bcrypt/argon2)、Session管理(登录后regenerate ID)、JWT密钥安全、OAuth redirect_uri严格校验。}}
+
+{{JWT安全}}{{JWT(JSON Web Token)由Header.Payload.Signature组成。攻击：算法篡改(none攻击)、密钥爆破弱密钥、kid注入、过期Token重放、敏感信息泄露。安全实践：使用RS256(非对称)代替HS256(对称)、强密钥、设置合理过期时间、验证签名和issuer/audience、不在JWT中存储敏感数据、使用JTI防止重放、Refresh Token轮换。}}
+
+{{安全头部与CSP}}{{安全HTTP头：Content-Security-Policy(CSP限制资源来源)、X-Content-Type-Options(nosniff)、X-Frame-Options(DENY/SAMEORIGIN防点击劫持)、Strict-Transport-Security(HSTS强制HTTPS)、X-XSS-Protection(已废弃)、Referrer-Policy、Permissions-Policy。CSP指令：default-src/script-src/style-src/img-src/connect-src。CSP报告模式(report-only)。}}
+
+{{密码安全}}{{密码存储：绝对不存明文。bcrypt(推荐)：自动加盐、可调工作因子。argon2(新标准)：抗GPU/ASIC攻击。PBKDF2(NIST推荐)。禁止：MD5/SHA1(太弱)、无盐哈希。密码策略：最小长度12+、检查弱密码字典(Have I Been Pwned)、支持密码管理器。安全传输：HTTPS。密码重置：Token有效期、单次使用。}}
+
+{{API安全}}{{API安全风险：Broken Object Level Authorization(BOLA)、Broken Authentication、Mass Assignment、Lack of Resources Rate Limiting、Injection。防护：OAuth2/API Key认证、输入验证(严格Schema)、速率限制、API版本控制、最小数据暴露、日志审计。GraphQL特有风险：深度查询DoS、内省泄露、批量请求。API网关安全策略。}}
+
+{{渗透测试方法论}}{{渗透测试阶段：信息收集(子域名/端口/技术栈)→漏洞扫描(Nessus/Nikto/Nuclei)→漏洞利用(Metasploit/手动)→后渗透(权限维持/横向移动)→报告。工具：Burp Suite(HTTP代理/抓包)、Nmap(端口扫描)、SQLMap(自动化SQL注入)、Nuclei(模板化扫描)、dirsearch(目录扫描)。授权范围和法律合规。渗透测试报告编写。}}
+
+{{安全开发(SDL)}}{{Security Development Lifecycle(SDL)：安全需求→威胁建模(STRIDE)→安全设计→安全编码→安全测试→安全发布→安全响应。安全编码实践：输入验证、输出编码、参数化查询、最小权限、错误处理不泄露信息、依赖安全扫描。代码审计：SAST(静态)/DAST(动态)/IAST(交互式)。Snyk/Dependabot依赖漏洞扫描。安全CI/CD。}}
+
+{{云安全基础}}{{云安全共享责任模型。IAM(身份和访问管理)：最小权限原则、MFA、角色而非长期密钥。网络：VPC隔离、安全组/NACL、WAF。数据：加密(静态+传输)、密钥管理(KMS)。存储：S3桶权限(避免公开)。容器安全：镜像扫描、非root运行、网络策略。日志和监控：CloudTrail/CloudWatch。常见云安全配置错误。}}
+
+{{加密技术}}{{对称加密：AES(推荐AES-256-GCM)、ChaCha20。非对称加密：RSA(密钥交换/签名)、ECC(椭圆曲线，更短密钥同等安全)。哈希：SHA-256/SHA-3(完整性校验)、HMAC(消息认证码)。TLS/SSL：HTTPS加密传输。证书：CA签发、Let's Encrypt免费证书。密钥管理：HSM/KMS。端到端加密。零知识证明。同态加密(前沿)。}}
+
+{{日志与安全监控}}{{安全日志记录：认证事件、授权失败、数据访问、配置变更。ELK Stack(Elasticsearch+Logstash+Kibana)日志分析。SIEM(安全信息和事件管理)：关联分析、告警规则。关键指标：登录失败次数、异常访问模式、权限变更。日志防篡改。合规要求：GDPR/等保。安全运营中心(SOC)。事件响应流程。}}
+
+{{Web安全工具箱}}{{Burp Suite：Web安全测试核心工具(代理/扫描器/Intruder/Repeater)。Nmap：网络扫描。SQLMap：SQL注入自动化。Nuclei：模板化漏洞扫描。dirsearch/gobuster：目录爆破。Metasploit：渗透框架。Wireshark：网络抓包。hashcat/John the Ripper：密码破解。Postman/APIfox：API安全测试。浏览器开发者工具安全分析。}}
+
+{{安全编码实践}}{{输入验证(服务端为主，客户端为辅)。输出编码(根据上下文选择编码方式)。最小权限原则(数据库用户/操作系统用户)。错误处理(不泄露技术细节)。日志记录(安全事件)。依赖管理(定期更新、安全扫描)。密钥管理(环境变量/密钥管理服务、不硬编码)。安全配置(默认关闭不必要功能)。安全测试(集成到CI/CD)。安全培训(开发者安全意识)。}}
+
+{{漏洞赏金与CTF}}{{Bug Bounty漏洞赏金项目：HackerOne/Bugcrowd平台。报告编写：复现步骤、影响分析、修复建议。CTF(Capture The Flag)安全竞赛：Web/Pwn/Reverse/Crypto/Misc。学习资源：HackTheBox/TryHackMe/PortSwigger Web Security Academy。安全社区：OWASP/安全客/先知。道德黑客认证：CEH/OSCP。持续学习和实践。}}

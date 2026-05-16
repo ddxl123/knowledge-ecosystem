@@ -1,0 +1,43 @@
+# Spring Boot实战（2026版）
+# 领域: 计算机IT
+# 学科: 后端开发
+# 来源: Spring Boot实战（2026版）
+# 描述: Spring Boot最新版本高级特性与生产级实战，涵盖虚拟线程、GraalVM深度优化、AI集成及云原生架构
+
+{{Spring Boot 3.4+新特性}}{{Spring Boot 3.4+进一步优化：改进的自动配置报告、Docker Compose集成增强、SSL Bundle管理、RestClient改进。Property迁移工具自动检查过时配置。TestContainers增强集成。Observability改进：结构化日志格式化、Micrometer集成优化。容器化支持增强。安全性默认配置升级。}}
+
+{{虚拟线程(Project Loom)}}{{Java 21引入虚拟线程(Virtual Threads)，Spring Boot 3.2+原生支持。虚拟线程是轻量级线程，由JVM管理而非OS。spring.threads.virtual.enabled=true启用。每个请求一个虚拟线程，无需线程池调优。阻塞I/O不再浪费OS线程。与Reactive编程互补：简单阻塞代码获得高吞吐。适用场景：I/O密集型、微服务。注意：synchronized块会pin虚拟线程，使用ReentrantLock替代。}}
+
+{{Spring Native深度优化}}{{Spring Boot + GraalVM Native Image进一步成熟。AOT(Ahead-of-Time)编译时处理Bean定义、代理生成。自动Native hints减少手动配置。构建优化：Buildpacks、Maven/Gradle插件。启动时间<100ms、内存<50MB。Native编译调试：agentlib跟踪反射调用。CI/CD中集成Native构建。局限性分析：动态代理、反射、序列化的处理策略。}}
+
+{{Spring AI集成}}{{Spring AI是Spring的AI/LLM集成框架。ChatClient API统一调用各LLM提供商(OpenAI、Anthropic、Ollama等)。Prompt模板：PromptTemplate类。结构化输出：将LLM响应映射到Java对象。RAG(检索增强生成)：DocumentReader→Transformer→VectorStore→QA流程。Function Calling：LLM调用Spring Bean方法。向量数据库集成：PgVector、Redis、Chroma。Embedding模型支持。}}
+
+{{声明式HTTP客户端}}{{Spring 6引入HTTP Interface声明式客户端。@HttpExchange注解定义API接口。自动生成实现类(类似OpenFeign)。支持路径变量、请求参数、请求体、响应转换。与RestClient/WebClient底层配合。拦截器配置。错误处理。类型安全替代RestTemplate。代码生成减少样板代码。测试时Mock接口。}}
+
+{{RestClient新HTTP客户端}}{{RestClient是Spring 6.1引入的同步HTTP客户端，替代RestTemplate。流式API：RestClient.create().get().uri(...).retrieve().body(...)。支持拦截器、错误处理、请求/响应转换。与HTTP Interface配合使用。支持同步和异步调用。简洁的API设计。配置BaseURL、默认头、超时。可与SSL Bundle集成。}}
+
+{{可观测性(Observability)深度实践}}{{三大支柱：Metrics(指标)、Tracing(追踪)、Logging(日志)。Micrometer Observation API统一可观测性。@Observed注解自动创建观测点。Micrometer Tracing替代Sleuth。OpenTelemetry集成。结构化日志：Logback/Log4j2 JSON格式。分布式追踪：Trace ID贯穿请求链路。Dashboard模板：Grafana+Prometheus。告警规则配置。生产环境可观测性最佳实践。}}
+
+{{Docker Compose集成}}{{spring-boot-docker-compose模块自动管理开发环境容器。docker-compose.yml在classpath自动检测。启动时自动docker compose up，停止时down。支持服务连接(ServiceConnection)自动配置连接参数。开发环境数据库、Redis、消息队列一键启动。配置自定义compose文件路径。与DevTools配合使用。}}
+
+{{Spring Cloud 2024+微服务}}{{Spring Cloud最新版本：Spring Cloud Gateway响应式网关增强、Spring Cloud LoadBalancer改进、CircuitBreaker(Resilience4j)断路器。配置中心：Spring Cloud Config Server + Git/Vault。服务注册：Consul/Nacos/Eureka。分布式追踪：Micrometer Tracing。链路加密：mTLS。服务网格集成。配置动态刷新。API网关限流、鉴权。}}
+
+{{响应式与虚拟线程对比}}{{响应式(WebFlux)：非阻塞、背压、函数式、学习曲线陡峭。虚拟线程：阻塞式编程模型、简单易用、JVM管理。选择建议：新项目优先虚拟线程，响应式适合已有Reactive生态或极致性能场景。混合架构：部分服务WebFlux+部分服务MVC(虚拟线程)。数据库：R2DBC(响应式) vs JDBC(虚拟线程)。实际性能对比和选型指南。}}
+
+{{Spring Security 6新特性}}{{Spring Security 6改进授权架构。@EnableMethodSecurity替代@EnableGlobalMethodSecurity。SecurityFilterChain声明式配置。OAuth2/OIDC客户端和资源服务器增强。Passkeys(WebAuthn)支持。JWT自包含验证。CORS和CSRF配置简化。会话管理：并发控制、过期策略。安全头自动配置。Lambda DSL配置风格。}}
+
+{{数据访问增强}}{{Spring Data JPA改进：QBE增强、Projection优化。Spring Data JDBC简化版ORM。R2DBC响应式关系数据库。JOOQ类型安全SQL集成。MyBatis-Plus最新特性。多数据源配置。数据库变更数据捕获(CDC)：Debezium集成。读写分离。分库分表：ShardingSphere集成。数据库迁移：Flyway/Liquibase最佳实践。}}
+
+{{Kubernetes原生开发}}{{Spring Cloud Kubernetes：ConfigMap/Secret配置映射、Service发现、负载均衡。健康检查：Liveness/Readiness Probe。优雅停机：SIGTERM处理。ConfigMap热刷新：@RefreshScope。资源限制感知。Kubernetes Java Client。Helm Chart打包。Operator模式(Spring Cloud Kubernetes Operator)。Sidecar代理集成。}}
+
+{{Serverless与Function}}{{Spring Cloud Function：函数式编程模型。支持AWS Lambda、Azure Functions、Google Cloud Functions。@Bean定义Function/Consumer/Supplier。函数组合：function1|function2。Native Image优化冷启动。自动发现和路由函数。消息驱动函数(Spring Cloud Stream集成)。Serverless框架集成：Serverless Framework、SAM。}}
+
+{{测试现代化}}{{TestContainers增强：@ServiceConnection自动配置、Compose模块支持。@WebMvcTest/@WebFluxTest切片测试。MockServer模拟外部服务。契约测试：Spring Cloud Contract。性能测试：JMH基准测试。混沌工程：Chaos Monkey for Spring Boot。测试数据管理：@Sql、Flyway测试迁移。GitHub Actions CI/CD集成。}}
+
+{{事件驱动架构}}{{Spring Events：ApplicationEventPublisher发布事件，@EventListener监听。Spring Cloud Stream：消息中间件抽象层。支持Kafka、RabbitMQ、Pulsar。事件溯源(Event Sourcing)：记录状态变更序列。CQRS(命令查询职责分离)。Saga模式编排分布式事务。Avro/Protobuf消息序列化。Schema Registry管理消息格式。}}
+
+{{性能调优指南}}{{JVM调优：G1/ZGC垃圾收集器选择、堆内存配置、GC日志分析。虚拟线程配置。数据库连接池：HikariCP调优。缓存策略：Caffeine本地缓存+Redis分布式缓存。异步处理：@Async+CompletableFuture。批处理：Spring Batch。序列化优化：Protobuf替代JSON。响应压缩。连接池监控。性能基准测试和监控。}}
+
+{{企业级最佳实践}}{{多模块Maven/Gradle项目结构。统一异常处理和错误码。API版本管理。配置加密和密钥管理。审计日志(Spring Data Auditing)。国际化(i18n)。文件上传(OSS/S3集成)。报表导出(EasyExcel)。定时任务(XXL-Job)。工作流引擎(Camunda/Flowable)。搜索引擎(Elasticsearch集成)。全链路灰度发布。}}
+
+{{GraalVM Native生产化}}{{Native Image生产部署成熟度提升。构建优化：并行编译、缓存加速。调试Native应用：GDB集成、日志。Profile-Guided Optimization(PGO)提升性能。Native测试策略。CI/CD流水线集成。容器化部署：Distroless基础镜像。Serverless场景：冷启动优势明显。与传统JVM部署的对比和迁移策略。}}

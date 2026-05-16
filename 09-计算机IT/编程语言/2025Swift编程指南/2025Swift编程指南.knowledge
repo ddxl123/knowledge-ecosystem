@@ -1,0 +1,43 @@
+# Swift编程指南
+# 领域: 计算机IT
+# 学科: 编程语言
+# 来源: Swift编程指南（2025版）
+# 描述: Apple Swift编程语言核心知识，涵盖语法特性、协议编程、SwiftUI、并发及服务端开发
+
+{{Swift概述}}{{Swift是Apple开发的现代编程语言，用于iOS/macOS/watchOS/tvOS开发。特点：类型安全、可选类型(Optionals)、协议导向编程、值语义优先、ARC内存管理。Swift Playground交互式学习。Swift Package Manager(SPM)包管理。开源语言，支持Linux服务端开发。与Objective-C互操作。Playground实时预览。}}
+
+{{基本类型与变量}}{{let常量、var变量。类型推断。基本类型：Int、Double、String、Bool、Character。字符串插值："\(expression)"。元组：(statusCode, "OK")。可选类型(Optionals)：Int?，值或nil。强制解包!、可选绑定(if let/guard let)、空合并运算符??。类型别名typealias。类型转换：as/as?/as!。assert/precondition断言。}}
+
+{{集合类型}}{{Array<T>：有序集合，[Element]语法。Dictionary<Key, Value>：键值对，[Key: Value]语法。Set<T>：无序唯一集合。不可变(let)和可变(var)。常用方法：append/insert/remove/contains/sorted/filter/map/reduce。高阶函数：闭包作为参数。遍历：for-in循环、enumerated()索引+值。切片(Slice)。集合的值语义(复制而非引用)。}}
+
+{{函数与闭包}}{{func定义函数：func greet(name: String) -> String。参数标签(外部名/内部名)。默认参数值。可变参数(...args)。inout参数(引用传递)。返回元组多值返回。函数类型：(Int, Int) -> Int。闭包：{ (params) -> returnType in statements }。尾随闭包。简写：$0/$1。@escaping闭包逃逸。@Sendable可发送闭包。}}
+
+{{枚举与模式匹配}}{{enum定义枚举。关联值：case .success(Data)、case .failure(Error)。原始值：enum Direction: String。递归枚举indirect case。模式匹配：switch-case穷举检查。值绑定：case let .point(x, y)。where子句守卫。if case/case let模式匹配。Result<Success, Failure>标准库枚举。枚举遵循协议。CaseIterable所有枚举值。}}
+
+{{结构体与类}}{{struct值类型(复制)、class引用类型(共享)。struct默认init(成员逐一初始化)。class需要手动init。mutating方法(struct修改自身)。类的继承和重写(override)。类型方法(static/class)。属性：存储属性、计算属性(get/set)、属性观察器(willSet/didSet)。lazy延迟属性。类的引用相等(===)。Swift推荐struct优先。}}
+
+{{协议(Protocol)}}{{protocol定义协议(类似接口但更强大)。协议要求：属性(get/set)、方法、初始化器。协议继承：protocol B: A。协议组合：A & B。遵循协议：extension或直接实现。协议扩展提供默认实现。associatedtype关联类型。泛型约束<T: Protocol>。协议是Swift协议导向编程(POP)的核心。Codable、Equatable、Hashable、Identifiable标准协议。}}
+
+{{扩展与泛型}}{{extension扩展已有类型(不能添加存储属性)。可添加方法、计算属性、遵循协议、嵌套类型。泛型函数：func swap<T>(_ a: inout T, _ b: inout T)。泛型类型：struct Stack<Element>。类型约束：where Element: Equatable。关联类型约束。Opaque Types：some Protocol(不透明类型)。Existential Types：any Protocol(存在类型)。}}
+
+{{错误处理}}{{Error协议定义错误类型。throw抛出错误，throws声明。do-catch捕获错误。try/try?/try!处理方式。defer延迟执行(无论是否错误)。自定义错误枚举。Result类型处理异步错误。错误传播链。可恢复vs不可恢复错误。面向协议的错误处理设计。错误域和错误码(与Objective-C互操作)。}}
+
+{{Swift Concurrency}}{{async/await异步编程。async函数和方法。Task创建异步任务。TaskGroup结构化并发。await等待异步结果。Actor模型：actor隔离可变状态，防止数据竞争。MainActor：主线程隔离(@MainActor标记)。Sendable协议标记可安全跨并发域传递的类型。AsyncSequence异步序列。AsyncStream桥接回调到async。非隔离(nonisolated)。}}
+
+{{SwiftUI框架}}{{SwiftUI是声明式UI框架。View协议和body计算属性。内置视图：Text/Image/Button/List/NavigationStack/Form。状态管理：@State(视图本地)、@Binding(父子共享)、@Observable(观察对象)、@Environment(环境值)。布局系统：VStack/HStack/ZStack。动画：withAnimation。NavigationStack导航。Sheet/fullScreenCover模态。SwiftUI与UIKit互操作。}}
+
+{{Combine框架}}{{Combine是响应式编程框架。Publisher协议发出值。Subscriber协议接收值。操作符：map/filter/reduce/merge/zip/debounce。Subject：CurrentValueSubject/PassthroughSubject。@Published属性包装器。sink订阅。AnyCancellable管理订阅生命周期。与SwiftUI配合：@StateObject/@ObservableObject。网络请求和数据流处理。async/await是Combine的替代方案。}}
+
+{{属性包装器(Property Wrapper)}}{{属性包装器封装属性的存取逻辑。@propertyWrapper struct包装wrappedValue。@State/@Binding/@Published都是属性包装器。自定义属性包装器：@UserDefault("key") var name: String = ""。wrappedValue/wrappedValue(set)核心。projectedValue($前缀投影)。组合使用多个属性包装器。应用：验证、日志、持久化、线程安全。}}
+
+{{内存管理(ARC)}}{{Swift使用ARC(Automatic Reference Management)。强引用(默认)、weak(弱引用，可选类型)、unowned(无主引用，非可选)。循环引用：A强引用B，B强引用A→内存泄漏。解决：weak或unowned打破循环。闭包捕获列表：[weak self]或[unowned self]。类实例的反初始化(deinit)。内存调试：Memory Graph Debugger、Instruments。}}
+
+{{与Objective-C互操作}}{{@objc暴露Swift方法给ObjC。@objcMembers暴露整个类。#selector创建选择器。协议继承NSObjectProtocol。桥接：String↔NSString、Array↔NSArray、Dictionary↔NSDictionary。Bridging Header引入ObjC头文件。Swift调用ObjC代码和反之。混合语言项目。迁移策略：渐进式从ObjC迁移到Swift。}}
+
+{{测试与调试}}{{XCTest框架：XCTestCase子类。XCTAssert系列断言。异步测试：expectation + waitForExpectations。性能测试：measure {}。UI测试：XCUIApplication。Swift Testing框架(新)：@Test宏、#expect断言。代码覆盖率。LLDB调试器命令。print/NSLog日志。os_log系统日志。Instruments性能分析：Time Profiler、Allocations、Leaks。}}
+
+{{服务器端Swift}}{{Swift on Server：Vapor框架(最流行)、Hummingbird(轻量)。路由定义、中间件、模板渲染。Fluent ORM数据库操作。认证：JWT/Session。SwiftNIO底层网络框架(类似Netty)。AsyncHTTPClient异步HTTP客户端。Docker容器化部署。与Node.js/Go对比性能。Swift on Linux支持。数据库驱动：PostgreSQL/MySQL/SQLite/Redis。}}
+
+{{Swift 6新特性}}{{Swift 6严格并发检查(默认开启)。完整的数据竞争安全保证。@Sendable推断改进。Global Actor隔离改进。typed throws：throws(SomeError)。128位整数(Int128/UInt128)。嵌套协议。noncopyable types改进。C++互操作改进。Swift Testing框架。参数包(Parameter Packs)改进。所有权和借用(borrowing/consuming)。}}
+
+{{Swift包管理(SPM)}}{{Package.swift定义包。targets定义目标。dependencies声明依赖。products定义产品(库/可执行文件)。.product()精确依赖。条件编译：#if os(macOS)。binary target引用预编译库。Xcode集成SPM。版本解析策略。本地包依赖。Swift Package Collections包集合。SPM插件系统自定义构建命令。发布到Swift Package Registry。}}

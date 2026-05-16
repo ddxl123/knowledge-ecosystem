@@ -1,0 +1,45 @@
+# Vue.js实战（2026版）
+# 领域: 计算机IT
+# 学科: 前端开发
+# 来源: Vue.js实战（2026版）
+# 描述: Vue.js最新版本核心特性与高级实战，涵盖响应式系统深度优化、Vapor模式、AI辅助开发及现代前端架构
+
+{{Vue 3.5+响应式系统增强}}{{Vue 3.5+对响应式系统进行了重大优化。useId()生成服务端/客户端一致的唯一ID。onWatcherCleanup()在watcher回调中注册清理函数。Deferred ref：ref延迟计算优化。reactive()支持更多内置类型。响应式系统内存占用降低，大型应用性能提升。自动解包ref在模板中的.value访问。}}
+
+{{Vapor模式}}{{Vapor Mode是Vue的编译时优化模式，去除虚拟DOM开销。编译时将模板直接转换为高效的DOM操作指令。与Svelte类似的细粒度响应式更新。无需vdom diff，直接追踪状态变化对应的DOM节点。与现有Vue生态兼容，可渐进式采用。在性能敏感场景(大量列表、频繁更新)效果显著。仍处于实验阶段。}}
+
+{{Reactivity Transform(响应式语法糖)}}{{响应式语法糖简化ref的使用。$ref()自动解包，直接使用变量名而非.value。$computed()、$ref()、$shallowRef()等。$()和$$()在解构时保持响应性。编译时转换，无运行时开销。虽然该提案最终状态有所调整，但其理念影响了Vue的响应式API设计。实际开发中toRefs()仍是保持解构响应性的标准方式。}}
+
+{{defineModel宏}}{{defineModel()简化组件v-model的实现。直接在组件中声明双向绑定的model，无需手动定义prop和emit。支持多个model：const title = defineModel('title')。自定义修饰符：defineModel({ set(v) { return v.trim() } })。底层仍基于props和events，是语法糖。大幅简化表单组件的开发。}}
+
+{{异步组件与Suspense改进}}{{defineAsyncComponent()更灵活的异步加载配置：loadingComponent、errorComponent、delay、timeout、suspensible。Suspense稳定化：支持嵌套Suspense、fallback slot、事件(onResolve/onPending/onFallback)。结合Router懒加载实现路由级代码分割。错误边界与Suspense配合处理异步错误。服务端渲染中Suspense流式渲染。}}
+
+{{Server Components(Vue版)}}{{Vue的Server Components方案：组件在服务端渲染，不发送JS到客户端。.server.vue后缀标识服务端组件。可与客户端组件混合使用。减少客户端JavaScript体积。数据获取在服务端直接进行。Nuxt中通过NuxtIsland等实现岛屿架构(Islands Architecture)。部分交互区域作为客户端岛屿，其余为服务端渲染的静态HTML。}}
+
+{{Signal式响应式探索}}{{受Solid.js和Angular Signals影响，Vue探索更细粒度的响应式方案。Vapor模式底层采用信号式追踪。useSignal()概念：追踪读取点，精确更新。与现有ref/reactive的兼容性设计。编译时分析减少运行时开销。社区讨论：AliasedRef、DeepSignal等提案。Vue Vapor可能成为高性能场景的标准选择。}}
+
+{{Nuxt 4+全栈开发}}{{Nuxt 4+是Vue全栈框架的最新版本。app/目录重组：composables/、components/、pages/、layouts/统一在app/下。服务端路由自动类型生成。Nitro 3引擎优化服务端性能。Nuxt DevTools内置调试工具。数据层：useFetch/useAsyncData增强，支持缓存策略和乐观更新。零配置TypeScript。边缘渲染和混合渲染策略。}}
+
+{{Nuxt Layer模块化}}{{Nuxt Layer是应用模块化方案。每个Layer有独立的nuxt.config.ts、components/、composables/。extends配置继承Layer。适用场景：组件库、主题系统、微前端拆分。Layer可发布为npm包。自动导入在Layer间共享。nuxt.config.ts支持多Layer继承链。每个Layer可有自己的依赖和配置。}}
+
+{{组件设计模式增强}}{{Vue 3.4+的defineSlots()类型化插槽定义。泛型组件：defineComponent<T>()支持类型参数。配合TypeScript的模板类型检查。Render函数与JSX：h()函数和TSX支持。组件间通信模式：Props/Emits、Provide/Inject、Event Bus(外部库)、Pinia Store。Headless组件模式：逻辑与样式分离，提供无样式基础组件。}}
+
+{{宏与编译器语法糖}}{{Vue编译器宏包括：defineProps、defineEmits、defineExpose、defineOptions(设置组件选项如name/inheritAttrs)、defineSlots、defineModel。这些宏仅在<script setup>中可用，编译时处理，不需导入。defineOptions({ name: 'MyComponent', inheritAttrs: false })简化配置。编译时优化减少运行时开销。}}
+
+{{VueUse工具集深度应用}}{{VueUse是Vue组合式工具函数集合。DOM类：useIntersectionObserver、useResizeObserver、useMutationObserver。状态类：useLocalStorage、useSessionStorage、useStorageAsync。传感器类：useMouse、useGeolocation、useNetwork。浏览器类：useClipboard、usePermission、usePreferredDark。异步类：useFetch、useAsyncState、useIntervalFn。可按需导入，tree-shaking友好。}}
+
+{{构建工具链演进}}{{Vite 6+进一步优化构建性能。Rolldown(Rust实现的打包器)替代Rollup。更快的HMR和冷启动。Rsbuild/Rspack作为备选方案(Webpack兼容)。环境变量管理：.env文件层级。SSR构建配置。Monorepo支持：pnpm workspace + Turborepo。预构建依赖优化。插件生态丰富。}}
+
+{{SSG与混合渲染}}{{静态站点生成(SSG)：构建时生成HTML，适合内容站点。增量静态再生(ISR)：构建后定期重新生成页面。混合渲染：不同路由使用不同渲染策略(SSR/SSG/SPA)。Nuxt的routeRules配置每路由策略。预渲染关键页面，动态页面SSR。CDN部署优化。边缘计算提升全球访问速度。}}
+
+{{Vue与Web Components}}{{Vue组件可编译为Web Components。defineCustomElement()将Vue组件转为自定义元素。跨框架使用：在React/Angular项目中使用Vue Web Components。局限：slot映射、样式隔离、性能开销。Vue + Lit作为互补方案。Web Components作为微前端通信桥梁。Shadow DOM样式封装。}}
+
+{{类型安全增强}}{{Vue 3.5+的模板类型推断改进。Volar(Vue Language Tools)提供模板内TypeScript类型检查。defineProps泛型推断。useTemplateRef<T>()类型化模板ref。事件类型推断：defineEmits的类型声明。Pinia store类型推断。tsconfig中配置vue-tsc严格模式。IDE中模板内自动补全和错误提示。}}
+
+{{AI辅助Vue开发}}{{AI工具在Vue开发中的应用：GitHub Copilot/Cursor生成Vue组件代码。AI辅助TypeScript类型推断。AI驱动的UI生成(描述→组件)。AI代码审查和优化建议。AI测试用例生成。Prompt Engineering指导AI生成高质量Vue代码。AI辅助国际化翻译。AI驱动的性能分析和优化。}}
+
+{{边缘渲染与Serverless}}{{Nuxt支持边缘渲染(Cloudflare Workers、Vercel Edge Functions)。Nitro引擎适配多种部署平台。Serverless API Routes按需执行。边缘数据库(Turso/PlanetScale)配合使用。流式响应(Streaming Response)。WebSocket在边缘环境的支持。混合边缘+服务端架构。冷启动优化。}}
+
+{{测试与质量保障}}{{Vitest成为Vue项目标准测试框架。组件测试：@vue/test-utils v2。E2E测试：Playwright(推荐)。视觉回归测试：Chromatic/Percy。可访问性测试：axe-core集成。性能测试：Lighthouse CI。测试策略金字塔：单元→集成→E2E。MSW模拟API。Vue DevTools测试辅助。代码质量：ESLint + Prettier + Husky + lint-staged。}}
+
+{{Vue生态与社区}}{{Vue生态核心工具链：Vue 3(核心)、Vite(构建)、Pinia(状态)、Vue Router(路由)、Nuxt(框架)、VueUse(工具)、Vitest(测试)。UI组件库：Element Plus、Ant Design Vue、Naive UI、PrimeVue、Radix Vue。开发工具：Vue DevTools、Volar。社区活跃：VueConf大会、RFC流程、GitHub Discussions。Vue在企业级应用中广泛采用。}}

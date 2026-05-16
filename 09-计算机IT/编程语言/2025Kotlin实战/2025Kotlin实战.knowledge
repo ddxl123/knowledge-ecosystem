@@ -1,0 +1,43 @@
+# Kotlin实战
+# 领域: 计算机IT
+# 学科: 编程语言
+# 来源: Kotlin实战（2025版）
+# 描述: Kotlin编程语言核心知识与实战开发，涵盖语法特性、协程、Android开发、服务端应用及跨平台开发
+
+{{Kotlin概述}}{{Kotlin是JetBrains开发的现代静态类型语言，与Java 100%互操作。Google推荐的Android开发首选语言。特点：简洁语法、空安全、扩展函数、协程、数据类、密封类。运行在JVM上(也可编译为JS或Native)。Gradle Kotlin DSL是构建脚本首选。Kotlin Multiplatform(KMP)实现跨平台共享代码。}}
+
+{{基本类型与变量}}{{val不可变变量(推荐)、var可变变量。类型推断：val name = "Kotlin"。基本类型：Int、Long、Float、Double、Boolean、Char、String。字符串模板："Hello, $name"和"Length: ${name.length}"。类型转换：toInt()、toLong()等显式方法。可空类型：String?，安全调用?.，非空断言!!。Elvis运算符：?:。}}
+
+{{函数与Lambda}}{{fun关键字定义函数。默认参数和命名参数。单表达式函数：fun double(x: Int) = x * 2。可变参数：vararg。扩展函数：fun String.addExclamation() = "$this!"。高阶函数：函数作为参数或返回值。Lambda表达式：{ x, y -> x + y }。it关键字(单参数Lambda)。内联函数(inline)消除Lambda开销。作用域函数：let/run/with/apply/also。}}
+
+{{类与对象}}{{class定义类。主构造函数：class Person(val name: String, var age: Int)。init块初始化逻辑。次构造函数constructor。data class数据类(自动生成equals/hashCode/toString/copy)。object单例对象。companion object伴生对象(类似Java静态成员)。sealed class密封类(限制继承)。enum class枚举类。接口(interface)支持默认实现。抽象类(abstract)。}}
+
+{{空安全系统}}{{Kotlin类型系统区分可空和非空类型。非空类型String不能赋null。可空类型String?需要安全处理。安全调用操作符：obj?.method()。Elvis操作符：val len = str?.length ?: 0。非空断言：str!!.length(可能NPE)。安全类型转换：obj as? Type。let安全处理：str?.let { println(it) }。lateinit延迟初始化。by lazy惰性初始化。}}
+
+{{集合操作}}{{List(不可变)和MutableList(可变)。Set/MutableSet。Map/MutableMap。集合工厂函数：listOf/setOf/mapOf(不可变)、mutableListOf/mutableSetOf/mutableMapOf。序列(sequence)惰性求值。常用操作：filter、map、flatMap、sorted、groupBy、associate、partition、fold/reduce、first/last、any/all/none、count、sum。解构：val (key, value) = mapEntry。}}
+
+{{协程(Coroutines)}}{{协程是Kotlin的轻量级并发方案。launch启动协程(不返回结果)、async启动协程(返回Deferred结果)。suspend挂起函数。CoroutineScope作用域：GlobalScope(全局)、viewModelScope(Android)、lifecycleScope(Android)。调度器(Dispatcher)：Main(UI)、IO(网络/磁盘)、Default(CPU密集)。结构化并发：子协程跟随父作用域。Job控制协程生命周期。withContext切换线程。}}
+
+{{协程高级特性}}{{Flow：冷数据流，类似RxJava。flow { emit(value) }创建，collect收集。操作符：map/filter/take/reduce。StateFlow(有状态)和SharedFlow(无共享状态)替代LiveData。异常处理：try-catch和CoroutineExceptionHandler。取消：job.cancel()，cooperative cancellation。超时：withTimeout(ms)。通道(Channel)：协程间通信。Mutex互斥锁。Semaphore信号量。}}
+
+{{Kotlin与Android}}{{Jetpack Compose：声明式UI框架。@Composable注解定义UI组件。remember保存状态。State/StateFlow驱动UI更新。ViewModel管理UI状态。Navigation Compose导航。Room数据库(注解驱动ORM)。Hilt依赖注入。Kotlin Android Extensions已被ViewBinding替代。协程配合Retrofit网络请求。Compose动画系统。Material Design 3组件。}}
+
+{{Kotlin服务端开发}}{{Ktor：JetBrains官方Web框架。Routing定义路由，install安装插件(ContentNegotiation/Authentication)。序列化：kotlinx.serialization。数据库：Exposed(SQL DSL/DAO)框架。Spring Boot也完全支持Kotlin。Kotlin协程天然适合服务端高并发。http4k函数式HTTP工具包。gRPC-Kotlin。Kotlin与Java框架无缝互操作。}}
+
+{{Kotlin Multiplatform(KMP)}}{{KMP实现代码跨平台共享：JVM(Android/服务端)、iOS(Native)、JS(Web)、Native(桌面)。expect/actual声明平台特定实现。通用模块共享业务逻辑。Compose Multiplatform共享UI(Android/iOS/桌面/Web)。Ktor客户端跨平台HTTP。SQLDelight跨平台数据库。KMM(Kotlin Multiplatform Mobile)移动端共享代码。}}
+
+{{密封类与模式匹配}}{{sealed class限制类层次结构(同一模块内)。when表达式配合密封类实现穷举检查。sealed interface密封接口(Java 17也有)。智能类型转换：when分支自动转换类型。data class + sealed class建模领域状态。代数数据类型(ADT)。Kotlin 1.9+改进的when类型推断。}}
+
+{{委托(Delegation)}}{{类委托：class CountingSet<T>(val inner: Set<T>) : Set<T> by inner。属性委托：by lazy(惰性初始化)、by observable(监听变化)、by vetoable(条件阻止)。自定义委托：实现ReadWriteProperty/ReadOnlyProperty。Map委托：class User(val map: Map<String, Any?>)。委托模式替代继承实现代码复用。Kotlin标准库提供常用委托。}}
+
+{{DSL构建}}{{Kotlin DSL(领域特定语言)利用Lambda和接收者(receiver)构建。HTML DSL：html { body { h1("Title") } }。Gradle Kotlin DSL。类型安全构建器：@DslMarker注解防止作用域泄漏。apply/with/run利用接收者构建配置。序列化DSL。测试DSL。Ktor路由DSL。Jetpack Compose本质也是DSL。StringBuilder也是DSL模式。}}
+
+{{反射与注解}}{{Kotlin反射：kotlin-reflect包。KClass/KFunction/KProperty。类引用：MyClass::class。函数引用：::myFunction。属性引用：MyClass::property。注解处理：kapt(Kotlin Annotation Processing Tool)。KSP(Kotlin Symbol Processing)更高效的替代方案。注解使用与Java类似。序列化注解：@Serializable。编译时代码生成。}}
+
+{{测试与工具}}{{测试框架：JUnit 5 + kotlin.test。kotest(Kotlin测试框架，支持多种风格)。MockK：Kotlin原生Mock框架(比Mockito更适合)。Kotlin协程测试：runTest、TestDispatcher。覆盖率：JaCoCo/Kover。代码风格：ktlint。静态分析：detekt。Kotlin Playground在线运行。Dokka文档生成器。Kotlin编译器插件。}}
+
+{{Kotlin 2.0+新特性}}{{Kotlin 2.0：K2编译器(更快、更智能的类型推断)。data object(单例data class)。enum entries属性。改进的when类型推断。K2编译器前端改进。Compose编译器集成到Kotlin仓库。Context Receivers(实验性)。值类(Value Class)内联优化。Kotlin/Wasm(WebAssembly目标)。Kotlin/Native性能持续改进。}}
+
+{{异步编程模式}}{{Kotlin协程对比传统方案：比Thread轻量、比RxJava简单、结构化并发保证生命周期安全。回调转协程：suspendCancellableCoroutine。并行执行：async+awaitAll。重试逻辑：retry(n)。限流：Semaphore。超时：withTimeout。并发安全：Mutex、Channel、Actor模型。热流和冷流(StateFlow/SharedFlow vs Flow)。异常传播和处理策略。}}
+
+{{Kotlin生态与最佳实践}}{{代码规范：命名约定(驼峰)、函数长度控制、不可变优先(val)。空安全最佳实践：避免!!，优先使用?.和let。协程最佳实践：注入CoroutineScope、异常处理、取消传播。依赖管理：Gradle Version Catalog。代码组织：按功能分包而非按类型。Kotlin扩展和标准库活用。与Java互操作注意事项(@JvmStatic/@JvmOverloads)。}}

@@ -1,0 +1,45 @@
+# Unity游戏开发
+# 领域: 计算机IT
+# 学科: 游戏开发
+# 来源: Unity游戏开发（2025版）
+# 描述: Unity游戏引擎核心概念与实战开发，涵盖场景编辑、脚本编程、物理系统、UI系统及跨平台发布
+
+{{Unity引擎概述}}{{Unity是跨平台游戏引擎，支持2D/3D游戏、AR/VR、建筑可视化等。核心组件：Scene(场景)、GameObject(游戏对象)、Component(组件)、Asset(资源)。组件化架构：每个GameObject由多个Component组成(Transform、Renderer、Collider等)。Unity Hub管理项目和编辑器版本。支持平台：PC、移动端、主机、WebGL、VR/AR。}}
+
+{{C#脚本编程}}{{Unity使用C#作为脚本语言。MonoBehaviour是所有脚本基类。生命周期函数：Awake(实例化时)→OnEnable→Start(第一帧前)→FixedUpdate(物理更新)→Update(每帧)→LateUpdate(Update后)→OnDisable→OnDestroy。协程(Coroutine)：IEnumerator + yield return实现异步操作。ScriptableObject存储共享数据。命名空间组织代码。}}
+
+{{Transform与物理系统}}{{Transform组件：position(位置)、rotation(旋转)、scale(缩放)。父子关系：子对象跟随父对象变换。Physics 2D/3D物理系统：Rigidbody(刚体)、Collider(碰撞体)、Joint(关节)。碰撞检测：OnCollisionEnter/Stay/Exit(碰撞)、OnTriggerEnter/Stay/Exit(触发器)。物理材质控制摩擦和弹力。Raycast射线检测。CharacterController角色控制器。}}
+
+{{动画系统}}{{Animator Controller管理动画状态机。Animation Clip定义关键帧动画。状态(State)和过渡(Transition)。参数(Parameters)控制动画切换：Trigger、Bool、Int、Float。混合树(Blend Tree)实现平滑过渡。IK(Inverse Kinematics)反向动力学。动画事件(Animation Events)在动画特定帧调用函数。Timeline创建过场动画和过场序列。}}
+
+{{UI系统(Canvas)}}{{Unity UI(uGUI)基于Canvas。Canvas渲染模式：Screen Space-Overlay、Screen Space-Camera、World Space。UI组件：Text(TextMeshPro)、Image、Button、Slider、Toggle、InputField、ScrollView。锚点(Anchor)和枢轴(Pivot)控制布局自适应。事件系统：EventSystem + EventTrigger。UI动画和过渡效果。适配不同分辨率。}}
+
+{{光照与渲染}}{{光源类型：Directional(方向光/太阳光)、Point(点光源)、Spot(聚光灯)、Area(面光源)。全局光照(GI)：实时GI和烘焙GI(Baked GI)。光照探针(Light Probe)和反射探针(Reflection Probe)。材质和Shader：Standard Shader、URP Lit Shader。Shader Graph可视化着色器编辑。后处理效果(Post Processing)：Bloom、DOF、Color Grading、AO。}}
+
+{{资源管理}}{{资源导入设置：模型(FBX)、纹理(压缩格式)、音频(压缩设置)。AssetBundle打包和加载资源。Addressable Asset System：可寻址资源管理(推荐)。资源加载：同步Instantiate、异步Addressables.LoadAssetAsync。对象池(Object Pool)减少GC。Resources文件夹(不推荐)。资源依赖管理。内存管理和优化。}}
+
+{{2D游戏开发}}{{2D渲染：Sprite、Sprite Atlas(图集)、Tilemap(瓦片地图)。Tilemap编辑器：画笔、填充、选取。2D物理：Rigidbody2D、BoxCollider2D/CircleCollider2D。2D动画：Sprite Animation、2D Animation Package(骨骼动画)。2D光照：2D Light、Shadow Caster。Pixel Perfect像素完美渲染。2D Tilemap Extras高级瓦片。Cinemachine 2D相机。}}
+
+{{粒子系统}}{{Particle System组件创建粒子效果。模块设置：Emission(发射)、Shape(形状)、Velocity(速度)、Lifetime(生命周期)、Size(大小)、Color(颜色)、Rotation(旋转)。Sub Emitters子发射器。碰撞模块。拖尾(Trail)。粒子系统可用于火焰、烟雾、魔法效果、雨雪等。GPU粒子性能优化。VFX Graph高级视觉效果编辑器。}}
+
+{{音频系统}}{{AudioSource播放音频，AudioListener接收音频。3D空间音频：距离衰减、方向性。音频混合器(Audio Mixer)控制音量和效果。音频格式：WAV(无压缩)、MP3/OGG(压缩)。背景音乐和音效管理。AudioClip加载和播放。PlayOneShot播放不循环音效。音频可视化。FMOD/Wwise第三方音频中间件集成。}}
+
+{{游戏AI基础}}{{有限状态机(FSM)：EnemyState(Idle/Chase/Attack)切换。行为树(Behavior Tree)：Selector/Sequence/Decorator/Leaf节点。A*寻路算法：网格地图+开放列表+关闭列表。NavMesh导航系统：NavMeshAgent自动寻路、NavMeshObstacle动态障碍。视线检测(Raycast)。群体AI：分离、对齐、聚集规则。Unity ML-Agents机器学习AI。}}
+
+{{网络与多人游戏}}{{Unity Netcode for GameObjects：高层网络框架。NetworkObject、NetworkBehaviour。RPC调用：ServerRpc/ClientRpc。网络同步：NetworkVariable。NetworkManager管理连接。Photon Unity Networking(PUN)：第三方网络方案。Mirror：社区网络框架。房间管理、玩家匹配。客户端预测和服务器权威。延迟补偿。反作弊基础。}}
+
+{{ECS与DOTS}}{{ECS(Entity Component System)：数据导向设计。Entity(实体)、Component(纯数据)、System(纯逻辑)。Burst Compiler：编译为高性能原生代码。Job System：多线程任务调度。DOTS(Data-Oriented Technology Stack) = ECS + Burst + Jobs。适合大量同质对象(成千上万单位)。与传统MonoBehaviour对比。混合渲染器(Hybrid Renderer)。}}
+
+{{性能优化}}{{GPU优化：减少Draw Call(批处理/合批)、LOD(Level of Detail)、遮挡剔除(Occlusion Culling)、纹理压缩。CPU优化：减少GC(避免每帧分配)、对象池、Job System多线程。内存优化：AssetBundle/Addressable按需加载、纹理最大尺寸设置。Profiler工具：CPU/GPU/Memory Profiler。帧率分析和优化。移动平台特别优化。}}
+
+{{跨平台发布}}{{Build Settings选择目标平台。Player Settings配置：公司名、产品名、图标、版本号。移动端：Android(APK/AAB)、iOS(Xcode项目)。PC：Windows/Mac/Linux。WebGL：Web发布。VR/AR：Oculus/ARKit/ARCore。平台特定设置：输入适配、分辨率适配、性能调优。代码剥离和压缩。CI/CD自动化构建。}}
+
+{{Unity编辑器扩展}}{{Editor脚本自定义编辑器功能。[CustomEditor]自定义Inspector面板。EditorWindow创建自定义窗口。Scene视图GUI绘制Handles。Menu菜单扩展。PropertyDrawer自定义属性绘制。ScriptableObject编辑器支持。EditorCoroutine编辑器协程。AssetPostprocessor资源导入处理。BuildPipeline自定义构建流程。Package Manager自定义包。}}
+
+{{Shader编程}}{{ShaderLab语法：Properties、SubShader、Pass。HLSL/Cg着色器语言。顶点着色器(Vertex Shader)和片段着色器(Fragment Shader)。光照模型：Lambert(漫反射)、Phong/Blinn-Phong(高光)、PBR(物理渲染)。Shader Graph可视化编辑(推荐)。常用效果：溶解、描边、水面、全息、扫描线。URP/HDRP内置Shader。性能优化。}}
+
+{{AR/VR开发}}{{XR Interaction Toolkit：统一XR交互框架。AR Foundation：跨平台AR开发(ARKit+ARCore)。平面检测、图像追踪、人脸追踪、物体追踪。VR交互：抓取、射线指向、UI交互。XR Origin设置。空间锚点(Spatial Anchor)。遮挡(Occlusion)和光照估计。性能要求：高帧率(72/90/120FPS)、低延迟。MRTK(Mixed Reality Toolkit)。}}
+
+{{游戏设计模式}}{{单例模式(Singleton)：全局管理器。观察者模式(Observer)：事件系统(UnityEvent/C#事件)。状态模式(State)：角色状态机。命令模式(Command)：输入/撤销系统。工厂模式(Factory)：对象创建。策略模式(Strategy)：可替换的AI行为。对象池模式(Object Pool)：减少GC。MVC/MVVM：UI架构。依赖注入：VContainer/Zenject。}}
+
+{{Unity 6新特性}}{{Unity 6(2025 LTS)新特性：GPU Resident Drawer(大规模渲染)、Render Graph(渲染图优化)、URP/HDRP性能提升。Sentis(原Barracuda)AI推理引擎集成。多人游戏框架增强。编辑器性能改进。64位渲染支持。WebGPU支持。改进的2D工具链。Package Manager增强。Unity Cloud协作平台。AI辅助开发工具。}}

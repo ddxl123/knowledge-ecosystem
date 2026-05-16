@@ -1,0 +1,47 @@
+# Rust编程之道
+# 领域: 计算机IT
+# 学科: 编程语言
+# 来源: Rust编程之道（2025版）
+# 描述: Rust系统编程语言核心知识，涵盖所有权系统、生命周期、并发安全、trait系统及异步编程
+
+{{Rust核心理念}}{{Rust是系统编程语言，追求安全(内存安全)、并发(无数据竞争)、性能(零成本抽象)。无垃圾回收，通过所有权系统在编译时管理内存。编译器严格检查避免空指针、悬垂引用、数据竞争。Rust适合系统编程、WebAssembly、嵌入式、命令行工具、网络服务。Cargo是构建工具和包管理器。crates.io是包仓库。}}
+
+{{所有权系统}}{{所有权三规则：每个值有且只有一个所有者；同一时刻只能有一个可变引用或多个不可变引用；引用必须始终有效。移动语义：let s2 = s1后s1失效。Clone显式深拷贝。Copy trait标记可简单复制的类型(基本类型)。借用(Borrowing)：&T不可变引用、&mut T可变引用。借用规则防止数据竞争。所有权转移在函数调用时发生。}}
+
+{{生命周期}}{{生命周期标注'a确保引用有效性。函数签名：fn longest<'a>(x: &'a str, y: &'a str) -> &'a str。结构体中的生命周期：struct Excerpt<'a> { part: &'a str }。生命周期省略规则(编译器推断)：输入生命周期→单一输出→方法中&self。'static生命周期(全局有效)。生命周期不改变实际生命周期，只是告知编译器引用间的关系。}}
+
+{{结构体与枚举}}{{struct定义结构体。元组结构体struct Color(i32, i32, i32)。单元结构体struct Unit。impl块定义方法(&self/&mut self/self)。关联函数(无self，类似静态方法)。enum枚举：每个变体可携带不同类型数据。Option<T>：Some(T)/None替代null。Result<T, E>：Ok(T)/Err(E)错误处理。模式匹配：match、if let、while let。解构结构体/枚举。}}
+
+{{Trait系统}}{{Trait定义共享行为(类似接口)。trait Summary { fn summarize(&self) -> String; }。为类型实现trait：impl Summary for Article {}。默认方法实现。Trait约束(泛型)：fn notify<T: Summary>(item: &T)。多重约束：T: Summary + Display。where子句。返回impl Trait。Trait对象(动态分发)：&dyn Trait、Box<dyn Trait>。孤儿规则。}}
+
+{{错误处理}}{{Result<T, E>和Option<T>是Rust错误处理核心。?运算符自动传播错误。panic!宏不可恢复错误(数组越界等)。自定义错误类型实现Display和Error trait。错误转换：From trait。thiserror库简化自定义错误。anyhow库简化应用级错误处理。unwrap()/expect()快速原型(生产代码应避免)。错误链和上下文。}}
+
+{{集合类型}}{{Vec<T>动态数组：vec!宏创建、push/pop/index访问。HashMap<K, V>：insert/get/contains_key。BTreeMap/BTreeSet有序集合。VecDeque双端队列。LinkedList链表(少用)。BinaryHeap优先队列。HashSet/BTreeSet集合。迭代器模式：.iter()/.into_iter()/.iter_mut()。链式调用：filter/map/collect/fold/enumerate/zip。所有权在迭代中的影响。}}
+
+{{并发编程}}{{Rust编译时保证无数据竞争。std::thread::spawn创建线程。move闭包转移所有权到线程。Mutex<T>互斥锁：lock获取。Rc<T>(单线程引用计数)→Arc<T>(原子引用计数，多线程)。RefCell<T>(内部可变性)→RwLock<T>(多线程)。Send/Sync trait标记线程安全性。channel(mpsc)：发送/接收消息。std::sync::atomic原子操作。Rayon数据并行库。}}
+
+{{异步编程}}{{async/await异步语法。Future trait：poll方法返回Poll::Ready/Pending。async fn返回impl Future。tokio是主流异步运行时：tokio::spawn、tokio::select!、tokio::time。async-std替代运行时。Pin<P>固定值在内存中。Stream异步迭代。异步IO：TcpStream/文件。异步与同步桥接。异步取消安全性。结构化并发：JoinSet。}}
+
+{{泛型与类型系统}}{{泛型函数：fn largest<T: PartialOrd>(list: &[T]) -> &T。泛型结构体和枚举。泛型实现：impl<T> Point<T> {}。特化实现：impl Point<f64> {}。关联类型：type Item。常量泛型(Generics Const)。PhantomData标记类型关系。类型状态模式(Typestate Pattern)。零大小类型(ZST)。Newtype模式封装类型。}}
+
+{{模式匹配}}{{match表达式穷举匹配。模式类型：字面量、变量绑定、通配符(_)、范围(1..=5)、解构(结构体/枚举/元组)、引用(&)、守卫(if条件)。if let简洁匹配。while let循环匹配。let-else(Rust 1.65+)。嵌套模式。@绑定：msg @ Message::Hello。模式匹配是Rust的核心控制流工具。}}
+
+{{智能指针}}{{Box<T>堆分配。Rc<T>引用计数(单线程)。Arc<T>原子引用计数(多线程)。RefCell<T>内部可变性(运行时借用检查)。Cell<T>Copy类型的内部可变性。Cow<T>写时复制。Weak<T>弱引用。Deref trait自定义解引用行为(解引用强制转换)。Drop trait自定义清理逻辑。Rc<RefCell<T>>组合实现多所有者可变数据。}}
+
+{{宏(Macros)}}{{声明宏(macro_rules!)：模式匹配生成代码。macro_rules! vec { ... }。过程宏(Procedural Macros)：自定义derive宏、属性宏、函数宏。#[derive(Debug, Clone, Serialize)]自动生成代码。serde_derive序列化宏。thiserror::Error派生宏。proc_macro/proc_macro2库。宏是元编程工具，减少样板代码。卫生性(Hygiene)保证宏中变量不冲突。}}
+
+{{模块系统与Cargo}}{{mod声明模块。pub公开性控制。use引入路径。crate根模块( src/main.rs 或 src/lib.rs )。mod.rs或同名文件夹组织模块。Cargo.toml：[dependencies]依赖、[dev-dependencies]开发依赖、[features]条件编译。workspace多包项目。cargo build/test/run/bench/doc。cargo clippy代码检查。cargo fmt格式化。Cargo发布crates.io。}}
+
+{{Unsafe Rust}}{{unsafe关键字解除编译器部分检查。unsafe可做的事情：解引用裸指针(*const T/*mut T)、调用unsafe函数、访问/修改可变静态变量、实现unsafe trait。unsafe不意味着代码"危险"，而是将安全保证责任交给程序员。FFI(外部函数接口)调用C库。#[repr(C)]控制内存布局。bindgen自动生成FFI绑定。安全抽象封装unsafe代码。}}
+
+{{序列化(Serde)}}{{Serde是Rust序列化/反序列化框架。#[derive(Serialize, Deserialize)]自动派生。支持格式：JSON(serde_json)、YAML、TOML、MessagePack、CBOR、Bincode。自定义序列化：#[serde(rename/serialize_with/deserialize_with)]。#[serde(default)]默认值。#[serde(flatten)]扁平化。#[serde(tag)]枚举标记。serde_json::from_str/to_string。性能优异，零拷贝反序列化。}}
+
+{{Web开发(Actix/Axum)}}{{Actix-web：高性能Web框架，Actor模型。Axum：tokio团队开发，基于tower中间件。路由定义、请求处理、JSON响应。中间件(Middleware)。状态管理(State)。表单验证。文件上传。WebSocket支持。数据库集成：SQLx(异步、编译时检查)、Diesel(ORM)、SeaORM。认证：JWT。API文档：utoipa(OpenAPI)。性能基准测试。}}
+
+{{命令行工具(clap)}}{{clap是Rust命令行参数解析库。#[derive(Parser)]声明式定义参数。子命令(Subcommand)。参数验证。环境变量支持。帮助信息自动生成。color-eyre/anyhow错误处理。indicatif进度条。dialoguer交互式提示。colored终端颜色。常用CLI工具：ripgrep(rg)、fd、bat、exa、sd。编译为单一二进制文件，便于分发。}}
+
+{{WebAssembly(Wasm)}}{{Rust是WebAssembly的首选语言之一。wasm-pack构建Rust→Wasm。wasm-bindgen提供JS互操作。Web API访问(web-sys/js-sys)。在浏览器中运行Rust代码。应用场景：计算密集型Web应用、游戏、图像处理、密码学。WASI(WebAssembly System Interface)支持服务端Wasm。组件模型(Component Model)。性能接近原生。}}
+
+{{测试与文档}}{{#[test]标记测试函数。#[cfg(test)]条件编译测试模块。assert!/assert_eq!/assert_ne!断言。#[should_panic]预期panic。集成测试：tests/目录。cargo test运行测试。cargo tarpaulin代码覆盖率。基准测试：criterion库。文档注释：/// 和 //!。cargo doc生成HTML文档。rustdoc支持文档内代码示例(自动编译验证)。}}
+
+{{Rust生态与最佳实践}}{{常用生态：tokio(异步运行时)、serde(序列化)、reqwest(HTTP客户端)、clap(命令行)、tracing(日志)、anyhow/thiserror(错误处理)、sqlx/diesel(数据库)。最佳实践：优先使用不可变绑定(let)、利用类型系统编码业务规则、错误处理不用unwrap、文档注释覆盖公开API、clippy警告认真对待、利用cargo features控制编译体积。}}

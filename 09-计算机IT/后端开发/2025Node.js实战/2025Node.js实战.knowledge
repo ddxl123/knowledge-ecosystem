@@ -1,0 +1,45 @@
+# Node.js实战
+# 领域: 计算机IT
+# 学科: 后端开发
+# 来源: Node.js实战（2025版）
+# 描述: Node.js服务端JavaScript运行时核心概念与实战，涵盖事件驱动架构、Express框架、数据库集成及微服务
+
+{{Node.js核心概念}}{{Node.js基于V8引擎的JavaScript运行时。核心特性：事件驱动、非阻塞I/O、单线程事件循环。事件循环阶段：timers→pending callbacks→idle/prepare→poll→check→close callbacks。适合I/O密集型应用(高并发、实时应用)。不适合CPU密集型任务(可用Worker Threads)。模块系统：CommonJS(require/module.exports)和ESM(import/export)。}}
+
+{{npm与包管理}}{{npm是Node.js默认包管理器。package.json定义项目元数据和依赖。npm install安装依赖(--save-dev开发依赖)。语义版本(SemVer)：主版本.次版本.修订号。npx执行本地安装的命令。package-lock.json锁定依赖版本。工作空间(Workspaces)支持Monorepo。npm scripts定义项目脚本。pnpm和yarn是替代包管理器。}}
+
+{{Express框架}}{{Express是最流行的Node.js Web框架。app.get/post/put/delete定义路由。中间件模式：app.use()挂载中间件链。路由参数：req.params。查询参数：req.query。请求体：req.body(body-parser中间件)。路由模块化：express.Router()。错误处理中间件：(err, req, res, next)。静态文件：express.static()。模板引擎：EJS、Pug。}}
+
+{{中间件机制}}{{中间件是Express的核心概念，按顺序执行的请求处理函数。内置中间件：express.json()、express.urlencoded()、express.static()。第三方中间件：cors(跨域)、helmet(安全头)、morgan(日志)、compression(压缩)、rate-limit(限流)。自定义中间件：函数接收(req, res, next)，处理后调用next()传递。错误中间件放在最后。}}
+
+{{Koa框架}}{{Koa是Express团队打造的下一代框架。更轻量、更现代。洋葱模型中间件：async/await支持。ctx(Koa Context)封装request和response。koa-router路由。koa-bodyparser解析请求体。koa-static静态文件服务。Koa 2使用async函数中间件。更优雅的错误处理。中间件组合：koa-compose。比Express更小的核心。}}
+
+{{数据库集成}}{{关系型数据库：Sequelize(ORM，支持多种数据库)、Prisma(类型安全ORM，推荐)、TypeORM、Drizzle ORM。MongoDB：Mongoose(ODM)。Redis：ioredis客户端。连接池管理。事务处理。数据迁移。查询优化：索引、N+1问题解决。Prisma Schema定义数据模型，prisma migrate管理迁移，prisma client类型安全查询。}}
+
+{{认证与授权}}{{JWT(JSON Web Token)认证：jsonwebtoken库生成/验证Token。访问令牌+刷新令牌模式。Passport.js：认证中间件，支持多种策略(Local、JWT、OAuth、Google、GitHub)。bcrypt/bcryptjs密码哈希。Session认证：express-session配合Redis存储。RBAC(基于角色的访问控制)。OAuth 2.0流程。API Key认证。}}
+
+{{RESTful API设计}}{{REST原则：资源导向、统一接口、无状态、分层系统。HTTP方法语义：GET(读取)、POST(创建)、PUT(全量更新)、PATCH(部分更新)、DELETE(删除)。状态码：200(成功)、201(已创建)、400(客户端错误)、401(未认证)、403(禁止)、404(未找到)、500(服务器错误)。API版本控制。分页/过滤/排序。HATEOAS。OpenAPI/Swagger文档。}}
+
+{{错误处理}}{{集中式错误处理：错误中间件捕获所有错误。自定义错误类：继承Error类，添加statusCode和isOperational属性。异步错误：express-async-errors自动捕获或try-catch。未处理的Promise rejection和未捕获异常：process.on('unhandledRejection'/'uncaughtException')。优雅停机：SIGTERM/SIGINT信号处理。错误日志记录(winston/pino)。}}
+
+{{WebSocket实时通信}}{{ws库实现WebSocket服务器。Socket.IO提供更高级的实时通信：自动重连、房间、命名空间、广播。WebSocket握手过程。消息格式：JSON/binary。心跳机制检测连接状态。发布-订阅模式：Redis Adapter支持多实例。应用场景：实时聊天、通知推送、协作编辑、实时数据流。Server-Sent Events(SSE)作为替代方案。}}
+
+{{文件处理}}{{Multer处理文件上传(配合express)。流(Stream)处理大文件：Readable、Writable、Transform、Duplex。fs模块文件操作：fs.readFile/writeFile/promises。管道(pipe)连接流。文件上传到云存储：AWS S3、阿里云OSS、MinIO。图片处理：Sharp库缩放/裁剪/格式转换。PDF生成：pdfkit、puppeteer。CSV/Excel处理。}}
+
+{{日志与监控}}{{winston：功能丰富的日志库，支持多transport(控制台、文件、远程)。pino：高性能JSON日志库。日志级别：error/warn/info/debug/trace。结构化日志(JSON格式)便于分析。请求日志中间件(morgan/pino-http)。APM(Application Performance Monitoring)：New Relic、Datadog。Prometheus指标采集。健康检查端点。错误追踪：Sentry。}}
+
+{{安全最佳实践}}{{安全措施：helmet设置安全HTTP头、cors限制跨域、express-rate-limit限流、express-validator输入验证、参数化查询防SQL注入、XSS防护(sanitize-html)、CSRF令牌、HTTPS强制、环境变量管理(dotenv)、依赖安全(npm audit)、JWT密钥管理、密码策略、日志不记录敏感信息。OWASP Top 10防护。}}
+
+{{性能优化}}{{集群模式：cluster模块利用多核CPU。事件循环监控：event-loop-lag。数据库优化：连接池、索引、查询优化、缓存(Redis)。响应压缩(compression)。缓存策略：HTTP缓存头、Redis缓存、CDN。流式响应大文件。异步处理：队列(Bull/BullMQ)处理耗时任务。代码级优化：避免阻塞操作、合理使用Promise.all。性能基准测试：autocannon。}}
+
+{{测试策略}}{{Jest：主流测试框架，内置Mock、覆盖率。Mocha/Chai：灵活的测试组合。supertest：HTTP接口测试。测试金字塔：单元→集成→E2E。测试数据库：独立测试数据库，每个测试后清理。Mock策略：jest.mock()、nock(HTTP请求Mock)。API测试：请求验证、响应验证、错误场景。负载测试：artillery、k6。}}
+
+{{TypeScript与Node.js}}{{TypeScript为Node.js添加类型安全。tsconfig.json配置：target(ES版本)、module(模块系统)、strict(严格模式)。类型声明文件：.d.ts和@types包。ts-node直接运行TS文件。Node.js原生TypeScript支持(v22+)。Express类型：express-serve-staticcore。DTO(数据传输对象)类型定义。API类型安全：OpenAPI代码生成。}}
+
+{{NestJS框架}}{{NestJS是企业级Node.js框架，借鉴Angular设计理念。装饰器驱动：@Controller、@Injectable、@Module。依赖注入(DI)系统。中间件、守卫(Guard)、拦截器(Interceptor)、管道(Pipe)、过滤器(Filter)。内置支持TypeORM/Prisma、GraphQL、WebSocket、微服务。模块化架构。CLI工具快速生成代码。Express/Fastify底层可切换。}}
+
+{{微服务架构}}{{Node.js微服务通信：HTTP REST、gRPC(高性能)、消息队列(RabbitMQ/Kafka/NATS)。服务发现：Consul、etcd。API Gateway：Express Gateway、Kong。Circuit Breaker模式：opossum。分布式追踪：OpenTelemetry。配置中心：Nacos、Apollo。容器化部署：Docker+Kubernetes。服务网格：Istio。Saga模式处理分布式事务。}}
+
+{{部署与DevOps}}{{进程管理：PM2(集群模式、日志管理、自动重启)。Docker容器化：多阶段构建减小镜像。CI/CD：GitHub Actions、GitLab CI。环境管理：.env文件、环境变量注入。反向代理：Nginx。SSL/TLS配置。日志收集：ELK Stack、Loki。监控告警：Prometheus+Grafana。零停机部署：滚动更新。边缘部署：Cloudflare Workers、Deno Deploy。}}
+
+{{Node.js新特性}}{{Node.js 22+新特性：原生TypeScript支持(实验性)、WebSocket客户端、glob模式fs.watch、test runner内置、permission model(安全权限)、单文件可执行应用(SEA)。ESM稳定支持。Worker Threads多线程。AsyncLocalStorage上下文管理。node:test内置测试。性能持续优化：V8引擎更新、启动时间优化。}}

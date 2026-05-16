@@ -1,0 +1,45 @@
+# 黑马程序员Python教程
+# 领域: 计算机IT
+# 学科: 编程语言
+# 来源: 黑马程序员Python教程（2025版）
+# 描述: Python编程语言从零基础到项目实战，涵盖语法基础、面向对象、文件操作、网络编程及常用框架
+
+{{Python基础语法}}{{Python是解释型、动态类型的高级语言。缩进表示代码块(无花括号)。变量无需声明类型。基本类型：int、float、bool、str、None。字符串操作：切片[::]、格式化f-string、常用方法(split/join/strip/replace/find)。输入输出：input()、print()。类型转换：int()/str()/float()。运算符：算术、比较、逻辑、成员(in)、身份(is)。}}
+
+{{数据结构}}{{列表list：有序可变，[1, 2, 3]。方法：append/insert/remove/pop/sort/reverse/index/count。列表推导式：[x**2 for x in range(10) if x > 3]。元组tuple：有序不可变。字典dict：键值对，{"name": "Python"}。方法：get/keys/values/items/pop/update。字典推导式。集合set：无序唯一。方法：add/remove/union/intersection/difference。frozenset不可变集合。}}
+
+{{流程控制}}{{if-elif-else条件判断。for循环遍历可迭代对象。while循环。range()生成数字序列。break/continue控制循环。for-else/while-else(循环正常结束执行else)。三元表达式：x if condition else y。match-case模式匹配(Python 3.10+)。嵌套循环。enumerate()获取索引和值。zip()并行遍历多个可迭代对象。}}
+
+{{函数}}{{def定义函数。参数类型：位置参数、默认参数、关键字参数、可变参数(*args/**kwargs)。返回值：return(可返回多值-元组)。作用域：局部变量→闭包变量→全局变量→内建变量(LEGB)。global/nonlocal声明。装饰器(@语法糖)：在不修改原函数的情况下增加功能。递归函数。Lambda匿名函数。functools模块：lru_cache/wrapreduce。}}
+
+{{面向对象编程}}{{class定义类。__init__构造方法。self代表实例本身。实例属性和类属性。实例方法、类方法(@classmethod)、静态方法(@staticmethod)。继承：class Child(Parent)，super()调用父类。多继承和MRO(方法解析顺序)。封装：_单下划线(约定私有)、__双下划线(名称改写)。多态：不同类实现同一方法。魔术方法：__str__/__repr__/__len__/__eq__/__getitem__。}}
+
+{{文件操作}}{{open()打开文件，模式：r(读)/w(写)/a(追加)/b(二进制)/+(读写)。with语句自动关闭文件。read()/readline()/readlines()读取。write()/writelines()写入。os模块：路径操作(os.path.join/exists/mkdir)、文件操作(os.remove/rename/listdir)。pathlib面向对象路径操作(推荐)。CSV模块读写CSV。json模块读写JSON。pickle序列化。}}
+
+{{异常处理}}{{try-except-else-finally结构。捕获特定异常：except ValueError as e。异常类型：ZeroDivisionError/FileNotFoundError/KeyError/IndexError/TypeError/ValueError。自定义异常：class MyError(Exception)。raise抛出异常。异常链：raise NewError() from old_error。断言：assert condition, "message"。上下文管理器：__enter__/__exit__方法。with语句。}}
+
+{{模块与包}}{{import module导入模块。from module import func导入特定功能。as别名。__name__ == "__main__"判断是否直接运行。包(package)：含__init__.py的目录。相对导入(./)和绝对导入。pip包管理器：install/uninstall/list/freeze。requirements.txt依赖文件。虚拟环境：venv/python -m venv。第三方库：requests/Flask/NumPy等。}}
+
+{{正则表达式}}{{re模块。元字符：. \d \w \s \b ^ $。量词：* + ? {n} {n,m}。字符类：[abc] [^abc] [a-z]。分组：()捕获和(?:)非捕获。预查：(?=) (?!。常用函数：re.match(开头匹配)/re.search(搜索)/re.findall(全部)/re.sub(替换)/re.split(分割)。编译：re.compile()预编译正则。贪婪与非贪婪：*? +?。raw字符串r""避免转义。}}
+
+{{迭代器与生成器}}{{可迭代对象(Iterable)：实现__iter__()方法。迭代器(Iterator)：实现__iter__()和__next__()方法。for循环本质调用迭代器。生成器(Generator)：yield关键字暂停和恢复。生成器表达式：(x**2 for x in range(10))。send()方法发送值到生成器。itertools模块：chain/combinations/permutations/product/count/cycle。惰性求值节省内存。}}
+
+{{装饰器详解}}{{装饰器本质是接受函数返回函数的高阶函数。@decorator语法糖。带参数的装饰器：三层嵌套函数。functools.wraps保留原函数信息。类装饰器：实现__call__方法。常用内置装饰器：@property(属性)、@staticmethod、@classmethod、@functools.lru_cache。装饰器链：多个装饰器从下往上应用。应用场景：日志、权限检查、缓存、计时。}}
+
+{{多线程与多进程}}{{threading模块：Thread创建线程。GIL(GIL)限制Python多线程不能利用多核CPU(仅CPU密集型受限)。threading.Lock()互斥锁。concurrent.futures：ThreadPoolExecutor/ProcessPoolExecutor。multiprocessing模块：Process创建进程(可利用多核)。Queue进程间通信。asyncio异步IO：async/await语法。aiohttp异步HTTP。适用于IO密集型任务。}}
+
+{{网络编程}}{{socket模块：TCP/UDP网络通信。服务端：socket→bind→listen→accept→recv/send。客户端：socket→connect→send/recv。HTTP请求：requests库(get/post/put/delete)。请求头、参数、文件上传、Session。BeautifulSoup/Scrapy爬虫。Flask轻量Web框架。FastAPI现代异步API框架(自动文档)。WebSocket实时通信。}}
+
+{{Flask框架}}{{Flask是Python微框架。app.route()定义路由。请求处理：request.args/form/json。响应：return字符串/JSON/模板。模板引擎：Jinja2(变量{{ }}、控制{% %}、继承extends)。蓝图(Blueprint)模块化。表单：WTForms。数据库：Flask-SQLAlchemy。用户认证：Flask-Login。RESTful扩展：Flask-RESTful。中间件和错误处理。配置管理。}}
+
+{{FastAPI框架}}{{FastAPI是现代Python API框架。类型提示驱动自动生成文档(Swagger/ReDoc)。路径参数和查询参数自动解析。Pydantic模型验证请求和响应。依赖注入系统(Depends)。异步支持(async def)。中间件：CORS/认证。WebSocket支持。后台任务。文件上传。OpenAPI规范自动生成。性能接近Node.js/Go。测试：TestClient。}}
+
+{{数据处理(Pandas)}}{{Pandas是Python数据分析核心库。DataFrame：二维表结构。读取数据：pd.read_csv/read_excel/read_sql。数据查看：head/info/describe/shape。数据选择：loc(标签)/iloc(位置)/条件筛选。数据清洗：dropna/fillna/drop_duplicates/replace。数据处理：groupby聚合、merge合并、pivot_table透视表。数据导出：to_csv/to_excel。Matplotlib/Seaborn可视化。}}
+
+{{Django框架}}{{Django是全功能Web框架。MTV架构(Model-Template-View)。django-admin startproject创建项目。models.py定义数据模型。views.py编写视图函数/类。urls.py配置路由。templates/存放模板。Admin后台管理(自动生成)。ORM数据库操作。表单处理。中间件。用户认证系统。REST框架(DRF)。Django适合大型项目。}}
+
+{{爬虫技术}}{{requests库发送HTTP请求。BeautifulSoup解析HTML。Scrapy爬虫框架(高效、异步)：Spider/Item/Pipeline/Middleware。XPath/CSS选择器提取数据。动态页面：Selenium/Playwright(浏览器自动化)。反爬策略应对：代理IP、请求头伪装、验证码识别、cookies管理。数据存储：CSV/JSON/数据库。增量爬取。分布式爬虫：Scrapy-Redis。Robots.txt遵守。}}
+
+{{Python项目实战项目类型}}{{Web应用：Django/Flask博客系统、电商后台。数据分析：用户行为分析、数据可视化报告。爬虫：电商商品信息采集、新闻聚合。自动化：办公自动化(Excel处理/邮件发送)、Web测试自动化。机器学习：房价预测、图像分类。桌面应用：PyQt/Tkinter。API服务：FastAPI微服务。全栈项目：前后端分离+数据库+部署。}}
+
+{{Python最佳实践}}{{PEP 8编码规范。类型提示(Type Hints)：def greet(name: str) -> str。虚拟环境隔离依赖。项目结构：src/tests/docs。docstring文档字符串。单元测试：unittest/pytest。代码质量：pylint/flake8/black(格式化)/mypy(类型检查)。日志：logging模块(替代print)。配置管理：环境变量/.env文件。Docker容器化部署。CI/CD自动化。}}

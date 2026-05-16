@@ -1,0 +1,43 @@
+# Spring Boot实战
+# 领域: 计算机IT
+# 学科: 后端开发
+# 来源: Spring Boot实战（2025版）
+# 描述: Spring Boot框架核心概念与实战应用，涵盖自动配置、Web开发、数据访问、安全认证及微服务架构
+
+{{Spring Boot概述}}{{Spring Boot简化Spring应用开发，核心特性：自动配置(Auto-Configuration)、起步依赖(Starter Dependencies)、内嵌服务器(Tomcat/Jetty/Undertow)、Actuator监控。@SpringBootApplication组合注解包含@Configuration、@EnableAutoConfiguration、@ComponentScan。spring-boot-starter-*提供开箱即用的功能集成。}}
+
+{{项目结构与配置}}{{标准Maven/Gradle项目结构。src/main/java(源码)、src/main/resources(资源)、application.properties/yml(配置)。配置优先级：命令行参数→环境变量→配置文件→默认值。Profile多环境配置：application-dev.yml。@ConfigurationProperties绑定外部配置到Java Bean。配置加密：Jasypt。配置中心：Spring Cloud Config、Nacos。}}
+
+{{Spring IoC与依赖注入}}{{IoC(控制反转)容器管理对象生命周期和依赖关系。@Component、@Service、@Repository、@Controller标记Bean。@Autowired自动注入(构造器注入推荐)。@Qualifier指定注入Bean。@Scope定义作用域(singleton/prototype/request/session)。@Bean定义第三方库对象。Bean生命周期：实例化→属性注入→初始化→销毁。条件注解：@ConditionalOnClass/OnProperty。}}
+
+{{Spring MVC Web开发}}{{@RestController = @Controller + @ResponseBody。@RequestMapping/@GetMapping/@PostMapping定义路由。@PathVariable路径变量、@RequestParam查询参数、@RequestBody请求体JSON。@Valid参数校验(JSR 303/380)。全局异常处理：@ControllerAdvice + @ExceptionHandler。静态资源配置。拦截器：HandlerInterceptor。文件上传：MultipartFile。内容协商：JSON/XML。}}
+
+{{数据访问(MyBatis/Spring Data JPA)}}{{Spring Data JPA：JpaRepository接口自动实现CRUD。@Entity定义实体，@Id、@GeneratedValue、@Column映射字段。JPQL自定义查询：@Query注解。分页排序：Pageable、Page。Specification动态查询。MyBatis：@Mapper接口+XML映射文件。动态SQL：<if>、<foreach>、<where>。MyBatis-Plus增强：自动CRUD、分页插件、乐观锁。}}
+
+{{事务管理}}{{@Transactional声明式事务管理。传播行为(Propagation)：REQUIRED(默认，加入当前事务)、REQUIRES_NEW(新建事务)、NESTED(嵌套事务)。隔离级别(Isolation)：READ_COMMITTED、REPEATABLE_READ、SERIALIZABLE。回滚规则：默认RuntimeException回滚，rollbackFor指定。事务超时、只读事务。编程式事务：TransactionTemplate。分布式事务：Seata、TCC模式。}}
+
+{{Spring Security安全框架}}{{认证(Authentication)和授权(Authorization)。SecurityFilterChain配置安全规则。用户认证：UserDetailsService+PasswordEncoder。JWT认证：自定义Filter解析Token。OAuth2/OIDC：Spring Security OAuth2 Client/Resource Server。方法级安全：@PreAuthorize/@PostAuthorize。CSRF防护、CORS配置。RBAC权限模型。Remember-Me记住登录。}}
+
+{{RESTful API开发}}{{RESTful风格API设计。统一响应封装：Result<T>(code+message+data)。全局异常处理自定义错误码。API版本控制(URL/Header)。Swagger/OpenAPI文档：springdoc-openapi自动生成。接口参数校验：@Valid+@Validated。跨域配置：@CrossOrigin或WebMvcConfigurer。接口限流：Guava RateLimiter、Redis+Lua脚本。API网关路由。}}
+
+{{缓存集成}}{{@Cacheable/@CacheEvict/@CachePut注解驱动缓存。缓存管理器：ConcurrentMapCacheManager(简单)、RedisCacheManager(Redis)、EhCacheCacheManager(EhCache)。缓存策略：TTL过期、LRU淘汰。自定义KeyGenerator。缓存穿透/击穿/雪崩防护。Spring Cache抽象层统一缓存操作。多级缓存：本地缓存+Redis分布式缓存。}}
+
+{{消息队列集成}}{{Spring AMQP集成RabbitMQ：@RabbitListener监听消息，RabbitTemplate发送消息。交换机类型：Direct、Topic、Fanout、Headers。死信队列(DLX)处理失败消息。Spring Kafka：@KafkaListener、KafkaTemplate。消费者组、分区、偏移量管理。延迟消息。消息可靠性：确认机制、幂等消费。事件驱动架构。}}
+
+{{定时任务}}{{@Scheduled注解定义定时任务：cron表达式、fixedRate、fixedDelay。@EnableScheduling启用调度。cron格式：秒 分 时 日 月 周。分布式定时任务：XXL-Job、Elastic-Job、Quartz集群模式。异步任务：@Async + @EnableAsync。任务执行器：ThreadPoolTaskExecutor。Spring Task vs Quartz选择。任务监控和失败重试。}}
+
+{{文件处理}}{{MultipartFile接收上传文件。文件存储：本地文件系统、MinIO(兼容S3)、阿里云OSS、AWS S3。文件类型校验、大小限制配置。断点续传：Range请求头。文件下载：流式输出避免内存溢出。图片处理：Thumbnails库压缩裁剪。Excel导入导出：EasyExcel(Alibaba)、Apache POI。PDF生成：iText、Flying Saucer。}}
+
+{{日志与监控}}{{SLF4J门面+Logback实现。日志级别：ERROR/WARN/INFO/DEBUG/TRACE。MDC(Mapped Diagnostic Context)追踪请求。logback-spring.xml配置文件。结构化日志(JSON格式)。Spring Boot Actuator：/health、/info、/metrics、/env端点。Micrometer指标采集。Prometheus+Grafana监控。链路追踪：Micrometer Tracing→Zipkin/Jaeger。}}
+
+{{测试策略}}{{Spring Boot Test：@SpringBootTest加载完整上下文。Web层测试：@WebMvcTest。数据层测试：@DataJpaTest。MockMvc模拟HTTP请求。@MockBean模拟依赖。TestContainers集成真实数据库容器测试。JUnit 5 + AssertJ断言。测试Profile独立配置。API测试：RestAssured。覆盖率：JaCoCo插件。}}
+
+{{Docker化部署}}{{Dockerfile多阶段构建：构建阶段Maven打包，运行阶段JRE运行。分层构建优化缓存。docker-compose.yml编排应用+数据库+Redis。JVM容器化调优：-XX:MaxRAMPercentage、-XX:+UseContainerSupport。健康检查：spring-boot-starter-actuator。镜像瘦身：JLink自定义JRE、GraalVM Native Image。环境变量注入配置。}}
+
+{{Spring Cloud微服务}}{{Spring Cloud微服务全家桶：Nacos(注册中心+配置中心)、Gateway(网关)、OpenFeign(声明式HTTP客户端)、Sentinel(流量控制+熔断降级)、Seata(分布式事务)、Sleuth+Zipkin(链路追踪)。服务间通信：REST(OpenFeign)、gRPC。负载均衡：Spring Cloud LoadBalancer。配置热刷新：@RefreshScope。}}
+
+{{响应式编程(Spring WebFlux)}}{{Spring WebFlux基于Reactor的响应式Web框架。Mono(0/1个元素)和Flux(0~N个元素)。@RestController同样适用。R2DBC响应式数据库驱动。RouterFunction函数式路由。背压(Backpressure)机制。适合高并发I/O密集型场景。与Spring MVC对比选择。响应式Repository：ReactiveCrudRepository。WebClient替代RestTemplate。}}
+
+{{GraalVM Native Image}}{{GraalVM Native Image将Spring Boot应用编译为原生可执行文件。启动时间毫秒级、内存占用大幅降低。Spring Boot 3+原生支持。Buildpacks和Maven/Gradle插件构建。Native hints：@RegisterReflectionForBinding、RuntimeHintsRegistrar。限制：反射需声明、动态代理有限。适合Serverless和容器化部署。}}
+
+{{Spring Boot 3新特性}}{{Spring Boot 3基于Spring 6，要求Java 17+。Jakarta EE 9+迁移(javax→jakarta)。Native Image原生支持。Observability可观测性(结构化日志、指标、追踪统一)。HTTP Interface声明式客户端。Problem Detail(RFC 7807)错误响应。Virtual Threads(Project Loom虚拟线程支持)。Spring Security授权架构改进。}}
