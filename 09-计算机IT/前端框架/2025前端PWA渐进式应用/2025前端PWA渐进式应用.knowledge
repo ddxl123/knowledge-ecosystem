@@ -1,0 +1,163 @@
+# 2025前端PWA渐进式应用
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}
+{{PWA（Progressive Web App）定义与核心理念}}
+PWA即渐进式Web应用，是一种使用标准Web技术构建、结合了传统网站和原生应用优势的Web应用。核心理念是"渐进增强"——在任何浏览器中都能作为普通网站使用，在支持的浏览器中则可安装为应用。PWA具备跨平台单代码库、可安装到设备主屏幕、离线工作、后台运行、推送通知等能力，弥合了Web与原生应用之间的鸿沟。
+
+{{知识点2}}
+{{PWA的三大核心技术支柱}}
+PWA的技术基础由三大支柱构成：Web App Manifest（应用清单文件）、Service Worker（服务工作者）和HTTPS安全上下文。Manifest定义应用的名称、图标、显示模式等元信息；Service Worker提供离线缓存、后台同步、拦截请求等能力；HTTPS确保通信安全，防止中间人攻击。这三者协同工作，使Web应用具备原生应用般的体验。
+
+{{知识点3}}
+{{Web App Manifest文件结构与作用}}
+Web App Manifest是一个JSON格式文件，通过HTML中的<link rel="manifest" href="manifest.json">引入。它告诉浏览器如何将PWA安装到设备上，包括应用名称（name/short_name）、图标（icons）、启动URL（start_url）、显示模式（display）、主题色（theme_color）、背景色（background_color）、描述（description）和截图（screenshots）等关键属性。
+
+{{知识点4}}
+{{Manifest必填属性要求}}
+Chromium系浏览器要求Manifest至少包含以下成员：name或short_name（应用名称）；icons必须包含192px和512px两种尺寸的图标；start_url（启动URL）；display或display_override（显示模式）；prefer_related_applications必须为false或不设置。缺少这些属性将导致浏览器不触发安装提示。
+
+{{知识点5}}
+{{PWA的安装机制与安装性要求}}
+PWA可从Web和应用商店两种途径安装。从Web安装时，浏览器检测到应用满足安装性条件后会自动提示用户安装。安装条件包括：提供有效的Web App Manifest、通过HTTPS服务（或localhost）、在Chrome中还需要注册Service Worker。安装后PWA获得设备主屏幕图标，以standalone模式启动，脱离浏览器UI独立运行。
+
+{{知识点6}}
+{{beforeinstallprompt事件与自定义安装流程}}
+PWA可通过监听Window对象上的beforeinstallprompt事件来自定义安装流程。当浏览器判断PWA可安装时触发此事件，开发者可阻止默认行为（preventDefault），然后在自定义的"安装"按钮点击时调用event.prompt()显示安装提示。此方式允许在应用内提供上下文引导，提升安装转化率。注意iOS不支持此事件。
+
+{{知识点7}}
+{{PWA的display显示模式}}
+Manifest中的display属性控制PWA启动后的显示方式。常用值包括："standalone"（独立窗口，无浏览器地址栏和导航按钮，最接近原生应用体验）、"fullscreen"（全屏显示，隐藏所有浏览器UI）、"minimal-ui"（保留最少的浏览器导航控件）、"browser"（常规浏览器标签页）。display_override属性允许定义显示模式的降级回退序列。
+
+{{知识点8}}
+{{Service Worker基本概念与特性}}
+Service Worker是一种特殊的Web Worker，作为PWA的后台脚本运行在独立线程中。它与主线程隔离，无DOM访问权，完全异步设计。Service Worker可拦截和修改网络请求、缓存资源、接收推送消息、执行后台同步。它只能在安全上下文（HTTPS或localhost）中运行，采用Promise架构，不能使用同步XHR和Web Storage API。
+
+{{知识点9}}
+{{Service Worker生命周期：下载、安装与激活}}
+Service Worker遵循严格的生命周期：1）下载——用户首次访问时自动下载SW脚本；2）安装（install事件）——脚本更新或首次安装时触发，通常在此预缓存关键资源；3）激活（activate事件）——旧版本SW控制的所有页面关闭后激活，通常在此清理旧缓存。新的SW安装后称为"等待中的Worker"，直到旧版本完全退出才激活。可使用skipWaiting()跳过等待、claim()立即控制页面。
+
+{{知识点10}}
+{{Service Worker注册流程}}
+通过navigator.serviceWorker.register('/sw.js', { scope: '/' })注册Service Worker。scope参数定义SW控制的URL范围，默认为SW脚本所在目录。注册成功后浏览器下载并尝试安装SW脚本。后续更新检查在页面导航时触发，或SW已注册超过24小时且有事件触发时自动检查。如文件内容有变化（逐字节比较），则触发重新安装。
+
+{{知识点11}}
+{{FetchEvent与请求拦截机制}}
+Service Worker通过监听fetch事件拦截应用发出的所有网络请求，包括页面导航和子资源（JS、CSS、图片）加载。FetchEvent对象包含请求信息（Request对象）和respondWith()方法，允许SW用自定义Response替代默认网络请求。如果SW不对某请求调用respondWith()，该请求将正常发送到网络。这是PWA实现离线功能的核心机制。
+
+{{知识点12}}
+{{Cache API：请求/响应缓存存储}}
+Cache API提供持久化的Request/Response对存储，是PWA离线功能的基础。通过caches.open('cache-name')打开命名缓存，使用cache.add()/cache.put()添加资源，caches.match(request)查找匹配的缓存响应。Cache可在主线程和Service Worker中共享访问。缓存空间有限，浏览器会在超出配额时自动清理，应用应在activate事件中主动清理旧版本缓存。
+
+{{知识点13}}
+{{Cache First缓存优先策略}}
+Cache First策略：先查缓存，命中则直接返回；未命中则请求网络，成功后将响应存入缓存并返回。适合预缓存的静态资源（HTML骨架、CSS、JS），能提供最快的响应速度。缺点是缓存中的资源不会自动更新，直到新版本SW安装。实现要点：存入缓存时必须clone()响应对象，因为Response是流式的一次性读取。
+
+{{知识点14}}
+{{Stale While Revalidate缓存刷新策略}}
+Cache First with Cache Refresh（也称Stale While Revalidate）：始终同时发起网络请求和缓存查找，优先返回缓存响应保证速度，同时用网络响应异步更新缓存。适用于响应速度重要且需要一定新鲜度的场景（如UI资源）。用户下次访问时就能获得更新后的内容，实现了速度与新鲜度的平衡。
+
+{{知识点15}}
+{{Network First网络优先策略}}
+Network First策略：优先请求网络，成功则更新缓存并返回；网络失败时回退到缓存。适合需要最新数据但可接受稍旧内容的场景（如消息列表、新闻）。与纯网络请求的区别是：当设备离线时，用户仍能看到缓存中的内容而非完全不可用。
+
+{{知识点16}}
+{{Service Worker预缓存（Precaching）}}
+预缓存是指在SW的install事件中，主动将应用的关键资源从网络获取并存入缓存。使用event.waitUntil()确保缓存操作完成，如果失败则SW安装失败。预缓存使应用首次加载后即可离线运行，核心UI无需网络请求即可渲染。通常配合版本化缓存名（如"MyCache_v1"）实现缓存更新管理。
+
+{{知识点17}}
+{{缓存清理与版本管理}}
+在SW的activate事件中清理旧版本缓存是最佳实践。此时可确认旧版SW已完全停止，安全删除过时缓存。使用caches.keys()获取所有缓存名称，对比当前版本号删除旧缓存。浏览器也有存储配额限制（通常为可用磁盘空间的一定比例），超出时会自动清理，因此主动管理缓存至关重要。
+
+{{知识点18}}
+{{Push API：Web推送通知}}
+Push API允许服务器向已安装的PWA发送推送消息，即使应用未打开。流程：1）应用请求通知权限；2）通过PushManager.subscribe()获取推送订阅端点；3）将订阅信息发送给服务器；4）服务器通过推送服务发送消息；5）SW的push事件被触发，可显示系统级通知。Push API与Notifications API配合使用，实现原生应用级别的消息推送。
+
+{{知识点19}}
+{{Notifications API：系统级通知}}
+Notifications API允许PWA在操作系统级别显示通知，即使应用在后台或未打开。通过Notification.requestPermission()请求权限，使用new Notification('标题', {body, icon, ...})创建通知。通知可包含标题、正文、图标、操作按钮等。在Service Worker中使用ServiceWorkerRegistration.showNotification()显示通知，并通过notificationclick事件处理用户点击。
+
+{{知识点20}}
+{{Background Sync后台同步API}}
+Background Synchronization API允许应用将任务延迟到有网络连接时执行。典型场景：用户编写消息但设备离线，通过navigator.serviceWorker.ready获取注册后调用registration.sync.register('task-name')注册同步任务。设备恢复网络时，SW的sync事件被触发执行任务。如果任务失败，浏览器会有限次重试。Chrome中SW空闲30秒或同步执行超过30秒会被停止。
+
+{{知识点21}}
+{{Periodic Background Sync周期性后台同步}}
+Web Periodic Background Sync API允许SW在周期性间隔内执行任务，即使应用未打开。典型用途：定期更新缓存内容、预取新闻文章。通过registration.periodicSync.register('tag', {minInterval: 86400000})注册，浏览器在满足条件时触发periodicsync事件。浏览器可能会限制频率以节省电量，且用户未频繁使用的站点可能被拒绝授权。
+
+{{知识点22}}
+{{Background Fetch后台下载API}}
+Background Fetch API适用于需要较长时间的后台操作（如下载大型文件），解决了Background Sync的超时限制问题。通过registration.backgroundFetch.fetch('id', [urls], {title, icons})发起，网络请求在SW和主应用UI都关闭的情况下仍可进行。用户可通过系统UI查看下载进度，完成后SW的backgroundfetchsuccess事件被触发。
+
+{{知识点23}}
+{{IndexedDB客户端存储}}
+IndexedDB是PWA中存储大量结构化数据的核心API。它是事务型的NoSQL数据库，支持索引、游标和事务。在PWA中常用于存储用户数据、应用状态、离线待同步数据等。与Cache API互补——Cache用于HTTP请求/响应缓存，IndexedDB用于应用级数据存储。支持二进制数据（Blob、ArrayBuffer），适合存储文件。
+
+{{知识点24}}
+{{Badging API应用角标}}
+Badging API允许在PWA应用图标上显示角标（badge），用于低干扰地通知用户有新内容。使用navigator.setAppBadge(count)设置数字角标，navigator.clearAppBadge()清除角标。不支持数字时可使用navigator.setAppBadge()显示通用标记点。此API仅在已安装的PWA中可用，是提升用户参与度的重要手段。
+
+{{知识点25}}
+{{Web Share API与Share Target}}
+Web Share API允许PWA调用系统的原生分享菜单，将文本、链接、文件分享给其他应用。通过navigator.share({title, text, url, files})调用。Share Target则反过来——让PWA注册为分享目标，接收来自其他应用的分享内容。在Manifest中配置share_target属性定义接收方式（GET/POST）和参数映射。
+
+{{知识点26}}
+{{Window Controls Overlay API}}
+Window Controls Overlay API（适用于桌面已安装的PWA）允许隐藏默认窗口标题栏，使应用内容可延伸到整个窗口表面区域，获得更大的可视面积。通过Manifest中设置"display_override": ["window-controls-overlay"]启用，配合CSS环境变量（如titlebar-area-x/y/width/height）精确布局标题栏区域的自定义内容。
+
+{{知识点27}}
+{{PWA与SPA（单页应用）的结合}}
+PWA常以SPA形式实现，因为SPA通过JavaScript动态更新页面内容而非整页刷新，提供更接近原生应用的无缝体验。SPA的单HTML页面架构天然适合SW拦截请求——所有路由都在客户端处理，只有API请求需要网络。但PWA不必是SPA，多页面应用同样可以是PWA；SPA也不必是PWA。
+
+{{知识点28}}
+{{Service Worker静态路由（InstallEvent.addRoutes）}}
+新API InstallEvent.addRoutes()允许在SW安装时声明路由规则，告诉浏览器某些资源应直接从缓存或网络获取，无需等待SW启动。这解决了SW首次加载时的性能开销问题——当页面长时间未访问后加载，浏览器需等待SW启动才能决定内容来源。静态路由可绕过SW实现更快的资源加载。
+
+{{知识点29}}
+{{PWA的应用商店分发}}
+满足安装性条件的PWA可通过工具打包并发布到各应用商店。Google Play Store（通过TWA/Trusted Web Activity）、Microsoft Store、Meta Quest Store均支持PWA。PWABuilder（pwabuilder.com）是微软提供的开源工具，简化了PWA打包为各平台安装包的过程。应用商店分发使PWA可被更广泛的用户发现和安装。
+
+{{知识点30}}
+{{PWA的渐进增强原则}}
+渐进增强是PWA的核心设计哲学：在基础浏览器中作为普通网站正常运行，在支持高级API的浏览器中逐步增强功能。应使用Feature Detection检测API支持情况，提供可接受的降级体验。例如：不支持Background Sync的浏览器应提示用户手动重试发送消息；不支持安装的浏览器用户仍可通过URL访问应用。
+
+{{知识点31}}
+{{Service Worker通信机制}}
+Service Worker与主线程间通过多种方式通信：1）Client.postMessage()——SW向客户端页面发送消息；2）Broadcast Channel API——建立双向通信频道；3）MessageChannel——点对点消息传递。SW与主线程不能直接共享状态，所有通信都通过消息传递实现。典型场景：SW收到推送后通知主线程更新UI。
+
+{{知识点32}}
+{{PWA安全要求与HTTPS}}
+PWA必须在安全上下文中运行，最基本的要求是通过HTTPS提供服务。localhost和127.0.0.1（含端口号）被浏览器视为安全上下文以方便开发。Service Worker仅在安全上下文中可注册，这是防止中间人攻击利用SW的强大能力（拦截请求、缓存数据）的必要安全措施。file://协议虽然被视为安全上下文但不满足PWA的安装性要求。
+
+{{知识点33}}
+{{PWA离线体验设计最佳实践}}
+设计PWA离线体验时的关键策略：1）预缓存应用外壳（App Shell）确保核心UI可离线渲染；2）对动态API数据使用Network First策略，离线时返回缓存数据并提示用户；3）提供友好的离线回退页面；4）使用Background Sync延迟发送离线时的操作；5）在UI中明确告知用户当前网络状态；6）合理设置缓存大小和过期策略。
+
+{{知识点34}}
+{{App Shell架构模式}}
+App Shell是PWA的一种架构模式，将应用的最小HTML/CSS/JS骨架（导航栏、布局框架、加载指示器等）预缓存，确保即时加载和离线可用。动态内容通过API获取并由JavaScript填充。这种模式使PWA在首次加载后几乎瞬间启动，因为App Shell直接从缓存提供，无需网络请求。是Google推荐的PWA核心架构。
+
+{{知识点35}}
+{{PWA的跨浏览器兼容性现状}}
+PWA的浏览器支持情况因平台而异。桌面端：Chromium浏览器全面支持PWA安装；Safari 17+支持"Add to Dock"（macOS Sonoma），不要求Manifest；Firefox桌面端不支持基于Manifest的PWA安装。移动端：Android上Chrome、Edge、Firefox、Samsung Internet均支持PWA安装；iOS 16.4+支持从Safari、Chrome、Edge等的分享菜单安装PWA。
+
+{{知识点36}}
+{{Workbox：Google的PWA工具库}}
+Workbox是Google提供的构建PWA的JavaScript库集合，简化了Service Worker的开发。核心模块包括：workbox-routing（路由管理）、workbox-strategies（预定义缓存策略）、workbox-precaching（预缓存管理）、workbox-expiration（缓存过期控制）、workbox-background-sync（后台同步）。支持Webpack、Vite等构建工具集成，是生产环境PWA开发的事实标准。
+
+{{知识点37}}
+{{PWA性能优化策略}}
+PWA的性能优化涵盖多个层面：1）使用App Shell模式实现秒开；2）合理预缓存关键资源减少网络依赖；3）使用Navigation Preload加速导航请求；4）懒加载非关键资源；5）使用Cache API减少重复网络请求；6）Service Worker中的静态路由避免SW启动延迟；7）压缩和版本化缓存资源；8）使用IndexedDB而非localStorage存储大量数据。
+
+{{知识点38}}
+{{Navigation Preload导航预加载}}
+Navigation Preload是Service Worker的一项优化特性，允许浏览器在SW启动的同时并行发起导航请求，而非等待SW启动后才开始。通过registration.navigationPreload.enable()启用，SW在fetch事件中通过event.preloadResponse获取预加载的响应。这解决了SW冷启动时首次页面加载变慢的问题。
+
+{{知识点39}}
+{{PWA与原生应用的能力对比}}
+PWA已具备的能力：离线运行、推送通知、主屏幕安装、全屏显示、相机/GPS/加速度计等硬件访问、文件系统访问（File System Access API）、支付（Payment Request API）、蓝牙（Web Bluetooth）、USB（WebUSB）。仍受限的方面：iOS上推送通知支持有限、无法访问所有原生API（如NFC、指纹传感器在部分浏览器中受限）、后台运行时间受浏览器策略限制。
+
+{{知识点40}}
+{{PWA在企业级应用中的实践}}
+PWA在企业场景中的优势：1）统一的跨平台代码库降低开发和维护成本；2）即时更新无需应用商店审核；3）离线能力适合网络不稳定的工业环境；4）通过Manifest的scope控制访问范围实现安全隔离；5）可与现有Web基础设施无缝集成。知名企业PWA案例包括Twitter Lite、Pinterest PWA、Starbucks PWA等，均报告了显著的用户参与度和转化率提升。

@@ -1,0 +1,83 @@
+# 2025前端前端CSS Object Fit
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{object-fit 是 CSS 属性，用于控制替换元素（如 <img>、<video>）的内容如何适应其容器的尺寸。它定义了替换内容在给定宽高下如何缩放或裁剪。}}
+
+{{知识点2}}{{object-fit 的初始值（默认值）是 fill，即替换内容会填满整个内容框，如果宽高比不匹配则会拉伸变形。}}
+
+{{知识点3}}{{object-fit: contain 的行为是等比缩放内容使其完全放入容器内，保持原始宽高比。如果内容宽高比与容器不匹配，会出现信箱（letterbox）或邮筒（pillarbox）效果，即留有空白区域。}}
+
+{{知识点4}}{{object-fit: cover 的行为是等比缩放内容使其完全覆盖容器，保持原始宽高比。如果内容宽高比与容器不匹配，超出容器的部分会被裁剪。}}
+
+{{知识点5}}{{object-fit: fill 的行为是拉伸内容以完全填满容器，不保持原始宽高比。这是默认值，可能导致图片变形失真。}}
+
+{{知识点6}}{{object-fit: none 的行为是不调整内容大小，保留其原始尺寸。如果内容大于容器则溢出，如果小于容器则留白。}}
+
+{{知识点7}}{{object-fit: scale-down 的行为是比较 none 和 contain 两种模式，取结果尺寸较小的那个。本质上：如果原始尺寸小于容器则保持原尺寸（如 none），如果大于容器则等比缩小（如 contain）。}}
+
+{{知识点8}}{{object-fit 属性只适用于替换元素（replaced elements），包括 <img>、<video>、<embed>、<iframe>、<object> 等。对普通块级元素无效。}}
+
+{{知识点9}}{{object-fit 属性不可继承（inherited: no），子元素不会自动继承父元素的 object-fit 值。}}
+
+{{知识点10}}{{object-fit 属性支持的全局值包括：inherit、initial、revert、revert-layer 和 unset。}}
+
+{{知识点11}}{{object-fit 的动画类型为 discrete（离散），意味着在值之间切换时不会产生平滑过渡动画，而是直接跳变。}}
+
+{{知识点12}}{{object-position 属性用于配合 object-fit 使用，控制替换元素在其内容框内的对齐位置。默认值为 50% 50%，即居中显示。}}
+
+{{知识点13}}{{object-position 支持关键字值：top、bottom、left、right、center，以及逻辑关键字如 x-start、x-end、y-start、y-end、block-start、block-end、inline-start、inline-end。}}
+
+{{知识点14}}{{object-position 支持百分比值和长度值，如 25% 75%、10px 20px、1cm 2cm 等。百分比相对于元素自身的宽高计算。}}
+
+{{知识点15}}{{object-position 支持边偏移语法（edge offsets），如 bottom 10px right 20px，可以从指定边缘偏移定位。}}
+
+{{知识点16}}{{object-position 是可继承属性（inherited: yes），与 object-fit 不同。子元素会继承父元素的 object-position 值。}}
+
+{{知识点17}}{{object-position 的动画类型为 repeatable list，支持平滑动画过渡，与 object-fit 的离散动画不同。}}
+
+{{知识点18}}{{object-fit 和 object-position 的组合使用可以实现类似 background-size: cover + background-position 的效果，但作用于内联替换元素而非背景。}}
+
+{{知识点19}}{{object-fit: cover 是实现头像裁剪的常用方案。将图片设为正方形容器，使用 cover 值可确保任何比例的图片都完美填满正方形区域。}}
+
+{{知识点20}}{{object-fit: contain 适合展示不想被裁剪的图片，如产品图、Logo 等。缺点是可能出现空白区域，可通过设置容器背景色来改善视觉效果。}}
+
+{{知识点21}}{{object-fit: scale-down 适合响应式场景，图片在小容器中会缩小，但永远不会放大超过原始尺寸，避免模糊。}}
+
+{{知识点22}}{{当 object-fit 不是 fill 时，图片的实际渲染区域可能小于内容框，未填充的空间会显示元素的背景色（background-color）。}}
+
+{{知识点23}}{{object-fit 属性规范来自 CSS Images Module Level 3（W3C 草案），是 CSS 图像处理标准的一部分。}}
+
+{{知识点24}}{{object-fit 自 2020 年 1 月起在所有主流浏览器中可用（Baseline widely available），包括 Chrome、Firefox、Safari、Edge。}}
+
+{{知识点25}}{{历史上 Safari 7-9.1 和 iOS 8-9.3 支持 object-fit 但不支持 object-position。现代浏览器已不存在此问题。}}
+
+{{知识点26}}{{object-fit 也适用于 <video> 元素，可以控制视频在其容器中的填充方式，实现类似图片裁剪的视频裁剪效果。}}
+
+{{知识点27}}{{object-fit 与 CSS aspect-ratio 属性配合使用时，可以创建固定比例的媒体容器，是现代响应式图片布局的常用组合。}}
+
+{{知识点28}}{{object-fit 可以替代传统的 background-size + background-image 方案来实现图片裁剪，优势是保留了 <img> 标签的语义和可访问性。}}
+
+{{知识点29}}{{使用 object-fit: cover 时，可通过 object-position 调整裁剪焦点。例如 object-position: top 可确保人物照片从顶部开始显示，避免裁掉头部。}}
+
+{{知识点30}}{{object-fit 的 computed value（计算值）与指定值相同（as specified），不会在计算过程中发生转换。}}
+
+{{知识点31}}{{object-position 的语法支持 <position> 值类型，可接受 1 到 4 个值来定义 2D 位置，支持相对偏移和绝对偏移。}}
+
+{{知识点32}}{{object-position 可以将替换元素定位到其内容框之外，实现部分内容溢出隐藏的效果，结合 overflow: hidden 可实现更精细的裁剪控制。}}
+
+{{知识点33}}{{在响应式设计中，object-fit: cover 配合 width: 100% 和固定的 height 值是创建全宽英雄横幅（hero banner）的常见模式。}}
+
+{{知识点34}}{{object-fit 对 <input type="image"> 元素同样适用，可以控制表单中图片提交按钮的缩放行为。}}
+
+{{知识点35}}{{使用 object-fit 时，图片的固有尺寸（intrinsic dimensions）和宽高比仍然影响布局计算，如未显式设置宽高则按原始尺寸显示。}}
+
+{{知识点36}}{{object-fit 的性能表现优秀，缩放和裁剪操作由浏览器的合成器（compositor）处理，不需要 JavaScript 参与，不会引起重排（reflow）。}}
+
+{{知识点37}}{{在 CSS Grid 和 Flexbox 布局中，object-fit 可确保图片在弹性容器中正确缩放而不破坏布局结构，是现代 CSS 布局的重要补充。}}
+
+{{知识点38}}{{object-fit: none 配合 object-position 可以实现图片的平移查看效果，用户通过改变 object-position 值可以"平移"查看原始大图的不同区域。}}
+
+{{知识点39}}{{与 background-size 的 cover/contain 不同，object-fit 作用于元素内容而非背景，因此图片仍保留在文档流中，支持右键保存、拖拽等原生交互。}}
+
+{{知识点40}}{{object-fit 的五种值可以分为三类理解：拉伸类（fill）、等比缩放类（contain、cover）、原始尺寸类（none、scale-down 是 contain 和 none 的智能组合）。}}

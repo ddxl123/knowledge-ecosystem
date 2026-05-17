@@ -1,0 +1,87 @@
+# 2025前端测试入门
+# 领域: 计算机IT
+# 学科: 前端框架
+# 来源: 2025前端测试入门
+# 描述: 前端测试核心知识点
+
+{{前端测试的定义与目的}}前端测试是指对Web应用的用户界面、交互逻辑、业务功能进行自动化验证的过程。其目的是在代码变更时快速发现回归问题，提升代码质量与开发信心，减少手动测试成本。现代前端测试通常分为单元测试、集成测试和端到端（E2E）测试三个层次，形成完整的测试金字塔。
+
+{{测试金字塔}}测试金字塔是一种测试策略模型，从底到顶依次为：单元测试（数量最多、速度最快、成本最低）、集成测试/组件测试（数量适中、速度中等）、端到端测试（数量最少、速度最慢、成本最高）。金字塔模型强调应编写大量细粒度的单元测试作为基础，适量的集成测试验证模块间协作，少量的E2E测试覆盖关键用户路径。
+
+{{单元测试概述}}单元测试针对代码中最小的可测试单元（如函数、方法、工具模块）进行验证。它不依赖外部系统或真实DOM，通过模拟（mock）隔离依赖。单元测试编写简单、执行快速，是前端测试的基础层。2025年主流的前端单元测试框架包括Vitest和Jest。
+
+{{Vitest介绍}}Vitest是由Vite团队开发的下一代前端测试框架，与Vite深度集成。它兼容Jest API，支持开箱即用的TypeScript、ESM和JSX，无需额外配置。Vitest利用Vite的模块转换能力实现极速测试执行，支持智能文件监听模式（watch mode），并提供原生的代码覆盖率支持。2025年已成为Vue、React等项目的首选测试框架。
+
+{{Vitest配置}}Vitest通过vite.config.ts中的test字段或独立的vitest.config.ts进行配置。关键配置项包括：environment（测试环境，如jsdom、happy-dom）、globals（全局API，无需import describe/it/expect）、include（测试文件匹配模式，默认**/*.test.ts）、coverage（覆盖率提供者和选项）、setupFiles（测试前执行的初始化文件）。Vitest复用项目的Vite配置，零配置即可运行。
+
+{{Jest测试框架}}Jest是Facebook开发的JavaScript测试框架，长期作为前端测试的行业标准。它内置断言库、mock功能、代码覆盖率和快照测试。Jest通过Babel或ts-jest处理TypeScript，配置相对复杂但生态成熟。2025年虽然Vitest崛起，但大量存量项目仍使用Jest，且Jest 30版本带来了ESM原生支持等改进。
+
+{{describe-it-expect模式}}前端测试普遍采用describe/it/expect的BDD风格结构。describe用于分组相关测试用例，it（或test）定义单个测试用例，expect用于断言。示例：describe('add函数', () => { it('应正确相加两个数', () => { expect(add(1, 2)).toBe(3); }); })。这种结构清晰表达测试意图，便于组织和阅读。
+
+{{断言库（Assertion Library）}}断言库提供验证测试结果的API。Vitest和Jest内置expect断言，常用方法包括：toBe（严格相等）、toEqual（深度相等）、toBeTruthy/falsy（真假值判断）、toThrow（异常验证）、toContain（包含检查）、toHaveBeenCalledWith（函数调用验证）。expect还支持链式调用如not、resolves、rejects等修饰符。
+
+{{Mock与Stub}}Mock和Stub用于隔离被测代码的外部依赖。Mock替换整个模块或函数并记录调用信息，Stub提供预设的返回值。Vitest/Jest提供vi.fn()创建mock函数，vi.mock()替换模块导入，vi.spyOn()监听已有方法调用。合理使用mock可使单元测试不依赖网络请求、数据库或第三方API，保持测试的独立性和速度。
+
+{{组件测试概述}}组件测试验证UI组件的渲染输出和交互行为。它将组件在测试环境中挂载（mount），模拟用户操作（如点击、输入），然后断言组件的DOM输出和状态变化。组件测试介于单元测试和E2E测试之间，既能验证组件逻辑，又不需要启动完整的应用。
+
+{{React Testing Library}}React Testing Library（RTL）是React组件测试的事实标准，由Kent C. Dodds创建。它鼓励从用户角度测试组件，而非测试实现细节。核心API包括：render（渲染组件）、screen.getByRole/getByText（查询元素）、fireEvent/userEvent（模拟用户交互）、waitFor（异步等待）。RTL的设计理念是"测试越像用户使用软件的方式，测试就越能给你信心"。
+
+{{Vue Test Utils}}Vue Test Utils是Vue.js官方的组件测试工具库，用于在隔离环境中挂载Vue组件。它提供mount和shallowMount方法挂载组件，支持模拟props、slots、events和依赖注入。配合Vitest和jsdom环境，可以测试组件的模板渲染、事件处理、生命周期等。Vue 3版本的Test Utils支持Composition API和setup函数的测试。
+
+{{Testing Library生态}}Testing Library不仅支持React，还提供Vue、Svelte、Angular、Lit等框架的适配器，以及用于DOM测试的@testing-library/dom。它还提供jest-dom扩展断言库，增加toBeInTheDocument、toHaveClass、toBeVisible等DOM相关的断言方法。整个生态遵循"测试实现不可见，测试行为可见"的设计哲学。
+
+{{快照测试（Snapshot Testing）}}快照测试将组件或函数的输出序列化为文本快照，后续测试运行时自动对比新旧快照的差异。Jest和Vitest均支持toMatchSnapshot()和toMatchInlineSnapshot()。快照测试适合检测意外的UI变更，但需谨慎使用：过大的快照难以维护，频繁更新的快照形同虚设。建议对小型、稳定的输出使用快照测试。
+
+{{E2E测试概述}}端到端（E2E）测试从用户视角出发，在真实浏览器中模拟完整的用户操作流程，验证整个应用的功能正确性。E2E测试覆盖前后端交互、路由导航、表单提交、API调用等完整链路。它最接近真实用户体验，但编写和维护成本最高，执行速度最慢。2025年主流E2E工具为Playwright和Cypress。
+
+{{Playwright介绍}}Playwright是微软开发的现代E2E测试框架，支持Chromium、Firefox和WebKit三大浏览器引擎。它提供自动等待机制、网络拦截、多标签页/多上下文支持、移动端模拟和截图/视频录制。Playwright的API设计简洁，支持Page Object模式。2025年Playwright已成为增长最快的E2E工具，社区活跃，文档完善。
+
+{{Playwright安装与配置}}通过npm init playwright@latest初始化Playwright项目，自动安装浏览器引擎。配置文件playwright.config.ts定义测试目录、浏览器列表、超时时间、baseURL等。关键配置：projects（定义不同浏览器/设备的测试）、webServer（自动启动开发服务器）、retries（失败重试次数）、reporter（测试报告格式）。Playwright原生支持TypeScript。
+
+{{Playwright定位器（Locator）}}Playwright推荐使用语义化定位器选择页面元素：getByRole（通过ARIA角色定位，如getByRole('button', { name: '提交' })）、getByText（文本内容）、getByLabel（表单标签）、getByPlaceholder、getByTestId（data-testid属性）。这些定位器具有自动等待和重试能力，比CSS选择器更具可维护性，能适应UI结构变化。
+
+{{Playwright自动等待}}Playwright的核心优势之一是自动等待机制。在执行操作（如click、fill）前，Playwright会自动等待元素可见、可用、稳定（无动画）。断言（如expect(locator).toBeVisible()）也会自动重试直到条件满足或超时。这消除了传统E2E测试中大量的手动sleep和waitFor调用，大幅提高测试稳定性。
+
+{{Cypress测试框架}}Cypress是另一款流行的E2E测试框架，以内置时间旅行调试、实时重载和出色的开发者体验著称。它运行在浏览器内部，可直接访问DOM和应用代码。Cypress 13+版本增加了原生App测试、云录制回放等功能。其独特的cy.intercept()可拦截和模拟网络请求，cy.clock()可控制时间流逝。
+
+{{Playwright vs Cypress对比}}Playwright支持多浏览器（Chromium/Firefox/WebKit），Cypress仅原生支持Chromium系列。Playwright支持多标签页、多域名场景，Cypress受同源策略限制。Playwright基于CDP协议效率更高，Cypress运行在浏览器内访问更直接。2025年趋势：新项目更多选择Playwright，Cypress在存量项目中仍有广泛应用。两者都是优秀工具，选择取决于项目需求。
+
+{{测试策略：何时写什么类型的测试}}合理的测试策略应遵循测试金字塔：对工具函数、纯逻辑编写大量单元测试；对UI组件编写组件测试验证渲染和交互；对关键用户路径（如登录、下单、支付）编写少量E2E测试。避免倒金字塔（E2E过多导致维护负担）或冰淇淋反模式（缺乏单元测试导致问题定位困难）。
+
+{{测试覆盖率}}代码覆盖率衡量测试执行了多少比例的代码，指标包括行覆盖率、分支覆盖率、函数覆盖率和语句覆盖率。Vitest内置v8覆盖率支持，Jest使用Istanbul。覆盖率工具通过c8或istanbul instrumenter在运行时收集数据。高覆盖率不等于高质量测试，但低覆盖率通常意味着测试不足。建议设定合理的覆盖率阈值（如80%），并关注未覆盖的关键分支。
+
+{{测试驱动开发（TDD）}}TDD是一种开发方法论，遵循"红-绿-重构"循环：先编写失败的测试（红），再编写最少代码使测试通过（绿），最后重构代码保持测试通过。TDD迫使开发者先思考接口设计和需求，产出更模块化、可测试的代码。在前端开发中，TDD特别适合工具函数、业务逻辑和自定义hooks的开发。
+
+{{行为驱动开发（BDD）}}BDD扩展TDD，使用自然语言描述测试场景，使非技术人员也能理解测试意图。BDD工具如Cucumber.js使用Gherkin语法（Given/When/Then）编写特征文件。在前端实践中，BDD更多体现为describe/it的语义化命名和清晰的测试描述，而非严格使用BDD框架。
+
+{{测试环境配置}}前端测试通常需要配置jsdom或happy-dom作为DOM模拟环境。jsdom是完整的DOM实现，兼容性好但速度较慢；happy-dom是轻量级替代，速度快但API覆盖略少。Vitest通过environment配置项选择测试环境，部分测试（如SSR测试）可使用node环境。某些测试还需配置浏览器环境，如Playwright。
+
+{{测试工具函数与辅助方法}}项目中应编写可复用的测试辅助方法，如：自定义render函数（封装Provider/Router等上下文）、工厂函数（生成测试数据）、自定义matcher（扩展断言能力）、通用mock（模拟API响应）。这些工具减少测试样板代码，提高一致性和可维护性。建议在test-utils目录中集中管理。
+
+{{测试数据管理}}测试数据应独立于生产数据，使用工厂模式或fixture文件生成。避免在测试中硬编码大量数据，使用createUser()、createOrder()等工厂函数按需创建。对于API响应，可使用msw（Mock Service Worker）在网络层拦截请求，返回预定义的mock数据。msw支持REST和GraphQL，可在浏览器和Node环境中使用。
+
+{{Mock Service Worker（MSW）}}MSW是一种API模拟方案，通过Service Worker拦截浏览器中的网络请求，或通过Node拦截器拦截服务端请求。与传统mock不同，MSW在网络层拦截，不修改业务代码。它支持请求匹配、响应延迟模拟、错误场景测试。MSW既可用于测试，也可用于开发环境的API模拟，是2025年前端测试中处理API依赖的推荐方案。
+
+{{快照测试最佳实践}}快照测试的最佳实践包括：保持快照小而聚焦（针对特定组件或函数输出）；定期审查快照变更而非盲目更新；使用toMatchInlineSnapshot()将快照内联在测试文件中便于阅读；避免对频繁变化的大型DOM结构使用快照；将快照视为代码审查的一部分。
+
+{{异步测试}}前端代码中异步操作无处不在（API调用、定时器、动画）。Vitest/Jest支持async/await编写异步测试。对于定时器，使用vi.useFakeTimers()模拟时间流逝；对于API请求，使用mock或msw返回预设响应；对于DOM更新，使用waitFor()或findBy*查询等待元素出现。Playwright的自动等待机制天然处理了异步问题。
+
+{{性能测试基础}}前端性能测试关注页面加载速度、交互响应时间和运行时性能。工具包括Lighthouse（综合性能评估）、Web Vitals（Core Web Vitals指标测量）、Bundle Analyzer（打包体积分析）。在测试层面，可通过Playwright的性能API收集指标，或在E2E测试中监控页面加载时间。性能回归检测应集成到CI流程中。
+
+{{视觉回归测试}}视觉回归测试通过截图对比检测UI的视觉变化。Playwright内置page.screenshot()和toMatchSnapshot()支持截图快照对比。工具如Percy、Chromatic和Applitools提供云端视觉测试服务，支持跨浏览器和跨设备的视觉对比。视觉测试适合检测CSS变更、主题切换和响应式布局的意外破坏。
+
+{{CI/CD中的测试集成}}前端测试应集成到CI/CD流水线中，确保每次代码变更都自动运行测试。GitHub Actions、GitLab CI等平台支持配置测试步骤。典型流程：代码推送→安装依赖→运行lint→运行单元测试→运行组件测试→构建→运行E2E测试→部署。Playwright提供官方Docker镜像用于CI环境，支持并行执行和分片测试。
+
+{{测试报告}}测试报告帮助团队了解测试执行结果和覆盖率。Vitest支持多种reporter（default、verbose、json、html），Jest支持coverage报告和自定义reporter。Playwright内置HTML报告，支持截图、视频和trace附件。工具如Allure提供美观的交互式报告。在CI中，可将测试结果以评论形式反馈到PR，便于代码审查。
+
+{{测试中的常见陷阱}}常见测试陷阱包括：测试实现细节而非行为（脆弱测试）、过度mock导致测试失去意义、测试间共享状态导致随机失败、忽视异步处理导致测试不稳定、测试命名模糊导致问题定位困难、测试过多过少导致维护困难。遵循"测试行为而非实现"的原则可避免多数陷阱。
+
+{{Vitest的Workspace功能}}Vitest Workspace允许在monorepo中为不同包配置独立的测试配置。通过vitest.workspace.ts定义工作空间，每个包可有自己的测试环境、setup文件和覆盖率配置。这在大型monorepo项目中非常实用，确保每个包在最适合的环境中运行测试。Vitest还支持项目级的测试过滤和并行执行。
+
+{{测试中的Accessibility测试}}可访问性（a11y）测试确保Web应用对残障用户可用。工具如axe-core（Deque Labs）和jest-axe可在组件测试中自动检测ARIA属性缺失、颜色对比度不足、键盘导航问题等。Playwright的@axe-core/playwright包支持在E2E测试中进行全页面可访问性扫描。建议将a11y检查集成到测试流程中作为质量门禁。
+
+{{Vitest的Browser模式}}Vitest 2.0+支持Browser模式，在真实浏览器（通过Playwright或WebDriverIO驱动）中运行测试。这解决了jsdom/happy-dom无法模拟浏览器特定API（如Canvas、WebGL、IntersectionObserver）的问题。Browser模式适合需要真实浏览器环境的组件测试，如涉及文件上传、拖拽、媒体播放等场景的测试。
+
+{{测试文件组织}}测试文件的组织方式通常有两种：1）与源文件同目录（如Button.tsx和Button.test.tsx），便于快速定位；2）独立的tests或__tests__目录，保持源码目录整洁。2025年前端社区更倾向第一种方式，因为现代编辑器支持按文件类型过滤，同目录方式减少了跳转成本。文件命名建议使用.test.ts或.spec.ts后缀。
+
+{{前端测试的未来趋势}}2025年前端测试的发展趋势包括：1）Vitest逐渐取代Jest成为默认选择；2）Playwright在E2E领域持续增长；3）AI辅助测试生成和维护；4）组件测试和E2E测试的边界模糊化；5）实时测试（开发时自动运行相关测试）成为标配；6）可访问性和性能测试深度集成到常规测试流程；7）msw等工具推动测试与开发环境的API模拟统一。

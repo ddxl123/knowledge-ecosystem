@@ -1,0 +1,153 @@
+# 2025前端前端WebTransport API
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{WebTransport API 概述
+WebTransport API 是一个提供低级别、双向通信能力的 Web API，通过 HTTP/3 协议连接客户端与服务器。它支持可靠和不可靠两种数据传输模式，基于 Google 的 QUIC 协议（基于 UDP），是 WebSocket 的现代替代方案。截至 2026 年 3 月，该 API 已达到 Baseline 状态，可在主流浏览器中使用。}}
+
+{{知识点2}}{{WebTransport 的底层协议基础
+WebTransport 基于 HTTP/3 协议，而 HTTP/3 又基于 QUIC 协议。QUIC 基于 UDP 构建，由 Google 开发，解决了经典 TCP 协议的多项问题，包括队头阻塞、慢启动和网络切换中断等。QUIC 内置了 TLS 安全特性，减少了握手往返次数。}}
+
+{{知识点3}}{{队头阻塞问题的解决
+HTTP/2 虽然支持多路复用，但当单个资源传输失败时，同一连接上的所有其他资源都会被阻塞，直到丢失的数据包被重新传输。而 QUIC 中每个流是独立的，只有失败的资源会受到影响，其他流不受干扰。这使得 WebTransport 在多流场景下性能更优。}}
+
+{{知识点4}}{{更快的连接性能
+QUIC 处理安全特性（TLS）不需要像 TCP 那样进行协议切换，意味着更少的往返次数。流式传输比传统的数据包机制提供更好的传输效率。在高延迟网络上，这种性能差异尤为显著，WebTransport 的可靠传输甚至比 WebSocket 更快。}}
+
+{{知识点5}}{{更好的网络切换支持
+QUIC 使用唯一的连接 ID 来标识每个请求的源和目标，而非依赖 IP 地址。这个 ID 可以在不同网络之间保持不变，意味着当用户从 Wi-Fi 切换到移动网络时，下载可以不间断地继续。HTTP/2 使用 IP 地址作为标识，网络切换会导致连接中断。}}
+
+{{知识点6}}{{可靠与不可靠传输
+WebTransport 同时支持可靠传输（保证数据到达和顺序）和不可靠传输（不保证到达和顺序）。可靠传输适用于聊天应用等需要数据完整性的场景；不可靠传输适用于游戏状态更新等实时性要求高、旧数据可被新数据覆盖的场景。}}
+
+{{知识点7}}{{WebTransport 构造函数
+通过 new WebTransport(url) 创建连接实例。URL 必须使用 HTTPS 协议，且需要显式指定端口号。构造函数返回一个 WebTransport 对象，连接在 transport.ready promise 解析后即可使用。示例：const transport = new WebTransport('https://example.com:4999/wt');}}
+
+{{知识点8}}{{ready 属性
+WebTransport.ready 是一个只读属性，返回一个 Promise。当传输连接准备好使用时，该 Promise 会解析。在 ready 解析之前，不应尝试使用连接发送或接收数据。这是建立连接后的第一个检查点。}}
+
+{{知识点9}}{{closed 属性
+WebTransport.closed 是一个只读属性，返回一个 Promise，当传输连接关闭时解析。如果连接正常关闭，Promise 会正常解析；如果因错误关闭，Promise 会被 reject。通过 try...catch 可以区分正常关闭和异常关闭。}}
+
+{{知识点10}}{{close() 方法
+WebTransport.close() 方法用于关闭正在进行的 WebTransport 会话。可以传入可选的关闭信息参数。调用后，closed promise 会被触发，所有关联的流也会被关闭。}}
+
+{{知识点11}}{{datagrams 属性与不可靠传输
+WebTransport.datagrams 返回一个 WebTransportDatagramDuplexStream 实例，用于发送和接收数据报（datagram）。数据报是不可靠传输的基本单位，不保证到达顺序，但提供极低延迟的传输能力，非常适合实时应用场景。}}
+
+{{知识点12}}{{WebTransportDatagramDuplexStream 接口
+该接口表示用于客户端和服务器之间不可靠数据报传输的双工流。它包含一个 ReadableStream（读取传入数据报）和一个 WritableStream（写入传出数据报），以及各种设置和统计信息。通过 transport.datagrams 属性访问。}}
+
+{{知识点13}}{{发送不可靠数据报
+通过 transport.datagrams.writable 获取 WritableStream 的 writer，然后使用 writer.write(data) 发送数据。数据类型为 Uint8Array。示例：const writer = transport.datagrams.writable.getWriter(); writer.write(new Uint8Array([65, 66, 67]));}}
+
+{{知识点14}}{{接收不可靠数据报
+通过 transport.datagrams.readable 获取 ReadableStream 的 reader，然后循环调用 reader.read() 读取数据。返回的 value 是 Uint8Array 类型。当 done 为 true 时表示流已结束。}}
+
+{{知识点15}}{{incomingHighWaterMark 属性
+WebTransportDatagramDuplexStream.incomingHighWaterMark 用于获取或设置传入数据的高水位标记，即传入 ReadableStream 内部队列在被认为已满之前可以达到的最大块数。超过此值时，流会发出背压信号。}}
+
+{{知识点16}}{{incomingMaxAge 属性
+WebTransportDatagramDuplexStream.incomingMaxAge 用于获取或设置传入数据报的最大存活时间（毫秒）。超过此时间的数据报会被丢弃。未设置时返回 null。这对于实时应用中丢弃过期数据非常有用。}}
+
+{{知识点17}}{{outgoingHighWaterMark 属性
+WebTransportDatagramDuplexStream.outgoingHighWaterMark 用于获取或设置传出数据的高水位标记，即传出 WritableStream 内部队列在被认为已满之前可以达到的最大块数。控制发送端的背压行为。}}
+
+{{知识点18}}{{outgoingMaxAge 属性
+WebTransportDatagramDuplexStream.outgoingMaxAge 用于获取或设置传出数据报的最大存活时间（毫秒）。超过此时间的待发送数据报会被丢弃。未设置时返回 null。}}
+
+{{知识点19}}{{maxDatagramSize 属性
+WebTransportDatagramDuplexStream.maxDatagramSize 是只读属性，返回可写入 writable 流的传出数据报的最大允许大小（字节）。超过此大小的数据将无法发送。}}
+
+{{知识点20}}{{可靠传输与流
+可靠传输通过流（Streams）实现，保证数据的传输和到达顺序。虽然比不可靠传输慢，但比 WebSocket 更快。在使用可靠传输时，还可以设置不同流在同一传输上的相对优先级。}}
+
+{{知识点21}}{{createBidirectionalStream() 方法
+WebTransport.createBidirectionalStream() 异步打开一个双向流（WebTransportBidirectionalStream），返回的流对象同时包含 readable 和 writable 属性，可以同时读取和写入数据。适用于需要双向通信的场景如聊天应用。}}
+
+{{知识点22}}{{WebTransportBidirectionalStream 接口
+该接口表示双向传输流，包含 readable（WebTransportReceiveStream）和 writable（WebTransportSendStream）属性。与 WebTransportDatagramDuplexStream 类似，但 readable/writable 的具体类型不同，前者用于可靠传输，后者用于不可靠传输。}}
+
+{{知识点23}}{{createUnidirectionalStream() 方法
+WebTransport.createUnidirectionalStream() 异步打开一个单向流，返回一个 WritableStream，只能用于向服务器写入数据。通过 writer.close() 关闭流并确保所有数据已发送。适用于客户端只需要向服务器发送数据的场景。}}
+
+{{知识点24}}{{incomingBidirectionalStreams 属性
+WebTransport.incomingBidirectionalStreams 是只读属性，返回一个 ReadableStream，包含服务器打开的双向流。每个元素是 WebTransportBidirectionalStream 对象，可用于从服务器读取数据并向其写入数据。}}
+
+{{知识点25}}{{incomingUnidirectionalStreams 属性
+WebTransport.incomingUnidirectionalStreams 是只读属性，返回一个 ReadableStream，包含服务器打开的单向流。每个元素是 WebTransportReceiveStream 对象，只能用于从服务器读取 Uint8Array 数据。}}
+
+{{知识点26}}{{congestionControl 属性
+WebTransport.congestionControl 是只读属性，返回一个字符串，指示应用对发送数据时的偏好：是追求高吞吐量还是低延迟。这允许应用根据自身需求（如视频流 vs 游戏）调整传输行为。}}
+
+{{知识点27}}{{reliability 属性
+WebTransport.reliability 是只读属性，返回一个字符串，指示连接是否仅支持可靠传输，还是同时支持不可靠传输（如 UDP）。这取决于服务器配置和网络环境。}}
+
+{{知识点28}}{{getStats() 方法
+WebTransport.getStats() 异步返回一个包含 HTTP/3 连接统计信息的 Promise。可用于监控连接性能、丢包率、延迟等指标，帮助开发者优化应用的网络行为。}}
+
+{{知识点29}}{{WebTransportError 错误处理
+WebTransportError 接口表示与 WebTransport API 相关的错误，可由服务器错误、网络连接问题或客户端中止操作引起。继承自 DOMException，额外提供 source（错误来源：stream 或 session）和 streamErrorCode（应用协议错误码，0-255）属性。}}
+
+{{知识点30}}{{WebTransportError.source 属性
+WebTransportError.source 是只读属性，返回一个枚举值，指示错误来源。值可以是 'stream'（流级别错误）或 'session'（会话级别错误）。这有助于开发者确定错误的影响范围和处理策略。}}
+
+{{知识点31}}{{WebTransportError.streamErrorCode 属性
+WebTransportError.streamErrorCode 是只读属性，返回 0-255 范围内的数字，表示此错误的应用协议错误码。如果没有可用的错误码则返回 null。应用可以定义自己的错误码体系来传递语义化的错误信息。}}
+
+{{知识点32}}{{安全上下文要求
+WebTransport API 仅在安全上下文（HTTPS）中可用。这是因为它依赖 HTTP/3 和 QUIC 协议，这些协议本身就需要加密传输。在非 HTTPS 环境下无法使用 WebTransport。}}
+
+{{知识点33}}{{Web Workers 支持
+WebTransport API 支持在 Web Workers 中使用。这意味着可以在后台线程中进行网络通信，避免阻塞主线程，对于需要处理大量数据的应用（如实时音视频、大规模数据同步）非常重要。}}
+
+{{知识点34}}{{与 WebSocket API 的对比
+WebSocket 基于 TCP，存在队头阻塞问题；WebTransport 基于 QUIC/UDP，无此问题。WebSocket 只支持可靠传输；WebTransport 同时支持可靠和不可靠传输。WebSocket 不支持多流；WebTransport 支持多个独立的双向和单向流。WebTransport 的可靠传输比 WebSocket 更快。}}
+
+{{知识点35}}{{与 Streams API 的集成
+WebTransport 深度集成了 Streams API。ReadableStream 和 WritableStream 是其核心数据传输机制。incomingBidirectionalStreams、incomingUnidirectionalStreams 等属性返回 ReadableStream，datagrams 属性提供 ReadableStream 和 WritableStream 的双工流。}}
+
+{{知识点36}}{{服务器端要求
+使用 WebTransport 需要支持 HTTP/3 的服务器。服务器需要实现 QUIC 协议栈并支持 WebTransport 扩展。常见的服务器实现包括 Go 的 quic-go、Rust 的 quinn、Node.js 的 webtransport 库等。}}
+
+{{知识点37}}{{典型应用场景 - 在线游戏
+WebTransport 非常适合在线游戏场景。不可靠数据报可用于传输玩家位置、状态更新等实时数据（丢失可被最新数据覆盖）；可靠流可用于传输关键事件如得分、聊天消息等。低延迟特性保证了流畅的游戏体验。}}
+
+{{知识点38}}{{典型应用场景 - 实时音视频
+实时音视频传输对延迟极为敏感。WebTransport 的不可靠传输模式类似 WebRTC 的数据通道，但基于标准化的 Web API。可以用于音视频帧的传输、屏幕共享等场景。}}
+
+{{知识点39}}{{典型应用场景 - 实时数据推送
+股票行情、体育比分、物联网传感器数据等场景需要低延迟的数据推送。WebTransport 的数据报模式提供比 SSE（Server-Sent Events）和 WebSocket 更灵活的传输选择。}}
+
+{{知识点40}}{{典型应用场景 - 文件传输与大文件上传
+通过可靠流传输文件可以利用 QUIC 的多路复用能力，避免队头阻塞。多个文件可以同时传输而不互相影响。结合流的背压机制，可以有效控制内存使用。}}
+
+{{知识点41}}{{连接生命周期管理
+WebTransport 连接的生命周期为：创建（new WebTransport）→ 就绪（await ready）→ 使用（读写数据）→ 关闭（close() 或 await closed）。应始终处理 closed promise 以捕获意外断连。使用 try...catch 处理连接和传输错误。}}
+
+{{知识点42}}{{数据类型与编码
+WebTransport 传输的数据类型为 Uint8Array（二进制数据）。如需传输文本、JSON 等格式，需要先编码为二进制。可使用 TextEncoder/TextDecoder 进行 UTF-8 编解码，或使用 JSON.stringify + TextEncoder 传输 JSON 数据。}}
+
+{{知识点43}}{{背压机制
+WebTransport 的流支持背压（backpressure）机制。当接收端处理速度跟不上发送速度时，流会自动降低发送速率。通过 highWaterMark 属性可以调节缓冲区大小，控制背压的触发阈值，防止内存溢出。}}
+
+{{知识点44}}{{规范状态与标准化
+WebTransport API 的规范由 W3C WebTransport 工作组维护（w3c.github.io/webtransport）。底层协议为 IETF 的 WebTransport over HTTP/3（draft-ietf-webtrans-http3）。截至 2025 年，API 已进入较为稳定的阶段，各主流浏览器已实现支持。}}
+
+{{知识点45}}{{浏览器兼容性（2026年Baseline）
+截至 2026 年 3 月，WebTransport API 已达到 Baseline 状态，意味着在最新版本的主流浏览器中均可使用。Chrome 最早实现支持（Chrome 97+），Firefox 和 Safari 随后跟进。需要 HTTPS 安全上下文。}}
+
+{{知识点46}}{{调试与开发工具
+Chrome DevTools 提供了 WebTransport 连接的调试支持。可以在 Network 面板中查看 WebTransport 连接的状态、数据传输情况。console 中可通过 transport.getStats() 获取连接统计信息。}}
+
+{{知识点47}}{{与 Fetch API 和 XMLHttpRequest 的对比
+Fetch API 和 XHR 基于请求-响应模型，不适合实时双向通信。WebSocket 提供双向通信但基于 TCP。WebTransport 结合了双向通信和 UDP 的优势，支持多流和不可靠传输，是实时 Web 应用的最佳选择。}}
+
+{{知识点48}}{{迁移策略 - 从 WebSocket 迁移
+从 WebSocket 迁移到 WebTransport 需要：1）确保服务器支持 HTTP/3；2）将连接创建代码替换为 WebTransport 构造函数；3）将消息收发逻辑改为使用 Streams API；4）处理可靠/不可靠传输的选择；5）更新错误处理逻辑以使用 WebTransportError。}}
+
+{{知识点49}}{{性能优化建议
+1）对实时数据使用不可靠传输减少延迟；2）对关键数据使用可靠传输确保完整性；3）合理设置 highWaterMark 避免内存问题；4）使用 incomingMaxAge/outgoingMaxAge 丢弃过期数据；5）利用 congestionControl 适配网络状况；6）在 Web Worker 中使用避免阻塞 UI。}}
+
+{{知识点50}}{{WebTransport 与 WebRTC DataChannel 的对比
+两者都支持可靠和不可靠传输，但 WebTransport 基于客户端-服务器模型，WebRTC DataChannel 基于对等（P2P）模型。WebTransport 不需要 ICE/STUN/TURN 穿越 NAT，部署更简单。WebTransport 支持更多并发流，适合大规模数据传输场景。}}

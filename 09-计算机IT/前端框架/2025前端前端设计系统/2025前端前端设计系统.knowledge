@@ -1,0 +1,103 @@
+# 2025前端前端设计系统
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{设计系统（Design System）定义：设计系统是一套完整的标准和规范，通过可复用的组件和模式来规模化管理设计。它不仅包含UI组件库，还包括设计原则、设计令牌（Design Tokens）、样式指南、模式库、文档以及维护这些资源的团队和流程。根据Nielsen Norman Group的定义，设计系统是"一套完整的标准，旨在通过可复用的组件和模式来管理规模化设计"。设计系统的核心价值在于：减少冗余、建立共享语言、确保跨产品和渠道的视觉一致性。}}
+
+{{知识点2}}{{设计系统的三大核心组成：（1）设计仓库（Design Repository）——包含样式指南、组件库和模式库的技术资产；（2）人员与流程——专门的设计系统团队负责维护、迭代和推广；（3）治理规范——版本管理、贡献流程、使用指南等制度保障。一个成熟的设计系统三者缺一不可，仅有组件库而缺乏治理和团队支持，系统会逐渐失效。}}
+
+{{知识点3}}{{设计令牌（Design Tokens）：设计令牌是设计系统中最基础的可复用设计决策的原子化表达，如颜色值、间距值、字体大小、圆角、阴影等。它们以平台无关的键值对形式存储（如JSON），可编译为CSS变量、iOS/Android原生值等。W3C Design Tokens Community Group（DTCG）正在推动设计令牌的标准化格式规范。典型结构为三层：Global Tokens（原始值，如blue-500: #3B82F6）、Alias/Semantic Tokens（语义化引用，如color-primary: {blue}）、Component-specific Tokens（组件级令牌，如button-background-primary: {color-primary}）。}}
+
+{{知识点4}}{{DTCG（Design Tokens Community Group）格式规范：由W3C社区组推动的设计令牌标准格式，定义了设计令牌的JSON结构，包括$type（类型，如color、dimension、typography）和$value（值）等核心属性。该规范使不同工具（Figma、Style Dictionary、Tokens Studio等）之间能互通设计令牌，是2025年前端设计系统互操作性的关键基础。Style Dictionary v4已完全兼容DTCG格式。}}
+
+{{知识点5}}{{Style Dictionary：由Amazon开源的设计令牌转换工具，能将设计令牌从JSON格式编译为CSS自定义属性、SCSS变量、iOS Swift常量、Android XML资源等多平台产物。它支持自定义转换器（transform）、格式化器（format）和过滤器（filter），是构建跨平台设计系统的核心工具链之一。v4版本支持DTCG原生格式、增量构建和更好的TypeScript支持。}}
+
+{{知识点6}}{{原子设计（Atomic Design）方法论：由Brad Frost提出的UI设计方法论，将界面分解为五个层级：（1）Atoms（原子）——最基本的UI元素，如按钮、输入框、标签；（2）Molecules（分子）——由原子组合而成的简单功能单元，如搜索框（输入框+按钮）；（3）Organisms（有机体）——由分子和原子组成的复杂UI区域，如导航栏；（4）Templates（模板）——页面级布局骨架；（5）Pages（页面）——填充真实数据的模板实例。该方法论为组件库的组织架构提供了系统性指导。}}
+
+{{知识点7}}{{组件库（Component Library）：组件库是设计系统中最核心的技术资产，包含预制的、可复用的UI元素。一个完善的组件库条目包含：组件名称（唯一且明确）、描述与使用场景、属性/变体（variants）、状态（默认、悬停、禁用、错误等）、代码片段、无障碍说明。代表性组件库包括Google Material Design、IBM Carbon、Microsoft Fluent UI、Ant Design、Shadcn/ui等。}}
+
+{{知识点8}}{{模式库（Pattern Library）：模式库是组件之上的更高层级抽象，定义了组件的组合方式和布局方案。与组件库关注单个元素不同，模式库关注的是页面结构、内容布局模板、常见交互模式（如搜索流程、表单验证流程、分页模式等）。例如Atlassian设计系统中的页面头部模板就是一个典型的设计模式。}}
+
+{{知识点9}}{{样式指南（Style Guide）：样式指南包含品牌视觉规范（色彩、字体、商标、Logo使用规范）、内容写作指南（语气、语言风格、微文案规范）以及交互设计标准。著名的样式指南包括NASA 1976年图形标准手册和Mailchimp内容风格指南。样式指南通常作为设计系统的一个子集存在。}}
+
+{{知识点10}}{{设计原则（Design Principles）：设计原则是指导设计决策的核心价值观和准则。好的设计原则具有可操作性——不仅能指导"做什么"，还能帮助在冲突中做出取舍。例如Material Design的"Material is the metaphor"、Atlassian的"Bold、Optimistic、Practical"。设计原则应该简洁、可记忆，并且有具体的示例说明如何应用。}}
+
+{{知识点11}}{{设计系统的优势：（1）规模化复制——利用预制组件快速创建界面，减少重复劳动；（2）释放设计资源——设计师可将精力聚焦于更复杂的问题（信息架构、工作流优化、用户旅程）；（3）建立统一语言——跨职能团队减少沟通误解，如"dropdown"在系统中有唯一定义；（4）视觉一致性——跨产品、跨渠道、跨部门的品牌统一；（5）教育工具——帮助新成员快速上手设计和内容规范。}}
+
+{{知识点12}}{{设计系统的挑战与局限：（1）建设和维护成本高——需要专职团队持续投入，不是一劳永逸的项目；（2）采纳需要时间——需要培训和文档支持，否则可能被错误或不一致地使用；（3）灵活性与一致性之争——过于严格会限制创新，过于灵活则失去统一性；（4）版本升级困难——大规模组件库的breaking change影响面大；（5）跨团队协调——不同产品线对组件的需求可能冲突。}}
+
+{{知识点13}}{{Material Design 3（M3）：Google于2021年推出的第三代设计系统，核心特色包括：Dynamic Color（基于用户壁纸自动生成配色方案）、更新的组件规范、更大的圆角、更柔和的阴影。M3强调个性化和表达性，提供了完整的Figma工具包、Compose/Web/iOS实现。其色彩系统基于HCT（Hue-Chroma-Tone）色彩空间，支持无障碍对比度自动计算。}}
+
+{{知识点14}}{{Carbon Design System：IBM的企业级开源设计系统，基于IBM Design Language。特色功能包括：完整的组件库支持React/Angular/Vue/Svelte/Web Components、内置无障碍（WCAG 2.1 AA合规）、White/Gray10/Gray90/Gray100四套主题、Theming API支持自定义品牌。Carbon是大型企业设计系统的标杆之一。}}
+
+{{知识点15}}{{Ant Design（蚂蚁设计）：蚂蚁金服推出的企业级设计系统，是国内使用最广泛的前端UI库之一。基于"自然"的设计价值观，提供React/Vue/Angular版本。v5引入了全新的Design Token体系、CSS-in-JS引擎（cssinjs）、组件级定制能力。其ProComponents系列（ProTable、ProForm等）面向中后台场景提供了高阶业务组件。}}
+
+{{知识点16}}{{Shadcn/ui：2023-2025年快速崛起的组件方案，其核心理念是"不是组件库，而是可复制粘贴的组件集合"。基于Radix UI Primitives（无样式基元）+ Tailwind CSS构建，组件源码直接拷贝到项目中而非通过npm安装依赖。优势在于：完全可控、无版本锁定、样式高度可定制。在Next.js生态中被广泛采用，已成为2025年前端设计系统的重要范式之一。}}
+
+{{知识点17}}{{Radix UI：由WorkOS维护的无样式（headless）UI组件库，提供完全无障碍的基元组件。核心特性包括：WAI-ARIA合规、键盘导航、焦点管理、受控/非受控模式支持。采用分离架构——将行为逻辑与视觉样式解耦，让开发者完全控制外观。是Shadcn/ui的底层引擎，也可独立使用配合任何CSS方案。}}
+
+{{知识点18}}{{Headless UI组件模式：一种将组件的行为逻辑与视觉表现分离的架构模式。Headless组件只处理状态管理、交互逻辑和无障碍支持，不包含任何样式。代表性库包括：Radix UI、Headless UI（Tailwind Labs出品）、React Aria（Adobe出品）。这种模式的优势在于：完全的设计自由度、更好的可访问性、跨框架复用逻辑。2025年已成为设计系统组件开发的主流范式。}}
+
+{{知识点19}}{{复合组件模式（Compound Components）：一种高级组件设计模式，通过共享隐式状态的子组件组合来构建灵活的API。典型例子如<Tabs>包含<Tabs.List>、<Tabs.Trigger>、<Tabs.Content>。相比单一组件传递大量props，复合组件提供更声明式、更灵活的组合方式。React Context是实现隐式状态共享的核心机制。Radix UI大量使用此模式。}}
+
+{{知识点20}}{{Figma在设计系统中的角色：Figma已成为2025年设计系统的事实标准工具。其设计系统相关能力包括：Variables（变量系统，对应Design Tokens）、Component Properties（组件属性变体）、Auto Layout（自动布局）、Dev Mode（开发者模式，生成代码和规格）、Branching（分支管理，类似Git）、Analytics（组件使用分析）。Figma的Variables API支持导出设计令牌到Style Dictionary等工具。}}
+
+{{知识点21}}{{设计系统中的色彩系统：成熟的色彩系统通常包含：（1）语义化色板（Primary、Secondary、Neutral、Error、Warning、Success等）；（2）每个色阶的多个明度级别（如50-950共10级）；（3）前景/背景配对规则，确保WCAG对比度合规；（4）Dark Mode映射规则。2025年趋势包括：Dynamic Color（动态取色）、OKLCH/LCH色彩空间的采用（更好的感知均匀性）、CSS color-mix()函数的应用。}}
+
+{{知识点22}}{{设计系统中的排版系统（Typography System）：排版系统定义了字体选择、字重、字号、行高、字间距等规范。核心要素包括：（1）字体族选择（通常1-2个，一个标题一个正文）；（2）Type Scale（字号阶梯），常用Major Third（1.25x）、Perfect Fourth（1.333x）等数学比例；（3）语义化层级（Display、Heading 1-6、Body、Caption等）；（4）响应式排版——clamp()函数实现流式排版；（5）CJK（中日韩）排版适配——字重、行高、段间距的特殊处理。}}
+
+{{知识点23}}{{设计系统中的间距系统（Spacing System）：间距系统是确保视觉一致性的基础，通常基于4px或8px的基准网格。常见方案：4px基准（4、8、12、16、20、24、32、40、48、64、80、96px）或8px基准。语义化命名如space-xs、space-sm、space-md、space-lg、space-xl。CSS中使用自定义属性实现：--space-1: 0.25rem; --space-2: 0.5rem等。2025年CSS gap属性的广泛支持使间距管理更加简洁。}}
+
+{{知识点24}}{{响应式设计在设计系统中的实现：设计系统需要定义断点（Breakpoints）、流式布局和响应式组件变体。典型断点：Mobile（<640px）、Tablet（640-1024px）、Desktop（1024-1280px）、Wide（>1280px）。2025年趋势：Container Queries（容器查询）取代部分Media Queries场景、CSS Subgrid实现更精细的布局控制、Fluid Typography（clamp()实现流式排版）、Intrinsic Design（内在设计，组件自适应而非固定断点）。}}
+
+{{知识点25}}{{暗色模式（Dark Mode）设计：设计系统中的暗色模式不是简单颜色反转。关键原则：（1）使用深灰色（如#121212）而非纯黑背景；（2）降低白色文字不透明度（如#FFFFFF的87%）减少刺眼感；（3）调整阴影——暗色模式下阴影效果减弱，需用亮度差异表达层级；（4）品牌色需在暗色背景上重新校准对比度；（5）提供light/dark/system三种切换模式。CSS prefers-color-scheme媒体查询和color-scheme属性是原生支持方案。}}
+
+{{知识点26}}{{无障碍设计（Accessibility）在设计系统中的地位：无障碍不是"加分项"而是"必选项"。设计系统需确保：WCAG 2.1 AA级合规（对比度4.5:1、可键盘操作、屏幕阅读器兼容等）。关键实践包括：（1）所有组件内置WAI-ARIA角色和属性；（2）焦点管理（focus trap、focus visible）；（3）键盘导航模式（Arrow Keys、Tab、Escape等）；（4）颜色不作为唯一信息传达方式；（5）足够的点击目标尺寸（最小44x44px）。React Aria和Radix UI是无障碍做得最好的组件库。}}
+
+{{知识点27}}{{Storybook：设计系统的开发、文档和测试平台。核心能力：（1）组件隔离开发——在独立环境中开发和调试组件；（2）交互式文档——自动生成组件API文档和可交互示例；（3）可视化测试——通过Chromatic等工具进行像素级回归测试；（4）交互测试——模拟用户操作验证组件行为；（5）MDX文档——将Markdown和JSX混合编写使用指南。Storybook 8引入了Portable Stories、更好的Vitest集成和Component Testing。是2025年设计系统文档的事实标准。}}
+
+{{知识点28}}{{设计系统的版本管理策略：组件库的版本管理需要考虑：（1）遵循SemVer（语义化版本）——Major对应Breaking Change、Minor对应新功能、Patch对应Bug修复；（2）废弃策略——提供迁移路径和升级指南，而非直接删除；（3）CSS变量的向后兼容——新增变量通常不破坏兼容性；（4）Changelog自动生成——conventional-commits配合工具自动生成；（5）多版本并行维护——大型企业可能需要同时维护2-3个大版本。Changesets和semantic-release是常用的自动化工具。}}
+
+{{知识点29}}{{CSS-in-JS在设计系统中的应用与演进：2025年CSS-in-JS格局已发生重大变化。Runtime方案（如styled-components、Emotion）因性能开销逐渐被替代。新趋势包括：（1）Zero-runtime方案——vanilla-extract、Linaria、Panda CSS在构建时生成静态CSS；（2）CSS Modules复兴——原生CSS能力增强（嵌套、层叠层）使CSS Modules更具竞争力；（3）Utility-first——Tailwind CSS成为最流行方案，配合设计令牌实现设计系统；（4）CSS @layer——原生级联层控制，减少样式冲突。}}
+
+{{知识点30}}{{Web Components与设计系统：Web Components（Custom Elements、Shadow DOM、HTML Templates）是浏览器原生的组件标准，天然适合构建框架无关的设计系统。优势：（1）跨框架——同一组件可在React、Vue、Angular等中使用；（2）样式封装——Shadow DOM防止样式泄漏；（3）浏览器原生——无运行时依赖。挑战：（1）Shadow DOM内的样式覆盖困难；（2）SSR支持复杂；（3）与框架表单集成需额外工作。Lit是构建Web Components设计系统的流行工具库。代表系统：Shoelace/Web Awesome、Adobe Spectrum Web Components。}}
+
+{{知识点31}}{{多主题（Theming）系统架构：设计系统的主题系统通常支持多品牌、多场景定制。架构模式包括：（1）CSS自定义属性方案——通过改变根元素上的变量实现主题切换，性能最佳；（2）Design Token编译——将主题token编译为不同的CSS文件/变量集；（3）运行时切换——CSS变量天然支持运行时切换，无需重新渲染；（4）嵌套主题——局部区域使用不同主题（如暗色卡片在亮色页面上）。Ant Design v5的ConfigProvider和Chakra UI的Theme Tokens是优秀的实现参考。}}
+
+{{知识点32}}{{设计系统的治理（Design System Governance）：治理确保设计系统健康、可持续发展。核心要素：（1）贡献模型——Centralized（中心化，专职团队）vs Federated（联邦化，各团队贡献）vs Hybrid；（2）RFC流程——重大变更通过提案审核；（3）采用度量——组件使用率、覆盖页面数、贡献者数量；（4）质量门禁——PR审查、自动化测试、无障碍检测、Bundle Size检查；（5）定期审计——清理未使用组件、更新过时模式。Spotify的后台治理模式和GitHub的Primer团队治理是优秀案例。}}
+
+{{知识点33}}{{设计系统文档最佳实践：好的文档包含三个层次：（1）Foundations——设计原则、色彩、排版、间距等基础规范；（2）Components——每个组件的使用指南、代码示例、可交互Demo、无障碍说明、Do/Don't；（3）Patterns——常见场景的组件组合方案、页面模板。2025年趋势：Storybook作为文档平台、MDX混合编写、API自动生成（react-docgen等）、组件使用分析（哪些团队在用、用了哪些变体）。文档应面向设计师和开发者两种受众分别提供入口。}}
+
+{{知识点34}}{{设计系统中的图标系统：图标系统需要关注：（1）图标库选型——Lucide（2025年最流行的开源图标库之一，1400+图标）、Phosphor Icons、Heroicons、Material Symbols等；（2）尺寸规范——通常16px、20px、24px三个尺寸级别；（3）风格一致性——线性（outline）vs 填充（filled）、圆角vs直角；（4）交付方式——SVG Sprite、React组件、CSS类名、Web Component；（5）无障碍——装饰性图标使用aria-hidden="true"，功能图标需提供alt文本或aria-label。}}
+
+{{知识点35}}{{设计系统中的动效（Motion）规范：动效是提升用户体验的重要维度。设计系统中的动效规范包括：（1）缓动函数标准——ease-in-out用于大多数场景、spring用于物理感交互；（2）时长规范——Micro-interactions（100-200ms）、Small transitions（200-300ms）、Large transitions（300-500ms）；（3）Reduced Motion——尊重prefers-reduced-motion用户偏好，提供无动画降级；（4）进入/退出动画——组件挂载/卸载时的一致动画模式；（5）Framer Motion、View Transitions API、CSS @starting-rule是2025年前端动效的主流方案。}}
+
+{{知识点36}}{{设计系统中的表单设计模式：表单是最高频的交互场景。设计系统需定义：（1）输入组件规范——Input、Select、Checkbox、Radio、Switch、DatePicker等；（2）布局模式——单列vs多列、标签位置（上/左/浮动标签）；（3）校验策略——实时校验 vs 提交校验、错误信息位置和样式；（4）状态管理——受控/非受控模式、表单库集成（React Hook Form、Zod等）；（5）无障碍——label关联、错误提示的aria-describedby、fieldset分组。2025年趋势：Server Actions与表单的原生集成。}}
+
+{{知识点37}}{{设计系统中的数据可视化组件：复杂设计系统通常包含图表和数据展示组件。关键组件：（1）基础图表——柱状图、折线图、饼图、散点图；（2）数据展示——Table、DataGrid、Stat Card、Progress Bar；（3）设计规范——配色需与设计系统色彩体系一致、响应式适配、大数据量下的性能优化。主流库：Recharts（React）、Apache ECharts、D3.js（高度定制）、Visx（Airbnb的数据可视化组件库）。2025年趋势：AI驱动的图表推荐、自然语言生成图表。}}
+
+{{知识点38}}{{设计系统的Monorepo架构：大型设计系统通常采用Monorepo管理多个包。工具选择：（1）Turborepo——Vercel出品，构建缓存和并行执行；（2）Nx——企业级Monorepo工具，提供依赖图分析；（3）pnpm Workspaces——高效的包管理和幽灵依赖消除。典型包结构：tokens（设计令牌）、icons（图标库）、core/atoms（基础组件）、patterns（组合模式）、docs（文档站）、eslint-plugin（lint规则）、cli（脚手架工具）。Changesets用于独立版本管理和Changelog生成。}}
+
+{{知识点39}}{{设计系统中的国际化（i18n）支持：全球化产品要求设计系统具备国际化能力。关键考虑：（1）RTL（从右到左）布局——使用logical properties（margin-inline-start等）替代物理方向；（2）文本膨胀——德语、俄语等语言文本可能比英文长50%+，组件需能适应；（3）日期/数字/货币格式化——Intl API原生支持；（4）字体回退——CJK字符需要额外字体支持；（5）图标方向——箭头、进度条等方向性图标在RTL下需镜像。Chakra UI和MUI的RTL支持较为完善。}}
+
+{{知识点40}}{{AI与设计系统的融合（2025年趋势）：AI正在改变设计系统的多个环节：（1）AI辅助组件生成——基于自然语言描述生成组件代码（v0 by Vercel、bolt.new等）；（2）设计令牌智能推荐——AI根据品牌色彩自动生成完整色板和无障碍配对；（3）组件文档自动生成——从代码注释和用法自动编写文档；（4）设计审计——AI扫描页面检测与设计系统的偏差；（5）Figma AI——Figma内置AI能力辅助组件创建和布局建议。AI不会替代设计系统，但会加速其创建和维护。}}
+
+{{知识点41}}{{设计系统的采用度量与ROI：衡量设计系统价值需要跟踪：（1）效率指标——新页面/功能上线时间缩短比例、设计到开发交付周期；（2）一致性指标——UI差异检出率、品牌合规率；（3）采用指标——组件使用率（按团队/产品线）、文档访问量、贡献者数量；（4）质量指标——无障碍合规率、性能基准（Bundle大小）、Bug数量；（5）ROI计算——节省的设计/开发工时 × 人力成本 - 系统维护成本。GitHub Primer团队公开分享了其采用度量框架。}}
+
+{{知识点42}}{{渐进式采用设计系统的策略：设计系统不需要一次性全面铺开。推荐策略：（1）Pilot阶段——选择1-2个产品或页面试用；（2）核心组件优先——先覆盖最高频的Button、Input、Typography、Spacing；（3）提供迁移工具——codemod自动替换旧代码、ESLint规则强制使用设计系统组件；（4）展示成功案例——用数据证明效率提升和质量改善；（5）建立贡献通道——让使用团队参与组件共建，增强归属感。Spotify的Glue设计系统采用了联邦化贡献模型。}}
+
+{{知识点43}}{{Server Components对设计系统的影响（React 19/RSC）：React Server Components改变了组件的运行环境，对设计系统产生深远影响：（1）组件需要区分Server/Client边界——交互组件（需要useState、useEffect等）需标记'use client'；（2）Bundle大小优化——仅客户端组件打入JS Bundle，纯展示组件可在服务端渲染；（3）样式方案选择——CSS-in-JS的运行时方案在RSC中受限，推动Zero-runtime方案采用；（4）流式渲染——Suspense边界与组件设计的关系；（5）Shadcn/ui的组件天然适配此模式，每个组件明确标注客户端依赖。}}
+
+{{知识点44}}{{设计系统中的布局系统：布局系统定义页面和组件的空间组织方式。核心组件：（1）Grid系统——12列网格或灵活网格，CSS Grid已成为首选方案；（2）Stack/Flex——一维方向的元素排列，gap属性替代margin方案；（3）Container——最大宽度限制和响应式内边距；（4）Sidebar/Main——常见的应用布局模式；（5）CSS Subgrid——嵌套网格对齐父网格轨道。2025年CSS能力大幅增强：Container Queries、:has()选择器、Subgrid使布局系统更加强大和灵活。}}
+
+{{知识点45}}{{设计系统的测试策略：全面的测试是设计系统质量保障的关键。测试层次：（1）单元测试——Jest/Vitest测试组件逻辑和渲染；（2）可视化回归测试——Chromatic、Percy、Playwright截图对比检测视觉变化；（3）无障碍测试——axe-core自动化检测、手动屏幕阅读器测试；（4）交互测试——Storybook play函数模拟用户操作；（5）跨浏览器测试——BrowserStack/LambdaTest确保兼容性；（6）Bundle大小测试——size-limit防止包体积膨胀。GitHub Actions CI流水线应集成所有测试层次。}}
+
+{{知识点46}}{{设计系统中的通知和反馈模式：Toast/Snackbar/Alert/Notification是高频业务组件。设计系统需定义：（1）类型——Success、Error、Warning、Info四种语义；（2）位置——顶部居中、右上角、底部等；（3）行为——自动消失时间、手动关闭、堆叠规则（最新在上/最新在下）；（4）可访问性——role="alert"、aria-live="polite"/"assertive"；（5）动画——进入/退出动画、进度条倒计时。Sonner（2025年最流行的Toast库）和react-hot-toast是常用实现。}}
+
+{{知识点47}}{{设计系统中的对话框和抽屉模式：Modal/Dialog/Drawer/Sheet是复杂交互的承载组件。设计规范：（1）焦点管理——打开时焦点移入、关闭时焦点恢复、Tab键循环限制在对话框内（Focus Trap）；（2）层级管理——z-index系统、嵌套对话框的处理；（3）关闭方式——ESC键、点击遮罩层、关闭按钮；（4）尺寸变体——Small/Medium/Full-screen；（5）阻塞vs非阻塞——Modal阻塞背景交互，Toast/Sheet可非阻塞。Vaul（抽屉组件）和Radix Dialog是2025年的优秀实现。}}
+
+{{知识点48}}{{设计系统中的导航模式：导航是信息架构的核心载体。设计系统需定义：（1）全局导航——顶部栏（TopBar）、侧边栏（Sidebar）或混合模式；（2）面包屑——层级路径展示；（3）标签页（Tabs）——同级内容切换；（4）分页（Pagination）——列表数据导航；（5）移动端导航——Bottom Navigation、Hamburger Menu、Tab Bar；（6）命令面板（Command Palette）——Cmd+K快捷搜索，2025年已成为SaaS产品的标配交互模式。cmdk和Vaul是Command Palette的流行实现。}}
+
+{{知识点49}}{{跨平台设计系统：统一Web、Mobile（iOS/Android）、Desktop的设计体验。策略：（1）设计令牌跨平台——Style Dictionary将同一套token编译为CSS/Swift/Kotlin；（2）组件名和API统一——不同平台实现相同语义的组件；（3）平台差异适配——iOS的滑动返回、Android的返回键、桌面端的鼠标悬停；（4）React Native + Web——React Native Web实现代码复用；（5）代表性系统——Shopify Polaris（Web+Mobile）、Adobe Spectrum（Web+Desktop+Mobile）。Fluent UI和Ionic也提供跨平台方案。}}
+
+{{知识点50}}{{2025年前端设计系统趋势总结：（1）Headless组件成为主流——Radix UI、React Aria等无样式基元被广泛采用；（2）Shadcn/ui模式兴起——源码即依赖，完全可控；（3）Design Token标准化——DTCG规范推动工具互操作；（4）CSS原生能力回归——@layer、Container Queries、Subgrid减少JS依赖；（5）AI辅助设计系统——组件生成、文档编写、设计审计；（6）Server Components适配——设计系统需区分服务端/客户端组件边界；（7）Design-to-Code成熟——Figma Dev Mode + AI bridge缩短设计到代码的距离；（8）可组合性优先——从庞大单体库转向小型、可组合的模块化方案。}}

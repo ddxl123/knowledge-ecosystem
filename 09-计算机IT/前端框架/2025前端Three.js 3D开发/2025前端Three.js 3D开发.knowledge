@@ -1,0 +1,203 @@
+# 2025前端Three.js 3D开发
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}
+{{Three.js概述}}
+Three.js是基于WebGL的JavaScript 3D图形库，由Ricardo Cabello（mrdoob）创建并开源维护。目标是提供易用、轻量、跨浏览器的通用3D渲染能力。核心渲染器为WebGLRenderer和WebGPURenderer，另有SVG和CSS3D渲染器作为插件。项目托管于GitHub（mrdoob/three.js），通过npm安装：npm install three。当前主流版本为r170+，支持ES Module导入：import * as THREE from 'three'。Three.js被广泛应用于数据可视化、游戏开发、产品展示、建筑可视化、虚拟现实等领域。
+
+{{知识点2}}
+{{三大核心对象：Scene、Camera、Renderer}}
+Three.js应用的基础架构由三大核心对象组成。Scene（场景）是所有3D对象的容器，代表整个3D世界。Camera（相机）定义观察视角和投影方式。Renderer（渲染器）负责将Scene和Camera描述的内容绘制到屏幕上。基本渲染循环：renderer.render(scene, camera)。创建最小Three.js应用需要：创建Scene → 创建Camera → 创建几何体和材质 → 组合成Mesh添加到Scene → 创建Renderer并调用render。
+
+{{知识点3}}
+{{PerspectiveCamera透视相机}}
+PerspectiveCamera是最常用的相机类型，模拟人眼的透视效果。构造函数：new THREE.PerspectiveCamera(fov, aspect, near, far)。fov为垂直视野角度（通常45-75度），aspect为宽高比（通常window.innerWidth/window.innerHeight），near和far为近远裁剪面距离。相机默认位于原点(0,0,0)朝-z方向看，通过camera.position和camera.lookAt()调整视角。裁剪面之外的物体不会被渲染，合理设置near/far对性能至关重要。
+
+{{知识点4}}
+{{OrthographicCamera正交相机}}
+OrthographicCamera使用正交投影，物体不会因距离远近而缩放，常用于2D游戏、UI渲染、工程制图。构造函数：new THREE.OrthographicCamera(left, right, top, bottom, near, far)。需要手动计算可视区域的宽高比。在等距视角游戏和CAD类应用中非常实用。与透视相机的区别在于平行线不会汇聚，保持物体实际尺寸比例不变。
+
+{{知识点5}}
+{{WebGLRenderer渲染器}}
+WebGLRenderer是Three.js的核心渲染器，将3D场景渲染到Canvas元素上。构造：new THREE.WebGLRenderer({ antialias: true, alpha: true })。关键属性和方法：renderer.setSize(width, height)设置渲染尺寸，renderer.setPixelRatio(window.devicePixelRatio)适配高DPI屏幕，renderer.setClearColor(color)设置背景色，renderer.shadowMap.enabled = true开启阴影，renderer.toneMapping = THREE.ACESFilmicToneMapping设置色调映射。domElement属性返回Canvas元素，需手动添加到DOM中。renderer.setAnimationLoop(animate)是推荐的动画循环方式。
+
+{{知识点6}}
+{{Scene场景管理}}
+Scene是Three.js场景图的根节点，继承自Object3D。通过scene.add(object)添加对象，scene.remove(object)移除对象。scene.children获取所有子对象。scene.background设置背景（Color、Texture或CubeTexture），scene.fog设置雾化效果（Fog或FogExp2），scene.environment设置环境贴图（影响PBR材质）。场景图是树状结构，支持嵌套的Group和Object3D，子对象会继承父对象的变换。
+
+{{知识点7}}
+{{BoxGeometry立方体几何体}}
+BoxGeometry是最基础的3D几何体。构造：new THREE.BoxGeometry(width, height, depth, widthSegments, heightSegments, depthSegments)。默认尺寸为1x1x1的立方体。segments参数控制细分程度，更高的细分数允许更精细的顶点变形。所有内置几何体都继承自BufferGeometry，存储顶点位置、法线、UV坐标等属性在BufferAttribute中。
+
+{{知识点8}}
+{{SphereGeometry球体几何体}}
+SphereGeometry用于创建球体。构造：new THREE.SphereGeometry(radius, widthSegments, heightSegments, phiStart, phiLength, thetaStart, thetaLength)。默认半径为1，widthSegments和heightSegments默认32。可调节起始角度和弧度创建部分球体。高细分段数可创建光滑球面，但会增加顶点数量影响性能。常用于行星、弹珠、天空球等场景。
+
+{{知识点9}}
+{{其他常用内置几何体}}
+Three.js提供丰富的内置几何体：PlaneGeometry（平面）、CircleGeometry（圆面）、ConeGeometry（圆锥）、CylinderGeometry（圆柱）、TorusGeometry（圆环）、TorusKnotGeometry（环面纽结）、DodecahedronGeometry（十二面体）、IcosahedronGeometry（二十面体）、OctahedronGeometry（八面体）、TetrahedronGeometry（四面体）、CapsuleGeometry（胶囊体）、TubeGeometry（管道体）、LatheGeometry（旋转体）、ExtrudeGeometry（挤出体）、RingGeometry（环形面）。每种几何体都有可调节的参数来控制形状和细分。
+
+{{知识点10}}
+{{BufferGeometry自定义几何体}}
+BufferGeometry是所有几何体的基类，允许手动定义顶点数据。通过Float32Array创建顶点位置(position)、法线(normal)、UV坐标(uv)等BufferAttribute。示例：geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3))。3表示每个顶点3个分量(x,y,z)。支持自定义属性用于着色器。setIndex()设置索引缓冲区复用顶点。computeVertexNormals()自动计算法线。是理解Three.js渲染管线的基础。
+
+{{知识点11}}
+{{Mesh网格对象}}
+Mesh（网格）是Three.js中最常用的可渲染对象，由Geometry（几何体）和Material（材质）组合而成。构造：new THREE.Mesh(geometry, material)。Mesh继承自Object3D，拥有position、rotation、scale等变换属性。position是Vector3类型，rotation是Euler类型，支持rotateX/Y/Z方法。一个几何体可被多个Mesh共享，节省内存。Mesh是场景中可见物体的基本单位。
+
+{{知识点12}}
+{{Object3D基类与变换}}
+Object3D是Three.js中几乎所有3D对象的基类。核心属性：position（Vector3，位置）、rotation（Euler，欧拉旋转）、quaternion（Quaternion，四元数旋转）、scale（Vector3，缩放）、matrix（Matrix4，变换矩阵）、visible（可见性）、parent/children（父子关系）。方法：add()/remove()管理子对象、lookAt()朝向目标、translateX/Y/Z()沿轴移动、rotateX/Y/Z()绕轴旋转、traverse()遍历子树、updateMatrixWorld()更新世界矩阵。变换顺序默认为TRS（平移→旋转→缩放）。
+
+{{知识点13}}
+{{MeshBasicMaterial基础材质}}
+MeshBasicMaterial是最简单的网格材质，不受光照影响，颜色恒定。适用于不需要光照效果的场景如线框、平面着色、HUD元素。关键属性：color（颜色）、map（纹理贴图）、wireframe（线框模式）、transparent/opacity（透明度）、side（渲染面：FrontSide/BackSide/DoubleSide）、alphaMap（透明贴图）、envMap（环境贴图）。性能最好但缺乏真实感。
+
+{{知识点14}}
+{{MeshStandardMaterial PBR标准材质}}
+MeshStandardMaterial基于物理渲染（PBR）模型，是Three.js中最常用的材质类型。核心属性：color（基础颜色/albedo）、metalness（金属度0-1）、roughness（粗糙度0-1）、map（颜色贴图）、metalnessMap/roughnessMap（金属度/粗糙度贴图）、normalMap（法线贴图，增加表面细节）、aoMap（环境光遮蔽贴图）、emissive/emissiveMap（自发光）、displacementMap（位移贴图）、envMap/environment（环境贴图，对PBR效果影响巨大）。支持透明度和alphaMap。是创建逼真材质的首选。
+
+{{知识点15}}
+{{MeshPhysicalMaterial物理材质}}
+MeshPhysicalMaterial扩展了MeshStandardMaterial，增加高级物理特性。额外属性：clearcoat（清漆层，模拟汽车喷漆）、clearcoatRoughness（清漆粗糙度）、sheen（光泽层，模拟布料）、sheenRoughness/sheenColor、transmission（透射，模拟玻璃/水）、thickness（透射厚度）、ior（折射率，默认1.5）、iridescence（虹彩效果）、anisotropy（各向异性）。是Three.js中功能最丰富的材质，适合需要高级视觉效果的场景。
+
+{{知识点16}}
+{{其他材质类型}}
+Three.js提供多种材质：MeshPhongMaterial（Phong光照模型，性能好于Standard）、MeshLambertMaterial（Lambert漫反射，最省性能的光照材质）、MeshToonMaterial（卡通着色）、MeshNormalMaterial（法线可视化，调试用）、MeshMatcapMaterial（MatCap材质，预烘焙光照）、MeshDepthMaterial（深度材质）、ShaderMaterial（自定义着色器）、RawShaderMaterial（原始着色器）、PointsMaterial（点材质）、SpriteMaterial（精灵材质）、LineBasicMaterial/LineDashedMaterial（线材质）、ShadowMaterial（阴影材质）。
+
+{{知识点17}}
+{{纹理与贴图系统}}
+Three.js通过TextureLoader加载2D纹理：new THREE.TextureLoader().load(url, onLoad)。CubeTextureLoader加载立方体贴图（用于环境映射）。Texture对象关键属性：wrapS/wrapT（包裹模式：RepeatWrapping/ClampToEdgeWrapping）、magFilter/minFilter（过滤模式）、repeat（重复次数）、offset（偏移）、rotation（旋转）、anisotropy（各向异性过滤）。TextureLoader支持jpg/png/webp等格式。DataTexture支持从数据数组创建纹理。纹理坐标（UV）定义几何体表面如何映射纹理。
+
+{{知识点18}}
+{{光源类型}}
+Three.js支持多种光源：AmbientLight（环境光，均匀照亮所有物体，无方向无阴影）、DirectionalLight（方向光，模拟太阳光，平行光线，支持阴影）、PointLight（点光源，从一点向所有方向发光，衰减）、SpotLight（聚光灯，锥形光束，支持阴影和衰减）、HemisphereLight（半球光，模拟天空和地面的环境光）、RectAreaLight（矩形面光源，模拟窗户/灯箱，仅支持MeshStandard/MeshPhysical材质）。每种光源都有color和intensity属性。LightProbe用于存储环境光照信息。
+
+{{知识点19}}
+{{阴影系统}}
+Three.js阴影需要显式启用：renderer.shadowMap.enabled = true。光源需设置castShadow = true，物体需设置castShadow/receiveShadow = true。DirectionalLightShadow使用正交投影，SpotLightShadow使用透视投影，PointLightShadow使用立方体贴图实现全向阴影。shadow.mapSize控制阴影贴图分辨率（默认512x512），shadow.bias控制阴影偏移防止伪影。ShadowMaterial可创建仅接收阴影的透明材质。阴影是性能开销较大的特性，需权衡质量和性能。
+
+{{知识点20}}
+{{环境贴图与IBL}}
+环境贴图（Environment Map）用于模拟周围环境的反射和光照。CubeTextureLoader加载6面立方体贴图，或使用PMREMGenerator处理HDR环境贴图。通过scene.environment或material.envMap设置。envMapIntensity控制反射强度。IBL（基于图像的照明）是PBR渲染的关键部分，使用环境贴图提供间接光照。Three.js的RoomEnvironment类可生成简单的室内环境贴图。HDR贴图通过RGBELoader或EXRLoader加载。
+
+{{知识点21}}
+{{动画系统Animation}}
+Three.js动画系统基于AnimationClip（动画片段）、AnimationAction（动画动作）和AnimationMixer（动画混合器）。AnimationClip包含多个KeyframeTrack，定义属性随时间的变化。AnimationMixer管理多个AnimationAction的播放。使用流程：加载模型获取animations → 创建mixer → mixer.clipAction(clip)创建action → action.play()播放。在渲染循环中调用mixer.update(delta)更新动画。支持动画权重混合、淡入淡出、循环模式（LoopOnce/LoopRepeat/LoopPingPong）。
+
+{{知识点22}}
+{{模型加载GLTF/GLB}}
+GLTF（GL Transmission Format）是Three.js推荐的3D模型格式，被称为"3D界的JPEG"。使用GLTFLoader加载：new GLTFLoader().load(url, (gltf) => { scene.add(gltf.scene) })。GLB是二进制版本，文件更小。GLTF支持PBR材质、动画、骨骼、变形目标、场景层级。DRACOLoader用于解压Draco压缩的几何体，大幅减小文件体积。Three.js也支持OBJ、FBX、Collada等格式但GLTF是首选。KTX2Loader加载压缩纹理。
+
+{{知识点23}}
+{{模型加载OBJ/FBX}}
+OBJLoader加载OBJ格式模型（文本格式，不含动画和材质信息，需配合MTLLoader加载材质）。FBXLoader加载FBX格式模型（支持动画、骨骼、材质，来自Autodesk）。ColladaLoader加载DAE格式。STLLoader加载STL格式（常用于3D打印）。PLYLoader加载PLY格式（点云数据）。每种Loader都遵循Three.js的Loader基类接口，支持load/onProgress/onError回调和LoadingManager统一管理加载进度。
+
+{{知识点24}}
+{{射线拾取Raycaster}}
+Raycaster用于鼠标交互和碰撞检测，实现点击选择3D物体。使用流程：创建Raycaster → 从鼠标位置创建射线 → 检测与物体的交叉。关键代码：raycaster.setFromCamera(mouse, camera)，然后raycaster.intersectObjects(objects)。返回的交叉对象包含distance（距离）、point（世界坐标交点）、face（相交面）、object（被相交的对象）。THREE.Raycaster的性能优化：对大量对象使用空间分区（BVH、Octree），避免每帧对所有对象检测。
+
+{{知识点25}}
+{{控制器Controls}}
+OrbitControls是最常用的相机控制器，支持轨道旋转、缩放和平移。构造：new OrbitControls(camera, domElement)。关键属性：enableDamping（惯性阻尼）、autoRotate（自动旋转）、minDistance/maxDistance（缩放限制）、minPolarAngle/maxPolarAngle（垂直角度限制）、target（焦点目标）。在动画循环中需调用controls.update()。其他控制器：TrackballControls（自由旋转）、FlyControls（飞行控制）、FirstPersonControls（第一人称）、PointerLockControls（FPS锁定）、DragControls（拖拽物体）、TransformControls（变换手柄）。
+
+{{知识点26}}
+{{后处理PostProcessing}}
+后处理在渲染完成后对画面进行图像处理效果。Three.js通过EffectComposer实现。核心流程：RenderPass → 各种ShaderPass → 最终输出。常用后处理效果：UnrealBloomPass（辉光/泛光）、SSAOPass（屏幕空间环境光遮蔽）、SMAAPass/FXAApass（抗锯齿）、BokehPass（景深模糊）、FilmPass（胶片颗粒）、GlitchPass（故障效果）、OutlinePass（轮廓高亮）、SSRPass（屏幕空间反射）。每个Pass都是一个着色器程序，按顺序链式处理。后处理会显著影响性能。
+
+{{知识点27}}
+{{着色器ShaderMaterial}}
+ShaderMaterial允许编写自定义GLSL着色器。顶点着色器(vertexShader)处理每个顶点的位置变换，片元着着色器(fragmentShader)计算每个像素的最终颜色。构造：new THREE.ShaderMaterial({ uniforms: {...}, vertexShader: '...', fragmentShader: '...' })。uniforms传递CPU数据到GPU（时间、纹理、自定义参数）。内置变量：gl_Position（顶点位置）、gl_FragColor（片元颜色）。Three.js自动注入常用的uniform（modelViewMatrix、projectionMatrix）和attribute（position、normal、uv）。RawShaderMaterial不注入内置变量。
+
+{{知识点28}}
+{{WebGPU渲染器}}
+WebGPU是下一代Web图形API，Three.js的WebGPURenderer正在积极开发中。相比WebGL的优势：更低的API开销、更好的多线程支持、计算着色器（Compute Shader）支持、更现代的着色语言WGSL。WebGPURenderer配合NodeMaterial系统使用，提供更灵活的材质节点图。目前浏览器兼容性逐步提升，Chrome已默认支持，Firefox/Safari开发中。Three.js通过WebGPURenderer实现渐进式迁移，保持API一致性。
+
+{{知识点29}}
+{{NodeMaterial节点材质系统}}
+NodeMaterial是Three.js的新一代材质系统，通过节点图方式构建材质。提供MeshStandardNodeMaterial、MeshPhysicalNodeMaterial等。节点系统允许在运行时动态组合材质效果，无需编写完整着色器。节点包括：属性节点、纹理节点、数学运算节点、光照节点等。支持程序化材质和材质的可视化编辑。是Three.js走向Shader Graph方向的重要演进，与WebGPU渲染器配合使用效果最佳。
+
+{{知识点30}}
+{{性能优化策略}}
+Three.js性能优化关键策略：1）几何体优化 - 使用BufferGeometry、合并几何体（mergeBufferGeometries）、LOD（细节层次）、InstancedMesh（实例化渲染大量相同物体）。2）材质优化 - 减少材质种类、共享材质实例。3）纹理优化 - 压缩纹理（KTX2/Basis）、合适的纹理尺寸、mipmap。4）渲染优化 - frustumCustum（视锥裁剪）、减少drawCall、使用WebGLRenderTarget离屏渲染。5）场景优化 - 使用BVH加速光线投射、空间分区。6）设备适配 - 降低pixelRatio、减少阴影分辨率。使用renderer.info查看渲染统计。
+
+{{知识点31}}
+{{InstancedMesh实例化渲染}}
+InstancedMesh用于高效渲染大量相同几何体和材质的物体（如草地、粒子、森林）。构造：new THREE.InstancedMesh(geometry, material, count)。通过setMatrixAt(index, matrix)设置每个实例的变换矩阵，setColorAt(index, color)设置颜色。调用instanceMatrix.needsUpdate = true通知GPU更新。比为每个物体创建独立Mesh的drawCall大幅减少，可渲染数万个实例而保持高帧率。适合粒子系统、植被、建筑群等场景。
+
+{{知识点32}}
+{{LOD细节层次}}
+LOD（Level of Detail）根据物体与相机的距离自动切换不同精度的模型。构造：const lod = new THREE.LOD()。通过lod.addLevel(object, distance)添加不同细节层次。在渲染循环中调用lod.update(camera)自动判断使用哪个层级。远距离使用低面数模型，近距离使用高面数模型，在视觉质量和渲染性能之间取得平衡。是大型3D场景的必备优化技术。
+
+{{知识点33}}
+{{Group与场景层级}}
+Group是Object3D的子类，用于将多个对象组织在一起形成逻辑组。对Group的变换会应用到所有子对象。const group = new THREE.Group(); group.add(mesh1, mesh2)。Group常用于组织复杂模型的不同部分、实现父子变换关系（如机器人手臂的关节）。场景图（Scene Graph）是树状结构，从Scene根节点出发，包含Group、Mesh、Light、Camera等节点。理解场景图对管理复杂3D场景至关重要。
+
+{{知识点34}}
+{{数学工具Vector3/Matrix4/Quaternion}}
+Vector3是最常用的数学类，表示3D向量，用于位置、方向、缩放。核心方法：add/sub/multiply/divide（向量运算）、normalize（归一化）、length/lengthSq（长度）、cross（叉积）、dot（点积）、applyMatrix4（应用矩阵变换）、lerp（线性插值）、distanceTo（距离计算）。Euler表示欧拉旋转（三个角度），Quaternion表示四元数旋转（避免万向节锁）。Matrix4表示4x4变换矩阵，compose/decompose在TRS和矩阵间转换。MathUtils提供clamp、lerp、smoothstep等工具函数。
+
+{{知识点35}}
+{{曲线系统Curves}}
+Three.js提供丰富的曲线类：LineCurve/LineCurve3（直线）、QuadraticBezierCurve/QuadraticBezierCurve3（二次贝塞尔）、CubicBezierCurve/CubicBezierCurve3（三次贝塞尔）、SplineCurve（样条曲线）、CatmullRomCurve3（Catmull-Rom样条）、EllipseCurve（椭圆弧）、ArcCurve（圆弧）。所有曲线继承Curve基类，提供getPoint(t)、getPoints(divisions)、getLength()方法。CurvePath/Path用于组合多段曲线。常用于相机路径、物体运动轨迹、形状定义。
+
+{{知识点36}}
+{{调试辅助工具Helpers}}
+Three.js提供多种调试辅助工具：AxesHelper（坐标轴，红X绿Y蓝Z）、GridHelper（网格地面）、ArrowHelper（方向箭头）、BoxHelper（包围盒）、Box3Helper（AABB包围盒）、CameraHelper（相机视锥可视化）、SkeletonHelper（骨骼可视化）、各光源Helper（DirectionalLightHelper、PointLightHelper、SpotLightHelper等）、PlaneHelper（平面可视化）。Helper只是调试工具，生产环境中应移除。使用scene.add(helper)添加到场景。
+
+{{知识点37}}
+{{事件系统与交互}}
+Three.js的EventDispatcher提供事件系统，Object3D继承自它。支持addEventListener/removeEventListener/dispatchEvent。常见事件：click、mousemove、pointerdown/up等（通过DOM事件+Raycaster实现）。OrbitControls等控制器也提供change、start、end事件。Three.js r152+支持事件冒泡（Object3D的事件向上传播到父对象）。交互实现通常通过监听Canvas的DOM事件，转换为3D空间中的射线检测。
+
+{{知识点38}}
+{{Fog雾化效果}}
+雾化效果使远处物体逐渐融入背景色，增强深度感。THREE.Fog(color, near, far)创建线性雾（从near开始到far完全被雾遮盖）。THREE.FogExp2(color, density)创建指数雾（density控制密度）。通过scene.fog = fog设置。雾化会影响使用默认着色器的材质，自定义着色器需手动处理雾。雾化不仅增强视觉效果，还能用来隐藏远处物体的突然出现（与LOD配合使用）。
+
+{{知识点39}}
+{{Canvas纹理与文字}}
+使用Canvas 2D API生成动态纹理。创建canvas元素 → 获取2D上下文 → 绘制文字/图形 → 用CanvasTexture包装为Three.js纹理。示例：const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d'); ctx.fillText('Hello', 10, 50); const texture = new THREE.CanvasTexture(canvas)。适用于动态文字标签、数据可视化图表、HUD界面。也支持CSS3DRenderer将DOM元素作为3D对象渲染。
+
+{{知识点40}}
+{{响应式设计与窗口适配}}
+Three.js应用需要处理窗口大小变化。监听resize事件：window.addEventListener('resize', () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight) })。高DPI适配：renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))，限制为2避免过度消耗GPU。渲染到指定容器时需获取容器尺寸。移动端还需处理触摸事件和设备方向。
+
+{{知识点41}}
+{{粒子系统Points}}
+Points类用于创建粒子系统。构造：new THREE.Points(geometry, material)。geometry的position属性定义粒子位置。PointsMaterial控制粒子外观：size（大小）、sizeAttenuation（是否随距离衰减）、map（粒子纹理）、color、transparent/opacity、blending（混合模式）。粒子系统适合创建雨雪、火焰、烟雾、星空等效果。更新粒子位置需修改geometry.attributes.position并设置needsUpdate = true。大量粒子可用InstancedMesh或GPU粒子实现更优性能。
+
+{{知识点42}}
+{{阴影与光照进阶}}
+高级光照技术：RectAreaLight（矩形面光源）模拟窗户光效果，需配合RectAreaLightUniformsLib使用。LightProbe存储球谐光照信息，用于环境光照。IESLightProfile用于SpotLight模拟真实灯具光分布。环境光遮蔽（AO）可通过aoMap纹理或SSAOP后处理实现。全局光照（GI）通常通过预烘焙光照贴图或屏幕空间技术近似。Three.js支持PCF/PCFSoft/VSM等阴影过滤算法，通过renderer.shadowMap.type设置。
+
+{{知识点43}}
+{{纹理压缩与性能}}
+纹理是GPU内存的主要消耗者。压缩纹理格式：KTX2/Basis Universal（通用压缩，通过KTX2Loader加载）、DDS（DirectDraw Surface）、PVR（PowerVR）。KTX2是Three.js推荐的纹理压缩格式，支持ETC2/ASTC/BC等GPU原生压缩。纹理尺寸应为2的幂次方（512/1024/2048）。使用TextureLoader的ImageBitmapLoader后端可加速解码。纹理的wrap/filter设置影响质量和性能。PMREMGenerator用于预处理环境贴图。
+
+{{知识点44}}
+{{WebGLRenderTarget离屏渲染}}
+RenderTarget允许渲染到纹理而非屏幕。用于后处理、反射、阴影贴图、实时纹理更新。构造：new THREE.WebGLRenderTarget(width, height, { minFilter, magFilter, format, type })。渲染到纹理：renderer.setRenderTarget(target); renderer.render(scene, camera); renderer.setRenderTarget(null)。支持多渲染目标（MRT）、3D纹理（RenderTarget3D）、立方体贴图渲染目标（WebGLCubeRenderTarget）。是实现高级渲染技术的基础。
+
+{{知识点45}}
+{{物理模拟与Cannon.js/Ammo.js集成}}
+Three.js本身不包含物理引擎，但可与Cannon.js/cannon-es或Ammo.js（Bullet物理引擎的JS移植）集成。cannon-es是纯JavaScript物理引擎，API简洁。集成方式：在渲染循环中同步物理世界的位置/旋转到Three.js Mesh。Ammo.js基于WebAssembly，性能更佳但集成更复杂。Rapier.js是新兴的Rust物理引擎WebAssembly版本，性能优异。物理模拟用于碰撞检测、刚体动力学、布料模拟、车辆物理等。
+
+{{知识点46}}
+{{WebGL与WebGPU的区别}}
+WebGL基于OpenGL ES 2.0/3.0，是当前主流Web 3D API。WebGPU是下一代API，优势：更低CPU开销（命令缓冲区设计）、原生多线程支持、计算着色器、更灵活的资源绑定模型、更好的GPU利用率。WebGPU使用WGSL着色语言替代GLSL。Three.js同时支持两种渲染器，WebGPURenderer逐步成熟。浏览器支持：Chrome 113+默认支持WebGPU，Firefox/Safari开发中。未来WebGPU将逐步取代WebGL。
+
+{{知识点47}}
+{{Three.js与React Three Fiber}}
+React Three Fiber（R3F）是Three.js的React渲染器，使用声明式方式构建3D场景。npm install @react-three/fiber。核心组件：<Canvas>容器、<mesh>替代THREE.Mesh、<perspectiveCamera>等。支持React Hooks：useFrame（动画循环）、useThree（访问场景/相机/渲染器）、useLoader（资源加载）。R3F生态：@react-three/drei（预制组件库）、@react-three/postprocessing（后处理）、@react-three/rapier（物理引擎）。R3F在React项目中大幅简化Three.js开发。
+
+{{知识点48}}
+{{骨骼动画与变形目标}}
+骨骼动画（Skeletal Animation）通过骨骼（Bone）和蒙皮（SkinnedMesh）实现角色动画。骨骼形成层级结构，蒙皮网格的每个顶点受多个骨骼影响（权重混合）。变形目标（Morph Targets）通过顶点位置的插值实现表情动画。在GLTF模型中，骨骼动画存储为AnimationClip。播放流程：GLTFLoader加载 → 创建AnimationMixer → clipAction播放。支持多动画混合和IK（逆运动学）插件。
+
+{{知识点49}}
+{{ECS架构与大型项目}}
+大型Three.js项目推荐使用ECS（Entity-Component-System）架构。将游戏对象分解为Entity（实体ID）、Component（数据组件）、System（逻辑系统）。Three.js的Object3D可作为Entity基础，附加自定义Component。流行的Three.js ECS框架：bitecs.js（高性能ECS）、ecsy（Mozilla开发）。也可使用Three.js自带的Object3D.userData存储组件数据。ECS有利于代码解耦、性能优化和大型团队协作。
+
+{{知识点50}}
+{{最新特性与发展方向}}
+2025年Three.js重点发展方向：1）WebGPU渲染器成熟化，NodeMaterial系统完善。2）更好的TypeScript支持（类型定义随官方维护）。3）新材质特性：SSS（次表面散射）材质、Volume材质。4）ProjectorLight（投影光）新光源类型。5）性能持续优化：更高效的场景图更新、GPU驱动渲染。6）更好的XR（VR/AR）支持。7）社区生态持续壮大，GitHub 100k+ star。Three.js保持着Web 3D领域的事实标准地位。

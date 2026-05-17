@@ -1,0 +1,79 @@
+# 2025前端前端监控与APM
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{前端监控（Frontend Monitoring）是指对Web应用在用户浏览器端的运行状态进行持续采集、分析和告警的技术体系。它涵盖错误监控、性能监控、用户行为追踪三大核心维度，帮助开发团队在生产环境中发现并修复问题，提升用户体验。}}
+
+{{知识点2}}{{APM（Application Performance Monitoring，应用性能监控）是一种用于监控和管理软件应用程序性能和可用性的技术。前端APM专注于浏览器端的性能数据采集，包括页面加载时间、资源加载耗时、API请求延迟、运行时错误等指标。}}
+
+{{知识点3}}{{Core Web Vitals（核心网页指标）是Google提出的衡量Web用户体验的三项核心指标。2025年的三项指标为：LCP（Largest Contentful Paint，最大内容绘制）衡量加载性能，目标≤2.5秒；INP（Interaction to Next Paint，交互到下次绘制）衡量交互响应性，目标≤200毫秒；CLS（Cumulative Layout Shift，累积布局偏移）衡量视觉稳定性，目标≤0.1。}}
+
+{{知识点4}}{{LCP（Largest Contentful Paint，最大内容绘制）衡量页面主要内容的加载速度。它测量视口内最大可见元素（如图片、视频海报、大块文本）完成渲染的时间点。Google建议LCP应在页面开始加载后的2.5秒内完成，超过4秒则被视为"差"。}}
+
+{{知识点5}}{{INP（Interaction to Next Paint，交互到下次绘制）于2024年3月正式取代FID成为Core Web Vitals指标。INP测量页面对用户交互（点击、键盘输入、触摸）的整体响应性，取所有交互延迟的第98百分位值，目标≤200ms。与FID仅测量首次交互不同，INP覆盖整个页面生命周期的所有交互。}}
+
+{{知识点6}}{{CLS（Cumulative Layout Shift，累积布局偏移）衡量页面内容意外移动的程度。它通过计算每个意外布局偏移的"影响分数×距离分数"来量化视觉不稳定性。常见原因包括未指定尺寸的图片/视频、动态注入的广告、晚加载的字体等。目标值≤0.1。}}
+
+{{知识点7}}{{Sentry是业界最流行的开源前端错误监控平台，支持JavaScript、React、Vue、Angular等主流框架。其核心功能包括：实时错误捕获与聚合、源码级堆栈追踪（通过Source Map）、面包屑（Breadcrumbs）回溯用户操作路径、Release Health监控版本健康度，以及性能监控与分布式链路追踪。}}
+
+{{知识点8}}{{Sentry JavaScript SDK的初始化需要配置DSN（Data Source Name）和采样率。关键配置项包括：tracesSampleRate控制性能追踪采样比例（0-1之间），tracePropagationTargets指定需要追踪的请求目标，browserTracingIntegration启用浏览器端性能追踪，replaysSessionSampleRate控制Session Replay采样率。}}
+
+{{知识点9}}{{Sentry Performance Monitoring通过分布式链路追踪（Distributed Tracing）捕获每个事务（Transaction）的详细性能数据。它可以自动检测N+1查询、连续数据库查询可批处理、主线程阻塞等性能问题（Performance Issues），并提供Trace Explorer进行自定义查询分析。}}
+
+{{知识点10}}{{Sentry Session Replay（会话回放）可以录制用户在页面上的完整操作过程，包括DOM变化、鼠标移动、点击、滚动等。回放数据与错误事件关联，帮助开发者直观理解bug发生的上下文。支持隐私遮蔽（masking）敏感文本和元素。}}
+
+{{知识点11}}{{LogRocket是一个集Session Replay、Product Analytics、Error Tracking和Performance Monitoring于一体的前端监控平台。其最大特色是高质量的会话回放与控制台/网络日志的结合，开发者可以"看到用户看到了什么"并同步查看技术日志。}}
+
+{{知识点12}}{{LogRocket的Session Replay能够录制完整的DOM变化、控制台输出、网络请求和Redux/Vuex状态变化。支持LogRocket Galileo AI功能，利用AI自动识别影响业务的技术问题和用户体验问题，减少告警噪音。}}
+
+{{知识点13}}{{User Timing API是浏览器原生的性能测量接口，允许开发者使用performance.mark()标记关键时间点，performance.measure()测量两个标记之间的耗时。它比Date.now()更精确，且与DevTools和PerformanceObserver无缝集成，是自定义性能指标的基础。}}
+
+{{知识点14}}{{PerformanceObserver是浏览器提供的异步监听性能条目的API。它支持监听多种entryType，包括：navigation（页面导航）、resource（资源加载）、paint（绘制时间点如FP/FCP）、largest-contentful-paint（LCP）、layout-shift（CLS）、longtask（长任务）、event（交互事件）等。}}
+
+{{知识点15}}{{Web Vitals库（web-vitals）是Google官方开源的轻量级库，用于采集Core Web Vitals指标。使用方式简单：import { onLCP, onINP, onCLS } from 'web-vitals'，然后通过回调函数获取指标值。支持通过sendBeacon或fetch将数据发送到自建或第三方分析端点。}}
+
+{{知识点16}}{{FCP（First Contentful Paint，首次内容绘制）衡量页面首次渲染任何文本、图片或非空白Canvas/SVG的时间点。FCP是用户感知页面开始加载的重要信号，Google建议FCP应在1.8秒以内。FCP与LCP的区别在于：FCP是首次渲染"任何"内容，LCP是渲染"最大"内容。}}
+
+{{知识点17}}{{TTFB（Time to First Byte，首字节时间）衡量浏览器发出HTTP请求到接收响应第一个字节之间的时间。TTFB反映了服务器响应速度，受DNS解析、TCP连接、TLS握手和服务器处理时间影响。良好的TTFB应≤800ms。}}
+
+{{知识点18}}{{RUM（Real User Monitoring，真实用户监控）是一种通过在真实用户浏览器中注入SDK来采集性能和体验数据的监控方式。与Synthetic Monitoring（合成监控）不同，RUM反映的是真实用户在真实网络和设备条件下的体验，数据更贴近实际。Datadog RUM、Sentry、LogRocket都属于RUM工具。}}
+
+{{知识点19}}{{Datadog APM提供从浏览器到后端服务的全栈分布式链路追踪。前端通过Datadog RUM SDK采集浏览器端性能数据（页面加载、资源加载、用户交互），与后端Trace关联形成完整的请求链路。支持Watchdog AI自动检测异常和根因分析，支持OpenTelemetry标准。}}
+
+{{知识点20}}{{Source Map是将压缩/转译后的JavaScript代码映射回原始源码的技术。在前端监控中，Source Map至关重要——它使Sentry等工具能够将生产环境的错误堆栈追踪还原为开发者可读的源文件和行号。部署时需注意Source Map的安全性（不应公开暴露），Sentry支持上传Source Map到其服务器进行符号化。}}
+
+{{知识点21}}{{错误边界（Error Boundary）是React中用于捕获子组件渲染错误的组件。通过componentDidCatch或static getDerivedStateFromError生命周期方法，Error Boundary可以优雅降级UI而非白屏。前端监控中，通常结合Error Boundary和Sentry的captureError实现自动上报。Vue中对应的是errorHandler和onErrorCaptured。}}
+
+{{知识点22}}{{前端性能指标的"四分位分类法"：Google将Web Vitals指标按P75值分为三档——"Good"（绿色，≤目标值）、"Needs Improvement"（橙色，需要改进）、"Poor"（红色，差）。评估时取全部用户数据的第75百分位值，这意味着至少75%的用户体验达到"Good"才算合格。}}
+
+{{知识点23}}{{N+1查询问题在前端监控中表现为：一个页面加载触发了1次主要API请求后，又发起N次额外的相关请求。Sentry的Performance Issues检测器能自动识别此类模式。前端常见的N+1场景包括：循环中发起独立请求、列表渲染时逐项获取详情等，可通过批量接口或GraphQL解决。}}
+
+{{知识点24}}{{前端长任务（Long Task）是指主线程上执行时间超过50ms的任务。长任务会阻塞主线程，导致用户交互无响应（影响INP指标）。通过PerformanceObserver监听longtask entryType可以检测长任务。解决策略包括：代码拆分与懒加载、Web Workers卸载计算、requestIdleCallback延后非关键任务、虚拟滚动减少DOM操作。}}
+
+{{知识点25}}{{资源加载优化与监控密切相关。通过PerformanceObserver监听resource entryType可获取所有资源（JS/CSS/图片/字体）的加载耗时。关键指标包括：DNS查询时间（domainLookupEnd - domainLookupStart）、TCP连接时间、TLS握手时间、请求响应时间（responseEnd - requestStart）、资源大小（transferSize/encodedBodySize/decodedBodySize）。}}
+
+{{知识点26}}{{Sentry Release Health功能可以监控每个发布版本的崩溃率、用户影响范围和会话健康度。通过对比不同Release的错误率，团队可以快速发现引入回归的版本并执行回滚。支持与CI/CD集成，自动创建Release并关联commit信息和deploy通知。}}
+
+{{知识点27}}{{前端告警策略设计原则：基于指标阈值和趋势设置告警。核心告警维度包括：错误率突增（如5分钟内错误率超过基线2倍）、P95/P99延迟恶化、关键用户流程转化率下降、Core Web Vitals退化。Sentry和Datadog均支持自定义告警规则和多渠道通知（Slack、邮件、PagerDuty等）。}}
+
+{{知识点28}}{{前端SDK的性能开销管理至关重要。Sentry SDK设计为异步非阻塞，对页面性能影响极小。但需注意：tracesSampleRate在生产环境建议设为0.1-0.5（采样10%-50%），而非1.0；Session Replay采样率应更低（如0.1）以平衡数据量与成本；避免在高频事件中调用captureMessage/captureException。}}
+
+{{知识点29}}{{OpenTelemetry是CNCF下的可观测性开放标准，提供统一的SDK和协议来采集Traces、Metrics和Logs。前端可通过@opentelemetry/sdk-trace-web和@opentelemetry/auto-instrumentations-web自动采集浏览器端性能数据。2025年越来越多的APM工具（Datadog、Sentry、Grafana）支持OTLP协议，实现数据互通。}}
+
+{{知识点30}}{{Sentry vs LogRocket vs Datadog选型对比：Sentry擅长错误监控和分布式链路追踪，开源且支持全语言；LogRocket强在Session Replay和产品分析，适合产品团队理解用户行为；Datadog是全栈可观测性平台，从前端RUM到后端APM、基础设施监控一体化，适合大型企业。三者可互补使用。}}
+
+{{知识点31}}{{前端监控数据上报策略：通常使用navigator.sendBeacon()进行数据上报，它在页面卸载时仍能可靠发送数据（如beforeunload场景）。备选方案是fetch的keepalive选项。对于大量数据应批量上报（如每5秒聚合一次），避免频繁小请求影响网络性能。Sentry SDK内部已实现这些优化。}}
+
+{{知识点32}}{{Performance API中的Navigation Timing API提供了页面导航的详细时间线数据。通过performance.getEntriesByType('navigation')获取PerformanceNavigationTiming对象，包含：redirectTime、domainLookupTime、connectTime、requestTime、responseTime、domParseTime、domContentLoadedTime、loadEventTime等完整加载阶段数据。}}
+
+{{知识点33}}{{Paint Timing API提供首次绘制（FP）和首次内容绘制（FCP）的时间点。通过performance.getEntriesByType('paint')获取。FP是浏览器首次将像素绘制到屏幕的时间，FCP是首次渲染有意义内容的时间。这两个指标衡量用户"看到页面开始响应"的感知速度。}}
+
+{{知识点34}}{{前端监控中的用户标识与会话追踪。Sentry通过setUser({id, email, username})设置用户上下文，使错误与具体用户关联。LogRocket通过用户ID关联会话回放。会话（Session）通常定义为用户活跃期间的一系列交互，超时（如30分钟无活动）后创建新会话。这对分析用户影响范围和转化漏斗至关重要。}}
+
+{{知识点35}}{{前端监控的Source Map安全实践：生产部署时不将Source Map文件上传到CDN或公开可访问位置。推荐方案：1）构建时生成Source Map并上传到Sentry（通过@sentry/webpack-plugin或@sentry/vite-plugin），随后从服务器删除；2）或存储在私有S3 bucket中，仅允许Sentry服务器访问。这防止源码泄露同时保留错误调试能力。}}
+
+{{知识点36}}{{Google CrUX（Chrome User Experience Report）是基于Chrome用户真实使用数据的公开数据集，提供Core Web Vitals等指标的聚合数据。它是衡量网站实际用户体验的权威数据源，被Google Search用作排名信号。可通过CrUX API、CrUX Dashboard或PageSpeed Insights查询特定网站/页面的CrUX数据。}}
+
+{{知识点37}}{{前端异常分类：1）JavaScript运行时错误（TypeError、ReferenceError等）；2）未捕获的Promise Rejection（unhandledrejection事件）；3）资源加载失败（img/script/link的onerror）；4）网络请求失败（HTTP 4xx/5xx）；5）CORS跨域错误；6）CSP安全策略违规。Sentry自动捕获前4类，后2类需手动配置。}}
+
+{{知识点38}}{{前端性能预算（Performance Budget）是团队预设的性能指标上限，用于防止性能退化。常见预算：JavaScript总大小≤300KB（gzipped）、LCP≤2.5s、FCP≤1.8s、CLS≤0.1、TTFB≤800ms。可通过Lighthouse CI、Webpack Performance Hints、bundlesize等工具在CI/CD中自动检查。}}

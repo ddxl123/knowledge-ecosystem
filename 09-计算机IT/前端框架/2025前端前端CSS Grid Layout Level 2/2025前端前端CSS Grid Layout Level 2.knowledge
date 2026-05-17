@@ -1,0 +1,79 @@
+# 2025前端前端CSS Grid Layout Level 2
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{CSS Grid Layout Level 2 规范概述：CSS Grid Layout Module Level 2 是 Level 1 的扩展，核心新增特性是 Subgrid（子网格）。Subgrid 允许网格项目（grid item）自身的网格轨道与父网格对齐，解决了嵌套网格无法与父网格对齐的痛点。规范由 W3C CSS 工作组维护，当前为候选推荐标准（CR）。}}
+
+{{知识点2}}{{Subgrid 的定义：Subgrid 是 grid-template-columns 或 grid-template-rows 属性的一个特殊值。当嵌套的网格容器使用 subgrid 关键字时，它不再自行定义轨道，而是继承父网格中对应跨度的轨道尺寸，从而实现父子网格的精确对齐。}}
+
+{{知识点3}}{{Subgrid 的语法：grid-template-columns: subgrid [line-name1] [line-name2] ... 或 grid-template-rows: subgrid [line-name1] [line-name2] ...。方括号中的线名可选，用于在子网格中添加额外的命名线。}}
+
+{{知识点4}}{{仅列方向使用 Subgrid：当仅设置 grid-template-columns: subgrid 时，列轨道继承父网格，行轨道仍由子网格自行定义（独立的嵌套网格行为）。子网格跨越几条父网格列轨道，就拥有几条列轨道。}}
+
+{{知识点5}}{{仅行方向使用 Subgrid：当仅设置 grid-template-rows: subgrid 时，行轨道继承父网格，列轨道由子网格自行定义。适用于需要垂直对齐但水平方向独立布局的场景，如表单布局。}}
+
+{{知识点6}}{{双向 Subgrid：同时设置 grid-template-columns: subgrid 和 grid-template-rows: subgrid，子网格在两个维度都继承父网格轨道。子网格中的项目可以精确对齐到父网格的任意行列交叉点。}}
+
+{{知识点7}}{{子网格中线号重新编号：子网格内部的线号从 1 开始重新计数，不继承父网格的线号。这意味着组件可以在主网格的不同位置使用，其内部线号始终一致，提高了组件的可复用性。}}
+
+{{知识点8}}{{Subgrid 继承间距（gap）：父网格的 gap、column-gap、row-gap 值会传递到子网格，使子网格轨道间距与父网格一致。可以通过在子网格容器上设置不同的 gap 值来覆盖默认行为。}}
+
+{{知识点9}}{{覆盖子网格间距：在子网格容器上设置 row-gap: 0 或其他值可以覆盖继承的间距。此时子网格线位于父网格间距的中心位置，效果类似于对元素应用负 margin，将间距空间归还给项目。}}
+
+{{知识点10}}{{Subgrid 中的命名网格线继承：父网格中定义的命名线会传递到子网格中，子网格项目可以使用父网格的线名进行定位。例如父网格定义了 [col-start] 和 [col-end]，子网格中的项目可以直接引用这些名称。}}
+
+{{知识点11}}{{Subgrid 中添加自定义线名：在 subgrid 关键字后添加方括号命名，如 grid-template-columns: subgrid [sub-a] [sub-b] [sub-c]，这些线名会追加到从父网格继承的线名之后，两种线名可以同时使用。}}
+
+{{知识点12}}{{Subgrid 无隐式网格：在使用 subgrid 的维度上，不会创建隐式网格轨道。如果子网格中的项目数量超过父网格分配的轨道数，多余项目会堆叠在最后一条轨道中。这是规范定义的行为。}}
+
+{{知识点13}}{{处理隐式网格的策略：如果需要自动放置项目且不确定项目数量，应避免在该维度使用 subgrid。可以移除该维度的 subgrid 值，改用 grid-auto-rows 或 grid-auto-columns 来控制隐式轨道的尺寸。}}
+
+{{知识点14}}{{Subgrid 与内容尺寸的交互：子网格中的内容尺寸会影响父网格的轨道尺寸。当父网格使用允许内容影响尺寸的轨道大小方法（如 auto、min-content）时，子网格和主网格中的内容都会使轨道增长。}}
+
+{{知识点15}}{{Subgrid 与普通嵌套网格的切换：由于 subgrid 的行为与普通嵌套网格非常相似，可以轻松在两者之间切换。当发现需要隐式网格时，只需移除 subgrid 值并可能添加 grid-auto-rows 即可。}}
+
+{{知识点16}}{{Subgrid 的典型用例——卡片布局：在一组卡片组件中，每张卡片是一个网格项目，卡片内部的标题、描述、按钮等元素需要跨卡片对齐。使用 subgrid 可以让所有卡片的内部元素自动对齐，无需固定高度或 JavaScript。}}
+
+{{知识点17}}{{Subgrid 的典型用例——表单布局：表单中标签和输入框的对齐是经典难题。使用 subgrid，可以将每一行表单设为子网格，标签列和输入列分别对齐父网格的列轨道，实现完美对齐。}}
+
+{{知识点18}}{{Subgrid 的典型用例——复杂数据表格：当需要在网格中展示具有嵌套结构的数据（如每行包含多个子项）时，subgrid 可以确保子项的列与主表格列精确对齐。}}
+
+{{知识点19}}{{Subgrid 与 display: grid 的关系：要使用 subgrid，元素必须同时设置 display: grid。subgrid 是 grid-template-columns/rows 的值，而非 display 属性的值。即 display: grid + grid-template-columns: subgrid 的组合。}}
+
+{{知识点20}}{{Subgrid 项目必须是网格项目：只有作为网格容器直接子元素（即网格项目）的元素才能使用 subgrid。该元素需要通过 grid-column 和 grid-row 属性指定在父网格中跨越的轨道范围。}}
+
+{{知识点21}}{{Subgrid 跨度决定轨道数量：子网格在某个维度上拥有的轨道数量等于它在父网格中该维度上跨越的轨道数量。例如 grid-column: 2 / 7 跨越 5 条轨道，则 subgrid 也有 5 条列轨道。}}
+
+{{知识点22}}{{Subgrid 的浏览器兼容性——Firefox：Firefox 最早实现 subgrid 支持，从版本 71（2019年12月）开始默认启用，是第一个支持该特性的浏览器。到 2025 年已支持到 Firefox 153+。}}
+
+{{知识点23}}{{Subgrid 的浏览器兼容性——Safari：Safari 从版本 16.0（2022年9月）开始支持 subgrid。到 2025 年已支持 Safari 26.5+（包括 iOS Safari 16.0+）。}}
+
+{{知识点24}}{{Subgrid 的浏览器兼容性——Chrome/Edge：Chrome 和 Edge 从版本 117（2023年9月）开始默认支持 subgrid。114-116 版本中需要手动启用实验性标志。到 2025 年支持 Chrome 147+、Edge 147+。}}
+
+{{知识点25}}{{Subgrid 的浏览器兼容性——其他浏览器：Samsung Internet 24+ 支持；Opera 103+ 支持；Opera Mobile 80+ 支持；KaiOS 3 支持。不支持的包括 IE 11、Opera Mini、UC Browser 15.5、QQ Browser 14.9、百度浏览器 13.52。}}
+
+{{知识点26}}{{Subgrid 的渐进增强策略：可以使用 @supports (grid-template-columns: subgrid) 特性查询来检测浏览器支持。在不支持的浏览器中回退到普通嵌套网格，确保布局仍然可用。}}
+
+{{知识点27}}{{Subgrid 与 align-items/justify-items：子网格中的项目继承子网格容器的对齐属性。由于子网格的轨道与父网格对齐，项目的对齐方式也会在整个网格上下文中生效。}}
+
+{{知识点28}}{{Subgrid 与 grid-template-areas 的关系：grid-template-areas 不能与 subgrid 值一起使用。subgrid 替代了轨道定义，而 grid-template-areas 是另一种定义轨道的方式，两者互斥。}}
+
+{{知识点29}}{{Subgrid 规范的历史演进：Subgrid 最初在 CSS Grid Level 1 规范中被提出，但因实现复杂性被推迟到 Level 2。2018 年 Smashing Magazine 发表《CSS Grid Level 2: Here Comes Subgrid》推动了社区关注。2019 年 Firefox 率先实现。}}
+
+{{知识点30}}{{Subgrid 与 Masonry 布局：CSS Grid Level 2 规范中还包含 masonry（瀑布流）布局的实验性提案。masonry 和 subgrid 是 Level 2 的两个主要新增特性，但 masonry 目前仅 Firefox 支持（实验性）。}}
+
+{{知识点31}}{{Subgrid 在组件化开发中的价值：在组件化前端开发中，子组件的 DOM 结构被封装，无法直接访问父网格的轨道。Subgrid 允许组件内部自动继承父网格的轨道定义，无需通过 CSS 变量或 JavaScript 传递尺寸信息。}}
+
+{{知识点32}}{{Subgrid 性能考量：Subgrid 本身不会引入额外的性能开销，因为它复用父网格的轨道计算结果。相比使用 JavaScript 计算并对齐嵌套元素，subgrid 是纯 CSS 方案，性能更优且无布局抖动。}}
+
+{{知识点33}}{{Subgrid 调试技巧：使用浏览器开发者工具的 Grid Inspector 可以可视化子网格的轨道和线号。Chrome DevTools、Firefox DevTools 和 Safari Web Inspector 都支持在网格覆盖层中显示子网格信息。}}
+
+{{知识点34}}{{Subgrid 与 CSS 自定义属性的配合：虽然 subgrid 继承父网格轨道，但可以通过 CSS 自定义属性（变量）在子网格上动态调整间距、对齐等属性，实现灵活的主题切换和响应式设计。}}
+
+{{知识点35}}{{Subgrid 项目的内容溢出处理：当子网格项目的内容超出轨道尺寸时，遵循普通网格的溢出规则。可以使用 overflow 属性控制溢出行为，或通过 minmax() 确保轨道有足够的最小尺寸。}}
+
+{{知识点36}}{{Subgrid 与 auto-fill/auto-fit 的限制：subgrid 不能与 repeat(auto-fill, ...) 或 repeat(auto-fit, ...) 一起使用。subgrid 的轨道数量由它在父网格中跨越的轨道数决定，是确定的，不支持自动填充。}}
+
+{{知识点37}}{{W3C 规范参考：CSS Grid Layout Module Level 2 的正式规范地址为 https://drafts.csswg.org/css-grid-2/#subgrids。MDN 文档参考地址为 https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout/Subgrid。}}
+
+{{知识点38}}{{Subgrid 的无障碍性考虑：Subgrid 仅影响视觉布局，不影响 DOM 结构和屏幕阅读器的导航顺序。应确保源顺序仍然合理，不要仅依赖网格重排来调整视觉呈现，以维护良好的可访问性。}}

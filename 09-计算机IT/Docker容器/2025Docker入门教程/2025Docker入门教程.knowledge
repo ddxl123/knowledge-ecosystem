@@ -1,0 +1,107 @@
+# 2025Docker入门教程
+# 领域: 计算机IT
+# 学科: Docker
+# 来源: 2025Docker入门教程
+# 描述: Docker容器核心知识点
+
+{{Docker概述}}
+Docker 是一个开源的应用容器引擎，基于 Go 语言开发，遵循 Apache 2.0 协议。Docker 可以让开发者打包应用及其依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 或 Windows 操作系统上。容器是完全使用沙箱机制，相互之间不会有任何接口，且性能开销极低。Docker 解决了"在我机器上能运行"的经典问题，实现了应用的一致性部署。
+
+{{Docker与虚拟机的区别}}
+Docker 容器与传统虚拟机有本质区别。虚拟机通过 Hypervisor 模拟完整的操作系统，每个 VM 包含独立的内核、系统库和应用，启动时间在分钟级别，占用资源多（GB 级别）。Docker 容器直接运行在宿主机的内核上，不需要额外的操作系统，启动时间在秒级甚至毫秒级，占用资源少（MB 级别）。容器共享宿主机内核，通过 namespace 实现隔离，通过 cgroups 实现资源限制。
+
+{{Docker架构}}
+Docker 采用 Client-Server 架构。Docker Client 通过命令行或 REST API 与 Docker Daemon（守护进程）通信。Docker Daemon 负责构建、运行和分发容器。Registry（如 Docker Hub）用于存储镜像。核心组件包括：Docker Client（docker CLI）、Docker Daemon（dockerd）、Docker Registry（镜像仓库）、Docker Objects（镜像、容器、网络、数据卷等）。
+
+{{Docker安装}}
+在 Ubuntu 上安装 Docker：执行 sudo apt-get update 更新包索引，安装依赖包（apt-transport-https、ca-certificates、curl、gnupg），添加 Docker 官方 GPG 密钥和 APT 源，然后执行 sudo apt-get install docker-ce docker-ce-cli containerd.io。安装后执行 sudo systemctl start docker 启动服务，并将当前用户加入 docker 组以免 sudo 使用。macOS 和 Windows 推荐安装 Docker Desktop。
+
+{{Docker镜像概念}}
+Docker 镜像是一个只读模板，包含了运行容器所需的所有内容——代码、运行时、库、环境变量和配置文件。镜像由一系列层（layer）组成，每层代表 Dockerfile 中的一条指令。层是只读的，多个镜像可以共享相同的层，节省存储空间。镜像使用分层存储架构（UnionFS），通过联合文件系统将多个层叠加在一起形成最终的文件系统。
+
+{{Docker镜像管理命令}}
+常用镜像管理命令：docker images 列出本地镜像；docker pull <image> 从仓库拉取镜像；docker push <image> 推送镜像到仓库；docker rmi <image> 删除本地镜像；docker image prune 清理无用镜像；docker tag <image> <new-tag> 给镜像打标签；docker save -o file.tar <image> 导出镜像为 tar 文件；docker load -i file.tar 从 tar 文件导入镜像；docker image inspect <image> 查看镜像详细信息。
+
+{{Docker Hub}}
+Docker Hub 是 Docker 官方提供的公共镜像仓库，类似于代码托管中的 GitHub。用户可以创建免费账户，推送和拉取镜像。Docker Hub 包含大量官方镜像（如 nginx、ubuntu、node、python 等）和社区维护的镜像。私有仓库需要付费。组织账户可以管理团队的镜像。自动构建功能可以连接 GitHub/Bitbucket 代码仓库，代码更新时自动构建镜像。
+
+{{Docker容器生命周期}}
+Docker 容器的生命周期状态包括：Created（已创建）、Running（运行中）、Paused（已暂停）、Stopped（已停止）、Deleted（已删除）。核心管理命令：docker create 创建容器（不启动）；docker start 启动容器；docker run 创建并启动容器；docker stop 停止容器（发送 SIGTERM，超时后 SIGKILL）；docker kill 强制停止容器（发送 SIGKILL）；docker restart 重启容器；docker rm 删除容器；docker pause/unpause 暂停/恢复容器。
+
+{{docker run详解}}
+docker run 是最常用的命令，常用参数：-d 后台运行（守护模式）；-it 交互式终端（-i 保持 STDIN，-t 分配伪终端）；--name 指定容器名称；-p <host>:<container> 端口映射；-v <host>:<container> 挂载数据卷；-e 设置环境变量；--rm 容器停止后自动删除；--network 指定网络；--restart 设置重启策略（no/always/on-failure/unless-stopped）；--memory 限制内存；--cpus 限制 CPU。
+
+{{Dockerfile基础}}
+Dockerfile 是一个文本文件，包含了一系列指令，用于自动化构建 Docker 镜像。基本结构：FROM 指定基础镜像，RUN 执行命令，COPY/ADD 复制文件，WORKDIR 设置工作目录，EXPOSE 声明端口，CMD/ENTRYPOINT 设置启动命令。每条指令都会创建一个新的镜像层。构建命令：docker build -t <name>:<tag> <path>。
+
+{{Dockerfile常用指令}}
+FROM：指定基础镜像，必须是第一条非注释指令。RUN：执行命令并创建新层，支持 shell 格式和 exec 格式。COPY：从构建上下文复制文件到镜像。ADD：类似 COPY，但支持 URL 和自动解压 tar 文件（推荐优先使用 COPY）。WORKDIR：设置工作目录。ENV：设置环境变量。EXPOSE：声明容器监听的端口（文档性质，不实际发布端口）。VOLUME：声明匿名数据卷挂载点。
+
+{{CMD与ENTRYPOINT}}
+CMD 指定容器启动时的默认命令，可以被 docker run 的参数覆盖。ENTRYPOINT 指定容器启动时的入口命令，不容易被覆盖。最佳实践：ENTRYPOINT 定义主命令，CMD 定义默认参数。例如 ENTRYPOINT ["python"] CMD ["app.py"]，运行时可 docker run myapp test.py 覆盖 CMD 参数。shell 格式（CMD command）会通过 /bin/sh -c 执行，exec 格式（CMD ["cmd","arg"]）直接执行，推荐使用 exec 格式以正确传递信号。
+
+{{多阶段构建}}
+多阶段构建（Multi-stage Build）是优化镜像大小的重要技术。在 Dockerfile 中使用多个 FROM 指令，每个 FROM 开始一个新阶段。可以在前面的阶段中使用包含编译工具的大镜像进行构建，然后在最后阶段使用轻量基础镜像，只复制编译产物。例如：第一阶段用 golang 镜像编译 Go 程序，第二阶段用 alpine 镜像只包含二进制文件，最终镜像可以缩小到几 MB。
+
+{{Dockerfile最佳实践}}
+1. 使用精简基础镜像（alpine、distroless）。2. 合并 RUN 指令减少层数。3. 将不常变化的层放在前面以利用缓存。4. 使用 .dockerignore 排除不需要的文件。5. 不要在镜像中存储密钥和密码。6. 使用非 root 用户运行应用。7. 多阶段构建减少最终镜像大小。8. 使用 COPY 而非 ADD（除非需要解压）。9. 为每条指令添加注释。10. 使用 HEALTHCHECK 指令定义健康检查。
+
+{{Docker数据卷}}
+数据卷（Volume）是 Docker 中持久化数据的首选方式。容器的文件系统是临时的，容器删除后数据会丢失。数据卷独立于容器的生命周期，容器删除后卷仍然存在。创建方式：docker volume create 创建命名卷；docker run -v <name>:<path> 挂载命名卷；docker run -v <host-path>:<container-path> 绑定挂载（Bind Mount）。数据卷存储在宿主机的 /var/lib/docker/volumes/ 目录下。
+
+{{绑定挂载与匿名卷}}
+绑定挂载（Bind Mount）将宿主机上的任意目录或文件挂载到容器中，路径必须是绝对路径。适合开发环境，可以实时同步代码修改。匿名卷（Anonymous Volume）不指定名称，Docker 自动生成随机名称。适合不需要持久化的临时数据。tmpfs 挂载将数据存储在内存中，容器停止后数据消失，适合存储敏感信息。推荐使用命名卷（Named Volume）而非绑定挂载和匿名卷，便于管理和备份。
+
+{{Docker容器网络}}
+Docker 提供多种网络驱动：bridge（桥接网络，默认）、host（共享宿主机网络）、overlay（覆盖网络，用于跨主机通信）、macvlan（分配 MAC 地址）、none（无网络）。默认的 bridge 网络中，容器通过虚拟网桥互联，但容器间只能通过 IP 通信（除非使用 --link）。自定义 bridge 网络支持自动 DNS 解析，推荐使用。命令：docker network create 创建网络，docker network ls 列出网络，docker network connect/disconnect 连接/断开容器。
+
+{{端口映射}}
+端口映射将容器内部端口暴露到宿主机。-p <host-port>:<container-port> 映射指定端口；-p <container-port> 随机映射宿主机端口；-p <host-ip>:<host-port>:<container-port> 绑定到特定 IP。可以同时映射多个端口。docker port <container> 查看端口映射。EXPOSE 指令只是声明端口，不自动映射。生产环境中通常使用反向代理（如 Nginx、Traefik）来管理端口和路由。
+
+{{Docker Compose基础}}
+Docker Compose 用于定义和运行多容器应用。通过 docker-compose.yml（或 compose.yml）文件配置服务、网络和数据卷。Compose 文件是 YAML 格式，声明式定义整个应用栈。基本命令：docker compose up 启动所有服务（-d 后台运行）；docker compose down 停止并移除所有资源；docker compose ps 查看服务状态；docker compose logs 查看日志；docker compose build 构建镜像；docker compose exec 在运行的容器中执行命令。
+
+{{Compose文件结构}}
+Compose 文件主要顶级元素：services（定义服务）、networks（定义网络）、volumes（定义数据卷）。每个 service 可配置：image（镜像名称）、build（构建上下文）、ports（端口映射）、volumes（数据卷）、environment（环境变量）、env_file（环境变量文件）、depends_on（依赖关系）、restart（重启策略）、command（覆盖启动命令）、healthcheck（健康检查）、deploy（部署配置）。支持使用 ${VAR} 引用环境变量。
+
+{{Compose服务编排}}
+Compose 的核心能力是服务编排。depends_on 定义服务启动顺序，但只保证启动顺序不保证就绪。使用 healthcheck 配合 condition: service_healthy 实现真正的依赖就绪。profiles 允许按需启动部分服务。extends 支持服务配置继承。links 已弃用，推荐使用自定义网络。Compose V2 已集成到 docker CLI，使用 docker compose 而非 docker-compose 命令。
+
+{{Docker日志管理}}
+docker logs <container> 查看容器日志。常用参数：-f 实时跟踪；--tail <n> 显示最后 n 行；--since/--until 按时间过滤；-t 显示时间戳。日志驱动（Logging Driver）控制日志存储方式，默认 json-file。可配置为 syslog、journald、fluentd、awslogs 等。docker logs 命令只支持 json-file 和 journald 驱动。生产环境建议使用集中式日志系统（ELK、Loki）收集容器日志。
+
+{{Docker资源限制}}
+Docker 可以限制容器使用的系统资源：--memory/-m 限制内存（如 -m 512m）；--memory-swap 限制内存+交换区；--cpus 限制 CPU 核数（如 --cpus=1.5）；--cpu-shares 设置 CPU 权重（相对值）；--blkio-weight 设置块 IO 权重；--device-read-bps/--device-write-bps 限制设备读写速率。超出内存限制的容器会被 OOM Killer 终止。合理设置资源限制可以防止单个容器耗尽系统资源。
+
+{{Docker健康检查}}
+HEALTHCHECK 指令定义容器健康检查方式。格式：HEALTHCHECK [选项] CMD <命令>。选项：--interval 检查间隔（默认30秒）；--timeout 超时时间（默认30秒）；--start-period 启动等待时间（默认0）；--retries 重试次数（默认3次）。健康状态有三种：starting（启动中）、healthy（健康）、unhealthy（不健康）。docker inspect 可查看健康状态。Compose 和 Swarm 可根据健康状态决定是否将流量路由到容器。
+
+{{Docker安全实践}}
+1. 不以 root 用户运行容器（USER 指令）。2. 使用只读文件系统（--read-only）。3. 限制容器能力（--cap-drop ALL --cap-add）。4. 使用安全扫描工具（docker scout、Trivy）扫描镜像漏洞。5. 不在镜像中硬编码密钥，使用 Docker Secrets 或环境变量。6. 使用 .dockerignore 防止敏感文件进入构建上下文。7. 定期更新基础镜像。8. 使用签名镜像（Docker Content Trust）。9. 限制容器的网络访问。10. 使用 AppArmor 或 Seccomp 配置文件。
+
+{{Docker镜像仓库搭建}}
+使用 Docker Registry 搭建私有仓库：docker run -d -p 5000:5000 --name registry registry:2。推送镜像：docker tag myimage localhost:5000/myimage && docker push localhost:5000/myimage。Harbor 是企业级开源镜像仓库，提供 Web UI、访问控制、镜像扫描、镜像复制等功能。配置 HTTPS 证书后可安全地在生产环境使用。Registry 支持配置存储后端（本地文件系统、S3、GCS 等）。
+
+{{Docker Swarm}}
+Docker Swarm 是 Docker 原生的集群管理和编排工具。docker swarm init 初始化 Swarm 集群，docker swarm join 将节点加入集群。Swarm 使用 Service 概念部署应用，支持 replicas（副本数）、update_config（滚动更新策略）、rollback_config（回滚策略）。docker stack deploy -c compose.yml <stack> 部署整个应用栈。Swarm 提供内置的服务发现、负载均衡和滚动更新能力。
+
+{{Docker与Kubernetes}}
+Kubernetes（K8s）是更强大的容器编排平台，适合大规模生产环境。Docker 可以作为 K8s 的容器运行时（虽然 K8s 已弃用 dockershim，但可通过 cri-dockerd 适配器使用）。Docker Compose 文件可以转换为 K8s 资源配置（kompose 工具）。对于小型项目，Docker Compose 或 Swarm 已足够；对于大规模微服务架构，建议使用 Kubernetes。
+
+{{Docker存储驱动}}
+存储驱动（Storage Driver）决定了镜像层和容器可写层的管理方式。常用驱动：overlay2（推荐，性能好，支持所有 Linux 发行版）、devicemapper（支持块级存储）、btrfs/zfs（支持快照）。overlay2 使用联合文件系统将多个层叠加，写时复制（CoW）策略在修改文件时才复制到可写层。选择合适的存储驱动对性能有重要影响。通过 docker info 可查看当前使用的存储驱动。
+
+{{Docker buildx高级构建}}
+Docker Buildx 是 Docker 的扩展构建工具，支持多平台构建、构建缓存导入导出、并行构建等高级功能。docker buildx create 创建构建器实例。docker buildx build --platform linux/amd64,linux/arm64 构建多平台镜像。支持远程构建、集群构建。构建缓存可以通过 Registry 或本地目录导入导出，加速 CI/CD 流程。Buildx 是 BuildKit 的 CLI 前端，构建性能和功能远超传统 docker build。
+
+{{Docker在CI/CD中的应用}}
+Docker 在 CI/CD 流水线中的典型应用：1. 使用 Docker 作为构建环境，确保构建一致性。2. 在流水线中构建和推送镜像。3. 使用 Docker Compose 运行集成测试。4. 使用多阶段构建生成最小化生产镜像。5. 使用镜像扫描工具检查安全漏洞。6. 通过标签管理镜像版本。7. 使用 Webhook 触发自动部署。GitHub Actions、GitLab CI、Jenkins 等 CI/CD 工具均原生支持 Docker。
+
+{{Docker故障排查}}
+常用故障排查方法：docker logs 查看容器日志；docker inspect 查看容器详细信息；docker exec -it <container> /bin/bash 进入容器调试；docker stats 查看容器资源使用情况；docker events 监听 Docker 事件；docker system df 查看磁盘使用情况；docker system prune 清理无用资源。常见问题：容器无法启动（检查日志和端口冲突）、网络不通（检查网络配置和防火墙）、磁盘空间不足（清理无用镜像和容器）。
+
+{{Docker系统维护}}
+定期维护任务：docker system prune -a 清理所有未使用的资源（镜像、容器、网络）；docker volume prune 清理未使用的数据卷；docker image prune -a --filter "until=720h" 清理 30 天前的镜像；docker system df 查看磁盘占用。建议配置定时任务自动清理。监控 Docker Daemon 状态，设置磁盘空间告警。定期更新 Docker Engine 和基础镜像以获取安全补丁。
+
+{{Docker实用技巧}}
+1. 使用 .dockerignore 减少构建上下文大小。2. 使用 docker compose watch 实现开发时自动重建。3. 使用 docker context 管理多个 Docker 主机。4. 使用 docker init 生成 Dockerfile 和 Compose 文件模板。5. 使用 --init 参数正确处理 PID 1 信号（或使用 tini）。6. 使用 docker scout 快速扫描镜像漏洞。7. 使用 BuildKit 缓存加速构建（--mount=type=cache）。8. 使用 Docker 插件扩展功能（如日志、网络、存储插件）。

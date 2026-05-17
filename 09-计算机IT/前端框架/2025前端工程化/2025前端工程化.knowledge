@@ -1,0 +1,93 @@
+# 2025前端工程化
+# 领域: 计算机IT
+# 学科: 前端框架
+# 来源: 2025前端工程化
+# 描述: 前端工程化核心知识点
+
+{{Vite构建工具}}{{Vite是2025年前端最主流的构建工具，基于原生ESM和Rollup，开发时利用浏览器原生模块导入实现极速HMR（热模块替换）。核心优势：开发启动极快（无需打包）、按需编译、开箱即用支持TypeScript/JSX/CSS Modules等。Vite 6进一步优化了Environment API、支持SSR改进和Rolldown（Rust编写的Rollup替代品）集成，构建性能大幅提升。}}
+
+{{Rspack构建工具}}{{Rspack是由字节跳动开源的Rust编写的Webpack兼容构建工具，API与Webpack高度兼容，构建速度提升5-10倍。2025年Rspack已成为大型项目从Webpack迁移的首选方案，支持Module Federation、持久化缓存、SWC编译等特性。核心价值在于零迁移成本获得极致性能。}}
+
+{{Turbopack构建工具}}{{Turbopack是Vercel基于Rust开发的增量构建工具，作为Webpack的继任者。采用函数级增量编译，只重新计算发生变化的部分。深度集成Next.js生态，支持Server Components和流式渲染。2025年已趋于稳定，适合Next.js项目使用。}}
+
+{{esbuild超快速编译}}{{esbuild是用Go语言编写的极速JavaScript/TypeScript打包器和压缩器，速度比传统工具快10-100倍。常用于库的打包和开发工具链的底层引擎（Vite开发模式就使用esbuild进行依赖预构建）。支持Tree Shaking、代码分割、Source Map等核心功能。}}
+
+{{SWC编译器}}{{SWC（Speedy Web Compiler）是Rust编写的超快JavaScript/TypeScript编译器，可替代Babel进行转译和代码压缩。2025年已被Next.js、Rspack等主流工具内置使用。支持装饰器、JSX、TypeScript等语法转换，编译速度比Babel快20-70倍。}}
+
+{{包管理器pnpm}}{{pnpm是2025年最推荐的前端包管理器，采用内容寻址存储和硬链接机制，相同依赖只在全局存储中保留一份，极大节省磁盘空间。严格依赖提升策略避免幽灵依赖问题。monorepo原生支持好，workspace协议成熟。性能优于npm和yarn。}}
+
+{{包管理器Bun}}{{Bun是2025年新兴的JavaScript运行时和工具链，内置包管理器（bun install）速度极快。支持运行JavaScript/TypeScript，内置打包器、测试运行器和包管理器。bun install比npm快10-100倍。适合对速度有极致要求的开发流程。}}
+
+{{npm lockfile v3}}{{npm从v9开始默认使用lockfileVersion 3，格式更简洁。2025年npm v10+已成为稳定版本，支持overrides覆盖依赖版本、自动安装peerDependencies等功能。虽然pnpm更优，但npm仍是默认选择，了解其lockfile机制对排查依赖问题至关重要。}}
+
+{{TypeScript工程化配置}}{{2025年TypeScript已成为前端工程标配。关键配置：strict模式开启所有严格检查、moduleResolution设为bundler或node16、paths配置路径别名、references实现项目引用（增量编译）。tsc --noEmit用于类型检查，实际编译交给esbuild/SWC等更快工具。}}
+
+{{ESLint代码规范}}{{ESLint是JavaScript/TypeScript代码静态分析工具。2025年推荐使用ESLint flat config（eslint.config.js）替代传统.eslintrc。配合@typescript-eslint/parser和@typescript-eslint/eslint-plugin实现TypeScript规则检查。常用规则集：eslint-config-airbnb、eslint-config-standard等。}}
+
+{{Prettier代码格式化}}{{Prettier是"有主见的"代码格式化工具，自动统一代码风格。支持JavaScript/TypeScript/CSS/HTML/Markdown等。2025年推荐配合ESLint使用：ESLint负责代码质量规则，Prettier负责格式化。通过eslint-config-prettier禁用ESLint中与Prettier冲突的规则。}}
+
+{{Husky和lint-staged}}{{Husky用于管理Git hooks，lint-staged用于对暂存区文件执行lint。典型工作流：pre-commit hook触发lint-staged，只对本次提交的文件执行ESLint和Prettier检查，确保提交的代码符合规范。2025年Husky v9+简化了配置，.husky/pre-commit直接写命令即可。}}
+
+{{Commitlint提交规范}}{{Commitlint用于规范化Git提交信息，配合conventional-changelog使用。常用@commitlint/config-conventional规则集，要求提交信息格式为type(scope): subject。常见type：feat/fix/docs/style/refactor/test/chore。结合commitizen可交互式生成规范提交信息。}}
+
+{{CI/CD流水线设计}}{{前端CI/CD典型流水线：代码提交→Lint检查→单元测试→构建打包→部署。2025年主流方案：GitHub Actions、GitLab CI、Jenkins。关键实践：并行执行lint和test、缓存node_modules和构建产物、分环境部署（dev/staging/prod）、自动化版本发布和Changelog生成。}}
+
+{{GitHub Actions工作流}}{{GitHub Actions是GitHub内置的CI/CD平台，通过YAML文件定义工作流。常用actions：actions/checkout检出代码、actions/setup-node配置Node.js、actions/cache缓存依赖。支持matrix策略并行测试多版本Node.js。可触发npm publish自动发包。2025年仍是开源项目首选CI方案。}}
+
+{{Docker化前端部署}}{{2025年前端项目推荐Docker化部署。典型Dockerfile：多阶段构建（builder阶段安装依赖并构建、production阶段使用nginx镜像只拷贝构建产物）。配合.dockerignore排除node_modules等文件。优势：环境一致性、便于Kubernetes编排、易于水平扩展。}}
+
+{{Nginx前端部署配置}}{{Nginx是前端生产环境最常用的Web服务器。关键配置：try_files实现SPA路由（回退到index.html）、gzip压缩开启、静态资源设置长缓存（Cache-Control）、配置反向代理API请求到后端服务、HTTPS证书配置（Let's Encrypt）。2025年也常用Caddy作为替代。}}
+
+{{Monorepo架构设计}}{{Monorepo是将多个项目放在一个代码仓库中管理的架构模式。2025年主流工具：pnpm workspace（轻量原生）、Turborepo（Vercel出品，支持任务编排和缓存）、Nx（功能最全面，支持增量构建和依赖图分析）。优势：代码复用、统一版本管理、原子提交、共享工具链配置。}}
+
+{{Turborepo任务编排}}{{Turborepo是Vercel开发的Monorepo构建系统，核心特性：任务编拓扑排序（自动分析包间依赖关系）、远程缓存（团队共享构建缓存）、增量构建（只构建变更部分）。turbo.json定义pipeline，配置dependsOn声明任务依赖。2025年已成为pnpm workspace的最佳搭档。}}
+
+{{Nx Monorepo工具}}{{Nx是功能最全面的Monorepo工具，支持增量构建、依赖图可视化、代码生成器、分布式任务执行。nx graph命令可视化展示项目依赖关系。支持affected命令只构建受影响的项目。插件生态丰富（React/Angular/Node等）。适合大型企业级Monorepo。}}
+
+{{Module Federation模块联邦}}{{Module Federation是Webpack 5引入的微前端方案，允许不同应用在运行时动态共享模块。2025年Module Federation已演进到MF 2.0（@module-federation/enhanced），支持Rspack/Vite等构建工具、运行时插件系统、类型安全共享。核心场景：微前端、跨团队共享组件、独立部署子应用。}}
+
+{{微前端架构方案}}{{2025年主流微前端方案：Module Federation（运行时共享模块）、qiankun（基于single-spa，国内流行）、无界（iframe沙箱方案）、Micro-app（类WebComponent方案）。选择标准：技术栈兼容性、JS沙箱隔离、样式隔离、通信机制、子应用独立部署能力。大型项目推荐Module Federation。}}
+
+{{Tree Shaking优化}}{{Tree Shaking是通过静态分析ES Module的import/export关系，移除未使用代码的优化技术。2025年所有主流构建工具（Vite/Rspack/Webpack）都支持。关键点：使用ES Module格式导出、避免副作用（sideEffects字段标记）、库开发时设置"module"或"exports"字段指向ESM入口。}}
+
+{{代码分割策略}}{{代码分割将代码拆分为多个chunk按需加载，减少首屏加载时间。策略：路由级分割（React.lazy/Suspense）、组件级分割（动态import）、第三方库单独chunk（splitChunks配置）、预加载/预获取（<link rel="modulepreload">）。2025年Vite/Rspack自动处理公共模块提取。}}
+
+{{Source Map调试映射}}{{Source Map是将编译/压缩后的代码映射回源码的机制，便于调试。2025年最佳实践：开发环境使用eval-source-map（快速重建、源码映射）、生产环境使用hidden-source-map（不暴露源码但可上传到错误监控平台）、或nosourcemap完全关闭。Sentry等平台支持Source Map上传实现线上错误源码定位。}}
+
+{{CSS工程化方案}}{{2025年前端CSS工程化主流方案：CSS Modules（作用域隔离，Vite内置支持）、Tailwind CSS（原子化CSS框架，JIT引擎按需生成）、CSS-in-JS（styled-components/emotion，但性能争议导致使用率下降）、PostCSS（CSS转换工具，Tailwind底层依赖）。趋势：零运行时CSS方案回归，Tailwind和CSS Modules成为主流。}}
+
+{{Tailwind CSS工程化}}{{Tailwind CSS是实用优先的CSS框架，2025年已成前端CSS方案首选之一。核心特性：JIT引擎按需生成CSS（产物极小）、与框架无关、设计系统内置。工程化要点：配置tailwind.config.js自定义主题、postcss集成、与CSS Modules配合使用、vscode插件智能提示。v4引入新引擎Oxide进一步提升性能。}}
+
+{{前端测试体系}}{{2025年前端测试金字塔：单元测试（Vitest/Jest）、集成测试（Testing Library）、端到端测试（Playwright/Cypress）。Vitest是Vite原生测试框架，兼容Jest API但速度更快。Playwright支持多浏览器自动化测试，2025年已超越Cypress成为E2E测试首选。测试覆盖率工具：c8/istanbul。}}
+
+{{Vitest单元测试}}{{Vitest是基于Vite的极速单元测试框架，API兼容Jest。核心优势：利用Vite的HMR实现测试热更新、原生支持TypeScript/ESM、与Vite共享配置和插件。支持快照测试、Mock、代码覆盖率。2025年已成为新项目单元测试的默认选择，逐步替代Jest。}}
+
+{{Playwright端到端测试}}{{Playwright是Microsoft开发的E2E测试框架，支持Chromium/WebKit/Firefox三大浏览器引擎。核心特性：自动等待机制、网络拦截、多标签页支持、代码录制（codegen）、并行执行。2025年Playwright Test已成熟稳定，API设计优于Cypress，支持组件测试，社区增长迅速。}}
+
+{{前端监控与可观测性}}{{前端监控三大支柱：错误监控（Sentry/Bugsnag捕获JS错误和异常）、性能监控（Core Web Vitals指标LCP/FID/CLS采集）、用户行为监控（页面PV/UV、点击流、用户路径分析）。2025年OpenTelemetry开始渗透到前端，实现全链路可观测性。Sentry仍是错误监控首选。}}
+
+{{Core Web Vitals性能指标}}{{Core Web Vitals是Google提出的Web性能核心指标：LCP（最大内容绘制，<2.5s）、INP（交互到下一帧绘制，<200ms，2024年替代FID）、CLS（累积布局偏移，<0.1）。2025年这些指标直接影响SEO排名。优化手段：图片懒加载、代码分割、SSR/SSG、预加载关键资源、字体优化。}}
+
+{{前端缓存策略}}{{前端缓存分层：浏览器HTTP缓存（Cache-Control/ETag）、Service Worker缓存（离线可用、资源预缓存）、应用层缓存（React Query/SWR管理API数据缓存）、构建产物缓存（文件名带contenthash实现长期缓存）。2025年最佳实践：静态资源强缓存+内容hash、API数据用SWR/React Query管理、CDN缓存配合缓存清除。}}
+
+{{国际化i18n方案}}{{2025年前端国际化主流方案：react-intl（FormatJS，React生态）、vue-i18n（Vue生态）、i18next（框架无关）。工程化要点：语言包按需加载（动态import）、ICU消息格式支持复数和性别等复杂场景、日期/数字/货币本地化、翻译管理平台集成（Crowdin/Locize）、SSR场景下的语言检测和切换。}}
+
+{{环境变量管理}}{{前端环境变量管理：Vite使用import.meta.env读取VITE_前缀变量，Webpack使用DefinePlugin注入process.env。.env文件分层（.env/.env.local/.env.production）。2025年推荐：运行时环境变量（通过window.__ENV__注入，构建后可改）优于构建时变量。敏感信息（API密钥）不应打包到前端代码中。}}
+
+{{前端构建产物优化}}{{2025年构建产物优化清单：代码压缩（Terser/SWC minify）、图片优化（WebP/AVIF转换、压缩）、字体优化（font-display: swap、子集化）、Gzip/Brotli压缩、Tree Shaking移除死代码、动态Polyfill（core-js按需引入）、资源内联阈值控制（小文件base64内联）。}}
+
+{{SSR与SSG框架}}{{2025年主流SSR/SSG框架：Next.js（React生态，App Router+Server Components）、Nuxt（Vue生态，Nitro引擎）、Astron（内容站首选，岛屿架构）。SSR优势：首屏性能、SEO。SSG优势：静态部署、CDN分发。ISR（增量静态再生）结合两者优势。Edge SSR（边缘渲染）进一步降低延迟。}}
+
+{{Edge Computing与前端}}{{2025年Edge Computing深入前端工程化：Edge SSR（Cloudflare Workers/Vercel Edge Functions在边缘节点执行SSR）、Edge Middleware（请求级中间件在边缘执行A/B测试/认证/重定向）、Edge Caching（边缘节点缓存动态内容）。优势：降低延迟、减轻源站压力、全球化部署。}}
+
+{{前端安全防护}}{{2025年前端安全核心措施：CSP（Content Security Policy）防御XSS、Subresource Integrity（SRI）验证外部资源完整性、HTTPS强制、依赖安全审计（npm audit/Snyk扫描已知漏洞）、DOMPurify净化用户输入、避免innerHTML直接插入、SameSite Cookie属性防止CSRF。Dependabot自动依赖更新。}}
+
+{{包发布与版本管理}}{{npm包发布流程：语义化版本（SemVer）、package.json配置main/module/exports字段、.npmignore或files字段控制发布内容。2025年推荐使用changesets管理monorepo版本发布（@changesets/cli），支持独立版本和统一版本模式。自动发布：GitHub Actions + npm publish触发。}}
+
+{{前端项目脚手架}}{{2025年项目创建工具：create-vite（Vite官方脚手架，支持React/Vue/Svelte/Preact）、create-next-app（Next.js脚手架）、create-turbo（Turborepo monorepo脚手架）、degit（轻量模板克隆工具）。企业级方案：自研CLI脚手架，集成团队规范（ESLint/Prettier/commitlint预配置）、模板选择、依赖注入。}}
+
+{{Git工作流规范}}{{2025年前端团队Git工作流：Git Flow（适合发版周期明确的项目）、Trunk-Based Development（主干开发，适合CI/CD成熟团队）、GitHub Flow（简化的分支策略）。关键实践：分支命名规范（feat/fix/chore前缀）、PR模板、Code Review流程、Squash Merge保持历史清晰、保护主分支（require PR reviews）。}}
+
+{{前端文档工程化}}{{2025年前端文档工具：Storybook（组件文档和可视化开发，v8支持React/Vue/Svelte）、Docusaurus（技术文档站，Meta出品）、VitePress（Vue驱动的静态文档站）、TypeDoc（API文档自动生成）。最佳实践：文档即代码（docs目录版本化管理）、CI自动构建部署文档站、组件Playground交互演示。}}
+
+{{前端性能分析工具}}{{2025年前端性能分析工具链：Chrome DevTools Performance面板、Lighthouse自动化审计、Webpack Bundle Analyzer/Rollup Visualizer分析打包体积、Web Vitals库采集真实用户性能数据、SpeedCurve/WebPageTest持续性能监控。Bundle分析应作为CI流程的一部分，体积超限自动告警。}}

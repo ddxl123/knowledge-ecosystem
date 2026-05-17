@@ -1,0 +1,163 @@
+# 2025前端Docker容器化
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}
+{{Docker容器化概述}}
+Docker是一种开源的容器化平台，允许开发者将应用及其依赖打包到一个轻量级、可移植的容器中。对于前端开发而言，Docker解决了"在我机器上能跑"的经典问题，确保开发、测试和生产环境的一致性。Docker容器共享宿主机操作系统内核，比传统虚拟机更轻量，启动速度更快（秒级），资源占用更少。2025年，Docker已成为前端工程化部署的标准基础设施。
+
+{{知识点2}}
+{{容器与虚拟机的本质区别}}
+容器（Container）与虚拟机（VM）的核心区别在于隔离层级。虚拟机通过Hypervisor虚拟化整套硬件并运行完整操作系统，通常占用GB级磁盘和数百MB内存。容器则利用Linux内核的Namespace（进程隔离）和Cgroups（资源限制）实现轻量级隔离，仅包含应用运行时所需的库和依赖，镜像通常只有几十MB。容器共享宿主机内核，启动时间在毫秒到秒级，而虚拟机需要分钟级启动。
+
+{{知识点3}}
+{{Docker镜像（Image）}}
+Docker镜像是一个只读的模板，包含运行应用所需的一切：代码、运行时、系统工具、库和配置。镜像采用分层存储（Layer），每一层对应Dockerfile中的一条指令。相同的层可以在不同镜像间共享，节省存储空间。前端项目的基础镜像通常选择node（用于构建）和nginx或caddy（用于部署）。镜像通过Dockerfile构建，也可以从Docker Hub等Registry拉取官方镜像。
+
+{{知识点4}}
+{{Docker容器（Container）}}
+容器是镜像的运行实例。一个镜像可以创建多个容器实例，每个容器拥有独立的文件系统、网络和进程空间。容器的生命周期包括：创建（create）、启动（start）、运行（running）、暂停（paused）、停止（stopped）、删除（removed）。容器设计为临时性的（ephemeral），可以随时销毁和重建，状态数据应通过外部卷（Volume）持久化。
+
+{{知识点5}}
+{{Dockerfile基础语法}}
+Dockerfile是构建Docker镜像的声明式脚本。核心指令包括：FROM（指定基础镜像）、WORKDIR（设置工作目录）、COPY/ADD（复制文件）、RUN（执行命令）、EXPOSE（声明端口）、CMD/ENTRYPOINT（容器启动命令）、ENV（设置环境变量）、ARG（构建参数）、LABEL（元数据）、USER（运行用户）。每条指令创建一个新的镜像层，理解层缓存机制对优化构建速度至关重要。
+
+{{知识点6}}
+{{前端项目的Dockerfile基本结构}}
+典型的前端项目Dockerfile结构：1）选择Node.js基础镜像作为构建阶段；2）设置WORKDIR；3）先COPY package*.json并RUN npm install（利用层缓存）；4）COPY项目源码；5）执行构建命令（npm run build）；6）在第二阶段选择nginx/caddy镜像；7）COPY --from构建阶段的dist产物到nginx的html目录。这种结构确保最终镜像不包含Node.js等构建工具，大幅减小体积。
+
+{{知识点7}}
+{{多阶段构建（Multi-stage Build）}}
+多阶段构建是Docker的核心特性，在一个Dockerfile中使用多个FROM指令定义不同构建阶段。构建阶段使用完整的Node.js镜像安装依赖和编译代码，最终阶段使用精简的nginx-alpine镜像只复制构建产物。通过COPY --from=<stage-name>在阶段间传递文件。多阶段构建可以将前端应用的最终镜像从1GB+压缩到20-50MB。BuildKit（Docker默认构建引擎）只构建目标阶段依赖的阶段，跳过无关阶段，进一步提升构建效率。
+
+{{知识点8}}
+{{.dockerignore文件}}
+.dockerignore文件类似.gitignore，用于排除不需要发送到Docker构建上下文的文件。前端项目应排除：node_modules/（容器内重新安装）、.git/、dist/、*.md、.env*（敏感信息）、coverage/、.idea/、.vscode/等。合理配置.dockerignore可以：1）减少构建上下文大小，加速构建；2）避免node_modules中平台不匹配的二进制文件被复制进容器；3）防止敏感文件泄露到镜像中。
+
+{{知识点9}}
+{{Node.js基础镜像选择}}
+2025年推荐的Node.js基础镜像选择策略：node:XX-alpine（最小体积，约50MB，基于musl libc）；node:XX-slim（基于Debian精简版，约80MB，兼容性更好）；node:XX（完整版，约350MB，含编译工具链）。对于构建阶段推荐使用node:XX-slim（更好的npm生态兼容性），最终部署阶段使用nginx:alpine或caddy:alpine。始终指定具体版本号（如node:22.16.0-alpine）而非node:latest，确保构建可重现。
+
+{{知识点10}}
+{{依赖缓存优化策略}}
+依赖缓存是加速前端Docker构建的关键。策略：1）先COPY package.json和package-lock.json（或yarn.lock、pnpm-lock.yaml），再RUN install，利用层缓存；2）源码变更时跳过依赖安装层；3）使用BuildKit的RUN --mount=type=cache,target=/root/.npm挂载缓存目录；4）使用.dockerignore排除node_modules避免覆盖容器内安装的依赖；5）对于monorepo，可以只复制相关workspace的package.json。
+
+{{知识点11}}
+{{Nginx在前端部署中的角色}}
+Nginx是前端容器化部署中最常用的Web服务器。它负责：1）托管静态资源（HTML/CSS/JS）；2）配置SPA路由（try_files $uri $uri/ /index.html）；3）启用Gzip/Brotli压缩；4）设置缓存头（Cache-Control、ETag）；5）反向代理API请求到后端服务；6）HTTPS终端（SSL/TLS termination）。Nginx的配置通过自定义nginx.conf文件COPY到镜像中，通常放在/etc/nginx/conf.d/default.conf。
+
+{{知识点12}}
+{{SPA路由配置}}
+单页应用（SPA）如React/Vue/Angular使用前端路由（React Router、Vue Router），需要Nginx配置try_files将所有非文件请求重定向到index.html。典型配置：location / { root /usr/share/nginx/html; index index.html; try_files $uri $uri/ /index.html; }。同时需要为静态资源配置长期缓存（expires 1y），而index.html设置为no-cache确保更新时获取最新版本。
+
+{{知识点13}}
+{{Nginx性能优化配置}}
+前端Nginx容器性能优化：1）启用Gzip压缩（gzip on; gzip_types text/css application/javascript application/json）；2）配置Brotli压缩（需要ngx_brotli模块）；3）设置静态资源长期缓存（location ~* \.(js|css|png|jpg|ico|svg)$ { expires 1y; add_header Cache-Control "public, immutable"; }）；4）开启sendfile和tcp_nopush；5）配置worker_processes auto；6）设置合理的client_max_body_size。
+
+{{知识点14}}
+{{Docker Compose基础}}
+Docker Compose用于定义和运行多容器应用，通过单个YAML文件（docker-compose.yml或compose.yaml）配置服务、网络和卷。前端项目典型的服务栈：frontend（React/Vue应用）、backend（API服务）、database（MySQL/PostgreSQL）。通过docker compose up一键启动所有服务。2025年Docker Compose V2已集成到Docker CLI，不再需要单独安装docker-compose命令。
+
+{{知识点15}}
+{{Compose文件中的前端服务定义}}
+前端服务的Compose配置示例：定义build context和Dockerfile；映射端口（ports: 3000:80）；设置环境变量（environment: API_URL）；配置依赖关系（depends_on: backend）；挂载卷用于开发模式热更新（volumes: ./src:/app/src）；设置健康检查（healthcheck: curl -f http://localhost/）。通过profiles可以区分开发和生产配置。
+
+{{知识点16}}
+{{开发环境的热更新（Hot Reload）}}
+Docker开发环境实现热更新的方式：1）将源码目录通过volumes挂载到容器内（bind mount）；2）使用Vite的HMR或Webpack Dev Server的热替换；3）在docker-compose.yml中配置volumes: - ./src:/app/src并暴露WebSocket端口；4）使用nodemon或tsx watch监控文件变化；5）对于Vite，需要配置server.host: '0.0.0.0'和server.watch.usePolling: true以支持容器内文件监听。
+
+{{知识点17}}
+{{环境变量管理}}
+Docker容器中的环境变量管理：1）Dockerfile中使用ENV定义默认值；2）docker run -e或-compose environment注入运行时变量；3）使用.env文件配合docker compose --env-file；4）前端应用中，构建时通过ARG和ENV注入（构建时变量会打包进bundle）；5）运行时变量通过window.__ENV__或注入nginx配置模板（envsubst）实现；6）敏感变量使用Docker Secrets（Swarm模式）或外部密钥管理服务。
+
+{{知识点18}}
+{{前端构建时环境变量注入}}
+前端框架的构建时变量注入机制：React使用REACT_APP_前缀的环境变量（process.env.REACT_APP_*）；Vue使用VUE_APP_前缀（Vue 3中通过import.meta.env.VITE_*）；Vite原生支持import.meta.env，自定义变量需以VITE_开头。在Docker中，这些变量在docker build --build-arg阶段注入，或在Dockerfile中通过ARG+ENV组合设置。注意：构建时变量会被静态替换到产物中，运行时无法更改。
+
+{{知识点19}}
+{{运行时环境变量注入}}
+运行时环境变量注入方案：1）使用envsubst模板引擎，将nginx.conf.template中的${API_URL}替换为实际环境变量值，在容器启动时执行envsubst < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf；2）在index.html中注入window.__ENV__ = {API_URL: "${API_URL}"}；3）使用runtime-env-cra等工具在运行时注入React环境变量。这种方式无需重新构建镜像即可更改配置。
+
+{{知识点20}}
+{{Docker卷（Volume）}}
+Docker卷用于数据持久化和容器间数据共享。三种类型：1）Named Volumes（docker volume create）- Docker管理的持久化存储，适合数据库数据；2）Bind Mounts - 直接挂载宿主机目录，适合开发环境代码同步；3）tmpfs Mounts - 内存中的临时文件系统。前端开发中，Bind Mounts用于代码热更新；生产环境中，Named Volumes可用于存储用户上传文件或SSR缓存。
+
+{{知识点21}}
+{{Docker网络}}
+Docker提供多种网络驱动：bridge（默认，容器间通信）、host（共享宿主机网络）、overlay（跨主机通信，Swarm模式）、none（无网络）。前端容器化常用bridge网络，通过服务名（如backend）直接进行DNS解析实现容器间通信。在Compose中，所有服务自动加入默认网络，可通过services名称互相访问。自定义网络可以实现更细粒度的隔离和控制。
+
+{{知识点22}}
+{{镜像体积优化策略}}
+前端Docker镜像体积优化：1）使用多阶段构建，最终阶段仅包含构建产物和Web服务器；2）选择alpine基础镜像（约5MB基础+nginx约25MB）；3）合并RUN指令减少层数（RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*）；4）清理包管理器缓存；5）使用.dockerignore排除无关文件；6）使用dive工具分析镜像层，找出可以优化的大层；7）考虑使用distroless镜像。
+
+{{知识点23}}
+{{Docker缓存机制与BuildKit}}
+Docker构建缓存机制：每条指令执行后生成的层被缓存，后续构建如果指令和上下文未变则直接复用缓存层。BuildKit是Docker的默认构建引擎（Docker 23.0+），提供更高级的缓存功能：1）并行构建无依赖关系的阶段；2）RUN --mount=type=cache挂载持久化缓存目录（如npm缓存）；3）--mount=type=secret安全注入密钥不进入镜像层；4）缓存导入导出（--cache-from/to）支持CI/CD场景。
+
+{{知识点24}}
+{{Docker安全最佳实践}}
+前端Docker安全：1）不以root用户运行容器（USER node或USER nginx）；2）使用.dockerignore排除.env、.git等敏感文件；3）定期更新基础镜像获取安全补丁；4）使用.dockerignore防止node_modules中的恶意包；5）扫描镜像漏洞（docker scout quickview、Trivy、Snyk）；6）使用只读文件系统（--read-only）；7）限制容器资源（--memory、--cpus）；8）不将secrets硬编码在Dockerfile中。
+
+{{知识点25}}
+{{Docker镜像扫描与安全}}
+镜像安全扫描工具：1）Docker Scout（Docker官方，集成在Docker Desktop和CLI中，docker scout quickview）；2）Trivy（开源，支持镜像、文件系统、Git仓库扫描）；3）Snyk（商业+免费层，深度漏洞分析）；4）Granch（开源，专注于容器安全）。这些工具可以检测基础镜像、系统包和npm依赖中的已知漏洞（CVE）。建议在CI/CD流水线中集成镜像扫描作为质量门禁。
+
+{{知识点26}}
+{{CI/CD中的Docker构建}}
+前端CI/CD中的Docker构建流程：1）代码推送触发CI（GitHub Actions、GitLab CI、Jenkins）；2）拉取代码并执行npm install && npm run build；3）构建Docker镜像并打标签（commit SHA、latest、版本号）；4）推送镜像到Registry（Docker Hub、AWS ECR、阿里云ACR）；5）部署到目标环境（Kubernetes、ECS、云服务器）。GitHub Actions示例：使用docker/build-push-action自动构建和推送。
+
+{{知识点27}}
+{{GitHub Actions Docker构建示例}}
+GitHub Actions中构建前端Docker镜像的workflow配置：使用docker/login-action登录Registry；使用docker/setup-buildx-action启用BuildKit；使用docker/build-push-action执行构建，支持cache-from/to使用GitHub Actions缓存加速构建；通过tags参数配置镜像标签策略（分支名、SHA、语义版本）；通过context和file指定构建上下文和Dockerfile路径。配合docker/metadata-action可自动生成标签和标注。
+
+{{知识点28}}
+{{Docker Registry}}
+Docker Registry是存储和分发Docker镜像的服务。常用Registry：1）Docker Hub（官方，公共/私有仓库）；2）GitHub Container Registry（ghcr.io，与GitHub无缝集成）；3）AWS ECR（亚马逊云容器镜像服务）；4）阿里云容器镜像服务（ACR）；5）Harbor（开源企业级Registry，支持漏洞扫描和镜像签名）。私有Registry适合企业内部使用，支持访问控制、镜像复制和安全扫描。
+
+{{知识点29}}
+{{Docker与Kubernetes的前端部署}}
+Kubernetes（K8s）是容器编排的事实标准。前端容器化后部署到K8s：1）创建Deployment定义Pod模板（镜像、副本数、资源限制）；2）创建Service暴露服务（ClusterIP/NodePort/LoadBalancer）；3）创建Ingress配置域名路由和TLS；4）使用ConfigMap管理Nginx配置；5）使用Secret管理证书和密钥；6）通过HPA（Horizontal Pod Autoscaler）自动扩缩容。Helm Charts可以模板化K8s资源配置。
+
+{{知识点30}}
+{{Docker健康检查（Health Check）}}
+Dockerfile中使用HEALTHCHECK指令定义容器健康检查：HEALTHCHECK --interval=30s --timeout=3s --retries=3 CMD curl -f http://localhost/ || exit 1。Compose中也可以配置healthcheck。健康检查的作用：1）Docker自动检测容器是否正常运行；2）K8s的Liveness和Readiness探针基于此；3）负载均衡器可以将流量从不健康的容器移除。前端Nginx容器的健康检查通常检查HTTP 200响应。
+
+{{知识点31}}
+{{Docker日志管理}}
+容器日志最佳实践：1）将应用日志输出到stdout/stderr（Docker默认收集）；2）Nginx的access_log和error_log重定向到/dev/stdout和/dev/stderr；3）使用docker logs查看日志；4）Compose中配置logging driver（json-file、syslog、fluentd）；5）生产环境使用集中式日志系统（ELK Stack、Loki+Grafana）；6）配置日志轮转（max-size、max-file）防止磁盘占满。
+
+{{知识点32}}
+{{SSR应用的Docker化}}
+服务端渲染（SSR）应用（Next.js、Nuxt、Remix）的Docker化与纯静态应用不同：1）需要Node.js运行时作为Web服务器；2）多阶段构建中构建阶段执行npm run build，运行阶段使用node:slim；3）暴露Node.js服务端口（通常3000）；4）健康检查检查Node.js进程而非Nginx；5）需要处理环境变量的运行时注入；6）可以使用PM2或node直接启动；7）考虑内存限制和CPU需求。
+
+{{知识点33}}
+{{Monorepo项目的Docker化}}
+Monorepo（如使用Turborepo、Nx、Lerna）的Docker化策略：1）在根目录创建Dockerfile，使用workspace-aware的包管理器；2）先COPY所有package.json和lock文件，再RUN install；3）利用Turborepo的缓存（--cache-from）加速构建；4）针对不同应用创建独立Dockerfile；5）使用.dockerignore排除其他workspace的代码；6）考虑使用BuildKit的--filter参数只构建变更的包。
+
+{{知识点34}}
+{{前端微前端的Docker部署}}
+微前端架构（Module Federation、qiankun、Micro-App）的Docker部署：1）每个微前端独立构建为Docker镜像；2）基座应用（Shell）容器负责路由和加载子应用；3）子应用容器独立部署，通过URL加载；4）Nginx反向代理将不同路径路由到不同容器；5）使用Docker Compose编排整个微前端系统；6）独立的CI/CD流水线实现各子应用独立发布；7）通过ConfigMap或环境变量配置子应用入口地址。
+
+{{知识点35}}
+{{Docker Build Cloud}}
+Docker Build Cloud是Docker提供的云端构建服务，特别适合前端项目的CI/CD场景：1）将构建任务卸载到云端高性能机器；2）支持跨平台构建（amd64/arm64）；3）共享构建缓存加速团队协作；4）与GitHub Actions等CI工具集成；5）解决本地机器资源不足的问题。对于大型前端项目，云端构建可以显著减少CI构建时间。
+
+{{知识点36}}
+{{前端Docker开发环境标准化}}
+使用Docker标准化前端开发环境：1）创建devcontainer配置（VS Code Dev Containers）；2）定义统一的Node.js版本、包管理器和系统依赖；3）通过docker-compose.dev.yml定义开发服务栈；4）集成数据库、Redis等依赖服务；5）团队成员通过docker compose up获得一致的开发环境；6）消除"我的环境不同"的问题；7）新人上手时间从数小时缩短到几分钟。
+
+{{知识点37}}
+{{Docker与包管理器（npm/yarn/pnpm）}}
+不同包管理器的Docker最佳实践：npm - 使用npm ci代替npm install确保lock文件一致性；yarn - 使用yarn install --frozen-lockfile；pnpm - 使用pnpm install --frozen-lockfile，需要在Dockerfile中先RUN npm install -g pnpm或使用corepack enable。pnpm的store缓存需要通过RUN --mount=type=cache,target=/root/.local/share/pnpm/store优化。注意pnpm的workspace协议在Docker构建中的特殊处理。
+
+{{知识点38}}
+{{Docker资源限制}}
+容器资源限制防止前端应用占用过多资源：1）--memory/-m限制内存（如-m 256m）；2）--cpus限制CPU核数（如--cpus=1.0）；3）在Compose中使用deploy.resources.limits配置；4）Nginx容器通常设置128-256MB内存限制；5）SSR容器需要更多内存（512MB-1GB）；6）设置OOM优先级（--oom-score-adj）；7）K8s中通过resources.requests和resources.limits精细控制。
+
+{{知识点39}}
+{{Docker Swarm模式}}
+Docker Swarm是Docker内置的容器编排工具，适合中等规模前端部署：1）docker swarm init初始化集群；2）docker stack deploy -c compose.yml部署服务栈；3）支持服务副本和自动负载均衡；4）滚动更新（rolling update）实现零停机部署；5）支持Secrets管理敏感数据；6）比K8s简单但功能较少；7）适合不需要K8s复杂性的中小团队。前端应用通过docker service create --replicas 3实现多副本运行。
+
+{{知识点40}}
+{{容器化前端的监控与可观测性}}
+前端容器化后的监控方案：1）Nginx的access_log和error_log通过日志收集系统聚合；2）Prometheus + Grafana监控容器资源使用（CPU、内存、网络）；3）cAdvisor监控容器级别指标；4）前端应用级监控（Sentry、Datadog RUM）与容器监控结合；5）Loki收集和查询容器日志；6）OpenTelemetry实现分布式追踪；7）设置告警规则（如容器重启频繁、内存接近限制）。

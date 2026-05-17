@@ -1,0 +1,103 @@
+# 2025前端前端Fetch API
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{Fetch API 是什么：Fetch API 是现代浏览器提供的用于发起网络请求的接口，基于 Promise 设计，用于替代传统的 XMLHttpRequest。它提供了更强大、更灵活的功能来发起异步 HTTP 请求。fetch() 方法是一个全局方法，可在 Window 和 Worker 上下文中使用。}}
+
+{{知识点2}}{{fetch() 方法基本语法：fetch() 接收一个必选参数（资源 URL，可以是字符串、URL 对象或 Request 实例）和一个可选的 init 配置对象。它返回一个 Promise，解析为 Response 对象——只要服务器响应了响应头就会解析，即使服务器返回 HTTP 错误状态码也不会 reject。}}
+
+{{知识点3}}{{fetch() 不会自动 reject HTTP 错误：fetch() 只在网络故障或请求被阻止时才会 reject Promise。对于 HTTP 错误状态码（如 404、500），Promise 仍然会 resolve，需要手动检查 response.ok 或 response.status 属性来判断请求是否成功。}}
+
+{{知识点4}}{{Request 对象：Request 接口表示一个资源请求。可以通过 new Request(url, options) 构造，构造函数参数与 fetch() 相同。Request 对象拥有只读属性：url、method、headers、mode、credentials、cache、redirect、referrer、referrerPolicy、signal、body、bodyUsed、integrity、keepalive、destination、duplex 等。}}
+
+{{知识点5}}{{Request 实例方法：Request 提供 body 读取方法：arrayBuffer()、blob()、bytes()、formData()、json()、text()、clone()。这些方法返回 Promise，且 body 只能读取一次，重复调用会抛出 TypeError。clone() 方法可创建 Request 副本来实现多次使用。}}
+
+{{知识点6}}{{Response 对象：Response 接口表示对请求的响应。关键只读属性包括：status（状态码）、statusText（状态消息）、ok（布尔值，状态码 200-299 为 true）、headers（Headers 对象）、url（响应 URL）、type（响应类型如 basic/cors）、redirected（是否经过重定向）、body（ReadableStream）、bodyUsed（body 是否已被读取）。}}
+
+{{知识点7}}{{Response 静态方法：Response.error() 返回关联网络错误的新 Response；Response.redirect(url, status) 返回用于重定向的新 Response；Response.json(data, init) 返回包含 JSON 编码数据的新 Response，常用于 Service Worker 中构造响应。}}
+
+{{知识点8}}{{Response 实例方法：与 Request 类似，提供 arrayBuffer()、blob()、bytes()、formData()、json()、text()、clone() 方法来读取响应体。json() 是最常用的方法，返回解析 JSON 响应体后的 Promise。response.body 返回 ReadableStream，可用于流式处理。}}
+
+{{知识点9}}{{设置请求方法：默认情况下 fetch() 发起 GET 请求，通过 method 选项可指定其他 HTTP 方法，如 POST、PUT、DELETE、PATCH 等。当 mode 设为 no-cors 时，method 只能是 GET、POST 或 HEAD。}}
+
+{{知识点10}}{{设置请求体：通过 body 选项设置请求体。支持的类型包括：字符串、ArrayBuffer、TypedArray、DataView、Blob、File、URLSearchParams、FormData、ReadableStream。GET 和 HEAD 请求不能包含 body。请求体是流，读取后不能重复使用，需通过 clone() 创建副本。}}
+
+{{知识点11}}{{发送 JSON 数据：使用 JSON.stringify() 将对象序列化为 JSON 字符串作为 body，并设置 Content-Type 请求头为 application/json。这是最常见的 API 请求方式。}}
+
+{{知识点12}}{{发送表单数据：可使用 URLSearchParams 编码表单数据（设置 Content-Type 为 application/x-www-form-urlencoded），或使用 FormData 对象发送 multipart/form-data 格式数据（常用于文件上传）。URLSearchParams 也可拼接到 GET 请求的 URL 查询字符串中。}}
+
+{{知识点13}}{{Headers 对象：Headers 接口用于操作 HTTP 请求和响应头。支持通过对象字面量、数组或 Headers() 构造函数创建。主要方法：append(name, value) 追加值、set(name, value) 设置（覆盖）、get(name) 获取、has(name) 判断是否存在、delete(name) 删除。还支持 entries()、keys()、values()、forEach() 迭代方法和 getSetCookie() 方法。}}
+
+{{知识点14}}{{Headers 的输入净化：相比普通对象，Headers 对象会自动将 header 名称转为小写、去除值的首尾空白、阻止设置某些被禁止的 header（Forbidden request headers）。header 名称匹配不区分大小写。迭代时 header 值按字典序排列。}}
+
+{{知识点15}}{{Headers 修改限制：通过 new Headers() 创建的可自由修改；Request 的 headers 受 mode 限制（no-cors 只能修改 CORS 安全列表 header）；通过 fetch 获取的 Response 的 headers 是不可变的（immutable），由 Response.error() 或 Response.redirect() 创建的也不可修改。}}
+
+{{知识点16}}{{跨域请求 CORS：fetch() 默认 mode 为 cors，跨域请求使用 CORS 机制。简单请求直接发送，服务器需返回正确的 Access-Control-Allow-Origin 响应头；非简单请求（如含自定义 header 或非 GET/POST/HEAD 方法）会先发送预检请求（preflight），服务器确认后才发送实际请求。mode 还可设为 same-origin（禁止跨域）或 no-cors（限制 header 和方法，响应不透明）。}}
+
+{{知识点17}}{{凭证/凭据控制：通过 credentials 选项控制是否发送 Cookie、TLS 客户端证书、Authorization 等凭据。三个值：omit（不发送）、same-origin（默认，仅同源发送）、include（始终发送）。跨域发送凭据时服务器必须设置 Access-Control-Allow-Credentials: true 且 Access-Control-Allow-Origin 不能为 *。SameSite=Strict/Lax 的 Cookie 即使设为 include 也不会跨站发送。}}
+
+{{知识点18}}{{请求取消机制：使用 AbortController 实现请求取消。创建 AbortController 实例，将其 signal 属性传入 fetch 的 signal 选项，调用 controller.abort() 取消请求。取消后 Promise 以 AbortError 异常 reject。也可以在 Response body 读取前 abort，读取 body 时同样会抛出 AbortError。}}
+
+{{知识点19}}{{AbortSignal 超时控制：AbortSignal.timeout(ms) 静态方法创建在指定毫秒后自动 abort 的信号，可用于实现请求超时。AbortSignal.abort(reason) 创建已中止的信号。AbortSignal.any() 可组合多个信号，任一触发即中止。}}
+
+{{知识点20}}{{重定向处理：通过 redirect 选项控制重定向行为：follow（默认，自动跟随重定向）、error（遇到重定向报错）、manual（返回不透明重定向响应，由开发者手动处理）。response.redirected 属性指示响应是否经过重定向。}}
+
+{{知识点21}}{{缓存控制：通过 cache 选项控制请求缓存行为。可选值包括：default（遵循 HTTP 缓存规则）、no-store（不缓存）、reload（从网络获取但存储响应）、no-cache（条件请求验证缓存）、force-cache（优先使用缓存）、only-if-cached（仅使用缓存，mode 需为 same-origin）。}}
+
+{{知识点22}}{{子资源完整性校验：通过 integrity 选项指定请求资源的哈希值（如 sha256-BpfBw7ivV8q2jLiT13fxDYAe2tJllusRSZ273h2nFSE=），浏览器会验证获取的资源是否与指定的哈希值匹配，防止资源被篡改。}}
+
+{{知识点23}}{{Referrer 策略：通过 referrer 选项指定请求的 Referrer URL（如 "about:client"），referrerPolicy 选项控制 Referrer 信息的发送策略（如 no-referrer、no-referrer-when-downgrade、origin、same-origin 等），用于隐私和安全控制。}}
+
+{{知识点24}}{{响应体流式处理：response.body 返回 ReadableStream，支持流式读取大数据。可通过 getReader() 获取 reader 逐块读取，或使用 for await...of 循环异步迭代。还可使用 pipeThrough() 连接 TransformStream、pipeTo() 导入 WritableStream、tee() 将流分叉为两个相同流。}}
+
+{{知识点25}}{{流的锁定与扰动：ReadableStream 同一时间只能被一个 reader 锁定（locked 状态）。bodyUsed 为 true 表示 body 已被消费。已锁定或已扰动的流不能再次读取。需要多次使用时应先调用 clone() 创建副本。}}
+
+{{知识点26}}{{keepalive 选项：设置 keepalive: true 使请求在页面卸载后仍然存活，常用于发送分析数据。类似于 navigator.sendBeacon()，但更灵活。与 sendBeacon 不同，keepalive 的 fetch 请求有 64KB 大小限制。}}
+
+{{知识点27}}{{fetchLater() 延迟请求 API：2025 年新增 API，用于设置延迟发送的 fetch 请求。浏览器会在标签页关闭或导航离开时自动发送，也可通过 activateAfter 选项指定延迟时间。适用于页面生命周期末尾的信标数据（beacon）发送，解决了 unload/beforeunload 事件不可靠的问题。}}
+
+{{知识点28}}{{fetchLater() 配额限制：每个文档总体配额为 640KiB。默认分为 512KiB 顶层配额（顶层文档和同源子 frame）和 128KiB 共享配额（跨源子 frame）。同一报告源并发限制 64KiB。每个跨源子 frame 默认 8KiB。可通过 Permissions-Policy 的 deferred-fetch 和 deferred-fetch-minimal 指令调整配额分配。超出配额抛出 QuotaExceededError。}}
+
+{{知识点29}}{{fetchLater() 返回值：fetchLater() 返回 FetchLaterResult 对象，其 activated 属性为布尔值，指示请求是否已发送。请求发出前可通过 abortController.abort() 取消。请求体可在发送前通过 Request 对象更新。}}
+
+{{知识点30}}{{Fetch 与 XMLHttpRequest 对比：Fetch 基于 Promise，语法更简洁；XHR 基于回调事件。Fetch 默认不 reject HTTP 错误（需手动检查 ok/status），XHR 通过 readyState 和 status 处理。Fetch 支持流式读取响应体，XHR 需等待全部下载完成。Fetch 原生支持 Request/Response 对象抽象，XHR 直接操作原始数据。Fetch API 更现代，是未来标准方向。}}
+
+{{知识点31}}{{错误处理最佳实践：应使用 try...catch 包裹 fetch 调用，先检查 response.ok 是否为 true，非 2xx 状态码时手动抛出错误。网络错误（如断网、DNS 失败）会以 TypeError reject。配合 async/await 使用更清晰。可使用 AbortController 处理超时和取消场景的错误。}}
+
+{{知识点32}}{{fetch() 在 Service Worker 中的应用：Fetch API 是 Service Worker 的核心。在 Service Worker 中可拦截 fetch 事件（FetchEvent），通过 event.respondWith() 返回自定义 Response，实现离线缓存、请求修改、资源代理等功能。可直接构造 new Response() 作为响应。}}
+
+{{知识点33}}{{请求体类型详解——FormData：FormData 可用于构建 multipart/form-data 格式的请求体，特别适合文件上传。可通过 new FormData(formElement) 从表单元素创建，也可手动 append 字段和文件。使用 FormData 时不应手动设置 Content-Type，浏览器会自动设置包含 boundary 的正确值。}}
+
+{{知识点34}}{{请求体类型详解——ReadableStream：fetch 支持将 ReadableStream 作为请求体（需服务端支持流式接收）。这在上传大文件或流式发送数据时很有用。使用 duplex: "half" 选项声明半双工模式，表明请求体在接收响应前可能还在发送中。}}
+
+{{知识点35}}{{并发请求与 Promise.all：使用 Promise.all() 或 Promise.allSettled() 可同时发起多个 fetch 请求，实现并发加载。Promise.all() 在任一请求失败时 reject，Promise.allSettled() 等待所有请求完成（无论成功或失败），返回每个请求的结果状态。}}
+
+{{知识点36}}{{请求超时实现：Fetch API 本身没有内置 timeout 选项（不同于 XHR）。可通过 AbortSignal.timeout(ms) 实现，或手动使用 setTimeout + AbortController 实现。AbortSignal.timeout() 是更简洁的方案，在指定毫秒后自动中止请求。}}
+
+{{知识点37}}{{Fetch API 与 async/await：fetch 天然支持 async/await 语法，使异步代码看起来像同步代码。典型模式为：const response = await fetch(url); const data = await response.json();。配合 try...catch 实现完整的错误处理。}}
+
+{{知识点38}}{{网络错误类型：fetch() 在以下情况以 TypeError reject：网络故障（断网）、CORS 限制、请求被 CSP 阻止、URL 无效、请求被 AbortController 取消（此时错误名称为 AbortError）。这些错误不同于 HTTP 错误状态码。}}
+
+{{知识点39}}{{response.type 属性：指示响应的类型。basic 表示同源请求的正常响应；cors 表示跨域请求的有效 CORS 响应；opaque 表示 no-cors 模式的不透明响应（无法读取 body 和 headers）；opaqueredirect 表示 redirect: manual 时的不透明重定向响应。}}
+
+{{知识点40}}{{Response.json() 静态方法（2024+）：Response.json(data, init) 静态方法可直接创建 JSON 格式的 Response 对象，常用于 Service Worker 中拦截请求并返回 JSON 数据，无需手动设置 Content-Type 头。init 参数与 Response 构造函数的第二个参数相同。}}
+
+{{知识点41}}{{Fetch API 的规范标准：Fetch API 由 WHATWG（Web Hypertext Application Technology Working Group）维护，规范地址为 fetch.spec.whatwg.org。它是 Living Standard（动态标准），持续更新。所有主流浏览器（Chrome、Firefox、Safari、Edge）均已支持 fetch()，自 2017 年 3 月起广泛可用。}}
+
+{{知识点42}}{{Duplex 流与请求体：通过设置 duplex: "half" 选项，可以使用 ReadableStream 作为请求体进行流式上传。这表示请求体可能在服务器开始处理响应时仍在发送中（半双工模式）。这是 Fetch API 支持流式请求的关键特性。}}
+
+{{知识点43}}{{ReadableStream.from() 静态方法：可将可迭代对象（Array、Set）或异步可迭代对象（async generator）转换为 ReadableStream。对于不支持此方法的浏览器，可通过 new ReadableStream({ pull(controller) {... } }) 手动创建自定义流。}}
+
+{{知识点44}}{{Request.isHistoryNavigation 属性：指示请求是否由历史导航（如用户点击浏览器后退/前进按钮）触发。该属性为只读布尔值，可用于在 Service Worker 中区分普通请求和历史导航请求，实现不同的缓存策略。}}
+
+{{知识点45}}{{Headers.getSetCookie() 方法：当响应包含多个 Set-Cookie 头时，普通 get() 方法只能返回合并后的值。getSetCookie() 返回一个数组，包含所有 Set-Cookie 头的独立值，解决了多个 Set-Cookie 头被合并导致无法正确解析的问题。}}
+
+{{知识点46}}{{Fetch API 的安全性考虑：跨域请求受同源策略和 CORS 限制；凭证模式为 include 时需服务端配合，增加 CSRF 风险；integrity 选项提供子资源完整性校验；referrerPolicy 控制 Referer 信息泄露；CSP 可阻止 fetch 请求；no-cors 模式的响应不透明，防止数据泄露。}}
+
+{{知识点47}}{{Request.destination 属性：只读字符串，描述请求内容的类型。可能的值包括 ""（空字符串）、audio、audioworklet、document、embed、font、frame、iframe、image、json、manifest、model、object、paintworklet、report、script、sharedworker、style、track、video、worker、xslt 等。由浏览器自动设置，不能手动指定。}}
+
+{{知识点48}}{{Fetch 与 WebSocket 的区别：Fetch 用于请求-响应模式的 HTTP 通信；WebSocket 提供全双工持久连接。Fetch 适合 RESTful API 调用和资源获取；WebSocket 适合实时双向通信（聊天、实时数据推送）。Fetch 每次请求独立；WebSocket 连接建立后可持续收发消息。}}
+
+{{知识点49}}{{Fetch 的兼容性与 Polyfill：fetch() 在所有现代浏览器中均支持，包括 Web Worker 上下文。对于需要支持旧版浏览器的场景，可使用 whatwg-fetch（GitHub 官方 polyfill）或 isomorphic-fetch（同时支持浏览器和 Node.js）。Node.js 从 v18 起内置了实验性的全局 fetch（基于 undici）。}}
+
+{{知识点50}}{{Fetch 请求的优先级与调度：浏览器会根据请求类型自动设置优先级（如 CSS/JS 高优先级、图片低优先级）。可通过 Priority Hints API（importance 属性：high/low/auto）调整 fetch 请求优先级。Service Worker 中的 fetch 请求优先级可能与原始页面请求不同，需要注意性能影响。}}

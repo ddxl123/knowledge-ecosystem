@@ -1,0 +1,83 @@
+# 2025前端图片优化
+# 领域: 计算机IT
+# 学科: 前端框架
+# 来源: 2025前端图片优化
+# 描述: 前端图片优化核心知识点
+
+{{AVIF格式概述}}{{AVIF（AV1 Image File Format）是一种基于AV1编码的开源、免版税图片格式，使用HEIF容器封装。相比JPEG，AVIF有损压缩可减少约50%的文件大小，相比WebP也能节省约20-30%。支持有损/无损压缩、Alpha通道透明度、HDR高动态范围、广色域（Wide Color Gamut）、动画多帧存储和8/10/12位色深。MIME类型为image/avif，扩展名为.avif。截至2025年，Chrome 85+、Edge 121+、Firefox 93+、Safari 16.1+、Opera 71+均已支持。}}
+
+{{AVIF的局限性}}{{AVIF不支持渐进式渲染（Progressive Rendering），图片必须完全下载后才能显示。对于大文件，这可能影响用户体验。此外，AVIF编码速度相对较慢，尤其在高质量编码时。建议使用<picture>元素提供WebP/JPEG回退方案。}}
+
+{{WebP格式概述}}{{WebP是Google开发的现代图片格式，提供比JPEG和PNG更好的压缩性能。支持有损和无损压缩、动画、Alpha透明通道以及更高的色深。WebP有损压缩比JPEG小约25-35%，无损压缩比PNG小约26%。支持渐进式渲染。MIME类型为image/webp，扩展名为.webp。Chrome、Edge、Firefox、Opera、Safari均已支持。}}
+
+{{WebP与AVIF对比}}{{WebP压缩比AVIF略差（中位30% vs 50%的JPEG压缩率），但WebP支持渐进式渲染，且浏览器支持历史更长、兼容性更广。AVIF在高分辨率和HDR场景下优势更明显。2025年推荐策略：优先使用AVIF，WebP作为回退，JPEG/PNG作为最终兜底。}}
+
+{{JPEG XL格式}}{{JPEG XL是由JPEG委员会开发的下一代图片格式，目标是替代传统JPEG。支持有损和无损压缩、渐进式解码、动画、HDR、透明度，且能无损转码现有JPEG文件（JPEG重压缩）。理论上压缩效率优于AVIF和WebP。但截至2025年，主流浏览器（Chrome、Firefox）尚未默认启用JPEG XL支持，仅Safari 17+部分支持。建议关注其发展但暂不作为主要生产格式。}}
+
+{{JPEG格式优化}}{{JPEG仍是2025年使用最广泛的图片格式，所有浏览器均支持。优化策略：1）使用mozjpeg或libjpeg-turbo等现代编码器；2）质量参数建议70-85之间平衡质量和大小；3）采用渐进式JPEG（Progressive JPEG）替代基线JPEG以改善感知加载速度；4）移除EXIF元数据减小文件体积；5）对照片类内容使用JPEG，对需要透明度的内容使用WebP/AVIF/PNG。}}
+
+{{PNG格式特点与优化}}{{PNG是无损压缩格式，支持真彩色和Alpha透明度，适合需要精确还原的图像（如截图、图标、带透明度的图片）。优化手段：1）使用pngquant进行有损PNG压缩，可减少60-80%文件大小；2）使用optipng或pngcrush进行无损优化；3）考虑将PNG图标转为SVG或WebP；4）对于不需要透明度的照片类内容应使用JPEG/WebP/AVIF替代。}}
+
+{{SVG矢量图优势}}{{SVG（Scalable Vector Graphics）是基于XML的矢量图片格式，适合图标、Logo、UI元素、图表和简单图形。优势：文件小、无限缩放不失真、可用CSS/JS操控、支持动画、可被搜索引擎索引。2025年推荐：所有图标和简单图形优先使用SVG，配合symbol和use元素实现SVG Sprites以减少HTTP请求。}}
+
+{{图片格式选择策略}}{{2025年推荐的图片格式选择策略：1）照片类内容：AVIF > WebP > JPEG（质量75-85）；2）需要透明度的照片：AVIF > WebP > PNG-24；3）图标和UI元素：SVG > WebP > PNG-8；4）简单图形和Logo：SVG；5）动画：AVIF > WebP > APNG；6）截图和精确像素还原：无损WebP > PNG。始终通过<picture>元素提供多格式回退。}}
+
+{{响应式图片概述}}{{响应式图片（Responsive Images）是解决不同设备屏幕尺寸、分辨率和网络条件下加载合适图片的技术方案。主要解决两个问题：1）分辨率切换（Resolution Switching）：同一张图片提供不同分辨率版本；2）艺术指导（Art Direction）：不同屏幕下显示不同裁剪/构图的图片。核心技术包括srcset、sizes属性和<picture>元素。}}
+
+{{srcset与sizes属性}}{{srcset属性在<img>元素上定义可选图片集合及各自尺寸。配合sizes属性告知浏览器在不同视口宽度下图片的显示尺寸，帮助浏览器选择最合适的图片资源。语法：srcset="small.jpg 480w, medium.jpg 800w, large.jpg 1200w" sizes="(max-width: 600px) 480px, 800px"。浏览器根据视口宽度、像素密度和sizes提示自动选择最佳图片，无需JavaScript干预。}}
+
+{{srcset像素密度描述符}}{{srcset支持像素密度描述符（如1x、2x、3x）用于高DPI/Retina屏幕适配。例如：srcset="photo-1x.jpg 1x, photo-2x.jpg 2x"。适合图片在所有设备上显示相同CSS尺寸但需要不同物理像素密度的场景。注意：宽度描述符（w）和像素密度描述符（x）不能混用。}}
+
+{{picture元素与艺术指导}}{{<picture>元素允许为不同媒体条件提供完全不同的图片源，解决艺术指导问题。包含零个或多个<source>元素和一个必需的<img>回退元素。浏览器依次检查每个<source>的media、type和srcset属性，选择第一个匹配的源。示例：<picture><source srcset="wide.jpg" media="(min-width: 800px)"><source srcset="narrow.jpg" media="(orientation: portrait)"><img src="fallback.jpg" alt="..."></picture>。}}
+
+{{picture元素格式回退}}{{<picture>元素的type属性可用于提供不同图片格式的回退方案。浏览器检查type中的MIME类型，跳过不支持的格式。示例：<picture><source srcset="photo.avif" type="image/avif"><source srcset="photo.webp" type="image/webp"><img src="photo.jpg" alt="photo"></picture>。这是2025年最推荐的渐进增强图片格式策略，确保在所有浏览器中都能显示合适的图片。}}
+
+{{暗色模式图片适配}}{{使用<picture>元素配合prefers-color-scheme媒体查询可以为暗色和亮色模式提供不同图片。示例：<picture><source srcset="logo-dark.png" media="(prefers-color-scheme: dark)"><source srcset="logo-light.png" media="(prefers-color-scheme: light)"><img src="logo-light.png" alt="Logo"></picture>。适用于Logo、图标、插图等需要在不同主题下有不同表现的图片资源。}}
+
+{{原生懒加载概述}}{{原生图片懒加载通过HTML的loading属性实现，无需JavaScript。loading="lazy"指示浏览器推迟加载视口外的图片，直到用户滚动接近时才开始下载。loading="eager"（默认）表示立即加载。该属性已广泛支持（2022年3月起Baseline），适用于<img>、<iframe>、<video>和<audio>元素。这显著减少了初始页面加载的数据量和时间。}}
+
+{{懒加载最佳实践}}{{懒加载最佳实践：1）首屏关键图片（Hero Image、LCP图片）不应使用lazy，应设置loading="eager"或使用fetchpriority="high"；2）始终为懒加载图片指定width和height属性以预留空间，避免布局偏移（CLS）；3）可设置CSS的content-visibility: auto作为补充手段；4）注意：Chrome的懒加载实现会自动跳过视口内的图片（即lazy不会延迟首屏图片），但不依赖此行为。}}
+
+{{Intersection Observer实现懒加载}}{{Intersection Observer API是实现自定义图片懒加载的推荐方式。它异步监听目标元素与视口的交叉状态，不阻塞主线程。当元素进入视口（或指定rootMargin范围）时触发回调，将data-src赋值给src实现按需加载。比scroll事件监听性能更好。rootMargin可设置"200px"等值实现预加载，确保用户滚动到图片前图片已开始加载。}}
+
+{{fetchpriority属性}}{{fetchpriority属性允许开发者提示浏览器资源加载的相对优先级。值为"high"、"low"或"auto"。对首屏关键图片（如LCP图片）设置fetchpriority="high"可加速最大内容绘制（LCP），对非关键图片设置"low"降低优先级。该属性可在<img>、<link>等元素上使用，不影响懒加载行为，两者可配合使用。}}
+
+{{解码属性（decoding）}}{{<img>元素的decoding属性控制图片解码方式：decoding="sync"同步解码（阻塞其他内容渲染），decoding="async"异步解码（不阻塞其他内容），decoding="auto"（默认，浏览器自行决定）。对于首屏关键图片，sync可确保图片与页面内容同时显示；对于非关键图片，async避免阻塞渲染。}}
+
+{{图片宽高与CLS预防}}{{为所有<img>元素显式设置width和height属性是防止累积布局偏移（CLS）的关键做法。浏览器根据宽高比预留空间，即使图片尚未加载完成，页面布局也不会跳动。2025年最佳实践：始终在HTML中设置width和height（即使使用CSS覆盖尺寸），或使用CSS的aspect-ratio属性。现代浏览器会自动根据width/height计算宽高比。}}
+
+{{CSS object-fit与object-position}}{{object-fit属性控制图片在容器中的适配方式：contain（保持比例完全显示）、cover（保持比例填充容器，可能裁剪）、fill（拉伸填充）、none（原始尺寸）、scale-down（取contain和none中较小的）。object-position控制图片在容器中的对齐位置（类似background-position）。这两个属性让开发者无需JavaScript即可优雅地控制图片在各种容器中的表现。}}
+
+{{图片CDN概述}}{{图片CDN（如Cloudinary、imgix、Akamai Image Manager、Fastly Image Optimizer、Cloudflare Images）提供实时图片处理和全球分发能力。核心功能：1）自动格式协商（Accept头检测，返回AVIF/WebP/JPEG）；2）实时裁剪、缩放、质量调整；3）全球边缘节点缓存；4）自动压缩优化；5）水印和变换。使用图片CDN可大幅减少开发者手动处理图片的工作量。}}
+
+{{CDN图片URL参数化}}{{图片CDN通常通过URL参数控制图片变换。例如Cloudinary：https://res.cloudinary.com/demo/image/upload/w_400,q_auto,f_auto/sample.jpg，其中w_400指定宽度，q_auto自动质量优化，f_auto自动格式选择。imgix使用类似方案：?w=400&auto=format,compress。这种URL参数化方案便于在不同上下文（响应式、不同设备）中复用同一图片源。}}
+
+{{自动格式协商}}{{图片CDN的自动格式协商（如f_auto）根据请求的Accept头自动返回浏览器支持的最优格式。如果浏览器支持AVIF则返回AVIF，否则WebP，最后JPEG。服务端也可实现类似逻辑：检查Accept头中image/avif、image/webp的支持情况，返回对应格式。这是2025年无需使用<picture>元素即可实现多格式兼容的便捷方案。}}
+
+{{图片压缩工具链}}{{2025年常用图片压缩工具：1）构建工具集成：imagemin（webpack/vite插件）、@squoosh/lib（Google Squoosh的Node API）；2）命令行：sharp（Node.js高性能图片处理库）、cwebp/avifenc/cjxl格式编码器；3）在线工具：Squoosh.app（Google开源）、TinyPNG/TinyJPG；4）CI/CD集成：在构建流水线中自动压缩图片。推荐在构建阶段完成压缩，运行时依赖CDN二次优化。}}
+
+{{sharp库图片处理}}{{sharp是Node.js生态中最流行的高性能图片处理库，基于libvips实现。支持格式转换（JPEG/PNG/WebP/AVIF/GIF/TIFF）、尺寸调整、裁剪、旋转、水印、元数据读写等。处理速度远快于基于ImageMagick的方案。2025年前端工程中常用于：1）构建时图片压缩和格式转换；2）服务端图片API；3）生成响应式图片多尺寸版本。}}
+
+{{图片预加载策略}}{{使用<link rel="preload">可提前加载关键图片资源，减少关键渲染路径时间。语法：<link rel="preload" as="image" href="hero.avif" type="image/avif">。适用于LCP图片、首屏背景图等关键资源。注意：预加载应配合fetchpriority="high"使用；不要过度预加载（一般2-3个资源）；type属性帮助浏览器在不支持该格式时跳过预加载。}}
+
+{{内容可见性优化}}{{CSS的content-visibility属性可进一步优化屏幕外图片的渲染性能。设置content-visibility: auto的元素在进入视口前会跳过渲染（包括布局和绘制），减少初始渲染工作量。配合contain-intrinsic-size属性指定元素的内在尺寸以正确预留空间。这比原生lazy加载更进一步，优化了渲染阶段而非仅加载阶段。}}
+
+{{图片SEO优化}}{{图片SEO最佳实践：1）为所有图片提供描述性的alt文本；2）使用语义化的文件名（如golden-retriever-playing.jpg而非IMG_1234.jpg）；3）添加图片结构化数据（Schema.org ImageObject）；4）使用图片Sitemap；5）确保图片URL稳定可索引；6）使用合适的图片尺寸而非CSS缩放大图；7）提供Open Graph和Twitter Card图片标签用于社交分享。}}
+
+{{图片无障碍（Accessibility）}}{{图片无障碍核心要求：1）所有信息性图片必须有描述性alt文本；2）装饰性图片使用空alt=""以告知屏幕阅读器跳过；3）复杂图表提供long description；4）图标按钮需配合aria-label；5）图片链接的alt应描述链接目标而非图片内容；6）避免仅用颜色传达信息的图片。良好的无障碍实践也间接提升SEO和用户体验。}}
+
+{{LCP图片优化策略}}{{最大内容绘制（LCP）是Core Web Vitals关键指标，通常由首屏大图触发。优化策略：1）使用fetchpriority="high"提升LCP图片优先级；2）通过<link rel="preload">提前加载；3）使用现代格式（AVIF/WebP）减小文件大小；4）避免使用loading="lazy"于LCP图片；5）确保服务器响应快速（TTFB < 800ms）；6）使用CDN分发；7）适当压缩但避免过度压缩影响质量。}}
+
+{{图片缓存策略}}{{合理的图片缓存策略对性能至关重要：1）使用长Cache-Control（如max-age=31536000 immutable）配合内容哈希文件名；2）使用ETag或Last-Modified验证缓存；3）CDN边缘缓存配合源站回源策略；4）Service Worker缓存策略（Cache-First适合静态图片）；5）浏览器HTTP缓存是最快的方式，避免不必要的重新请求。}}
+
+{{CSS背景图优化}}{{CSS背景图优化技巧：1）使用image-set()函数提供多分辨率/格式背景图：background-image: image-set(url("photo.avif") type("image/avif"), url("photo.webp") type("image/webp")); 2）使用媒体查询为不同屏幕提供不同背景图；3）使用object-fit和object-position替代background-size/background-position；4）避免过多CSS背景图（HTTP/2多路复用已减少限制但仍有开销）。}}
+
+{{图片精灵（Sprites）与内联策略}}{{2025年图片策略选择：1）SVG Sprites：使用<symbol>+<use>内联SVG图标，减少HTTP请求，可通过CSS控制样式；2）CSS Sprites：传统方案，将多个小图合并为雪碧图，适合不支持SVG的场景；3）Data URI内联：小图片（<2KB）可Base64内联到CSS/HTML中，减少请求但增大文档体积；4）推荐SVG Sprites > Data URI > CSS Sprites。}}
+
+{{现代图片加载工作流}}{{2025年前端图片优化工作流：1）源文件管理：保留高质量源文件，使用Git LFS管理大文件；2）构建时处理：使用sharp/imagemin生成多格式（AVIF/WebP/JPEG）、多尺寸响应式图片；3）部署到CDN或使用图片CDN服务；4）HTML中使用<picture>+srcset+sizes组合；5）LCP图片预加载+高优先级；6）非首屏图片原生懒加载；7）监控Core Web Vitals指标持续优化。}}
+
+{{Canvas与图片处理}}{{HTML5 Canvas可用于客户端图片处理：1）图片压缩和格式转换（canvas.toBlob/toDataURL指定质量和格式）；2）图片裁剪和缩放后上传；3）添加水印和滤镜；4）生成缩略图。优势是减少服务端压力，但受限于浏览器支持的输出格式（通常JPEG/PNG/WebP）。2025年推荐使用OffscreenCanvas配合Web Worker在后台线程处理，避免阻塞主线程。}}
+
+{{Web Worker图片处理}}{{Web Worker和OffscreenCanvas可在后台线程进行图片处理，避免阻塞主线程导致页面卡顿。适用于：1）大批量图片压缩；2）客户端图片编辑器；3）图片格式转换。OffscreenCanvas在Worker中可用，支持2D和WebGL上下文。2025年浏览器支持已完善（Chrome 69+、Firefox 105+、Safari 16.4+），是客户端图片处理的推荐方案。}}
+
+{{图片性能监控指标}}{{监控图片优化效果的关键指标：1）LCP（Largest Contentful Paint）：目标<2.5秒，通常由图片触发；2）CLS（Cumulative Layout Shift）：目标<0.1，图片未设尺寸是常见原因；3）总图片资源大小：目标控制在页面总资源的50%以内；4）图片请求数：HTTP/2下限制放宽但仍需关注；5）TTFB：影响图片加载起始时间。使用Lighthouse、PageSpeed Insights和Chrome DevTools监控。}}

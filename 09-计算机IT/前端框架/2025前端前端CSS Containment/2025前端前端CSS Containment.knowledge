@@ -1,0 +1,83 @@
+# 2025前端前端CSS Containment
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{CSS Containment 是什么：CSS Containment（CSS 包含）是 W3C CSS Containment Module 规范定义的一组机制，允许开发者将页面 DOM 子树与其余部分隔离，使浏览器能够优化渲染独立部分，从而提升页面性能。它通过 `contain` 属性和相关属性实现。}}
+
+{{知识点2}}{{CSS Containment 的核心目标：CSS Containment 的核心目标是通过限制浏览器渲染引擎的工作范围来提升性能。当一个元素被"包含"后，浏览器知道该元素的内部变化不会影响外部布局，因此可以跳过不必要的重排和重绘计算。}}
+
+{{知识点3}}{{contain 属性概述：`contain` 属性是 CSS Containment 的核心属性，应用于所有元素，不可继承，初始值为 `none`。它接受 `none`、`strict`、`content`、`size`、`inline-size`、`layout`、`style`、`paint` 等关键字值，可以空格分隔组合使用。}}
+
+{{知识点4}}{{Size Containment（尺寸包含）：`contain: size` 表示元素的尺寸可以独立计算，忽略子元素。浏览器在布局时将该元素视为没有内容，不会因为子元素变化而触发自身尺寸重算。注意：使用 size containment 时必须显式指定元素尺寸，否则元素会坍缩为 0。}}
+
+{{知识点5}}{{Inline-Size Containment（行内尺寸包含）：`contain: inline-size` 仅在行内方向（通常是水平方向）施加尺寸包含，块方向不受影响。它不能与 `size` 同时使用。这在只需要约束宽度而不约束高度的场景中非常有用。}}
+
+{{知识点6}}{{Layout Containment（布局包含）：`contain: layout` 表示元素的内部布局与页面其余部分隔离。外部变化不影响内部布局，内部变化也不影响外部。此外，`position: fixed` 的定位上下文变为该元素而非视口，浮动元素也不会溢出到外部。}}
+
+{{知识点7}}{{Style Containment（样式包含）：`contain: style` 将 CSS 计数器（counter）和引号（quotes）的作用域限定在该元素及其后代内。计数器的 counter-increment 和 counter-set 在该元素处重新开始，引号嵌套层级也被隔离。}}
+
+{{知识点8}}{{Paint Containment（绘制包含）：`contain: paint` 表示后代元素不会在元素边界之外显示。如果包含元素在屏幕外，浏览器可以跳过其内部元素的绘制。溢出部分会被裁剪到元素的 border-box，同时该元素会创建新的层叠上下文和块格式化上下文。}}
+
+{{知识点9}}{{strict 关键字：`contain: strict` 是所有包含类型的组合，等价于 `contain: size layout paint style`。它是最强的包含模式，适用于尺寸已知且完全独立的组件。由于包含 size，必须显式设置元素尺寸。}}
+
+{{知识点10}}{{content 关键字：`contain: content` 等价于 `contain: layout paint style`，包含除 size 以外的所有类型。这是最常用的包含模式，因为不需要预先知道元素尺寸，同时仍然提供布局、绘制和样式隔离的性能优势。}}
+
+{{知识点11}}{{content-visibility 属性概述：`content-visibility` 属性控制元素是否渲染其内容，有三个值：`visible`（默认，正常渲染）、`hidden`（跳过内容渲染，类似 display:none 但保留渲染状态）、`auto`（自动根据是否对用户可见来决定是否跳过渲染）。}}
+
+{{知识点12}}{{content-visibility: auto 的性能优势：`content-visibility: auto` 会自动开启 layout、style、paint 三种包含。当元素不在视口附近时，跳过其内容渲染；当滚动到视口附近时恢复渲染。这对长页面（如文章列表、无限滚动）有显著的首屏渲染和交互性能提升。}}
+
+{{知识点13}}{{content-visibility: hidden vs display: none：`content-visibility: hidden` 跳过内容渲染但保留渲染状态，切换回 visible 时恢复更快；`display: none` 完全从布局中移除元素。content-visibility: hidden 适合需要频繁切换显示/隐藏的场景，如标签页内容。}}
+
+{{知识点14}}{{content-visibility 的动画支持：`content-visibility` 支持离散动画，但有特殊行为：从 hidden 到 visible 时，在动画开始（0%）就切换为 visible 以确保内容全程可见；从 visible 到 hidden 时，在动画结束（100%）才切换为 hidden。配合 CSS transitions 使用时需设置 `transition-behavior: allow-discrete`。}}
+
+{{知识点15}}{{contain-intrinsic-size 属性：`contain-intrinsic-size` 是 `contain-intrinsic-width` 和 `contain-intrinsic-height` 的简写属性，用于为启用了尺寸包含的元素指定"内在尺寸"。当元素因 size containment 或 content-visibility 跳过内容渲染时，浏览器使用此值作为占位尺寸进行布局。}}
+
+{{知识点16}}{{contain-intrinsic-size 的 auto 关键字：`contain-intrinsic-size: auto <length>` 表示当元素正常渲染过一次后，浏览器会"记住"其实际尺寸；当元素再次跳过内容时，使用记住的尺寸而非指定的占位值。这避免了因占位尺寸不准确导致的布局抖动。}}
+
+{{知识点17}}{{contain-intrinsic-size: auto none：`auto none` 组合表示如果没有记住的尺寸且元素正在跳过内容，则回退到 none（即视为无内容）。这在 Grid 或多列布局中比设为 0px 更安全，因为 0px 在这些布局中可能产生意外行为。}}
+
+{{知识点18}}{{contentvisibilityautostatechange 事件：当 `content-visibility: auto` 的元素的可见性状态发生变化时（从跳过内容变为渲染或反之），浏览器会触发 `contentvisibilityautostatechange` 事件。开发者可以利用此事件在元素即将可见时才加载数据或执行昂贵操作。}}
+
+{{知识点19}}{{ContentVisibilityAutoStateChangeEvent 接口：该事件对象具有 `skipped` 属性，布尔值，指示元素是否正在跳过其内容（true 表示跳过，false 表示正在渲染）。这使开发者能精确感知元素的渲染状态变化。}}
+
+{{知识点20}}{{CSS Containment 与 Container Queries 的关系：CSS Containment 是 Container Queries（容器查询）的基础。容器查询需要一个"查询容器"，而容器的定义依赖于 containment——通过 `container-type` 属性（或 `container` 简写）将元素设为特定类型的包含上下文，然后才能用 `@container` 查询其尺寸或样式。}}
+
+{{知识点21}}{{container-type 属性：`container-type` 属性将元素定义为查询容器。值可以是 `size`（在两个方向上启用尺寸包含）、`inline-size`（仅行内方向）、`normal`（默认，不作为容器）。设置 container-type 会自动应用相应的 contain 属性。}}
+
+{{知识点22}}{{container-name 属性：`container-name` 属性为查询容器命名，以便在 `@container` 规则中按名称引用特定容器而非最近的祖先容器。值为自定义标识符，可以指定多个名称。这在嵌套容器场景中尤其重要。}}
+
+{{知识点23}}{{container 简写属性：`container` 是 `container-name` 和 `container-type` 的简写属性，语法如 `container: sidebar / inline-size`（名称在前，类型在后，用斜杠分隔）。这简化了定义查询容器的代码。}}
+
+{{知识点24}}{{@container 规则：`@container` at-rule 用于编写容器查询，语法类似 `@media`。可以查询容器的尺寸（如 `@container sidebar (min-width: 400px)`）或自定义属性值（样式查询，如 `@container style(--theme: dark)`）。容器查询实现了组件级的响应式设计。}}
+
+{{知识点25}}{{Container Query Length Units：容器查询引入了一组长度单位：`cqw`（容器宽度的 1%）、`cqh`（容器高度的 1%）、`cqi`（容器行内尺寸的 1%）、`cqb`（容器块尺寸的 1%）、`cqmin`（cqi 和 cqb 中较小值）、`cqmax`（cqi 和 cqb 中较大值）。这些单位使样式能相对于容器尺寸进行缩放。}}
+
+{{知识点26}}{{Layout Containment 的副作用——创建 BFC：`contain: layout` 会创建一个新的块格式化上下文（BFC）。这意味着内部的浮动元素不会影响外部布局，外部的 margin 也不会与内部合并。这与 `overflow: hidden` 创建 BFC 类似但目的不同。}}
+
+{{知识点27}}{{Paint Containment 创建层叠上下文：`contain: paint` 会创建新的层叠上下文（stacking context）和块格式化上下文。这意味着元素内部的 z-index 只在该上下文内生效，不会与外部元素竞争层叠顺序。这对隔离组件的层叠行为非常有用。}}
+
+{{知识点28}}{{CSS Containment 的性能收益原理：浏览器渲染管线包括样式计算、布局、绘制、合成等阶段。CSS Containment 通过在各阶段创建"隔离墙"，使浏览器可以：跳过不需要重排的子树、跳过屏幕外元素的绘制、将独立区域合成为独立图层。这在复杂页面和频繁更新的场景中收益最大。}}
+
+{{知识点29}}{{CSS Containment 的浏览器支持：`contain` 属性在 Chrome 52+、Firefox 103+、Safari 15.4+、Edge 79+ 中受支持。`content-visibility` 在 Chrome 85+、Firefox 125+、Edge 85+ 中受支持（Safari 支持较晚）。Container Queries 在 Chrome 105+、Firefox 110+、Safari 16+ 中受支持。使用时建议配合 @supports 做特性检测。}}
+
+{{知识点30}}{{contain: style 的计数器隔离示例：在一个有序列表中，如果某个 li 元素设置了 `contain: style`，其 counter-increment 会在该元素处重新开始编号。例如列表本来编号 1-5，第三个 li 设置 contain: style 后，第三个 li 的子元素中计数器会从 1 重新开始。}}
+
+{{知识点31}}{{contain: layout 对 position: fixed 的影响：当一个元素设置了 `contain: layout`，其内部的 `position: fixed` 子元素不再相对于视口定位，而是相对于该 contain 元素定位。这类似于将 fixed 降级为 absolute，对组件化开发中的弹出层定位很有意义。}}
+
+{{知识点32}}{{使用 contain 的最佳实践：推荐在自定义组件的根元素上使用 `contain: content`，在尺寸固定的元素（如虚拟列表的单行）上使用 `contain: strict`。对于长列表或长页面，使用 `content-visibility: auto` 配合 `contain-intrinsic-size` 是最简单有效的性能优化手段。}}
+
+{{知识点33}}{{CSS Containment Module Level 2 与 Level 3：Level 2 规范（css-contain-2）定义了 contain、content-visibility 及其相关接口，是当前浏览器广泛实现的版本。Level 3 规范（css-contain-3）正在开发中，主要扩展了容器查询的能力，包括样式查询（style queries）等新特性。}}
+
+{{知识点34}}{{CSSContainerRule 接口：`CSSContainerRule` 是 JavaScript API，表示 `@container` 规则。它继承自 CSSConditionRule，具有 `containerName` 属性（查询容器名称）和 `containerQuery` 属性（查询条件字符串），允许开发者通过脚本操作容器查询规则。}}
+
+{{知识点35}}{{Containment 与虚拟滚动：在实现虚拟滚动（virtual scrolling）时，`contain: strict` 可以应用于每个虚拟列表项，确保列表项的重排不会影响列表外部。结合 `contain-intrinsic-size` 可以在列表项尚未渲染时提供准确的占位尺寸，避免滚动条抖动。}}
+
+{{知识点36}}{{contain 对无障碍性的影响：使用 `contain` 属性不会影响元素的无障碍性（accessibility）。`content-visibility: auto` 跳过的内容仍在 DOM 和无障碍树中，对屏幕阅读器、Tab 导航、页面内查找等功能保持可用。但 `content-visibility: hidden` 会使内容不可访问，类似 display: none。}}
+
+{{知识点37}}{{样式查询（Style Queries）：CSS Containment Level 3 引入的样式查询允许基于自定义属性的值来应用样式，例如 `@container style(--theme: dark) { ... }`。这使得组件可以根据父容器的主题或状态来调整自身样式，无需 JavaScript 介入。目前浏览器支持仍在逐步推进中。}}
+
+{{知识点38}}{{contain-intrinsic-block-size 和 contain-intrinsic-inline-size：除了 width/height 物理方向属性外，还有对应的逻辑方向属性 `contain-intrinsic-block-size` 和 `contain-intrinsic-inline-size`，用于在不同书写模式（writing-mode）下正确指定内在尺寸，遵循 CSS 逻辑属性的规范。}}
+
+{{知识点39}}{{CSS Containment 与 React/Vue 等框架的配合：现代前端框架频繁更新 DOM，CSS Containment 可以显著减少重排范围。在 React 的列表渲染中，给列表项加上 `contain: content` 可以避免列表项更新时触发整个页面的布局重算。Vue 的过渡动画中也可以利用 content-visibility 实现性能更优的显示/隐藏切换。}}
+
+{{知识点40}}{{CSS Containment 的注意事项与限制：使用 `contain: size` 或 `contain: strict` 时必须显式设置元素尺寸，否则元素会坍缩为零大小。`contain: layout` 会改变 fixed 定位行为。style containment 只影响计数器和引号，不影响其他样式属性的继承。在使用前应充分测试，确保不会破坏现有布局。}}

@@ -1,0 +1,138 @@
+# 2025前端WebGL图形编程
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}
+WebGL（Web Graphics Library）是一种基于 OpenGL ES 2.0 的 JavaScript API，允许在浏览器中无需插件即可进行 2D 和 3D 图形渲染。WebGL 程序由 JavaScript 控制代码和运行在 GPU 上的 GLSL 着色器代码组成。WebGL 元素可以与其他 HTML 元素混合并合成。
+
+{{知识点2}}
+WebGL 的本质是一个光栅化引擎，它根据用户提供的代码绘制点、线和三角形。WebGL 本身并不是一个完整的 3D 引擎，要实现 3D 效果需要开发者自行提供数学计算和着色器代码。
+
+{{知识点3}}
+WebGL 渲染上下文通过 canvas.getContext("webgl") 或 canvas.getContext("webgl2") 获取。获取上下文后可以设置清除颜色（gl.clearColor）并清空画布（gl.clear），这是 WebGL 渲染的基础步骤。
+
+{{知识点4}}
+WebGL 着色器分为顶点着色器（Vertex Shader）和片段着色器（Fragment Shader），它们配对组成着色器程序（Shader Program）。顶点着色器负责计算顶点的裁剪空间坐标，片段着色器负责计算图元中每个像素的颜色。
+
+{{知识点5}}
+GLSL（GL Shader Language）是 WebGL 使用的着色器语言，语法类似 C/C++，具有严格的类型系统。WebGL 1 使用 GLSL ES 1.0（#version 100），WebGL 2 使用 GLSL ES 3.0（#version 300 es），后者支持更多特性如整数纹理采样和条件渲染。
+
+{{知识点6}}
+WebGL 中着色器接收数据的四种方式：1）属性（Attributes）和缓冲区（Buffers）：从缓冲区数组中拉取数据提供给顶点着色器；2）Uniforms：在着色器执行前设置的全局常量；3）纹理（Textures）：可随机访问的像素数据数组；4）Varyings：顶点着色器向片段着色器传递的数据，会被插值。
+
+{{知识点7}}
+缓冲区（Buffer）是上传到 GPU 的二进制数据数组，通常包含位置、法线、纹理坐标、顶点颜色等数据。通过 gl.createBuffer() 创建，gl.bindBuffer() 绑定，gl.bufferData() 传入数据。缓冲区不是随机访问的，而是按顶点着色器的执行次数顺序读取。
+
+{{知识点8}}
+属性（Attribute）用于指定如何从缓冲区中提取数据并传递给顶点着色器。通过 gl.getAttribLocation() 获取位置，gl.enableVertexAttribArray() 启用，gl.vertexAttribPointer() 指定数据格式（分量数、数据类型、归一化、步长、偏移）。WebGL 2 中属性支持 float、vec2-4、mat2-4、int、ivec2-4、uint、uvec2-4 等类型。
+
+{{知识点9}}
+顶点数组对象（VAO，Vertex Array Object）是 WebGL 2 引入的重要概念，用于收集属性的状态配置，包括每个属性使用哪个缓冲区以及如何从中提取数据。使用 gl.createVertexArray() 创建，gl.bindVertexArray() 绑定，可以大幅简化状态管理。
+
+{{知识点10}}
+Uniform 是在执行着色器程序之前设置的全局变量，在一次绘制调用中对所有顶点保持不变。通过 gl.getUniformLocation() 获取位置，使用 gl.uniform1f/2f/3f/4f 等对应类型函数设置值。Uniform 可以是 float、vec2-4、mat2-4、sampler 等类型。
+
+{{知识点11}}
+裁剪空间坐标是 WebGL 的核心概念，坐标范围始终从 -1 到 +1，与画布大小无关。顶点着色器必须将 gl_Position 设置为裁剪空间坐标。WebGL 会自动将 gl_Position 的 x、y、z 除以 w（透视除法），实现透视效果。
+
+{{知识点12}}
+WebGL 3D 渲染需要理解模型矩阵（Model）、视图矩阵（View）和投影矩阵（Projection）的 MVP 矩阵变换。模型矩阵将物体从局部坐标变换到世界坐标，视图矩阵从世界坐标变换到相机坐标，投影矩阵从相机坐标变换到裁剪空间。
+
+{{知识点13}}
+透视投影通过矩阵将 z 值复制到 w 分量，利用 WebGL 自动的透视除法（x,y,z 除以 w）实现近大远小的效果。glMatrix、glm 等数学库提供了 mat4.perspective() 等函数来生成透视投影矩阵，参数包括视野角（fov）、宽高比（aspect）、近裁剪面和远裁剪面。
+
+{{知识点14}}
+正交投影（Orthographic Projection）不产生透视效果，物体大小不随距离变化，常用于 CAD、2D 游戏和 UI 渲染。通过 mat4.ortho() 生成正交投影矩阵，参数为 left、right、bottom、top、near、far。
+
+{{知识点15}}
+WebGL 中的法线（Normal）是描述表面朝向的单位向量，是实现光照计算的基础。法线数据通常作为顶点属性传入着色器。对于立方体等平面物体，每个顶点可能需要多个法线（每个面一个），因为同一顶点在不同面上朝向不同。
+
+{{知识点16}}
+方向光（Directional Lighting）是最简单的光照模型，假设光线从一个方向均匀照射（如太阳光）。计算方法是取光线方向与表面法线的点积（dot product），结果为 1 表示正面照射，-1 表示完全背光。最终颜色 = 物体颜色 × max(0, dot(法线, 光线方向))。
+
+{{知识点17}}
+WebGL 支持三种基本图元：点（gl.POINTS）、线（gl.LINES、gl.LINE_STRIP、gl.LINE_LOOP）和三角形（gl.TRIANGLES、gl.TRIANGLE_STRIP、gl.TRIANGLE_FAN）。三角形是最常用的图元，因为任何复杂表面都可以用三角形网格近似。
+
+{{知识点18}}
+WebGL 2 相比 WebGL 1 的主要新特性包括：3D 纹理支持、多重渲染目标（MRT）、变换反馈（Transform Feedback）、统一缓冲区对象（UBO）、采样器对象、遮挡查询、以及更多纹理格式支持。WebGL 2 向后兼容 WebGL 1。
+
+{{知识点19}}
+纹理（Texture）是 WebGL 中用于为 3D 物体添加表面细节的图像数据。通过 gl.createTexture() 创建，gl.bindTexture() 绑定，gl.texImage2D() 上传图像数据。纹理坐标（UV 坐标）范围为 0-1，通过纹理采样器（sampler）在着色器中采样。
+
+{{知识点20}}
+纹理过滤（Texture Filtering）决定了纹理缩放时的渲染质量。最近邻过滤（NEAREST）产生像素化效果，线性过滤（LINEAR）产生平滑效果。多级渐远纹理（Mipmap）通过预生成不同分辨率的纹理副本，在远处物体上提供更好的性能和质量。
+
+{{知识点21}}
+WebGL 的深度测试（Depth Test）通过 gl.enable(gl.DEPTH_TEST) 启用，使用深度缓冲区（Z-Buffer）确保近处物体遮挡远处物体。深度测试在片段着色器执行后进行，是 3D 渲染正确性的基础保障。
+
+{{知识点22}}
+面剔除（Face Culling）通过 gl.enable(gl.CULL_FACE) 启用，可以跳过渲染背面朝向相机的三角形，提升渲染性能。默认使用 gl.frontFace(gl.CCW) 定义逆时针为正面，gl.cullFace(gl.BACK) 剔除背面。
+
+{{知识点23}}
+混合（Blending）用于实现半透明效果。通过 gl.enable(gl.BLEND) 启用，gl.blendFunc() 设置源和目标混合因子。常见的 alpha 混合公式为：最终颜色 = 源颜色 × 源Alpha + 目标颜色 × (1 - 源Alpha)。透明物体需要从后往前排序渲染。
+
+{{知识点24}}
+帧缓冲区对象（FBO，Framebuffer Object）允许将渲染结果输出到纹理而非屏幕，实现离屏渲染。这是后处理效果（如模糊、Bloom、HDR）、阴影映射和环境反射的基础。通过 gl.createFramebuffer() 创建，附加颜色和深度纹理附件。
+
+{{知识点25}}
+WebGL 渲染管线（Rendering Pipeline）的流程：顶点数据 → 顶点着色器 → 图元装配 → 光栅化 → 片段着色器 → 逐片段操作（深度测试、模板测试、混合）→ 帧缓冲区。理解管线是优化渲染性能和调试问题的关键。
+
+{{知识点26}}
+Three.js 是最流行的 WebGL 3D 库，提供了场景图（Scene Graph）、相机（Camera）、光源（Light）、材质（Material）、几何体（Geometry）等高级抽象。核心概念包括 Scene、PerspectiveCamera、WebGLRenderer、Mesh（Geometry + Material）。2025 年 Three.js 已全面支持 WebGPU。
+
+{{知识点27}}
+Babylon.js 是另一个强大的 WebGL/3D 游戏引擎，提供了完整的工具链包括物理引擎、粒子系统、动画系统和 GUI 系统。相比 Three.js，Babylon.js 更专注于游戏开发，内置了更多游戏相关的功能。
+
+{{知识点28}}
+WebGPU 是 WebGL 的继任者，提供了更现代的图形 API，支持计算着色器（Compute Shader）、更高效的多线程渲染和更低的驱动开销。2025 年主流浏览器已基本支持 WebGPU。WebGPU 使用 WGSL（WebGPU Shading Language）替代 GLSL。
+
+{{知识点29}}
+WebGL 性能优化策略包括：1）减少绘制调用（Draw Call）数量，使用实例化渲染（Instanced Rendering）；2）使用 VAO 管理状态切换；3）合理使用纹理图集减少绑定切换；4）避免 CPU-GPU 之间频繁数据传输；5）使用适当精度的数据类型（如 Float16）。
+
+{{知识点30}}
+着色器程序的编译和链接是 WebGL 性能的关键环节。着色器编译错误可以通过 gl.getShaderInfoLog() 获取，链接错误通过 gl.getProgramInfoLog() 获取。建议在初始化时预编译所有着色器程序，避免运行时编译导致的卡顿。
+
+{{知识点31}}
+WebGL 中的模板测试（Stencil Test）通过 gl.enable(gl.STENCIL_TEST) 启用，使用模板缓冲区实现遮罩效果、轮廓描边、镜面反射等高级渲染技术。通过 gl.stencilFunc() 设置测试条件，gl.stencilOp() 设置测试通过/失败时的操作。
+
+{{知识点32}}
+实例化渲染（Instanced Rendering）允许用一次绘制调用渲染大量相同几何体的不同实例，是渲染粒子系统、草地、森林等大量重复物体的关键技术。WebGL 2 通过 gl.drawArraysInstanced() 和 gl.drawElementsInstanced() 支持，配合 gl.vertexAttribDivisor() 设置实例属性。
+
+{{知识点33}}
+变换反馈（Transform Feedback）是 WebGL 2 的特性，允许将顶点着色器的输出捕获到缓冲区中而非直接传递给图元装配阶段。这是实现 GPU 粒子系统、物理模拟和程序化动画的关键技术，避免了 CPU-GPU 之间的数据回读。
+
+{{知识点34}}
+阴影映射（Shadow Mapping）是 WebGL 中实现阴影的标准技术。从光源视角渲染场景到深度纹理（Shadow Map），然后在主渲染 pass 中比较片段深度与 Shadow Map 中的深度值来判断是否在阴影中。需要处理阴影失真（Shadow Acne）和锯齿（Peter Panning）问题。
+
+{{知识点35}}
+PBR（Physically Based Rendering）是现代 3D 渲染的标准光照模型，基于物理原理模拟光与表面的交互。核心参数包括：反照率（Albedo）、金属度（Metallic）、粗糙度（Roughness）、法线（Normal）、环境光遮蔽（AO）。Three.js 的 MeshStandardMaterial 和 MeshPhysicalMaterial 支持 PBR。
+
+{{知识点36}}
+WebGL 后处理（Post-processing）通过帧缓冲区将场景渲染到纹理，然后对纹理应用全屏着色器效果。常见效果包括：高斯模糊（Blur）、泛光（Bloom）、色调映射（Tone Mapping）、景深（Depth of Field）、屏幕空间环境光遮蔽（SSAO）、运动模糊（Motion Blur）。
+
+{{知识点37}}
+WebGL 中的拾取（Picking）是确定用户点击了哪个 3D 物体的技术。常用方法包括：1）颜色拾取：为每个物体分配唯一颜色，渲染到离屏缓冲区后读取像素颜色确定物体；2）射线投射（Ray Casting）：从相机通过鼠标位置发射射线，检测与物体的相交。Three.js 提供 Raycaster 工具类。
+
+{{知识点38}}
+WebGL 环境映射（Environment Mapping）使用立方体贴图（Cube Map）模拟环境反射。立方体贴图由 6 张对应立方体 6 个面的纹理组成。反射映射（Reflection Mapping）通过反射向量采样环境贴图，折射映射（Refraction Mapping）通过折射向量采样。Three.js 使用 CubeTextureLoader 加载立方体贴图。
+
+{{知识点39}}
+WebGL 中的骨骼动画（Skeletal Animation）通过骨骼层次结构和蒙皮实现角色动画。每个顶点关联一组骨骼和权重，在着色器中根据骨骼变换矩阵和权重混合计算最终顶点位置。Three.js 提供 SkinnedMesh、Skeleton、Bone 和 AnimationMixer 等类支持骨骼动画。
+
+{{知识点40}}
+WebGL 与 Canvas 2D 的复合渲染是常见需求。可以通过将 WebGL canvas 作为底层、2D canvas 作为上层叠加实现，也可以使用 gl.readPixels() 将 WebGL 内容读回后在 2D canvas 上绘制。CSS 的 mix-blend-mode 和 pointer-events 属性可用于控制层叠和交互。
+
+{{知识点41}}
+WebGL 在移动端的优化要点：1）降低渲染分辨率（devicePixelRatio）；2）使用压缩纹理格式（ETC2/ASTC）；3）减少 overdraw；4）避免在着色器中使用条件分支；5）使用 half 精度浮点数；6）限制绘制调用数量（建议 < 100）。
+
+{{知识点42}}
+WebGL 2 的统一缓冲区对象（Uniform Buffer Object，UBO）允许将一组 uniform 变量打包到一个缓冲区对象中，减少 uniform 设置调用次数，特别适合在多个着色器程序间共享数据（如变换矩阵、光照参数）。使用 gl.createBuffer() 创建，gl.bindBufferBase() 绑定到绑定点。
+
+{{知识点43}}
+WebGL 调试工具推荐：1）Spector.js：浏览器扩展，捕获和检查 WebGL 调用；2）WebGL Inspector：逐帧分析渲染调用；3）Chrome DevTools 的 WebGL 调试模式；4）gl.getError()：同步错误检查；5）WebGL debug utils 扩展提供更详细的错误信息。
+
+{{知识点44}}
+WebGL 中的程序化纹理生成可以通过在着色器中使用数学函数（如噪声函数、分形、正弦波）实时生成纹理，无需预加载图像。常见的程序化纹理包括：Perlin 噪声、Simplex 噪声、Voronoi 图案、分形布朗运动（FBM），广泛用于地形生成、云朵模拟和材质细节。
+
+{{知识点45}}
+WebGL 与 React/Vue 等前端框架的集成方案：1）Three.js 配合 React Three Fiber（R3F）声明式创建 3D 场景；2）Babylon.js 提供 React/Vue 官方集成；3）直接在 useEffect/onMounted 中初始化 WebGL 上下文。React Three Fiber 是 2025 年 React 生态中最流行的 3D 开发方案。

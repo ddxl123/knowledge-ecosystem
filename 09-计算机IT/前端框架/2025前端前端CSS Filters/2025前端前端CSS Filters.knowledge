@@ -1,0 +1,83 @@
+# 2025前端前端CSS Filters
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{CSS filter 属性概述：filter 属性将一个或多个滤镜函数应用于元素的渲染效果。它接受 none（默认值）、一个或多个 <filter-function> 值，或指向 SVG 滤镜的 url()。多个滤镜按声明顺序依次应用，属于 CSS 滤镜模块（Filter Effects Module Level 1）。}}
+
+{{知识点2}}{{blur() 高斯模糊函数：blur() 对输入图像应用高斯模糊，参数为模糊半径（length 类型）。值越大模糊越强，0 表示无效果。不接受百分比值，初始插值为 0。语法：filter: blur(5px); 或 filter: blur(1.5rem);}}
+
+{{知识点3}}{{brightness() 亮度函数：brightness() 对图像应用线性乘数，使其更亮或更暗。0% 为全黑，100% 为无变化，超过 100% 增加亮度。可接受百分比或小数值（如 0.4 等同 40%）。语法：filter: brightness(2);}}
+
+{{知识点4}}{{contrast() 对比度函数：contrast() 调整图像对比度。0% 使图像变为灰色，100% 无变化，超过 100% 增加对比度。同样接受百分比或小数。语法：filter: contrast(200%);}}
+
+{{知识点5}}{{drop-shadow() 投影函数：drop-shadow() 沿图像的 alpha 通道轮廓应用投影效果。与 box-shadow 不同，它遵循图像实际形状而非矩形边框。不支持 inset 关键字和 spread 参数。参数包括 x/y 偏移、可选模糊半径和颜色。语法：filter: drop-shadow(16px 16px 10px black);}}
+
+{{知识点6}}{{grayscale() 灰度函数：grayscale() 将图像转为灰度。100% 为完全灰度，0% 无变化，中间值为线性乘数。常用于图片悬停效果或禁用状态样式。语法：filter: grayscale(80%);}}
+
+{{知识点7}}{{hue-rotate() 色相旋转函数：hue-rotate() 沿色相环旋转图像颜色。参数为角度值（deg），0deg 无变化，360deg 回到原始颜色。可用于创建主题色变体或动态颜色效果。语法：filter: hue-rotate(90deg);}}
+
+{{知识点8}}{{invert() 反转函数：invert() 反转图像颜色。100% 完全反转（如照片底片效果），0% 无变化。常用于暗色模式适配或创意效果。语法：filter: invert(75%);}}
+
+{{知识点9}}{{opacity() 透明度函数：filter 中的 opacity() 与 CSS opacity 属性类似，但作为滤镜应用。0% 完全透明，100% 不透明。关键区别：filter 中的 opacity 在合成阶段计算，可能被浏览器优化到 GPU 处理。语法：filter: opacity(50%);}}
+
+{{知识点10}}{{saturate() 饱和度函数：saturate() 调整图像饱和度。0% 为完全去饱和（类似灰度），100% 无变化，超过 100% 增强饱和度。常用于图片增强或悬停效果。语法：filter: saturate(200%);}}
+
+{{知识点11}}{{sepia() 棕褐色函数：sepia() 将图像转为棕褐色调（复古效果）。100% 为完全棕褐，0% 无变化。常用于老照片风格或暖色调效果。语法：filter: sepia(60%);}}
+
+{{知识点12}}{{多滤镜组合应用：filter 属性可同时应用多个滤镜函数，按声明顺序依次执行。顺序很重要，先模糊再变亮与先变亮再模糊效果不同。语法：filter: contrast(175%) brightness(103%); 或 filter: drop-shadow(3px 3px red) sepia(100%) drop-shadow(-3px -3px blue);}}
+
+{{知识点13}}{{SVG 滤镜引用：通过 url() 可引用 SVG <filter> 元素作为 CSS 滤镜。语法：filter: url("filters.svg#filter-id"); 或 filter: url("#blur11");（引用内嵌 SVG）。SVG 滤镜提供更强大的自定义能力，如 feGaussianBlur、feColorMatrix 等。}}
+
+{{知识点14}}{{filter: none 默认值：filter 属性初始值为 none，表示不应用任何滤镜。可通过 filter: none 显式移除已设置的滤镜。支持全局值：inherit、initial、revert、revert-layer、unset。}}
+
+{{知识点15}}{{filter 滤镜的插值与动画：当动画时，如果起始和结束的滤镜函数列表长度相同且顺序一致（无 url），每个滤镜函数按各自规则插值。长度不同时，短列表末尾补初始值后插值。不满足条件时使用离散插值。这使得 filter 非常适合过渡动画。}}
+
+{{知识点16}}{{backdrop-filter 背景滤镜概述：backdrop-filter 对元素背后的像素（背景层）应用滤镜效果，直到最近的 backdrop root 边界。常用于毛玻璃效果。与 filter 不同，它不作用于元素本身，而是作用于其下方的内容。语法：backdrop-filter: blur(10px);}}
+
+{{知识点17}}{{backdrop-filter 支持的滤镜函数：backdrop-filter 支持与 filter 相同的所有滤镜函数：blur()、brightness()、contrast()、drop-shadow()、grayscale()、hue-rotate()、invert()、opacity()、saturate()、sepia()，以及 url() 引用 SVG 滤镜。}}
+
+{{知识点18}}{{backdrop root 背景根元素：backdrop root 是 backdrop-filter 效果的边界。以下元素会成为 backdrop root：根元素（html）、filter 值非 none 的元素、opacity 小于 1 的元素、有 mask/clip-path 的元素、backdrop-filter 非 none 的元素、mix-blend-mode 非 normal 的元素、will-change 设置了上述属性的元素。}}
+
+{{知识点19}}{{backdrop-filter 与 backdrop root 的交互：如果父元素设置了 opacity: 0.9，它成为 backdrop root，子元素的 backdrop-filter 只影响该父元素与子元素之间的内容，而非父元素背后的整个页面。这是 backdrop-filter 看起来"无效"的常见原因。}}
+
+{{知识点20}}{{毛玻璃效果（Frosted Glass）实现：组合 backdrop-filter: blur() 和半透明背景色即可实现毛玻璃。典型代码：background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); 这是 macOS/iOS 风格 UI 的常见实现方式。}}
+
+{{知识点21}}{{filter 与 box-shadow 的区别：drop-shadow() 滤镜遵循图像 alpha 通道形状投影，而 box-shadow 始终为矩形投影。drop-shadow 不支持 spread 参数和 inset。对 PNG 透明图片、文字等非矩形元素，drop-shadow 效果更自然。}}
+
+{{知识点22}}{{filter 与 opacity 属性的区别：CSS opacity 作用于整个元素及其子元素，在合成层之前计算。filter: opacity() 作为滤镜管线的一部分，在某些情况下可能被浏览器优化到 GPU 合成阶段。实际视觉效果类似，但性能特性可能不同。}}
+
+{{知识点23}}{{filter 的性能考量：filter 效果（尤其是 blur）是 GPU 密集型操作。高斯模糊的时间复杂度与半径相关。大量元素同时应用复杂 filter 可能导致掉帧。优化建议：使用 will-change: filter 提升为合成层、限制模糊半径、避免在大量 DOM 元素上使用复杂滤镜链。}}
+
+{{知识点24}}{{filter 的硬件加速：浏览器通常将 filter 效果交给 GPU 处理，使其成为合成层（compositing layer）。这意味着 filter 动画通常比 transform 之外的其他属性动画更流畅，但也会增加显存占用。}}
+
+{{知识点25}}{{-webkit- 前缀兼容性：filter 和 backdrop-filter 在较旧浏览器中需要 -webkit- 前缀。如 -webkit-filter: blur(5px) 和 -webkit-backdrop-filter: blur(10px)。现代浏览器（Chrome、Firefox、Safari、Edge）均已支持无前缀版本，但在兼容旧版 Safari 时仍需保留。}}
+
+{{知识点26}}{{filter 应用范围：filter 属性适用于所有元素。在 SVG 中，适用于容器元素（不含 <defs>）和所有图形元素。不影响文档流，滤镜效果仅在渲染层面。}}
+
+{{知识点27}}{{filter 与层叠上下文：应用 filter（值非 none）的元素会创建新的层叠上下文（stacking context），类似于 opacity 小于 1 的行为。这可能影响 z-index 和定位行为，需要注意。}}
+
+{{知识点28}}{{filter 动画过渡最佳实践：使用 CSS transition 或 @keyframes 动画 filter 属性时，确保起始和结束状态的滤镜函数数量和类型相同，以获得平滑插值。例如 transition: filter 0.3s ease; hover 时改变滤镜参数值。}}
+
+{{知识点29}}{{filter 与图片悬停效果常见模式：典型交互模式包括：悬停时去除灰度（grayscale(100%) → grayscale(0%)）、悬停时增加亮度、悬停时减少模糊、悬停时旋转色相。这些效果通过 transition 平滑过渡，实现优雅的交互反馈。}}
+
+{{知识点30}}{{filter 与暗色模式适配：invert() 和 hue-rotate() 可用于简易暗色模式方案。如 html { filter: invert(1) hue-rotate(180deg); } 反转整个页面颜色，但需对图片等元素再次反转回正常。这不是推荐的生产方案，但可用于快速原型。}}
+
+{{知识点31}}{{filter 与 SVG feGaussianBlur 等价关系：CSS filter: blur(3.5px) 等价于 SVG <feGaussianBlur stdDeviation="3.5" edgeMode="duplicate"/>。SVG 滤镜更强大，支持双轴模糊（stdDeviation 接受两个值）、边缘模式控制等。通过 url() 引用可获得更精细的控制。}}
+
+{{知识点32}}{{filter 对可访问性的影响：过度使用滤镜可能影响内容可读性。blur 滤镜会使文字难以辨认，高对比度滤镜可能裁剪细节。在使用 filter 隐藏内容时（如加载态），应确保屏幕阅读器仍可访问，考虑使用 aria 属性配合。}}
+
+{{知识点33}}{{filter 与混合模式配合：filter 可与 mix-blend-mode 和 background-blend-mode 配合使用，创建丰富的视觉效果。典型组合：先用 filter 调整色相和饱和度，再用混合模式与背景融合。注意：设置 mix-blend-mode 的元素也会成为 backdrop root。}}
+
+{{知识点34}}{{filter 浏览器兼容性现状（2025）：所有主流现代浏览器完整支持 filter 属性及全部 10 个滤镜函数。backdrop-filter 在 Chrome 76+、Firefox 103+、Safari 9+、Edge 79+ 均已支持。IE 不支持。Can I Use 覆盖率超过 97%。}}
+
+{{知识点35}}{{filter 的 computed value：filter 属性的计算值（computed value）与指定值相同（as specified），不会被解析为像素等绝对值。这意味着可以通过 getComputedStyle() 获取原始声明值。}}
+
+{{知识点36}}{{filter 的百分比与小数互换：除 blur() 外，所有接受百分比的滤镜函数也接受等价的小数值。如 brightness(0.4) 等同于 brightness(40%)，grayscale(0.8) 等同于 grayscale(80%)。blur() 只接受 length 值（px、rem 等），不接受百分比。}}
+
+{{知识点37}}{{自定义 filter 效果组合库：常用组合模式——复古风：sepia(60%) saturate(150%) contrast(110%)；冷色调：hue-rotate(180deg) saturate(80%)；高对比黑白：grayscale(100%) contrast(200%)；梦幻柔和：blur(1px) brightness(110%) saturate(120%)；暗角模拟需配合其他技术实现。}}
+
+{{知识点38}}{{filter 与 will-change 优化：对即将应用 filter 动画的元素，可预设 will-change: filter 提示浏览器提前创建合成层，避免动画开始时的卡顿。但不宜滥用，每个合成层消耗显存。建议动画结束后移除 will-change。}}
+
+{{知识点39}}{{backdrop-filter 的 z-index 注意事项：backdrop-filter 元素通常需要明确的 z-index 或定位（position: relative/absolute）才能正确捕获其下方的内容。在某些浏览器中，没有定位的元素可能无法正确应用背景滤镜。}}
+
+{{知识点40}}{{filter 与 content-visibility 结合：对于包含 filter 效果的大量列表项，可结合 content-visibility: auto 优化渲染性能。当元素不在视口内时，浏览器跳过其渲染（包括滤镜计算），显著减少主线程和 GPU 负载。}}

@@ -1,0 +1,123 @@
+# 2025前端Rollup打包工具
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{Rollup是一款JavaScript模块打包工具，它将小块代码编译成更大更复杂的代码包，如库或应用程序。Rollup使用ES6标准的ES模块格式（import/export）作为核心模块系统，而非CommonJS或AMD等旧方案。这使得开发者可以自由组合不同库中的函数，Rollup会将它们编译为浏览器或Node.js支持的格式。}}
+
+{{知识点2}}{{Tree-Shaking（摇树优化）是Rollup最核心的特性之一。Rollup会静态分析导入的代码，自动排除未实际使用的部分。与CommonJS必须导入整个工具对象不同，ES模块允许只导入需要的函数，Rollup利用显式的import/export语句实现比自动代码压缩工具更高效的死代码消除。}}
+
+{{知识点3}}{{Rollup支持多种输出格式（output.format），包括：es（ES模块）、cjs（CommonJS）、umd（通用模块定义，需指定name）、amd（异步模块定义）、iife（立即执行函数表达式，适合浏览器script标签）、system（SystemJS格式）。开发者可根据目标环境选择合适的输出格式。}}
+
+{{知识点4}}{{Rollup的安装方式为npm install --global rollup（全局安装）或npm install --save-dev rollup（本地安装）。本地安装推荐用于项目，便于团队协作和CI/CD集成。安装后可通过rollup命令行工具或JavaScript API两种方式使用。}}
+
+{{知识点5}}{{Rollup配置文件通常命名为rollup.config.js或rollup.config.mjs，位于项目根目录。配置文件是一个ES模块，默认导出包含input（入口文件）、output（输出配置）、plugins（插件数组）等选项的对象。也可导出数组以同时构建多个不相关的输入。}}
+
+{{知识点6}}{{input选项指定打包的入口文件，是配置中最重要的选项之一。可以是字符串（单入口）、数组（多入口）或对象（命名入口，如{main: 'src/main.js', vendor: 'src/vendor.js'}）。多入口会生成对应的多个chunk。}}
+
+{{知识点7}}{{external选项用于指定哪些模块应保持外部引用而不被打包。可以是字符串数组、正则表达式或函数。常用于将第三方依赖（如react、lodash）标记为外部依赖，避免将其打包进库的输出中。在iife/umd格式中还需配合output.globals提供全局变量名。}}
+
+{{知识点8}}{{output.dir选项指定输出目录，适用于生成多个chunk的情况；output.file选项指定单个输出文件。两者互斥使用。当使用代码分割（code splitting）或动态导入时，必须使用dir而非file。}}
+
+{{知识点9}}{{output.sourcemap选项控制是否生成Source Map，可设为true、false、'inline'（内联到输出文件）或'hidden'（生成但不添加引用）。Source Map对于调试打包后的代码至关重要，开发环境建议开启。}}
+
+{{知识点10}}{{output.banner和output.footer选项用于在输出文件的开头/末尾添加字符串，常用于添加版权信息、版本号或许可声明。可以是字符串或返回Promise的函数。类似地，output.intro和output.outro在包装函数内部添加内容。}}
+
+{{知识点11}}{{output.globals选项是一个对象，用于在iife/umd格式中映射外部依赖ID到其全局变量名。例如{'react': 'React', 'react-dom': 'ReactDOM'}，确保打包后的代码能正确引用浏览器环境中的全局变量。}}
+
+{{知识点12}}{{output.compact选项设为true时，Rollup会压缩输出代码，移除不必要的空格和换行。注意这只做基本压缩，完整的代码压缩通常配合@rollup/plugin-terser等插件实现。}}
+
+{{知识点13}}{{output.preserveModules选项设为true时，Rollup会保持原始模块结构，为每个输入模块生成单独的输出文件而非合并为单一bundle。适用于构建ES模块库，保持模块粒度便于tree-shaking。}}
+
+{{知识点14}}{{output.manualChunks选项允许手动指定代码分割策略，将特定模块分到指定chunk中。可以是对象（{'vendor': ['react', 'react-dom']}）或函数。用于优化缓存策略，将不常变化的第三方库单独打包。}}
+
+{{知识点15}}{{output.entryFileNames和output.chunkFileNames选项控制输出文件的命名模式。支持占位符如[name]（名称）、[hash]（内容哈希）、[format]（格式）等。例如'[name]-[hash].js'可实现缓存友好的文件命名。}}
+
+{{知识点16}}{{Rollup插件系统是其扩展能力的核心。插件是一个包含name属性和各种钩子函数（hook）的对象，用于自定义Rollup的行为。插件通常以函数形式导出，接收配置参数后返回插件对象，命名建议使用rollup-plugin-前缀。}}
+
+{{知识点17}}{{构建钩子（Build Hooks）在打包阶段执行，主要包括：options（修改输入选项）、buildStart（构建开始）、resolveId（解析模块ID）、load（加载模块内容）、transform（转换模块代码）、moduleParsed（模块解析完成）、buildEnd（构建结束）。这些钩子按顺序在模块图构建过程中被调用。}}
+
+{{知识点18}}{{输出生成钩子（Output Generation Hooks）在生成输出阶段执行，主要包括：renderStart（渲染开始）、banner/footer/intro/outro（添加头部/尾部内容）、renderChunk（渲染每个chunk）、generateBundle（生成bundle，可修改/删除/添加文件）、writeBundle（写入文件后）、closeBundle（关闭bundle）。}}
+
+{{知识点19}}{{插件钩子按执行方式分为四类：first（多个插件依次执行，返回非null值即停止）、sequential（所有插件按顺序依次执行）、parallel（所有插件并行执行）、async（可返回Promise异步执行）。开发者需根据钩子类型设计插件行为。}}
+
+{{知识点20}}{{@rollup/plugin-node-resolve是最重要的官方插件之一，用于解析node_modules中的第三方模块。不使用此插件时，Rollup只能解析相对路径和绝对路径的导入。它支持browser字段、条件导出（exports字段）等Node.js模块解析规则。}}
+
+{{知识点21}}{{@rollup/plugin-commonjs用于将CommonJS模块转换为ES模块。由于Rollup原生只支持ES模块语法，需要此插件来处理使用require/module.exports的npm包。它会自动转换CommonJS语法并处理循环依赖等复杂情况。}}
+
+{{知识点22}}{{@rollup/plugin-typescript提供TypeScript编译集成，允许Rollup直接处理.ts/.tsx文件。它使用TypeScript编译器API进行类型检查和代码转换。也可配合--configPlugin选项在配置文件中使用TypeScript编写。}}
+
+{{知识点23}}{{@rollup/plugin-babel集成Babel编译器，用于在打包前对代码进行转译。适用于需要支持旧版浏览器的场景，可配合@babel/preset-env实现按目标环境的语法降级。通常建议在其他插件之后应用。}}
+
+{{知识点24}}{{@rollup/plugin-terser用于压缩输出代码，是UglifyJS的现代替代品。它支持ES6+语法的压缩，在generateBundle钩子中对每个chunk执行压缩。通常放在output.plugins而非顶层plugins中使用。}}
+
+{{知识点25}}{{@rollup/plugin-replace用于在打包时替换代码中的字符串常量。最常用于替换process.env.NODE_ENV为'production'或'development'，实现环境相关的条件编译。支持防止替换不完整标识符的选项。}}
+
+{{知识点26}}{{@rollup/plugin-alias用于定义模块路径别名，简化导入路径。例如将@/映射到src/目录，使import utils from '@/utils'等价于import utils from '../src/utils'。支持正则表达式和数组形式的配置。}}
+
+{{知识点27}}{{@rollup/plugin-json允许将JSON文件作为ES模块导入。默认情况下它会进行tree-shaking，只导入实际使用的JSON属性。可设置namedExports: false禁用命名导出，或将特定文件标记为非tree-shakeable。}}
+
+{{知识点28}}{{@rollup/plugin-image支持将图片文件（JPG、PNG、GIF、SVG、WebP）作为base64 Data URI或ES模块导入。适用于小型图片的内联打包，减少HTTP请求。大图片建议使用@rollup/plugin-url配合limit选项。}}
+
+{{知识点29}}{{Rollup的JavaScript API通过rollup()函数创建bundle，返回Promise。bundle对象提供generate(outputOptions)方法在内存中生成输出，或write(outputOptions)方法直接写入磁盘。使用完毕后必须调用bundle.close()释放资源，或使用TypeScript的await using语法自动管理。}}
+
+{{知识点30}}{{rollup.watch()函数支持文件监听模式（watch mode），当源文件变化时自动重新构建。通过CLI的-w/--watch标志或编程式调用启用。watch配置选项包括buildDelay（构建延迟）、clearScreen（清除屏幕）、include/exclude（监听文件过滤）等。}}
+
+{{知识点31}}{{treeshake选项提供高级的tree-shaking配置。treeshake.moduleSideEffects可设为false声明模块无副作用，或使用数组精确控制。treeshake.annotations设为false可忽略/*@__PURE__*/注释。treeshake.preset可设为'safest'、'smallest'或'recommended'选择预设策略。}}
+
+{{知识点32}}{{output.generatedCode选项控制生成代码的特性，如是否使用箭头函数、const绑定、对象简写等。preset可设为'es5'或'es2015'选择预设。这允许针对不同目标环境生成合适的代码风格。}}
+
+{{知识点33}}{{output.interop选项处理不同模块格式之间的互操作性。当一个CJS模块被ES模块导入或反之，可能需要特殊的处理。可设为true、'compat'、'auto'、'default'、'defaultOnly'或函数形式，控制__esModule标记和默认导出的处理方式。}}
+
+{{知识点34}}{{Rollup支持代码分割（Code Splitting），通过动态import()语法自动将代码拆分为多个chunk。共享的依赖会被提取到公共chunk中，避免重复打包。使用output.dir而非output.file来输出多个文件。}}
+
+{{知识点35}}{{output.inlineDynamicImports选项设为true时，会将所有动态导入内联到单个chunk中，而非生成单独的chunk。这在某些场景下（如单文件输出）很有用，但会禁用代码分割功能。}}
+
+{{知识点36}}{{插件上下文（Plugin Context）提供了许多实用方法：this.resolve()手动解析模块、this.emitFile()发出文件（虚拟模块或资源）、this.load()加载模块、this.addWatchFile()添加监听文件、this.getModuleInfo()获取模块信息、this.parse()解析代码为AST。}}
+
+{{知识点37}}{{虚拟模块（Virtual Modules）是Rollup插件中的一种技术，允许在不访问文件系统的情况下提供模块内容。通过resolveId返回非null值标识虚拟模块，load钩子返回源代码。虚拟模块ID建议以\0前缀防止其他插件处理。}}
+
+{{知识点38}}{{Rollup的配置文件支持异步导出，可以导出一个返回配置对象的函数，或导出一个Promise。函数形式会接收命令行参数对象，允许根据CLI参数动态调整配置。支持--config前缀自定义命令行参数。}}
+
+{{知识点39}}{{output.paths选项用于重写外部依赖的导入路径。例如{'lodash': 'https://cdn.jsdelivr.net/npm/lodash/lodash.min.js'}将lodash的导入替换为CDN地址。适用于UMD/IIFE格式中使用CDN加载依赖的场景。}}
+
+{{知识点40}}{{preserveEntrySignatures选项控制入口chunk的导出签名。设为'sstrict'强制保持严格签名，'exports-only'仅在有导出时保持，false允许Rollup自由修改。这影响输出chunk的模块兼容性。}}
+
+{{知识点41}}{{Rollup支持ESM配置文件（rollup.config.mjs）和CommonJS配置文件（rollup.config.cjs）。使用--bundleConfigAsCjs标志可将ESM配置强制转为CJS加载。--configPlugin选项支持用TypeScript等语言编写配置文件。}}
+
+{{知识点42}}{{output.hashCharacters选项控制生成哈希使用的字符集，可设为'base64'、'hex'或'base36'。output.sourcemapDebugIds为Source Map和chunk生成调试ID，便于在开发工具中关联映射。}}
+
+{{知识点43}}{{@rollup/plugin-dynamic-import-vars处理包含变量的动态导入语句。当import()的路径包含变量时，此插件会在运行时解析路径并生成适当的代码。需要知道可能的模块范围以正确打包。}}
+
+{{知识点44}}{{@rollup/plugin-esm-shim用于为ESM输出包添加CJS兼容的垫片代码。当输出格式为es但源码中使用了CommonJS特有的全局变量（如require、__dirname、__filename）时，此插件会注入相应的ESM兼容代码。}}
+
+{{知识点45}}{{Rollup的output.hoistTransitiveImports选项控制是否将传递性导入提升到入口chunk中。设为true（默认）时，入口chunk会直接导入所有传递依赖，避免额外的间接跳转。设为false时保持原始导入链。}}
+
+{{知识点46}}{{output.minifyInternalExports选项设为true时，Rollup会将内部导出名缩短为更短的标识符以减小文件体积。这不影响外部接口，仅优化内部变量名。配合terser等压缩插件可进一步优化。}}
+
+{{知识点47}}{{Rollup的缓存机制通过cache选项控制。首次构建后生成的缓存可在后续构建中复用，显著提升增量构建速度。bundle对象和插件都可提供缓存。--watch模式下自动使用缓存。}}
+
+{{知识点48}}{{context和moduleContext选项在危险区域（Danger Zone）中，用于设置模块顶层代码中this的值。默认为'undefined'（ES模块）。对于需要特定this值的遗留代码，可设置为'global'或其他值。也可通过moduleContext按模块ID指定。}}
+
+{{知识点49}}{{Rollup生态中的Vite构建工具深度集成了Rollup。Vite在生产构建中使用Rollup进行打包，开发服务器则使用原生ES模块。Vite的插件API兼容Rollup插件，使得开发者可以复用Rollup生态的插件。}}
+
+{{知识点50}}{{Rollup 4.x版本要求Node.js 18.0.0及以上，采用Rust编写的SWC解析器替代了原有的acorn解析器，大幅提升解析性能。支持原生ESM配置、import attributes语法、新的JSX配置选项等现代特性。}}
+
+{{知识点51}}{{Rollup的pluginutils包（@rollup/pluginutils）提供了一组插件开发常用的工具函数，包括createFilter（创建文件过滤器）、addExtension（添加文件扩展名）、normalizePath（标准化路径）、attachScopes（分析作用域）等，简化插件开发流程。}}
+
+{{知识点52}}{{output.sourcemapPathTransform选项允许转换Source Map中的源文件路径，适用于需要修改Source Map中路径映射的场景。output.sourcemapBaseUrl设置Source Map的基础URL，用于远程Source Map的引用。}}
+
+{{知识点53}}{{output.assetFileNames选项控制资源文件（如图片、字体等非JS文件）的输出命名模式。支持[name]、[hash]、[extname]等占位符。默认为'assets/[name]-[hash][extname]'。output.sourcemapFileNames类似地控制Source Map文件的命名。}}
+
+{{知识点54}}{{onwarn选项允许自定义Rollup警告的处理方式。可以过滤特定警告、修改警告信息或将其升级为错误。在配置中以函数形式使用，接收warning对象和defaultHandler函数。logLevel选项可设置日志级别（info/warn/debug/error/silent）。}}
+
+{{知识点55}}{{shimMissingExports选项设为true时，当代码引用了模块中不存在的导出，Rollup会生成一个空的导出而非报错。这对于处理不完整的类型声明或遗留代码中的兼容性问题有用，但应谨慎使用。}}
+
+{{知识点56}}{{maxParallelFileOps选项限制Rollup并行读取/写入文件的最大数量。默认值取决于系统。在文件句柄有限的环境中（如某些CI系统），降低此值可避免资源耗尽错误。}}
+
+{{知识点57}}{{output.extend选项在iife/umd格式中设为true时，会将导出赋值给已有的全局变量而非创建新变量。这在需要扩展现有全局对象的场景中很有用，如jQuery插件开发。}}
+
+{{知识点58}}{{preserveSymlinks选项设为true时，Rollup不会跟随符号链接解析模块。这在某些monorepo结构中很重要，可以避免因符号链接导致的模块解析问题，与Node.js的--preserve-symlinks标志行为一致。}}
+
+{{知识点59}}{{experimentalLogSideEffects选项是实验性功能，设为true时Rollup会记录具有副作用的模块信息，帮助开发者识别和优化可能导致tree-shaking不充分的代码。output.experimentalMinChunkSize设置最小chunk大小，避免生成过小的chunk。}}
+
+{{知识点60}}{{Rollup的ES模块语法支持包括：标准import/export语句、动态import()、import.meta（访问模块元数据）、import attributes（导入属性，如import data from './data.json' with {type: 'json'}）。这些是Rollup处理代码的基础语法。}}

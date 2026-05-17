@@ -1,0 +1,125 @@
+# 2025前端图表库ECharts
+# 领域: 计算机IT
+# 学科: 前端框架
+# 来源: 2025前端图表库ECharts
+# 描述: ECharts图表库核心知识点
+
+{{知识点1}}{{ECharts概述与定位}}
+ECharts（Enterprise Charts）是百度开源、现由Apache基金会维护的JavaScript可视化图表库。它是一个纯JavaScript的图表库，可以在PC和移动设备上流畅运行，兼容当前绑大多数浏览器。底层依赖轻量级的矢量图形库ZRender，提供直观、交互丰富、可高度个性化定制的数据可视化图表。截至2025年，ECharts已发展到v5.x版本系列，是全球使用最广泛的前端图表库之一。
+
+{{知识点2}}{{ECharts初始化与实例创建}}
+ECharts的使用首先需要一个具备宽高的DOM容器，然后通过echarts.init()方法初始化图表实例。核心步骤：1）准备一个定义了宽高的DOM元素；2）调用echarts.init(dom)创建实例；3）通过instance.setOption(option)传入配置项渲染图表。实例方法还包括resize()自适应、dispose()销毁、on()/off()事件绑定等。
+
+{{知识点3}}{{Option配置体系结构}}
+ECharts的所有图表配置都通过一个全局的option对象进行声明式配置。option是一棵由key-value组成的树形结构，包含title、tooltip、legend、xAxis、yAxis、grid、series等顶级组件。每个组件又包含各自的子配置项。ECharts采用声明式API，用户只需描述"想要什么"，而不需要手动操作DOM。
+
+{{知识点4}}{{Series系列组件}}
+series是ECharts配置中最核心的部分，每个系列通过type属性指定图表类型，如line、bar、pie、scatter等。每个系列可以独立设置数据（data）、样式（itemStyle）、标签（label）、提示框（tooltip）等配置。一个图表中可以包含多个series实现混合图表效果。
+
+{{知识点5}}{{图表类型总览}}
+ECharts支持丰富的图表类型：基础图表（line折线图、bar柱状图、pie饼图、scatter散点图）、地理图表（map地图）、关系图表（graph关系图、tree树图、treemap矩形树图、sankey桑基图）、统计图表（boxplot箱线图、candlestickK线图）、数据可视化（radar雷达图、parallel平行坐标、funnel漏斗图、gauge仪表盘）、3D图表（scatter3D、bar3D、line3D、surface）以及自定义系列（custom）。
+
+{{知识点6}}{{数据集Dataset}}
+Dataset是ECharts4起引入的数据管理组件，推荐使用dataset而非series.data来管理数据。优势包括：数据可被多个组件复用、支持"数据与配置分离"的风格、支持二维数组和对象数组等多种格式。Dataset支持source和dimensions两个关键属性，source提供数据源，dimensions定义维度名称和类型。
+
+{{知识点7}}{{维度Dimension}}
+维度是dataset中数据表的列（或行）。维度可以有名称和类型。维度类型包括：number（默认数值型）、ordinal（类目型，用于字符串数据）、time（时间型，自动解析时间戳）、float（浮点型，使用TypedArray优化性能）、int（整型，使用TypedArray优化性能）。维度名可在source首行或通过dimensions属性定义。
+
+{{知识点8}}{{数据映射series.encode}}
+encode属性用于声明数据维度到图形映射的规则。encode支持的映射目标包括：x/y（直角坐标系轴）、radius/angle（极坐标系）、lng/lat（地理坐标系）、tooltip、label、itemName、value（无坐标系图表如饼图）、seriesName等。可通过维度名或维度序号（从0开始）指定数据源。
+
+{{知识点9}}{{系列布局方向seriesLayoutBy}}
+seriesLayoutBy控制数据集的行列映射方向：'column'（默认）将列映射为系列，'row'将行映射为系列。这决定了数据表中每一列或每一行对应一个图表系列。配合encode可以灵活控制数据到图形的映射关系。
+
+{{知识点10}}{{坐标系Axis系统}}
+ECharts支持多种坐标系：直角坐标系（grid+xAxis+yAxis）、极坐标系（polar+radiusAxis+angleAxis）、单轴（singleAxis）、地理坐标系（geo）、平行坐标（parallel）。xAxis和yAxis是使用最多的组件，支持category（类目轴）、value（数值轴）、time（时间轴）、log（对数轴）四种类型。
+
+{{知识点11}}{{Grid网格组件}}
+grid组件用于定义直角坐标系的位置和大小，一个ECharts实例中可以有多个grid实现多图表布局。配置项包括left/right/top/bottom（边距）、width/height（尺寸）、containLabel（是否包含标签）等。多个grid配合xAxis/yAxis的gridIndex属性实现复杂布局。
+
+{{知识点12}}{{Tooltip提示框}}
+tooltip组件用于鼠标悬浮时显示数据信息。支持trigger触发方式：'item'（数据项触发）、'axis'（坐标轴触发）、'none'（不触发）。支持formatter自定义格式化函数或模板字符串。还可配置axisPointer（指示器）、position（位置）、backgroundColor、borderColor等样式属性。
+
+{{知识点13}}{{Legend图例组件}}
+legend组件用于展示系列的名称和颜色标识，支持点击切换系列的显示/隐藏。可配置data数组指定图例项，支持orient（horizontal/vertical方向）、left/right/top/bottom（位置）、type（plain/scroll滚动图例）。图例名称需与series.name对应。
+
+{{知识点14}}{{Title标题组件}}
+title组件用于设置图表主标题和副标题。配置项包括text（主标题）、subtext（副标题）、left/top（位置）、textStyle（文字样式）、subtextStyle（副标题样式）等。支持textAlign对齐方式和padding内边距设置。
+
+{{知识点15}}{{DataZoom数据区域缩放}}
+dataZoom组件用于区域缩放和数据窗口过滤。支持两种类型：'inside'（鼠标滚轮/触摸缩放）和'slider'（滑块控件）。可配置start/end（数据窗口百分比范围）、xAxisIndex/yAxisIndex（控制的轴）、filterMode（数据过滤模式：filter/weakFilter/empty/none）。
+
+{{知识点16}}{{VisualMap视觉映射}}
+visualMap组件用于将数据值映射到视觉通道（颜色、大小、透明度等）。分两种类型：continuous（连续型，渐变色条）和piecewise（分段型，离散色块）。支持dimension（映射维度）、min/max（值域范围）、inRange/outOfRange（范围内/外的视觉配置）、calculable（是否可拖拽）。
+
+{{知识点17}}{{Toolbox工具栏}}
+toolbox组件提供一组工具按钮：saveAsImage（保存图片）、restore（还原）、dataView（数据视图）、dataZoom（区域缩放）、magicType（动态类型切换，如柱状图/折线图切换）。可配置show是否显示、feature各工具配置、orient方向、left/top位置等。
+
+{{知识点18}}{{itemStyle通用样式配置}}
+itemStyle是ECharts中用于配置图形元素样式的通用属性，几乎所有系列都支持。包含color（颜色）、borderColor/borderWidth（边框）、shadowBlur/shadowColor/shadowOffsetX/shadowOffsetY（阴影）、opacity（透明度）等。支持渐变色：线性渐变（type:'linear'）和径向渐变（type:'radial'）。
+
+{{知识点19}}{{label标签配置}}
+label组件用于在图形上显示文字标签。配置项包括show是否显示、position（位置，如'top'/'inside'/'bottom'）、formatter（格式化字符串或函数）、color/fontSize/fontWeight（样式）。formatter支持模板变量：{a}系列名、{b}数据名、{c}数据值、{d}百分比。
+
+{{知识点20}}{{emphasis高亮状态}}
+emphasis配置项定义鼠标悬浮到图形元素上时的高亮样式。支持focus聚焦策略：'none'（不淡出）、'self'（只聚焦当前元素）、'series'（聚焦整个系列）。还可配置blurScope控制淡出范围，以及itemStyle、label等子属性定义高亮时的样式变化。
+
+{{知识点21}}{{主题定制机制}}
+ECharts提供主题定制能力。方法一：使用echarts.registerTheme(name, theme)注册自定义主题对象，创建实例时传入主题名；方法二：使用官方主题构建工具（Theme Builder）在线配置并导出主题；方法三：直接在option中使用backgroundColor、textStyle等全局样式配置。ECharts内置'dark'暗黑主题。
+
+{{知识点22}}{{渐变色支持}}
+ECharts支持线性渐变和径向渐变。线性渐变：new echarts.graphic.LinearGradient(x1, y1, x2, y2, colorStops)；径向渐变：new echarts.graphic.RadialGradient(x, y, r, colorStops)。colorStops为数组，每项包含offset（0-1）和color。渐变可用于itemStyle.color、backgroundColor、lineStyle.color等几乎所有颜色属性。
+
+{{知识点23}}{{ECharts事件系统}}
+ECharts提供丰富的事件机制。鼠标事件：click、dblclick、mousedown、mousemove、mouseup等；图形元素事件：通过instance.on('click', seriesType, handler)绑定特定系列的事件；组件事件：legendselectchanged、datazoom、pieselectchanged等。回调参数包含data、dataIndex、seriesIndex等信息。
+
+{{知识点24}}{{动态数据更新setOption}}
+ECharts通过再次调用setOption实现数据动态更新。ECharts会自动进行新旧option的合并（merge），只更新变化的部分。支持notMerge参数（true时完全替换option）和lazyUpdate（延迟更新）。大数据量更新时可使用replaceMerge指定需要替换的组件类型，配合transition动画实现平滑过渡。
+
+{{知识点25}}{{动画与过渡配置}}
+ECharts内置丰富的动画效果。全局动画配置：animation（是否开启动画）、animationDuration（动画时长）、animationEasing（缓动函数）、animationDelay（延迟）。系列级动画还可配置animationDurationUpdate、animationEasingUpdate。支持enterFrom/leaveTo配置进入和离开动画的起止状态。
+
+{{知识点26}}{{性能优化策略}}
+大数据量场景下的ECharts性能优化：1）使用dataset的dimensions指定type为'float'/'int'以使用TypedArray；2）关闭动画animation: false；3）使用progressive渐进式渲染，设置progressive和progressiveThreshold；4）使用large: true开启大数据模式（散点图等）；5）使用appendData()增量加载数据；6）减少不必要的label和tooltip显示。
+
+{{知识点27}}{{自定义系列Custom Series}}
+custom系列类型允许用户通过renderItem回调函数完全自定义图形元素的绘制。renderItem接收params和api两个参数，api提供坐标转换（api.coord()）、数据获取（api.value()）、样式获取（api.style()）等方法。返回包含type（如'rect'/'circle'/'group'/'path'/'text'等）的图形元素描述对象。
+
+{{知识点28}}{{多图表联动与共享}}
+ECharts支持多个图表实例之间的联动。方法一：多个实例共享同一个dataZoom或tooltip的配置；方法二：通过事件监听和dispatchAction实现联动，如instance1.on('datazoom', handler)中调用instance2.dispatchAction({type:'datazoom', ...})；方法三：使用dataset共享同一份数据源。
+
+{{知识点29}}{{响应式与自适应}}
+ECharts需要在容器尺寸变化时调用instance.resize()重新渲染。常用做法是监听window的resize事件。在SPA框架中，需在组件销毁时调用instance.dispose()释放资源，避免内存泄漏。可通过media查询配置项实现不同屏幕尺寸下的自适应配置。
+
+{{知识点30}}{{ECharts与前端框架集成}}
+ECharts可与主流前端框架集成：Vue中使用vue-echarts或直接在mounted中初始化；React中使用echarts-for-react或useEffect中初始化；Angular中通过ng-zorro-antd等组件库集成或自行封装组件。需注意在组件卸载时销毁实例（dispose），以及在窗口resize时调用resize方法。
+
+{{知识点31}}{{地图与地理可视化}}
+ECharts的地图功能支持中国省市地图和世界地图。通过registerMap注册GeoJSON地图数据，配合geo组件或series.type为'map'的系列使用。支持roam（缩放和平移）、zoom（初始缩放）、label（区域名称标签）、visualMap（数据映射颜色）等配置。也可使用scatter/effectScatter系列在地图上叠加散点。
+
+{{知识点32}}{{3D图表扩展}}
+通过引入echarts-gl扩展包，ECharts支持3D图表。常见3D图表类型：scatter3D（三维散点）、bar3D（三维柱状）、line3D（三维折线）、surface（三维曲面）、globe（地球）、map3D（三维地图）。3D图表需配置grid3D、xAxis3D、yAxis3D、zAxis3D等3D坐标系组件。
+
+{{知识点33}}{{数据导出与服务端渲染}}
+ECharts支持将图表导出为图片。客户端通过toolbox的saveAsImage功能或调用instance.getDataURL()获取base64编码的图片数据。服务端渲染（SSR）使用node-echarts（基于node-canvas）在Node.js环境中生成图表图片，适用于邮件报表、PDF生成等场景。ECharts5起支持SVG渲染模式（renderer:'svg'）。
+
+{{知识点34}}{{无障碍访问与国际化}}
+ECharts支持无障碍访问（a11y），通过aria配置项启用。aria.enabled开启后自动生成图表的文字描述，支持aria.label.description（整体描述）、aria.label.series（系列描述模板）、aria.general.withTitle等。国际化方面，ECharts通过locale配置支持多语言，内置中文和英文。
+
+{{知识点35}}{{按需引入与Tree Shaking}}
+ECharts5支持完整的Tree Shaking，可按需引入以减小打包体积。使用echarts/core引入核心模块，再按需引入组件如BarChart、LineChart、GridComponent、TooltipComponent等。配合bundlers（Webpack/Vite等）的Tree Shaking能力，最小引入体积可压缩至约200KB以下。
+
+{{知识点36}}{{ECharts GL与扩展生态}}
+ECharts拥有丰富的扩展生态。echarts-gl提供3D可视化能力；echarts-stat提供统计回归计算；echarts-wordcloud实现词云图；echarts-liquidfill实现水球图；echarts-extension-amap和echarts-extension-bmap支持高德/百度地图集成。官方还提供自定义系列仓库（echarts-custom-series）供社区贡献。
+
+{{知识点37}}{{数据转换transform}}
+ECharts5引入数据转换（transform）功能，可在dataset中对原始数据进行转换处理后再传给系列。内置转换器包括：filter（数据过滤）、sort（数据排序）、regression（回归拟合）。支持自定义transform通过registerTransform注册。transform在声明式配置中实现数据处理逻辑，减少手动数据加工。
+
+{{知识点38}}{{Universal Transition通用过渡动画}}
+ECharts5的Universal Transition功能支持系列之间的平滑过渡动画。当图表类型切换时（如柱状图转为饼图），ECharts会自动为相同数据项创建过渡动画。通过配置universalTransition: { enabled: true }开启，支持divideShape（'split'/'clone'）控制分割形状的过渡方式。
+
+{{知识点39}}{{ECharts API方法}}
+ECharts实例的核心API方法：setOption(option, opts)设置配置项；getOption()获取当前option；resize(opts)重新渲染；dispatchAction(triggerAction)触发组件行为；on(eventName, handler)/off()绑定解绑事件；getDataURL(opts)导出图片；showLoading()/hideLoading()加载动画；dispose()销毁实例；appendData(params)增量数据加载。
+
+{{知识点40}}{{常见图表配置实战}}
+柱状图核心配置：series.type:'bar'，xAxis.type:'category'配合data类目。折线图：series.type:'line'，smooth:true平滑曲线，areaStyle填充面积。饼图：series.type:'pie'，radius内外半径（环形图），roseType:'area'南丁格尔玫瑰图。散点图：series.type:'scatter'，symbolSize控制点大小（可为函数）。混合图表：同一option中多个series使用不同type。

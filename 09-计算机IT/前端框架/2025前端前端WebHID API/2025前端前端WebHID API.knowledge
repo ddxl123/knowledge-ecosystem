@@ -1,0 +1,83 @@
+# 2025前端前端WebHID API
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{WebHID API 是什么：WebHID API 是一个允许网页直接与 HID（Human Interface Device，人机接口设备）进行双向通信的浏览器 API。HID 协议最初为 USB 设备设计，后来也实现了对蓝牙等其他协议的支持。该 API 使 Web 应用能够连接、控制和读取各类 HID 设备的数据，如键盘、鼠标、游戏手柄、LED 控制器等。}}
+
+{{知识点2}}{{HID 协议的历史：HID 协议最初是为 USB 设备开发的，目的是简化设备的安装过程。后来该协议被移植到多种传输协议上，包括蓝牙。HID 设备包括键盘、鼠标、游戏控制器、传感器等输入输出设备。}}
+
+{{知识点3}}{{navigator.hid 入口对象：navigator.hid 是 WebHID API 的核心入口，它是 HID 接口的实例，通过它可以访问所有 WebHID 功能。访问前需要检查 navigator.hid 是否存在以判断浏览器是否支持该 API。}}
+
+{{知识点4}}{{HID 接口 - getDevices() 方法：getDevices() 返回一个 Promise，解析为之前已授权访问的已连接 HID 设备数组。该方法不会触发权限弹窗，只返回之前通过 requestDevice() 授权过的设备。}}
+
+{{知识点5}}{{HID 接口 - requestDevice() 方法：requestDevice() 返回一个 Promise，解析为匹配过滤条件的已连接 HIDDevice 对象数组。调用此方法会触发浏览器的权限流程，用户必须从设备列表中选择并点击"连接"按钮。这是获取新设备访问权限的唯一方式。}}
+
+{{知识点6}}{{requestDevice() 的过滤器参数：requestDevice() 接受一个 options 对象，其中 filters 数组用于筛选设备。每个过滤器对象可包含 vendorId、productId、usagePage 和 usage 四个可选属性。当包含多个过滤器时，设备只需匹配其中任一过滤器即可显示；但单个过滤器内的所有规则必须同时满足。}}
+
+{{知识点7}}{{过滤器匹配逻辑：如果 filters 数组为空（filters: []），则所有已连接设备都会显示给用户。多个过滤器之间是"或"关系（任一匹配即显示），而单个过滤器内的字段是"与"关系（全部匹配才算匹配）。}}
+
+{{知识点8}}{{requestDevice() 的安全要求：调用 requestDevice() 需要瞬时用户激活（Transient User Activation），即用户必须先与页面进行交互（如点击按钮），才能触发设备选择对话框。否则会抛出 SecurityError。}}
+
+{{知识点9}}{{HIDDevice 接口概述：HIDDevice 接口代表一个 HID 设备实例，提供设备信息属性、连接管理方法以及数据收发方法。一个物理设备可能对应多个 HIDDevice 对象。HIDDevice 继承自 EventTarget。}}
+
+{{知识点10}}{{HIDDevice.opened 属性：opened 是一个只读布尔值，表示设备当前是否处于打开连接状态。设备通过 requestDevice() 获取后默认是关闭的，需要显式调用 open() 方法打开。}}
+
+{{知识点11}}{{HIDDevice.vendorId 属性：vendorId 是一个只读整数，表示 HID 设备的供应商 ID。该 ID 由 USB 实施者论坛（USB-IF）分配给设备制造商，可用于精确识别设备厂商。}}
+
+{{知识点12}}{{HIDDevice.productId 属性：productId 是一个只读整数，表示 HID 设备的产品 ID。配合 vendorId 可以唯一标识一款特定的硬件产品。}}
+
+{{知识点13}}{{HIDDevice.productName 属性：productName 是一个只读字符串，包含 HID 设备的产品名称。该名称通常由设备制造商提供，可用于向用户展示友好的设备标识。}}
+
+{{知识点14}}{{HIDDevice.collections 属性：collections 是一个只读数组，返回设备的报告格式信息。每个集合包含 usagePage、usage、type、children、inputReports、outputReports 和 featureReports 等属性，描述了设备支持的各类报告及其结构。}}
+
+{{知识点15}}{{HIDDevice.open() 方法：open() 方法请求操作系统打开 HID 设备连接，返回一个 Promise。设备不会自动打开，必须在 requestDevice() 获取设备后显式调用 open() 才能进行数据传输。如果设备已打开则抛出 InvalidStateError。}}
+
+{{知识点16}}{{HIDDevice.close() 方法：close() 方法关闭与 HID 设备的连接，返回一个 Promise。使用完设备后应调用 close() 释放资源。close() 不会撤销权限，下次可通过 getDevices() 重新获取该设备。}}
+
+{{知识点17}}{{HIDDevice.forget() 方法：forget() 方法关闭设备连接并重置访问权限，返回一个 Promise。与 close() 不同，forget() 会撤销之前授予的权限，下次需要重新通过 requestDevice() 授权。}}
+
+{{知识点18}}{{HIDDevice.sendReport() 方法：sendReport(reportId, data) 方法向设备发送输出报告（Output Report）。reportId 是 8 位报告 ID（设备不使用报告 ID 时传 0），data 可以是 ArrayBuffer、TypedArray 或 DataView。返回 Promise，在报告发送完成后解析。}}
+
+{{知识点19}}{{HIDDevice.sendFeatureReport() 方法：sendFeatureReport(reportId, data) 方法向设备发送特性报告（Feature Report）。特性报告是 HID 设备与应用之间交换非标准化数据的方式。参数和返回值与 sendReport() 类似。}}
+
+{{知识点20}}{{HIDDevice.receiveFeatureReport() 方法：receiveFeatureReport(reportId) 方法从设备接收特性报告，返回一个 Promise，解析为包含特性报告数据的 DataView 对象。这是读取设备配置和状态信息的重要方式。}}
+
+{{知识点21}}{{HIDDevice 的 inputreport 事件：当设备发送输入报告时触发 inputreport 事件。事件对象是 HIDInputReportEvent 类型，包含 data（DataView 格式的报告数据）、device（发送报告的 HIDDevice）和 reportId（报告标识符）三个属性。}}
+
+{{知识点22}}{{HIDInputReportEvent 接口：HIDInputReportEvent 继承自 Event，包含三个只读属性：data（DataView 格式的数据，不包含 reportId）、device（发送报告的 HIDDevice 实例）和 reportId（一字节报告标识，设备不使用报告 ID 时为 0）。}}
+
+{{知识点23}}{{HID 接口的 connect 事件：当新的 HID 设备连接到系统时，navigator.hid 触发 connect 事件。事件类型为 HIDConnectionEvent，通过 event.device 可获取新连接的 HIDDevice 实例。这使得应用可以实时响应设备热插拔。}}
+
+{{知识点24}}{{HID 接口的 disconnect 事件：当已连接的 HID 设备断开时，navigator.hid 触发 disconnect 事件。事件类型同样为 HIDConnectionEvent，应用应监听此事件以正确处理设备断开情况，如清理资源或提示用户。}}
+
+{{知识点25}}{{HIDConnectionEvent 接口：HIDConnectionEvent 继承自 Event，包含一个只读属性 device，返回关联的 HIDDevice 实例。它有构造函数 HIDConnectionEvent(type, eventInitDict)，但通常由浏览器在设备连接状态变化时自动创建。}}
+
+{{知识点26}}{{collections 中的报告类型：collections 中的每个集合包含三类报告：inputReports（输入报告，设备到主机）、outputReports（输出报告，主机到设备）和 featureReports（特性报告，双向配置数据）。每类报告都有 reportId 和 items 等属性。}}
+
+{{知识点27}}{{集合类型（Collection Type）：collections 中的 type 字段描述集合中元素的关系。0x00 表示物理集合（轴组），0x01 表示应用集合（如鼠标、键盘），0x02 表示逻辑集合（关联数据），0x03 表示报告集合，0x04-0x06 为其他类型，0x80-0xFF 为厂商自定义类型。}}
+
+{{知识点28}}{{usagePage 和 usage 标识：usagePage 和 usage 共同组成 HID 使用标识，用于描述设备类型和功能。标准 HID 使用值定义在 USB-IF 的 HID Usage Tables 文档中。例如 usagePage 0x01 代表通用桌面设备，usage 0x02 表示鼠标，0x06 表示键盘。}}
+
+{{知识点29}}{{WebHID API 的安全上下文要求：WebHID API 仅在安全上下文（HTTPS）中可用。这是浏览器对涉及硬件访问的 API 的通用安全策略，确保设备通信不被中间人攻击篡改。本地开发时 localhost 也被视为安全上下文。}}
+
+{{知识点30}}{{WebHID API 的实验性状态：WebHID API 目前仍属于实验性技术（Experimental），由 WICG（Web Incubator Community Group）孵化，尚未成为正式的 W3C 标准。在生产环境使用前需仔细检查浏览器兼容性。}}
+
+{{知识点31}}{{WebHID API 的浏览器兼容性：WebHID API 主要由 Chromium 内核浏览器支持，包括 Chrome、Edge 和 Opera。Firefox 和 Safari 目前不支持。使用前应通过 'hid' in navigator 进行特性检测。}}
+
+{{知识点32}}{{WebHID 与 WebUSB 的区别：WebHID 使用 HID 协议与设备通信，而 WebUSB 使用原始 USB 协议。WebHID 的优势在于 HID 协议有标准化的设备描述符，浏览器可以理解设备功能，且不需要设备特定的驱动程序。WebUSB 则提供更底层的 USB 访问但更复杂。}}
+
+{{知识点33}}{{报告 ID 的使用：当 HID 设备使用报告 ID 时，每个报告的第一个字节是报告 ID。sendReport() 和 sendFeatureReport() 的 reportId 参数用于指定发送哪种报告。如果设备不使用报告 ID，应传入 0。可以通过 collections 属性获取设备支持的报告 ID。}}
+
+{{知识点34}}{{DataView 在数据解析中的应用：WebHID API 使用 DataView 作为二进制数据的容器，因为它提供了对底层 ArrayBuffer 的灵活读取方式。可以使用 getUint8()、getUint16()、getInt8() 等方法按偏移量读取不同大小和类型的数据值。}}
+
+{{知识点35}}{{Joy-Con 设备交互示例：Nintendo Switch Joy-Con 是 WebHID 的经典应用案例。通过 vendorId 0x057e 和 productId 0x2006（左手柄）或 0x2007（右手柄）可识别设备。通过 inputreport 事件读取按钮状态，通过 sendReport() 发送震动命令。}}
+
+{{知识点36}}{{设备热插拔处理模式：使用 WebHID 时应实现完整的设备生命周期管理：监听 connect 和 disconnect 事件，在 disconnect 事件中清理资源和 UI 状态，在 connect 事件中自动重新连接或提示用户。}}
+
+{{知识点37}}{{权限持久化机制：用户通过 requestDevice() 授权后，权限会被持久化。后续可通过 getDevices() 静默获取已授权设备，无需再次弹窗。调用 forget() 可撤销此持久化权限。这是 WebHID 权限模型的核心设计。}}
+
+{{知识点38}}{{WebHID 的典型应用场景：WebHID API 适用于多种场景，包括：游戏手柄自定义控制、LED 灯光控制、专业输入设备（如绘图板）支持、工业传感器数据采集、自定义键盘固件编程、物联网设备调试等。}}
+
+{{知识点39}}{{错误处理最佳实践：使用 WebHID API 时应妥善处理各类错误：requestDevice() 可能抛出 SecurityError，open() 可能抛出 InvalidStateError 或 NotAllowedError，sendReport() 和 receiveFeatureReport() 可能抛出 NotAllowedError。建议使用 try-catch 包裹所有 API 调用。}}
+
+{{知识点40}}{{WebHID 与 Permissions Policy：WebHID API 受 Permissions Policy 控制，默认情况下主框架和同源子框架可以使用。通过 HTTP 响应头中的 Permissions-Policy: hid=() 可以限制哪些源可以使用该 API。iframe 可通过 allow="hid" 属性获得访问权限。}}

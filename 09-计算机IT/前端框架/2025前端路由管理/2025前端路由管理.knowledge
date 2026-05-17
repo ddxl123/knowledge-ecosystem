@@ -1,0 +1,87 @@
+# 2025前端路由管理
+# 领域: 计算机IT
+# 学科: 前端框架
+# 来源: 2025前端路由管理
+# 描述: 前端路由管理核心知识点
+
+{{前端路由基本概念}}{{前端路由是指在单页应用（SPA）中，不依赖服务器重新加载页面，通过JavaScript动态改变URL并渲染对应组件的技术。它使浏览器地址栏变化与页面内容更新同步，提供类似多页应用的导航体验，同时保持SPA的流畅性。前端路由的核心机制是监听URL变化，匹配路由规则，然后渲染对应的组件。}}
+
+{{Hash路由模式}}{{Hash路由使用URL中的hash（#号）部分来模拟完整的URL。例如 http://example.com/#/about。由于hash变化不会触发浏览器向服务器发送请求，因此不需要服务器端配置。通过监听window的hashchange事件来响应URL变化。优点是兼容性好、无需服务端配合；缺点是URL带有#号不美观、SEO表现较差。Vue Router中通过createWebHashHistory()创建Hash模式路由。}}
+
+{{History路由模式}}{{History路由利用HTML5 History API（pushState和replaceState）来操作浏览器地址栏，URL看起来更自然，如 http://example.com/about。通过监听popstate事件响应浏览器前进/后退操作。优点是URL美观、有利于SEO；缺点是需要服务器端配置catch-all规则，将所有路由请求重定向到index.html，否则刷新页面会404。Vue Router中通过createWebHistory()创建。}}
+
+{{Memory路由模式}}{{Memory路由模式不与浏览器URL交互，路由状态保存在内存中。主要用于非浏览器环境如Node.js服务端渲染（SSR）和测试环境。Vue Router中通过createMemoryHistory()创建。此模式下不自动触发初始导航，需要手动调用app.use(router)后push初始路由。不推荐在浏览器应用中使用，因为没有浏览器历史记录，无法前进后退。}}
+
+{{React Router v7概述}}{{React Router v7是2025年React生态的主流路由方案，它统一了React Router和Remix框架。v7提供三种使用模式：Declarative模式（基础路由匹配与导航）、Data模式（添加数据加载和action）、Framework模式（完整框架体验，含SSR/SSG支持）。从v6或Remix v2升级到v7通常是无破坏性变更。}}
+
+{{React Router Declarative模式}}{{Declarative模式是最基础的React Router使用方式，提供URL到组件的匹配、导航API（useNavigate）和活跃状态检测（NavLink）。使用BrowserRouter组件包裹应用。适合简单SPA应用或已有数据层的项目。API包括Link、NavLink、Navigate、Outlet、Routes、useLocation、useParams、useSearchParams等。}}
+
+{{React Router Data模式}}{{Data模式通过将路由配置移出React渲染周期，增加了数据加载（loader）、表单提交（action）、pending状态等功能。使用createBrowserRouter和RouterProvider。loader函数在路由匹配时自动执行数据获取，action处理表单提交。支持useFetcher进行后台数据交互，避免不必要的页面导航。}}
+
+{{React Router Framework模式}}{{Framework模式基于Vite插件，提供完整的React Router框架体验。支持类型安全的href、Route Module API、智能代码分割、SPA/SSR/SSG渲染策略。路由在app/routes.ts中配置，使用route()、index()、layout()、prefix()等函数。Route Module导出loader、action、Component、headers、ErrorBoundary等。适合需要全功能框架的项目。}}
+
+{{React Router路由配置语法}}{{React Router v7 Framework模式在routes.ts中配置路由。route(pattern, moduleFile)定义基本路由，index(moduleFile)定义索引路由，layout(moduleFile, children)定义布局路由（不添加URL段），prefix(path, children)添加路径前缀。支持嵌套路由、可选段（:lang?）、动态段（:teamId）和通配符（*）。}}
+
+{{Vue Router基本配置}}{{Vue Router是Vue.js官方路由管理器，通过createRouter()创建路由实例，传入routes数组和history模式。每个路由对象包含path、component（或components）属性。支持命名路由、嵌套路由、重定向和别名。通过app.use(router)安装到Vue应用。2025年最新版提供表达式路由语法、精细导航控制、组件化配置等特性。}}
+
+{{Vue Router导航守卫概述}}{{Vue Router提供三级导航守卫：全局守卫（beforeEach、beforeResolve、afterEach）、路由独享守卫（beforeEnter）、组件内守卫（beforeRouteEnter、beforeRouteUpdate、beforeRouteLeave）。守卫用于在导航发生前进行权限验证、数据预加载、页面访问控制等操作。每个守卫接收to（目标路由）和from（来源路由）参数。}}
+
+{{全局前置守卫beforeEach}}{{通过router.beforeEach((to, from) => {...})注册。在每次导航触发时按创建顺序调用。返回false取消导航，返回路由位置对象执行重定向，返回undefined或true放行。支持异步函数，可在守卫中进行异步权限验证。Vue 3.3+支持在守卫中使用inject()注入全局属性如Pinia store。}}
+
+{{全局解析守卫beforeResolve}}{{通过router.beforeResolve()注册，与beforeEach类似但在所有组件内守卫和异步路由组件解析完成后、导航确认前调用。适合在此处获取数据或执行需要用户已确认进入页面的操作。例如检查摄像头权限等需要在最终确认前执行的逻辑。}}
+
+{{全局后置钩子afterEach}}{{通过router.afterEach((to, from, failure) => {...})注册。没有next参数，不能影响导航。适用于分析统计、页面标题修改、无障碍功能（如页面切换公告）等。第三个参数failure反映导航失败信息。}}
+
+{{路由独享守卫beforeEnter}}{{直接在路由配置对象上定义beforeEnter守卫。仅在进入该路由时触发，参数或查询字符串变化不触发。支持传入函数数组实现守卫复用。在嵌套路由中，父路由的beforeEnter在子路由间切换时不触发。}}
+
+{{组件内路由守卫}}{{Vue组件内可定义beforeRouteEnter（进入前，不能访问this）、beforeRouteUpdate（路由更新时，如参数变化）、beforeRouteLeave（离开前，可阻止用户误操作离开）。这些守卫在组件实例上下文中执行，可直接访问组件数据和方法。}}
+
+{{TanStack Router概述}}{{TanStack Router是一个为React和Solid应用设计的100%类型安全的路由库。提供完整的类型推断、内置数据获取与缓存、强大的search param API。轻量级（约12KB），支持嵌套/布局路由、Suspense+Transition、自动预取、错误边界等功能。2025年已成为React Router之外的重要路由选择。}}
+
+{{TanStack Router类型安全}}{{TanStack Router的核心特性是100%类型安全。路由路径、参数、search params全部有类型推断。使用createRoute时通过getParentRoute建立类型安全的路由树。导航时路径自动补全，参数类型自动推断。配合TypeScript使用时提供一流的开发体验。}}
+
+{{TanStack Router数据加载}}{{TanStack Router内置loader API进行数据获取，支持缓存和自动预取。loader在路由匹配时执行，返回数据直接提供给组件。支持并行路由加载器避免数据瀑布流。可与TanStack Query等客户端缓存库无缝集成。内置结构共享优化渲染性能。}}
+
+{{TanStack Router Search Params}}{{TanStack Router提供状态管理级别的search param API。支持schema定义、验证、类型安全的解析和序列化。可以像管理状态一样管理URL中的查询参数，轻松实现状态同步。支持pre/post处理、结构共享等高级特性。这是TanStack Router相比其他路由库的显著优势。}}
+
+{{动态路由与路由参数}}{{动态路由通过URL中的参数段实现，如/users/:id中的:id。React Router通过useParams()获取参数，Vue Router通过route.params获取。支持多个动态段如/c/:categoryId/p/:productId。参数在loader或组件中自动具有类型推断（Framework模式下）。动态路由是构建数据驱动页面的基础。}}
+
+{{嵌套路由}}{{嵌套路由允许在父路由内定义子路由，形成路由树结构。子路由通过父组件的Outlet（React Router）或router-view（Vue Router）渲染。父路由通常包含共享布局（导航栏、侧边栏等）。嵌套路由实现了布局复用和页面区域独立更新，是大型应用路由组织的核心模式。}}
+
+{{布局路由Layout Route}}{{布局路由是一种特殊路由，它为其子路由创建新的嵌套层级但不添加URL段。React Router v7使用layout()函数定义。例如auth布局包裹login和register路由，它们共享相同的认证布局但URL分别为/login和/register。布局路由简化了共享UI结构的路由配置。}}
+
+{{路由重定向}}{{路由重定向将一个URL自动导向另一个URL。Vue Router中通过redirect属性配置，支持字符串路径、命名路由或函数。React Router中在loader中返回redirect()响应。重定向常用于默认子路由设置、URL规范化、权限控制后的页面跳转等场景。}}
+
+{{路由别名Alias}}{{路由别名允许一个路由有多个访问路径。Vue Router中通过alias属性定义，如路由/user-profile可以别名为/profile。别名提供URL兼容性，当URL结构变化时保持旧URL可用。React Router中通过多条路由指向同一组件实现类似效果。}}
+
+{{导航编程式导航}}{{编程式导航通过代码触发页面跳转而非用户点击链接。React Router使用useNavigate() hook返回的navigate函数，支持replace选项和state传递。Vue Router使用router.push()或router.replace()，支持路径字符串、命名路由加参数、location对象等多种方式。编程式导航常用于表单提交后的跳转、权限拦截后的重定向等。}}
+
+{{Link组件与声明式导航}}{{声明式导航使用Link组件创建可导航的链接。React Router的Link/NavLink组件渲染为<a>标签，NavLink额外提供活跃状态样式。Vue Router使用router-link组件。声明式导航是SPA中最常用的导航方式，框架自动处理点击事件和URL更新，无需手动编写导航逻辑。}}
+
+{{路由懒加载与代码分割}}{{路由懒加载通过动态import()实现按需加载路由对应的组件代码。React Router Framework模式内置智能代码分割。Vue中使用defineAsyncComponent或路由级懒加载。懒加载减少初始包大小，提升首屏加载速度。配合Suspense和loading状态可提供良好的加载体验。}}
+
+{{路由守卫与权限控制}}{{路由守卫是实现前端权限控制的核心机制。典型模式：在全局前置守卫中检查用户认证状态，未登录用户重定向到登录页，已登录用户检查角色权限后决定是否放行。React Router在loader中检查权限，Vue Router使用beforeEach。需避免无限重定向循环。}}
+
+{{ScrollRestoration滚动恢复}}{{滚动恢复确保在路由导航时页面滚动位置的正确行为。React Router提供ScrollRestoration组件自动保存和恢复滚动位置。Vue Router在路由配置中通过scrollBehavior函数自定义滚动行为，支持返回savedPosition实现前进/后退时的滚动恢复，或返回{x:0, y:0}在新页面回到顶部。}}
+
+{{路由过渡动画}}{{路由过渡动画提升页面切换体验。Vue中使用Transition组件包裹router-view实现。React中使用useViewTransitionState或Framer Motion配合路由变化实现。View Transitions API是2025年浏览器原生支持的过渡方案，React Router v7已提供useViewTransitionState支持。}}
+
+{{404路由与错误处理}}{{404路由通过通配符路径匹配未定义的URL。React Router使用route("*", "./catchall.tsx")并在loader中throw 404 Response。Vue Router使用{ path: '/:pathMatch(.*)', component: NotFound }。React Router支持ErrorBoundary导出处理路由级错误，Vue Router通过onError回调处理导航错误。}}
+
+{{服务端渲染中的路由}}{{SSR场景中路由需要同时在服务端和客户端工作。React Router Framework模式原生支持SSR/SSG，ServerRouter处理服务端路由匹配。Vue Router使用createMemoryHistory在服务端创建路由实例。SSR路由需要处理数据预取（loader在服务端执行）、客户端激活（hydration）等特殊场景。}}
+
+{{History API工作原理}}{{HTML5 History API提供pushState()和replaceState()方法修改浏览器历史记录栈，配合popstate事件监听前进/后退操作。pushState添加新历史条目，replaceState替换当前条目。两者都不触发页面刷新，需要前端代码监听变化并更新UI。这是History路由模式的底层机制。}}
+
+{{Nuxt路由系统}}{{Nuxt.js基于文件系统的路由自动生成，无需手动配置路由表。pages目录下的文件结构直接映射为路由路径。支持动态路由（[id].vue）、嵌套路由（目录结构）、捕获所有路由（[...slug].vue）。Nuxt 3使用Vue Router作为底层路由引擎，提供自动代码分割和中间件支持。}}
+
+{{Next.js App Router}}{{Next.js 13+引入的App Router基于React Server Components，使用文件系统路由。app目录下的page.tsx定义页面，layout.tsx定义布局，loading.tsx定义加载状态，error.tsx定义错误处理。支持嵌套布局、并行路由、拦截路由等高级特性。与React Router Framework模式形成竞争关系。}}
+
+{{Angular路由系统}}{{Angular使用内置的@angular/router模块管理路由。通过Routes数组配置路由，RouterLink指令创建导航链接，RouterOutlet指令标记组件渲染位置。支持守卫（CanActivate、CanDeactivate等）、解析器（Resolve）、懒加载（loadChildren）。2025年Angular已演进到信号驱动的响应式路由。}}
+
+{{路由中间件模式}}{{路由中间件是在路由匹配和组件渲染之间执行的逻辑层。Nuxt 3支持路由中间件（全局、命名、内联）用于认证、权限检查、数据预取等。React Router通过loader/action链实现类似功能。中间件模式将横切关注点从业务逻辑中分离，提高代码可维护性。}}
+
+{{微前端中的路由管理}}{{微前端架构下路由管理面临多应用共存、独立部署、路由隔离等挑战。通常采用主应用统一管理顶层路由，子应用各自维护内部路由的方案。qiankun等微前端框架通过劫持路由事件实现应用切换。子应用可使用Hash路由避免与主应用路由冲突。路由通信通过自定义事件或共享状态实现。}}
+
+{{SPA路由SEO优化}}{{SPA路由的SEO优化需要特殊处理。主要方案包括：服务端渲染（SSR）让搜索引擎爬虫获取完整HTML；预渲染/静态生成（SSG）在构建时生成页面；动态渲染根据User-Agent返回不同内容。正确配置canonical URL、sitemap、robots.txt也很重要。History模式比Hash模式更利于SEO。}}
+
+{{路由与状态管理协同}}{{路由状态与应用状态需要协调管理。URL中的search params可作为状态的一部分（TanStack Router的search param API）。路由参数变化可触发数据重新获取（loader机制）。全局状态如用户信息可通过路由守卫注入。Vuex/Pinia状态可在守卫中访问。关键是避免路由状态和全局状态的重复和不一致。}}

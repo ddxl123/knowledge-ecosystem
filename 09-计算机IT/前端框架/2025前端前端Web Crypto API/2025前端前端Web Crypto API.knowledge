@@ -1,0 +1,103 @@
+# 2025前端前端Web Crypto API
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{Web Crypto API概述：Web Crypto API是一组允许脚本使用加密原语构建密码系统的接口。它提供了低级加密功能，包括密钥生成、加密解密、数字签名、哈希摘要等。所有方法都通过SubtleCrypto接口访问，可通过window.crypto.subtle获取。自2015年起所有主流浏览器均已支持。}}
+
+{{知识点2}}{{安全上下文要求：Web Crypto API仅在安全上下文（HTTPS）中可用。这是为了防止中间人攻击窃取加密操作中的敏感数据。getRandomValues()是唯一可以在非安全上下文中使用的方法。在Web Workers中同样可用。}}
+
+{{知识点3}}{{Crypto接口：Crypto接口提供基本加密功能，包括加密安全的随机数生成器和通过SubtleCrypto对象访问加密原语的能力。通过window.crypto（主线程）或WorkerGlobalScope.crypto（Worker线程）在全局作用域中访问。}}
+
+{{知识点4}}{{SubtleCrypto接口：SubtleCrypto是Web Crypto API的核心接口，提供低级加密函数。名称中包含"subtle"一词，表明其算法有微妙的使用要求，必须谨慎使用以提供适当的安全保证。不继承任何属性或方法，拥有独立的实例方法集合。}}
+
+{{知识点5}}{{CryptoKey对象：CryptoKey表示通过generateKey()、deriveKey()、importKey()或unwrapKey()获得的加密密钥。具有四个只读属性：type（"secret"/"private"/"public"）、extractable（布尔值）、algorithm（算法描述对象）、usages（用途数组）。CryptoKey是可序列化对象，可通过IndexedDB存储。}}
+
+{{知识点6}}{{CryptoKeyPair对象：CryptoKeyPair表示用于非对称加密算法的公私钥对。包含publicKey和privateKey两个CryptoKey对象。当使用RSA、ECDSA、ECDH、Ed25519、X25519等非对称算法生成密钥时返回此对象。}}
+
+{{知识点7}}{{SubtleCrypto.encrypt()方法：使用指定算法和密钥加密数据，返回Promise<ArrayBuffer>。支持四种加密算法：RSA-OAEP（公钥加密）、AES-CTR、AES-CBC、AES-GCM（对称加密）。参数包括algorithm（算法对象）、key（CryptoKey）、data（ArrayBuffer/TypedArray/DataView）。}}
+
+{{知识点8}}{{SubtleCrypto.decrypt()方法：使用指定算法和密钥解密数据，与encrypt()配对使用。返回Promise<ArrayBuffer>包含解密后的明文数据。支持与encrypt()相同的四种算法。需要使用与加密时相同的算法参数和密钥。}}
+
+{{知识点9}}{{RSA-OAEP加密算法：RSA-OAEP公钥加密系统在RFC 3447中定义。使用公钥加密、私钥解密。适用于密钥交换和少量数据加密场景。参数通过RsaOaepParams对象传入，可选择性指定label属性作为额外认证数据。}}
+
+{{知识点10}}{{AES-CTR加密模式：AES计数器模式（Counter Mode）在NIST SP800-38A中定义。每次加密消息块时混合一个额外的"计数器块"。计数器值由nonce（一次性数字）和递增计数器两部分组成。nonce确保不同消息间计数器不重用，计数器确保同一消息内不重用。}}
+
+{{知识点11}}{{AES-CBC加密模式：AES密码块链接模式（Cipher Block Chaining Mode）在NIST SP800-38A中定义。每个明文块在加密前与前一个密文块进行异或运算。需要初始化向量（IV），第一个块使用IV代替前一个密文块。不提供内置认证保护。}}
+
+{{知识点12}}{{AES-GCM加密模式（推荐）：AES伽罗瓦/计数器模式（Galois/Counter Mode）在NIST SP800-38D中定义。是"认证加密"模式，内置检查密文是否被篡改的功能。推荐在大多数场景下使用，因为它提供了比CTR和CBC更强的安全保障。需要nonce参数，明文长度不能超过2^39-256字节。}}
+
+{{知识点13}}{{SubtleCrypto.sign()方法：使用指定算法和密钥创建数字签名，返回Promise<ArrayBuffer>。支持RSASSA-PKCS1-v1_5、RSA-PSS、ECDSA、Ed25519、HMAC五种签名算法。对于公钥密码系统使用私钥签名，HMAC使用同一密钥进行签名和验证。}}
+
+{{知识点14}}{{SubtleCrypto.verify()方法：验证数字签名是否与给定的文本、算法和密钥匹配，返回Promise<boolean>。是sign()的配对操作。对于公钥密码系统使用公钥验证签名。验证结果为true表示签名有效，false表示无效。}}
+
+{{知识点15}}{{RSASSA-PKCS1-v1_5签名算法：在RFC 3447中定义的RSA签名方案。使用私钥签名、公钥验证。摘要算法在generateKey()或importKey()时通过RsaHashedKeyGenParams指定。是一种确定性签名算法，相同消息和密钥产生相同签名。}}
+
+{{知识点16}}{{RSA-PSS签名算法：在RFC 3447中定义，与RSASSA-PKCS1-v1_5不同的是它在签名操作中加入了随机盐值。因此相同消息使用相同密钥每次签名结果不同，提供更好的安全性。需要通过RsaPssParams指定saltLength参数。}}
+
+{{知识点17}}{{ECDSA签名算法：椭圆曲线数字签名算法，在FIPS-186和RFC 6090中定义。签名编码为s1和s2值（即r和s）的大端字节级联。支持P-256、P-384、P-521等命名曲线。比RSA签名更短，性能更好。}}
+
+{{知识点18}}{{Ed25519签名算法：基于Curve25519椭圆曲线的数字签名算法，属于EdDSA算法族，在RFC 8032中定义。摘要算法固定使用SHA-512。相比NIST曲线更简单高效，非政府起源使其设计决策透明开放。现代Web Crypto API的新支持算法。}}
+
+{{知识点19}}{{HMAC签名算法：基于哈希的消息认证码，在FIPS 198-1标准中定义。使用同一密钥进行签名和验证，因此不适合签名者和验证者不同的场景。适用于签名者和验证者为同一实体的情况。摘要算法在generateKey()或importKey()时指定。}}
+
+{{知识点20}}{{SubtleCrypto.digest()方法：使用指定哈希函数生成数据的摘要（哈希值），返回Promise<ArrayBuffer>。摘要具有抗碰撞性，即很难找到两个不同的输入产生相同的摘要值。不支持流式输入，必须将全部输入读入内存。不使用密钥。}}
+
+{{知识点21}}{{SHA哈希算法族：Web Crypto API支持SHA-1、SHA-256、SHA-384、SHA-512四种哈希算法。SHA-1输出160位，已不再安全，不应用于加密用途。SHA-256输出256位，SHA-384输出384位，SHA-512输出512位。均在FIPS 180-4中定义。SHA-256是最常用的通用哈希算法。}}
+
+{{知识点22}}{{SubtleCrypto.generateKey()方法：生成新的CryptoKey或CryptoKeyPair对象。对于对称算法返回单个CryptoKey，对于非对称算法返回CryptoKeyPair。参数包括algorithm（算法定义）、extractable（是否可导出）、keyUsages（用途数组）。支持RSA、ECDSA、ECDH、HMAC、AES、Ed25519、X25519等算法。}}
+
+{{知识点23}}{{SubtleCrypto.deriveKey()方法：从主密钥材料派生新密钥，返回Promise<CryptoKey>。与generateKey()不同，使用相同输入材料调用两次会得到相同底层值的密钥。支持ECDH、X25519（密钥协商）、HKDF、PBKDF2（密钥派生）四种算法。}}
+
+{{知识点24}}{{ECDH密钥协商算法：椭圆曲线Diffie-Hellman密钥协商算法在RFC 6090中定义。允许双方各拥有ECDH公私钥对，通过交换公钥生成共享秘密。共享秘密可用作对称密钥或作为HKDF等算法的输入派生密钥。支持P-256、P-384、P-521曲线。}}
+
+{{知识点25}}{{X25519密钥协商算法：基于Curve25519的密钥协商算法，在RFC 7748中定义。是ECDH的替代方案，比NIST曲线更简单高效。现代浏览器新增支持，设计透明开放。可用于deriveKey()和deriveBits()操作。}}
+
+{{知识点26}}{{HKDF密钥派生函数：设计用于从高熵输入（如ECDH密钥协商输出）派生密钥材料。不适合从低熵输入（如密码）派生密钥，后者应使用PBKDF2。在RFC 5869中定义。参数包括salt、info和哈希算法。}}
+
+{{知识点27}}{{PBKDF2密钥派生函数：设计用于从低熵输入（如密码）派生密钥材料。通过HMAC等函数对密码和盐值重复应用多次来派生密钥。重复次数越多越安全，抵御暴力破解字典攻击。在RFC 2898中定义。推荐迭代次数至少100,000次。}}
+
+{{知识点28}}{{SubtleCrypto.deriveBits()方法：从主密钥材料派生伪随机比特缓冲区，返回Promise<ArrayBuffer>。与deriveKey()类似但返回原始比特而非CryptoKey对象。支持ECDH、X25519、HKDF、PBKDF2算法。可用于生成初始化向量或其他非密钥材料。}}
+
+{{知识点29}}{{SubtleCrypto.importKey()方法：从外部格式导入密钥，返回Promise<CryptoKey>。支持四种格式：raw（原始字节，用于AES/HMAC/EC公钥）、pkcs8（PKCS#8格式，用于RSA/EC私钥）、spki（SubjectPublicKeyInfo格式，用于RSA/EC公钥）、jwk（JSON Web Key格式）。参数包括format、keyData、algorithm、extractable、keyUsages。}}
+
+{{知识点30}}{{SubtleCrypto.exportKey()方法：将CryptoKey导出为外部格式，返回Promise。jwk格式返回JSON对象，其他格式返回ArrayBuffer。只能导出extractable为true的密钥。尝试导出不可提取密钥将抛出InvalidAccessError异常。}}
+
+{{知识点31}}{{SubtleCrypto.wrapKey()方法：导出并加密密钥，用于在不安全环境中传输和存储。等效于exportKey()后跟encrypt()。支持所有可用于加密的算法以及AES-KW专用包装算法。wrappingKey必须具有wrapKey用途。}}
+
+{{知识点32}}{{SubtleCrypto.unwrapKey()方法：解密并导入密钥，是wrapKey()的逆操作。等效于decrypt()后跟importKey()。在单步中完成解密和导入，避免中间步骤暴露密钥材料。支持与wrapKey()相同的算法。}}
+
+{{知识点33}}{{AES-KW密钥包装算法：专门用于密钥包装的AES算法，在RFC 3394中定义。优势是不需要初始化向量（IV）。输入必须是64位的倍数。适用于安全地传输和存储对称密钥。}}
+
+{{知识点34}}{{密钥存储最佳实践：CryptoKey是可序列化对象，推荐使用IndexedDB存储密钥。以应用有意义的键字符串标识符存储CryptoKey，无需暴露底层密钥材料给JavaScript环境。避免将密钥存储在localStorage中（可被XSS攻击读取）。}}
+
+{{知识点35}}{{密钥用途（Key Usages）：CryptoKey的usages属性限制密钥可执行的操作。可选值包括：encrypt、decrypt、sign、verify、deriveKey、deriveBits、wrapKey、unwrapKey。创建密钥时应遵循最小权限原则，只授予必要的用途。}}
+
+{{知识点36}}{{密钥可提取性（Extractable）：generateKey()和importKey()的extractable参数控制密钥是否可通过exportKey()或wrapKey()导出。对于非对称密钥对，此参数仅影响私钥，公钥始终可提取。敏感密钥应设置extractable为false以增强安全性。}}
+
+{{知识点37}}{{密钥导入格式 - Raw：原始字节格式，用于导入/导出AES或HMAC密钥以及椭圆曲线公钥。密钥作为包含原始字节的ArrayBuffer提供。导入椭圆曲线公钥时数据可能包含压缩的椭圆曲线点。}}
+
+{{知识点38}}{{密钥导入格式 - PKCS#8：在RFC 5208中定义的私钥信息格式。用于导入/导出RSA或椭圆曲线私钥。期望接收DER编码形式的ArrayBuffer。常见于PEM格式，需先base64解码再转换为ArrayBuffer。}}
+
+{{知识点39}}{{密钥导入格式 - SubjectPublicKeyInfo（SPKI）：在RFC 5280第4.1节中定义的公钥格式。用于导入/导出RSA或椭圆曲线公钥。与PKCS#8类似，期望DER编码的ArrayBuffer。PEM编码时以"-----BEGIN PUBLIC KEY-----"开头。}}
+
+{{知识点40}}{{密钥导入格式 - JWK（JSON Web Key）：在RFC 7517中定义的JSON格式密钥表示。是最灵活的格式，可用于所有算法类型的密钥。导出时返回JSON对象而非ArrayBuffer。便于与服务端API交互和跨平台密钥交换。}}
+
+{{知识点41}}{{Crypto.getRandomValues()方法：获取加密强度的随机值。传入整数类型的TypedArray（如Uint8Array、Uint32Array等），数组内容被就地替换为随机数。最大字节长度为65,536字节。是唯一可在非安全上下文中使用的Crypto方法。不支持浮点数组类型。}}
+
+{{知识点42}}{{RSA密钥对生成示例：使用generateKey()生成RSA-OAEP密钥对，需指定modulusLength（推荐4096位以获得长期安全性）、publicExponent（通常为[1,0,1]即65537）、hash算法。返回包含publicKey和privateKey的CryptoKeyPair对象。}}
+
+{{知识点43}}{{椭圆曲线密钥对生成示例：使用generateKey()生成ECDSA密钥对，通过namedCurve指定曲线（如P-256、P-384）。P-384提供比P-256更高的安全性但性能稍低。返回CryptoKeyPair用于sign/verify操作。}}
+
+{{知识点44}}{{Web Crypto API安全警告：虽然Web Crypto API提供加密原语，但错误使用可能导致严重的安全问题。密钥管理和整体安全系统设计极难正确实现，属于专业安全专家领域。建议学习Crypto 101课程（crypto101.io）了解安全系统设计原理。}}
+
+{{知识点45}}{{Web Crypto API规范：由W3C Web Cryptography Working Group维护，当前规范为Web Cryptography Level 2。在w3c.github.io/webcrypto上发布。定义了Crypto接口、SubtleCrypto接口、CryptoKey接口以及所有支持的算法。}}
+
+{{知识点46}}{{认证加密（Authenticated Encryption）：强烈建议使用包含密文完整性检查的认证加密模式。GCM模式提供内置认证，推荐在大多数场景下使用。CTR和CBC模式默认不提供认证，手动添加容易出错。认证可防止选择密文攻击。}}
+
+{{知识点47}}{{加密算法选择指南：对称加密推荐AES-GCM（256位密钥）。非对称加密使用RSA-OAEP（至少2048位，推荐4096位）。签名推荐ECDSA（P-384）或Ed25519。密钥派生从密码用PBKDF2，从高熵材料用HKDF。哈希用SHA-256或SHA-384。}}
+
+{{知识点48}}{{Web Crypto API与旧版Crypto接口：旧版浏览器实现了未明确定义的Crypto接口，存在密码学安全隐患。为避免混淆，Web Crypto API将所有方法放在新的SubtleCrypto接口上。crypto.subtle属性提供对SubtleCrypto的访问。旧版方法已从支持Web Crypto API的浏览器中移除。}}
+
+{{知识点49}}{{异常处理：Web Crypto API的Promise可能因多种原因被拒绝。InvalidAccessError表示操作对提供的密钥无效。OperationError表示操作特定原因导致失败。SyntaxError表示keyUsages为空或无效。TypeError表示格式无效。NotSupported表示算法未知或不适用。}}
+
+{{知识点50}}{{ArrayBuffer与TypedArray：Web Crypto API的加密操作使用ArrayBuffer作为输入和输出数据格式。使用TextEncoder将字符串编码为Uint8Array，使用TextDecoder将解密结果解码回字符串。ArrayBuffer到十六进制字符串的转换常用于摘要的显示和比较。}}

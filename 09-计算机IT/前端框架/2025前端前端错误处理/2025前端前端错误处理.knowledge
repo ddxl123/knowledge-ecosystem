@@ -1,0 +1,79 @@
+# 2025前端前端错误处理
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{JavaScript try...catch 语句：try 块中放置可能抛出错误的代码，catch 块捕获并处理错误。catch 块接收一个 Error 对象作为参数，包含 message、name、stack 等属性。ES2019 支持可选的 catch 绑定（catch without parameter）。语法：try { ... } catch (error) { ... } finally { ... }，finally 块无论是否发生错误都会执行。}}
+
+{{知识点2}}{{JavaScript throw 语句：用于主动抛出异常，可以抛出任意值（字符串、数字、对象等），但推荐抛出 Error 实例或其子类。自定义错误类可继承 Error：class ValidationError extends Error { constructor(message) { super(message); this.name = 'ValidationError'; } }。throw new Error('something went wrong')。}}
+
+{{知识点3}}{{JavaScript Error 对象类型：内置错误类型包括 Error、TypeError、ReferenceError、RangeError、SyntaxError、URIError、EvalError。每种类型对应特定的错误场景，如 TypeError 用于类型不匹配，ReferenceError 用于引用未声明的变量。合理使用错误类型有助于快速定位问题。}}
+
+{{知识点4}}{{Error.stack 属性：Error 对象的 stack 属性包含错误的调用栈信息，格式为：ErrorType: message at functionName (file:line:col)。在调试时非常有用，可通过 console.error(error.stack) 输出完整调用链。生产环境中应将 stack 信息上报到错误监控平台。}}
+
+{{知识点5}}{{window.onerror 全局错误捕获：window 上的 error 事件可捕获所有未被 try...catch 处理的 JavaScript 运行时错误。回调函数接收五个参数：(message, source, lineno, colno, error)。返回 true 可阻止浏览器默认的错误提示行为。这是前端错误监控的基础手段之一。}}
+
+{{知识点6}}{{unhandledrejection 事件：用于捕获未处理的 Promise 拒绝。当 Promise 被 reject 但没有对应的 .catch() 或 await try...catch 处理时触发。window.addEventListener('unhandledrejection', event => { console.error(event.reason); event.preventDefault(); }); 这是防止 Promise 错误静默丢失的关键机制。}}
+
+{{知识点7}}{{React Error Boundary（错误边界）：React 中用于捕获子组件渲染期间错误的机制。通过定义 static getDerivedStateFromError(error) 方法更新 state 显示降级 UI，通过 componentDidCatch(error, info) 方法记录错误信息。错误边界无法捕获事件处理器、异步代码、服务端渲染及错误边界自身的错误。}}
+
+{{知识点8}}{{React 19 错误处理增强：React 19 在 createRoot 配置中新增 onUncaughtError、onCaughtError、onRecoverableError 三个回调，无需 ErrorBoundary 类组件即可全局捕获错误。配合 Sentry 的 Sentry.reactErrorHandler() 使用，可实现更精细的错误分类和上报。}}
+
+{{知识点9}}{{Next.js error.js 文件约定：Next.js App Router 中，在路由段下创建 error.js 文件可定义该路由段的错误边界。error.js 必须是客户端组件（'use client'），接收 error 和 reset 两个 props。error 是抛出的 Error 对象（含 digest 属性），reset 函数用于尝试重新渲染该路由段。}}
+
+{{知识点10}}{{Next.js not-found 处理：通过调用 notFound() 函数可触发 404 页面，配合 not-found.js 文件展示 404 UI。适用于资源不存在的场景，如博客文章 slug 未找到。notFound() 会停止当前路由段的渲染并展示最近的 not-found 边界。}}
+
+{{知识点11}}{{Next.js 全局错误处理：在 app 目录根部创建 global-error.js 可捕获整个应用的未处理错误，包括根布局中的错误。该文件必须包含 <html> 和 <body> 标签，因为它会替代根布局进行渲染。这是 Next.js 应用的最后一道错误防线。}}
+
+{{知识点12}}{{Vue.js errorHandler 全局配置：Vue 3 通过 app.config.errorHandler = (err, instance, info) => { ... } 配置全局错误处理器。可捕获组件渲染函数、事件处理器、生命周期钩子、watcher 等处的错误。info 参数包含错误来源信息（如 'render function'、'watcher' 等）。}}
+
+{{知识点13}}{{Vue.js onErrorCaptured 钩子：Vue 3 组合式 API 中使用 onErrorCaptured((err, instance, info) => { ... }) 捕获子组件的错误。返回 false 可阻止错误继续向上传播。支持在多个层级设置错误捕获，形成错误边界链。类似于 React 的 Error Boundary 功能。}}
+
+{{知识点14}}{{Angular ErrorHandler 服务：Angular 通过 ErrorHandler 类处理全局错误，默认实现会将错误输出到 console。可通过自定义类继承 ErrorHandler 并重写 handleError 方法实现自定义错误处理，然后在 providers 中注册。Angular 的 zone.js 也会自动捕获异步错误。}}
+
+{{知识点15}}{{Sentry 前端错误监控：Sentry 是最流行的前端错误监控平台，支持实时错误捕获、聚合、告警。JavaScript SDK 通过 Sentry.init({ dsn: '...' }) 初始化，自动捕获未处理异常和 Promise 拒绝。支持 Source Map 上传以还原压缩代码的错误堆栈，支持面包屑（Breadcrumbs）追踪用户操作路径。}}
+
+{{知识点16}}{{前端错误分类——按错误来源：可分为 JavaScript 运行时错误（语法错误、类型错误等）、网络请求错误（API 超时、4xx/5xx 响应）、资源加载错误（图片/脚本/CSS 加载失败）、CSS 渲染错误（布局异常）、第三方脚本错误（外部 SDK 报错）。不同类别需要不同的捕获和处理策略。}}
+
+{{知识点17}}{{前端错误分类——按严重程度：致命错误（页面白屏、核心功能不可用）、严重错误（主要功能受损但有降级方案）、一般错误（非核心功能异常）、警告（潜在问题但不影响使用）。错误监控系统应按严重程度分级告警，致命错误需要立即通知开发者。}}
+
+{{知识点18}}{{网络请求错误处理：使用 fetch API 时需注意 fetch 本身只在网络故障时 reject，HTTP 错误状态码（4xx/5xx）不会自动 reject，需手动检查 response.ok。推荐封装统一请求函数：if (!response.ok) throw new HttpError(response.status, response.statusText)。配合拦截器实现统一错误处理和重试逻辑。}}
+
+{{知识点19}}{{资源加载错误捕获：通过 window.addEventListener('error', handler, true) 使用捕获阶段监听资源加载错误（img、script、link 等）。判断 event.target 的 tagName 可区分资源类型。也可对单个元素使用 onerror 属性：img.onerror = () => { img.src = 'fallback.png'; }。PerformanceObserver 也可用于监测资源加载失败。}}
+
+{{知识点20}}{{Source Map 与错误定位：生产环境代码经过压缩混淆后，错误堆栈难以阅读。Source Map 文件映射压缩代码到源代码位置，错误监控平台（如 Sentry、Bugsnag）可利用 Source Map 还原真实错误位置。构建时需生成 .map 文件并上传到监控平台，注意不要将 Source Map 部署到公开可访问的路径。}}
+
+{{知识点21}}{{前端错误上报策略：错误上报应包含：错误消息和堆栈、用户代理和浏览器信息、页面 URL 和路由、用户 ID（脱敏后）、操作面包屑（最近 N 次用户操作）、设备和网络信息。使用 navigator.sendBeacon() 可在页面关闭时可靠地发送错误数据，避免丢失。}}
+
+{{知识点22}}{{错误采样与去重：生产环境中高频错误可能产生大量重复上报，需实施采样和去重策略。采样可按比例上报（如 10% 的错误），去重通过错误消息+堆栈的指纹（fingerprint）判断。Sentry 等平台自动进行错误聚合，将同一根因的错误归为一个 Issue。}}
+
+{{知识点23}}{{React useErrorBoundary 模式：React 18+ 推荐使用第三方库如 react-error-boundary 提供的 useErrorBoundary hook，支持在函数组件中抛出错误到最近的错误边界：const { showBoundary } = useErrorBoundary(); try { ... } catch (e) { showBoundary(e); }。比类组件的 this.setState 触发更优雅。}}
+
+{{知识点24}}{{Suspense 与错误边界配合：React 的 Suspense 和 Error Boundary 通常配合使用。在数据加载组件外层包裹 Error Boundary 和 Suspense，当异步组件抛出错误时由 Error Boundary 捕获，加载中状态由 Suspense 的 fallback 处理。这是 React 数据获取的标准模式。}}
+
+{{知识点25}}{{优雅降级与容错 UI：当错误发生时不应显示空白页面，而应展示友好的降级 UI。包括：错误提示文案、重试按钮、返回首页链接、反馈入口。根据错误范围决定降级粒度——组件级降级（只替换出错组件）优于页面级降级。骨架屏和加载状态也是容错设计的一部分。}}
+
+{{知识点26}}{{前端错误边界设计模式：应用应建立多层错误边界体系：根级边界（防止白屏）、页面级边界（隔离页面错误）、组件级边界（保护独立模块）。每一层提供不同的降级策略。核心交互区域（如支付、表单）应有更严格的错误捕获和更详细的错误上报。}}
+
+{{知识点27}}{{异步错误处理最佳实践：async/await 中必须使用 try...catch 包裹 await 调用。Promise 链中每个 .then() 后应有 .catch()。避免创建"浮空"的 Promise（fire-and-forget without catch）。unhandledrejection 事件可作为兜底方案。RxJS 中使用 catchError 操作符处理 Observable 错误。}}
+
+{{知识点28}}{{TypeScript 中的错误类型安全：catch 块中 error 默认类型为 unknown（TS 4.4+），需进行类型判断后才能安全访问属性。推荐模式：catch (error) { if (error instanceof Error) { console.error(error.message); } }。可定义 Result<T, E> 类型替代 throw 进行函数式错误处理。}}
+
+{{知识点29}}{{Web Workers 错误处理：Web Worker 中的错误不会冒泡到主线程，需通过 worker.onerror 事件捕获。worker.onerror = (event) => { event.preventDefault(); console.error(event.message); }。也可通过 postMessage 将 Worker 内部的错误信息传递到主线程处理。SharedWorker 和 Service Worker 同理。}}
+
+{{知识点30}}{{Service Worker 错误处理：Service Worker 的 fetch 事件处理器中应始终提供网络请求的降级方案。当网络请求失败时返回缓存资源或离线页面。self.addEventListener('fetch', event => { event.respondWith(fetch(event.request).catch(() => caches.match('/offline.html'))); })。更新失败时应确保旧版本继续工作。}}
+
+{{知识点31}}{{Content Security Policy (CSP) 与错误：CSP 违规会触发 securitypolicyviolation 事件。可通过 document.addEventListener('securitypolicyviolation', handler) 监听。CSP 报告模式（Content-Security-Policy-Report-Only）可在不阻断资源的情况下收集违规信息。配置 report-uri 或 report-to 指令将违规信息上报到服务器。}}
+
+{{知识点32}}{{前端性能错误监控：Performance Observer 可监测长任务（Long Task）、布局偏移（CLS）、首次输入延迟（FID）等性能指标。当指标超过阈值时触发错误上报：const observer = new PerformanceObserver(list => { list.getEntries().forEach(entry => { if (entry.duration > 50) reportSlowTask(entry); }); }); observer.observe({ entryTypes: ['longtask'] });}}
+
+{{知识点33}}{{GraphQL 错误处理：GraphQL 响应中的 errors 数组包含业务错误信息，与 HTTP 状态码无关。需在客户端统一解析 response.errors 并处理。Apollo Client 通过 onError link 全局拦截 GraphQL 错误。区分网络错误和业务错误，业务错误可能部分成功（data 和 errors 同时存在）。}}
+
+{{知识点34}}{{WebSocket 错误处理：WebSocket 连接需处理 open、message、error、close 四种事件。ws.onerror = (event) => { console.error('WebSocket error:', event); } 配合 ws.onclose 实现断线重连逻辑。重连应采用指数退避策略（exponential backoff），避免频繁重连造成服务端压力。}}
+
+{{知识点35}}{{前端错误恢复策略：自动重试（网络请求失败自动重试 2-3 次）、手动重试（提供重试按钮让用户主动触发）、降级替代（功能不可用时提供替代方案）、状态回滚（操作失败时恢复到操作前状态）。重试逻辑需配合去重和幂等性设计，避免重复提交。}}
+
+{{知识点36}}{{前端测试中的错误处理验证：单元测试应覆盖错误场景：mock API 返回错误响应、模拟网络中断、触发边界条件。React Testing Library 中使用 Error Boundary 包裹测试组件验证降级 UI。Cypress/Playwright E2E 测试中可拦截网络请求模拟错误响应：cy.intercept('GET', '/api/**', { statusCode: 500 });}}
+
+{{知识点37}}{{LogRocket 等会话回放工具：LogRocket、Sentry Session Replay 等工具可录制用户会话视频，当错误发生时回放用户操作过程。结合错误堆栈和面包屑信息，开发者可精确复现问题。Sentry 的 replaysSessionSampleRate 控制采样率，replaysOnErrorSampleRate 在错误发生时 100% 录制。}}
+
+{{知识点38}}{{前端错误处理的用户体验原则：不要向用户暴露技术性错误信息（如堆栈跟踪、错误代码），使用通俗易懂的语言说明问题和解决建议。错误提示应包含：发生了什么、为什么会发生（如果用户能理解）、用户可以做什么。提供反馈渠道让用户报告问题。保持页面其他功能可用。}}

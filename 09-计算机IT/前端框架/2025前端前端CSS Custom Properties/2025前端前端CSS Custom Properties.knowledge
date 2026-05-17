@@ -1,0 +1,83 @@
+# 2025前端前端CSS Custom Properties
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{CSS Custom Properties（自定义属性）是CSS中以两个短横线（--）开头的属性，用于定义可复用的值。它们通常被称为"CSS变量"，是原生CSS特性，无需预处理器。声明方式为 `--属性名: 值;`，使用时通过 `var(--属性名)` 引用。例如 `:root { --main-color: teal; }` 然后 `color: var(--main-color);`。来源：MDN Web Docs}}
+
+{{知识点2}}{{自定义属性必须在选择器内部声明，不能在顶层裸写。属性名必须以两个短横线开头，如 `--my-property`。不能以零个或一个短横线开头。属性名区分大小写，`--my-color` 和 `--My-color` 是两个不同的属性。推荐使用连字符命名法（kebab-case）如 `--main-bg-color`，避免使用特殊字符。来源：CSS-Tricks}}
+
+{{知识点3}}{{`var()` 函数是引用自定义属性的标准方式。基本语法为 `var(--custom-prop)`，支持可选的第二个参数作为回退值：`var(--custom-prop, fallback)`。回退值可以嵌套：`var(--primary, var(--backup, red))`。注意：回退值中第一个逗号之后的所有内容都被视为回退，如 `var(--foo, red, blue)` 的回退值是 `red, blue`。来源：MDN Web Docs}}
+
+{{知识点4}}{{自定义属性默认具有继承性。使用 `--` 语法声明的自定义属性会自动从父元素继承到子元素。这意味着如果父元素设置了 `--color: blue`，其所有后代元素都可以通过 `var(--color)` 使用该值，除非子元素显式覆盖了该属性。来源：MDN Web Docs}}
+
+{{知识点5}}{{`:root` 伪类是定义全局自定义属性的最佳位置。因为 `:root` 匹配文档根元素（通常是 `<html>`），在其上定义的属性对整个页面可见。这是最常见的设计模式：在 `:root` 中定义主题色、间距、字体等全局变量。来源：MDN Web Docs}}
+
+{{知识点6}}{{自定义属性可以被限制在特定作用域内。在某个选择器内定义的属性仅对该选择器及其后代可见，不会影响兄弟元素或其后代。这与编程语言中的变量作用域类似，遵循CSS的级联和继承规则。来源：MDN Web Docs}}
+
+{{知识点7}}{{自定义属性的值可以是任何有效的CSS值，包括颜色（hex、rgb、hsl）、长度（px、rem、em）、角度（deg、rad）、字符串、甚至复合值。例如：`--color: #990000;`、`--spacing: 1.2rem;`、`--angle: 22deg;`、`--name: "Chris";`。来源：CSS-Tricks}}
+
+{{知识点8}}{{自定义属性可以引用其他自定义属性，形成属性链。例如 `--red: #a24e34; --error: var(--red);`。这允许创建语义化命名系统：基础颜色用描述性名称，功能名称引用基础名称。但需注意循环引用会导致无效值。来源：CSS-Tricks}}
+
+{{知识点9}}{{拆分复合值是自定义属性的高级用法。可以将HSL颜色拆分为 `--h: 100; --s: 50%; --l: 50%; --a: 1;`，然后组合使用 `background: hsl(var(--h) var(--s) var(--l) / var(--a));`。这样可以在不同状态下只修改部分值，如hover时只改 `--l: 75%`，无需重写整个颜色声明。来源：CSS-Tricks}}
+
+{{知识点10}}{{使用自定义属性可以模拟不存在的CSS简写属性。例如box-shadow没有单独的spread属性，但可以通过 `--spread: 5px; box-shadow: 0 0 20px var(--spread) black;` 来单独控制spread值。同理可以控制渐变角度、网格间距等。来源：CSS-Tricks}}
+
+{{知识点11}}{{`@property` at-rule 是CSS Houdini的一部分，允许显式注册自定义属性。语法为 `@property --prop-name { syntax: "<type>"; inherits: boolean; initial-value: value; }`。必须包含 `syntax` 和 `inherits` 描述符，否则规则无效。来源：MDN Web Docs}}
+
+{{知识点12}}{{`@property` 的 `syntax` 描述符定义属性允许的值类型，如 `"<color>"`、`"<length>"`、`"<percentage>"`、`"<angle>"`、`"<number>"` 等。支持乘法器（`+` 空格分隔列表，`#` 逗号分隔列表）和组合符（`|` 接受多种类型之一）。`"*"` 表示接受任何有效token流。来源：MDN Web Docs}}
+
+{{知识点13}}{{`@property` 的 `inherits` 描述符控制自定义属性是否默认继承。设为 `false` 时，子元素不会继承父元素的值，而是使用 `initial-value`。这是与 `--` 语法的关键区别：`--` 语法始终继承，`@property` 可以关闭继承。来源：MDN Web Docs}}
+
+{{知识点14}}{{`@property` 的 `initial-value` 描述符设置属性的初始值。当 `syntax` 不是 `"*"` 时，必须提供 `initial-value`，且必须是计算无关值（如 `10px` 有效，`3em` 无效因为依赖父元素font-size）。`initial-value` 也作为值无效时的回退机制。来源：MDN Web Docs}}
+
+{{知识点15}}{{自定义属性的动画是 `@property` 的重要应用场景。使用 `--` 语法定义的属性无法被动画化，因为浏览器不知道其类型。通过 `@property` 注册后（如声明为 `<percentage>` 类型），浏览器可以对其值进行插值，从而实现平滑过渡和动画。来源：MDN Web Docs}}
+
+{{知识点16}}{{动画自定义属性示例：注册 `@property --progress { syntax: "<percentage>"; inherits: false; initial-value: 25%; }` 后，可以在 `@keyframes` 中从 `--progress: 25%` 到 `--progress: 100%` 做动画，实现进度条效果。这在纯CSS中以前是不可能的。来源：MDN Web Docs}}
+
+{{知识点17}}{{回退值机制有两种方式：`var()` 函数的第二个参数和 `@property` 的 `initial-value`。`var()` 回退仅在浏览器支持自定义属性但变量未定义时生效。如果浏览器完全不支持自定义属性，回退值也不会生效（属性声明整体无效）。来源：MDN Web Docs}}
+
+{{知识点18}}{{`var()` 函数的回退值使用场景包括：变量未声明时使用默认值（`var(--color, blue)`）；在自定义元素和Shadow DOM中提供外部传入值的默认值；嵌套回退提供多级默认值（`var(--primary, var(--backup, red))`）。来源：MDN Web Docs}}
+
+{{知识点19}}{{自定义属性的"无效值"处理与常规CSS属性不同。常规属性无效时被忽略，回退到之前的级联值。自定义属性在解析时无法预知使用位置，所以几乎所有值都被视为"有效"。当 `var()` 替换后导致属性值无效时，该属性使用初始值或继承值（而非被忽略），这就是"计算值时无效"的概念。来源：MDN Web Docs}}
+
+{{知识点20}}{{自定义属性在JavaScript中的操作方式与标准属性相同。读取：`getComputedStyle(element).getPropertyValue("--my-var")` 或 `element.style.getPropertyValue("--my-var")`。设置：`element.style.setProperty("--my-var", value)`。这使得动态主题切换、响应式交互等成为可能。来源：MDN Web Docs}}
+
+{{知识点21}}{{自定义属性与Sass/Less变量有本质区别。预处理器变量在编译时替换，是静态的；自定义属性在运行时解析，是动态的。自定义属性可以响应DOM变化、媒体查询、JavaScript修改，可以有作用域和继承，而预处理器变量不能。来源：CSS-Tricks}}
+
+{{知识点22}}{{自定义属性非常适合实现主题系统。在 `:root` 中定义一套颜色变量（`--bg-primary`、`--text-primary`、`--accent` 等），通过添加/移除class或 `data-theme` 属性来覆盖这些变量，即可实现完整的主题切换。无需修改任何使用这些变量的CSS规则。来源：CSS-Tricks}}
+
+{{知识点23}}{{自定义属性与 `calc()` 结合使用可以实现响应式计算。例如 `--spacing: 1rem; width: calc(100% - var(--spacing) * 2);`。自定义属性的值会在 `calc()` 表达式中被替换，然后浏览器计算最终结果。注意自定义属性值必须是语法上有效的。来源：CSS-Tricks}}
+
+{{知识点24}}{{多背景图管理是自定义属性的实用场景。可以将每个背景URL存入独立变量（`--bg1`、`--bg2` 等），然后在 `background-image` 中组合使用。在媒体查询中只需覆盖特定变量即可增减背景层，无需重写整个多值声明。来源：CSS-Tricks}}
+
+{{知识点25}}{{自定义属性可以用于构建灵活的Grid系统。例如 `.grid { --edge: 10px; grid-template-columns: var(--edge) 1fr var(--edge); }`，在大屏幕上只需覆盖 `--edge: 15%` 即可调整布局，无需重写整个 `grid-template-columns` 声明。来源：CSS-Tricks}}
+
+{{知识点26}}{{自定义属性可以模拟独立变换属性。虽然CSS标准的独立变换属性（`translate`、`rotate`、`scale`）现在已有支持，但自定义属性仍可用于更灵活的控制：`transform: var(--scale, scale(1)) var(--translate, translate(0));`，各状态只需覆盖对应变量。来源：CSS-Tricks}}
+
+{{知识点27}}{{单位拼接是自定义属性的限制之一。不能通过 `--num: 24; --unit: px;` 然后 `width: var(--num)var(--unit);` 来拼接值，因为这在CSS中不合法。解决方法是使用 `calc()` 乘法：`--num: 24; width: calc(var(--num) * 1px);`。来源：CSS-Tricks}}
+
+{{知识点28}}{{自定义属性在Web Components和Shadow DOM中特别有用。自定义属性可以穿透Shadow DOM边界，从外部宿主页面传入到组件内部。这使得组件可以通过CSS自定义属性接受外部主题配置，而不需要暴露内部样式。来源：CSS-Tricks}}
+
+{{知识点29}}{{使用 `@supports` 可以检测浏览器是否支持自定义属性：`@supports (--custom: value) { ... }`。不过现代浏览器（Chrome 49+、Firefox 31+、Safari 9.1+、Edge 15+）已全面支持基本自定义属性，`@property` 的支持稍晚（Chrome 85+、Firefox 128+、Safari 15.4+）。来源：CSS-Tricks}}
+
+{{知识点30}}{{多个 `@property` 规则使用相同名称时，样式表中最后出现的生效。如果CSS中的 `@property` 和JavaScript的 `registerProperty()` 注册了同名属性，JavaScript注册优先。这是一种层叠优先级机制。来源：MDN Web Docs}}
+
+{{知识点31}}{{自定义属性的性能注意事项：嵌套 `var()` 回退（如 `var(--a, var(--b, var(--c, red)))）` 会增加解析时间。大量使用自定义属性在极少数情况下可能影响渲染性能。最佳实践是保持变量层级浅、命名清晰。来源：MDN Web Docs}}
+
+{{知识点32}}{{CSS-wide关键字（`initial`、`inherit`、`unset`、`revert`、`revert-layer`）在自定义属性上的行为与普通属性一致。例如将自定义属性设为 `inherit` 会使用父元素的值，设为 `unset` 会重置为继承值或初始值。这些关键字不会一定触发 `var()` 的回退。来源：MDN Web Docs}}
+
+{{知识点33}}{{内联样式中设置自定义属性的优先级最高（遵循CSS级联规则）。可以在HTML元素的 `style` 属性中直接设置 `style="--color: red;"`，这会覆盖样式表中定义的同名属性。结合JavaScript的 `setProperty` 方法，可以实现运行时动态修改。来源：CSS-Tricks}}
+
+{{知识点34}}{{自定义属性的 `var()` 不能用在属性名、选择器或媒体查询中，只能用于属性值。例如不能写 `var(--prop)-color: red;` 或 `.var(--class) { }`。尝试这样做通常会产生无效语法或产生与变量无关的值。来源：MDN Web Docs}}
+
+{{知识点35}}{{空回退值 `var(--prop,)` 是合法的，表示如果 `--prop` 未定义，则用空值替换。这在某些需要清除属性值的场景下有用。例如 `margin: var(--extra-margin,);` 在变量未定义时不会添加额外margin。来源：MDN Web Docs}}
+
+{{知识点36}}{{自定义属性与 `!important` 结合使用时，`!important` 作用于整个声明而非变量值。例如 `color: var(--text) !important;` 会使该color声明具有最高优先级，但不影响 `--text` 变量本身的级联。来源：CSS-Tricks}}
+
+{{知识点37}}{{`env()` 函数是只读的用户代理环境变量，与自定义属性不同。`env()` 用于安全区域插入（如iPhone刘海屏）等浏览器提供的值，不能被开发者定义或修改。自定义属性是开发者定义的可读写变量。两者用途不同但语法上都用在属性值中。来源：MDN Web Docs}}
+
+{{知识点38}}{{自定义属性最佳实践包括：在 `:root` 中定义全局设计令牌（design tokens）；使用语义化命名（`--color-primary` 而非 `--blue`）；分层组织（基础值→语义值→组件值）；文档化变量用途；使用 `@property` 为关键变量添加类型约束和回退值。来源：MDN Web Docs + CSS-Tricks 综合}}
+
+{{知识点39}}{{自定义属性名称中不允许使用特殊字符，如 `@`、`&`、`^` 等。合法字符包括字母、数字、连字符、下划线。虽然技术上某些Unicode字符也合法，但最佳实践是只使用ASCII字母、数字和连字符。来源：CSS-Tricks}}
+
+{{知识点40}}{{自定义属性在不同文件间也能工作。如果 `1.css` 使用了 `var(--main-bg-color)`，而 `2.css` 中定义了 `--main-bg-color`，只要两个样式表都被引入同一页面，变量就能正确解析。解析时只关注级联中的定义位置，不区分文件来源。来源：MDN Web Docs}}

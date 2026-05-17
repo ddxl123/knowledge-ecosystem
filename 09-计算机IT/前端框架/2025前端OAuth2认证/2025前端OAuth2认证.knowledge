@@ -1,0 +1,123 @@
+# 2025前端OAuth2认证
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}
+OAuth 2.0是IETF制定的行业标准授权框架（RFC 6749，2012年发布），其核心目标是让第三方应用在不暴露用户凭据的前提下，获得对HTTP服务的有限访问权限。OAuth 2.0通过协调资源所有者（用户）与HTTP服务之间的审批交互来实现授权，专注于客户端开发者的简洁性，为Web应用、桌面应用、移动设备和IoT设备提供特定的授权流程。
+
+{{知识点2}}
+OAuth 2.0定义了四个核心角色：资源所有者（Resource Owner，即用户）、资源服务器（Resource Server，托管受保护资源的服务器）、客户端（Client，代表资源所有者请求资源的应用）、授权服务器（Authorization Server，验证资源所有者身份并发放访问令牌）。前端应用通常作为客户端角色参与OAuth流程。
+
+{{知识点3}}
+授权许可（Authorization Grant）是OAuth 2.0的核心概念，代表资源所有者授权客户端访问受保护资源的凭据。RFC 6749定义了四种授权许可类型：授权码（Authorization Code）、隐式许可（Implicit）、资源所有者密码凭据（Resource Owner Password Credentials）和客户端凭据（Client Credentials）。此外还支持扩展许可类型。
+
+{{知识点4}}
+访问令牌（Access Token）是用于访问受保护资源的凭据，通常是一个不透明字符串或JWT（JSON Web Token）。访问令牌代表授予的访问范围和持续时间，由资源服务器验证。RFC 6750定义了Bearer Token的使用规范，前端应用通过Authorization请求头或请求参数将访问令牌传递给资源服务器。
+
+{{知识点5}}
+刷新令牌（Refresh Token）是用于获取新访问令牌的凭据，通常比访问令牌具有更长的有效期。当访问令牌过期时，客户端可以使用刷新令牌向授权服务器请求新的访问令牌，而无需用户重新授权。在OAuth 2.1中，公共客户端的刷新令牌必须是发送者约束的（sender-constrained）或一次性使用的。
+
+{{知识点6}}
+授权码流程（Authorization Code Flow）是OAuth 2.0中最安全的流程，适用于能安全存储客户端密钥的服务器端Web应用。流程包括：客户端将用户重定向到授权服务器→用户授权→授权服务器返回授权码→客户端用授权码交换访问令牌。令牌交换发生在后端，前端不会直接暴露令牌。
+
+{{知识点7}}
+PKCE（Proof Key for Code Exchange，RFC 7636）是授权码流程的安全扩展，用于防止CSRF和授权码注入攻击。PKCE的工作原理：客户端生成一个随机的code_verifier，计算其SHA-256哈希值作为code_challenge，将code_challenge发送给授权服务器，在用授权码交换令牌时提交原始的code_veriver进行验证。PKCE最初为移动应用设计，但因其防注入能力，现在推荐所有OAuth客户端类型都使用。
+
+{{知识点8}}
+在前端SPA中实现PKCE的步骤：1）生成32-128字节的随机code_verifier；2）计算SHA-256哈希并Base64URL编码得到code_challenge；3）将code_challenge和code_challenge_method=S256发送到授权端点；4）收到授权码后，将code_verifier发送到令牌端点交换令牌。Web Crypto API可用于在浏览器端完成SHA-256计算。
+
+{{知识点9}}
+隐式流程（Implicit Flow）曾是SPA的首选流程，令牌直接在URL片段（fragment）中返回给前端。但OAuth 2.1已正式移除隐式流程，RFC 9700（OAuth 2.0安全最佳实践）也建议不再使用隐式流程。原因包括：令牌暴露在浏览器历史和URL中、无法使用刷新令牌、容易受到令牌拦截攻击。2025年新项目应使用授权码+PKCE流程替代。
+
+{{知识点10}}
+OAuth 2.1是对OAuth 2.0的整合和简化，主要变更包括：1）PKCE成为所有授权码流程的必需项；2）重定向URI必须使用精确字符串匹配；3）移除隐式许可和密码凭据许可；4）Bearer令牌不再允许通过URI查询字符串传递；5）公共客户端的刷新令牌必须是发送者约束或一次性使用的；6）简化了公共客户端和机密客户端的定义。
+
+{{知识点11}}
+RFC 9700（OAuth 2.0安全最佳当前实践，2025年1月发布）是OAuth安全的权威指南，涵盖了基于重定向流程的保护、令牌重放预防、访问令牌权限限制、客户端认证等最佳实践。它更新并扩展了RFC 6749、6750和6819的安全建议，是前端实现OAuth时必须参考的安全标准。
+
+{{知识点12}}
+前端SPA的令牌存储是OAuth安全的核心挑战。安全的存储方案包括：1）HttpOnly Secure Cookie：最安全，令牌不可被JavaScript访问，天然防御XSS；2）内存存储：令牌存在JavaScript变量中，页面刷新后丢失，需要配合刷新令牌；3）SessionStorage：同源隔离，标签页关闭后清除，但可被同源JS访问；4）LocalStorage：持久化存储但最不安全，易受XSS攻击。2025年推荐方案是HttpOnly Cookie或内存存储+刷新令牌。
+
+{{知识点13}}
+OAuth 2.0的范围（Scope）机制用于限制客户端对资源的访问权限。范围是授权服务器定义的字符串值，客户端在授权请求中声明所需范围，用户授权后，访问令牌仅包含已批准的范围。前端应遵循最小权限原则，只请求必要的范围。常见范围如：openid、profile、email、read、write等。
+
+{{知识点14}}
+OpenID Connect（OIDC）是构建在OAuth 2.0之上的身份认证层，由OpenID Foundation维护。OIDC在OAuth 2.0授权流程基础上增加了身份验证能力，引入了ID Token（JWT格式，包含用户身份信息）。前端使用OIDC可以同时完成认证（Authentication）和授权（Authorization），scope中包含openid即触发OIDC流程。
+
+{{知识点15}}
+ID Token与Access Token的区别：ID Token是面向客户端的，包含用户身份声明（如sub、name、email），用于让客户端知道用户是谁；Access Token是面向资源服务器的，用于证明客户端有权访问特定资源。前端不应将Access Token用于身份验证，也不应将ID Token用于API调用。
+
+{{知识点16}}
+JWT（JSON Web Token，RFC 7519）是OAuth中最常用的令牌格式，由三部分组成：Header（算法和令牌类型）、Payload（声明/claims）、Signature（签名）。JWT可以是未签名的（JWS）或加密的（JWE）。前端解析JWT时只需Base64URL解码Payload部分即可读取声明，但验证签名通常由后端完成。
+
+{{知识点17}}
+JWT Access Token Profile（RFC 9068）为OAuth访问令牌定义了标准的JWT结构规范，包括必须的claims如iss（签发者）、sub（主体）、aud（受众）、exp（过期时间）、iat（签发时间）、jti（唯一标识）以及scope等。这使得资源服务器可以本地验证JWT访问令牌而无需调用令牌内省端点。
+
+{{知识点18}}
+Bearer Token的使用规范（RFC 6750）要求通过Authorization请求头传递Bearer令牌：`Authorization: Bearer <token>`。RFC 9700和OAuth 2.1明确禁止通过URI查询字符串传递Bearer令牌，因为令牌会出现在浏览器历史、服务器日志和Referer头中。前端应始终使用请求头方式传递令牌。
+
+{{知识点19}}
+令牌刷新机制对前端至关重要。前端应实现：1）在访问令牌过期前主动刷新；2）使用拦截器（interceptor）在收到401响应时自动刷新；3）在刷新期间排队其他请求，避免多个并发刷新请求（token refresh race condition）；4）刷新失败时清除令牌并重定向到登录页。Axios拦截器和fetch包装器是常用的实现方式。
+
+{{知识点20}}
+重定向URI（Redirect URI）是OAuth安全的关键环节。RFC 9700要求：1）必须使用精确字符串匹配，不允许通配符或前缀匹配；2）必须使用HTTPS；3）不应使用localhost作为生产环境的重定向URI（仅限开发）；4）前端应为不同环境配置不同的重定向URI。错误的重定向URI验证是OAuth最常见的安全漏洞之一。
+
+{{知识点21}}
+跨站请求伪造（CSRF）是OAuth前端面临的主要威胁之一。防护措施包括：1）使用PKCE（code_verifier/code_challenge）天然防御CSRF；2）使用state参数：客户端生成随机state值存入session，授权响应中验证state一致性；3）验证发起请求的来源（origin）。PKCE已成为OAuth 2.1的强制要求，可同时防御CSRF和授权码注入。
+
+{{知识点22}}
+OAuth 2.0中客户端分为两类：机密客户端（Confidential Client）能安全存储凭据（如服务器端Web应用），公共客户端（Public Client）不能安全存储凭据（如SPA、移动应用、桌面应用）。SPA属于公共客户端，不能使用client_secret，必须依赖PKCE作为安全机制。OAuth 2.1简化了这一分类，仅取决于客户端是否拥有凭据。
+
+{{知识点23}}
+授权服务器发现（Authorization Server Metadata，RFC 8414）允许客户端通过向`/.well-known/oauth-authorization-server`发送GET请求来发现授权服务器的端点和能力。返回的JSON文档包含authorization_endpoint、token_endpoint、supported grant types、scopes等信息。前端可以利用此机制动态配置OAuth参数，而无需硬编码端点URL。
+
+{{知识点24}}
+Demonstration of Proof of Possession（DPoP，RFC 9449）是一种令牌绑定机制，用于防止令牌被盗用。DPoP要求客户端在每次请求时生成一个签名的DPoP证明（proof），证明持有令牌的客户端确实拥有对应的私钥。与Bearer Token不同，DPoP令牌即使被截获也无法被其他客户端使用。2025年DPoP正成为高安全场景的推荐方案。
+
+{{知识点25}}
+Pushed Authorization Requests（PAR，RFC 9126）是OAuth 2.0的高安全扩展。PAR允许客户端在后端将授权请求参数推送到授权服务器，获取一个请求URI，然后仅将该URI重定向给用户。这避免了在URL中暴露敏感的授权参数。PAR在高安全要求的金融和企业场景中越来越常见。
+
+{{知识点26}}
+前端OAuth认证的常见架构模式包括：1）BFF模式（Backend For Frontend）：前端不直接持有令牌，由后端代理令牌管理和API调用，安全性最高；2）SPA直接模式：前端直接与授权服务器交互，使用PKCE获取令牌；3）代理模式：前端通过API Gateway或反向代理进行令牌管理。BFF模式在2025年被越来越多地推荐用于生产环境。
+
+{{知识点27}}
+Token Introspection（RFC 7662）允许资源服务器向授权服务器查询令牌的状态和元信息。当资源服务器收到一个不透明的访问令牌时，可以通过内省端点验证令牌是否有效、是否过期、具有哪些范围等。前端通常不直接使用令牌内省，但了解此机制有助于理解令牌验证的完整流程。
+
+{{知识点28}}
+令牌撤销（Token Revocation，RFC 7009）允许客户端在不再需要令牌时主动撤销访问令牌或刷新令牌。前端应在用户登出时调用撤销端点清除服务器端的令牌状态。这比简单地在客户端删除令牌更安全，因为被撤销的令牌即使被截获也无法使用。
+
+{{知识点29}}
+前端处理OAuth错误的标准方式：1）授权拒绝（access_denied）：显示友好的错误信息，提供重试选项；2）令牌过期：自动使用刷新令牌获取新令牌；3）刷新令牌过期或被撤销：清除所有令牌状态，重定向到登录页；4）无效_scope：提示用户权限不足；5）server_error：显示通用错误并建议稍后重试。所有OAuth错误都应有用户友好的处理方式。
+
+{{知识点30}}
+CORS（跨源资源共享）配置对前端OAuth至关重要。前端SPA通常需要：1）授权服务器的CORS头允许前端域名的跨源请求（用于令牌刷新等）；2）资源服务器的CORS配置允许携带Authorization头的请求；3）预检请求（OPTIONS）的正确处理。错误的CORS配置是前端OAuth集成中最常见的非安全问题。
+
+{{知识点31}}
+单点登录（SSO）与OAuth/OIDC的结合是企业前端的常见需求。通过OIDC的session管理规范，前端可以：1）在iframe中静默检查授权服务器的会话状态；2）当授权服务器会话过期时触发前端重新认证；3）实现跨应用的统一登出。SSO的核心是授权服务器维护中央会话，各应用通过OIDC协议同步登录状态。
+
+{{知识点32}}
+前端OAuth安全加固清单：1）始终使用PKCE；2）令牌存储优先HttpOnly Cookie或内存；3）使用state参数防御CSRF；4）验证token的iss、aud、exp claims；5）使用HTTPS且设置Secure和SameSite Cookie属性；6）实施CSP（内容安全策略）防御XSS；7）不在URL中传递令牌；8）登出时撤销令牌；9）使用短生命周期的访问令牌配合刷新令牌；10）对敏感操作使用step-up authentication。
+
+{{知识点33}}
+Refresh Token Rotation是2025年推荐的安全实践。每次使用刷新令牌时，授权服务器发放新的刷新令牌并使旧的失效。如果检测到已使用的刷新令牌被再次使用（replay），则撤销该令牌家族的所有令牌。前端应正确处理令牌轮换，确保总是存储最新的刷新令牌。
+
+{{知识点34}}
+OAuth与第三方登录（Social Login）是前端最常见的OAuth应用场景。主流第三方登录提供商包括Google、GitHub、Facebook、Apple、微信等。前端实现时需：1）注册应用获取client_id；2）配置重定向URI；3）引导用户到提供商授权页面；4）处理回调获取授权码；5）交换令牌并获取用户信息。各提供商的scope和claims格式可能不同，前端需要适配处理。
+
+{{知识点35}}
+前端OAuth库选型：1）oidc-client-ts：成熟的OIDC/OAuth客户端库，支持PKCE、刷新令牌、自动续期；2）next-auth（Auth.js）：Next.js生态首选，支持多种OAuth提供商；3）@auth0/auth0-spa-js：Auth0官方SPA SDK，功能全面；4）passport.js：Node.js服务端认证中间件（BFF模式）；5）msal-browser：Microsoft身份平台SDK。2025年选择库时应确认是否支持OAuth 2.1和PKCE。
+
+{{知识点36}}
+设备授权流程（Device Authorization Grant，RFC 8628）适用于无浏览器或输入受限的设备（如智能TV、CLI工具）。前端在某些场景下需要处理设备流程：显示用户码（user_code）和验证URI，用户在另一设备上完成授权后轮询令牌端点。此流程不涉及PKCE，通过设备码和用户码的安全配对完成授权。
+
+{{知识点37}}
+Rich Authorization Requests（RAR，RFC 9396）扩展了OAuth的授权能力，允许客户端在授权请求中传递结构化的授权细节，而不仅仅是简单的scope字符串。RAR使用JSON格式的authorization_details参数，支持更精细的权限表达。前端在需要复杂授权场景（如金融交易授权）时可能需要使用RAR。
+
+{{知识点38}}
+跨应用访问（Cross-App Access，XAA）是OAuth工作组的草案规范，用于解决不同应用之间的令牌传递和委托场景。前端在微前端架构或跨域应用集成中可能涉及XAA模式。此规范仍在草案阶段，但代表了OAuth在复杂前端架构中的演进方向。
+
+{{知识点39}}
+WebAuthn/Passkeys与OAuth的结合是2025年的趋势。Passkeys提供无密码的身份验证体验，OAuth提供授权框架。前端可以通过WebAuthn API实现Passkeys登录，然后通过OIDC协议获取OAuth令牌。Auth0、Okta等身份平台已支持Passkeys作为OAuth认证因素。
+
+{{知识点40}}
+前端OAuth性能优化：1）使用silent authentication（静默认证）在iframe中无感知刷新令牌；2）合理设置令牌过期时间，平衡安全性和用户体验；3）缓存用户信息，避免重复请求userinfo端点；4）使用Web Workers处理令牌刷新，避免阻塞主线程；5）预加载授权服务器元数据；6）在路由守卫中使用异步认证检查，避免页面闪烁。

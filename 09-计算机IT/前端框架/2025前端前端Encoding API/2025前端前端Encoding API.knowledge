@@ -1,0 +1,93 @@
+# 2025前端前端Encoding API
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{Encoding API 概述：Encoding API 是 Web 标准 API，允许开发者在 JavaScript 字符串与 UTF-8 编码字节之间进行转换。它提供两种机制：编码（将 JS 字符串转为 UTF-8 字节数组）和解码（将特定编码的字节数组转为 JS 字符串）。注意编码只能输出 UTF-8，解码则支持多种编码格式。自 2020 年 1 月起在所有主流浏览器中可用（Baseline Widely Available）。}}
+
+{{知识点2}}{{TextEncoder 接口：TextEncoder 用于将 JavaScript 字符串编码为 UTF-8 字节序列。它是 Encoding API 的核心接口之一，构造函数为 new TextEncoder()，不需要任何参数。编码属性 encoding 始终返回 "utf-8"，这是 TextEncoder 唯一支持的编码格式。}}
+
+{{知识点3}}{{TextEncoder 构造函数：new TextEncoder() 创建并返回一个新的 TextEncoder 实例。该构造函数不接受任何参数，因为 TextEncoder 固定使用 UTF-8 编码。使用示例：const encoder = new TextEncoder();}}
+
+{{知识点4}}{{TextEncoder.encoding 属性：TextEncoder.encoding 是只读属性，始终返回字符串 "utf-8"。该属性可用于确认编码器使用的编码格式。由于 TextEncoder 只支持 UTF-8，此属性值固定不变。}}
+
+{{知识点5}}{{TextEncoder.encode() 方法：encode(string) 方法接受一个字符串输入，返回一个 Uint8Array，包含该字符串的 UTF-8 编码字节。例如：const encoded = new TextEncoder().encode("€")，返回 Uint8Array [226, 130, 172]（€ 的 UTF-8 编码为 3 字节）。}}
+
+{{知识点6}}{{TextEncoder.encodeInto() 方法：encodeInto(string, uint8Array) 方法将字符串编码并直接写入提供的 Uint8Array 缓冲区，返回 { read, written } 对象。read 表示已处理的 UTF-16 码元数，written 表示写入的字节数。相比 encode() 方法，encodeInto() 更高效，因为它避免了额外的内存分配，适合需要精确控制输出缓冲区的场景。}}
+
+{{知识点7}}{{encodeInto() 返回值详解：encodeInto() 返回的对象包含两个属性：read（已从源字符串转换的 UTF-16 码元数量，如果目标缓冲区空间不足可能小于 string.length）和 written（在目标 Uint8Array 中写入的字节数，保证写入完整的 UTF-8 字节序列）。}}
+
+{{知识点8}}{{encodeInto() 缓冲区大小计算：将 JavaScript 字符串转换为 UTF-8 时，输出所需空间最小为 string.length 字节，最大为 string.length * 3 字节。对于纯 ASCII 英文文本，比例接近 1；对于希腊语、西里尔语等（U+0080 到 U+07FF），比例约 2；对于中日韩等语言（U+0800 到 U+FFFF），比例约 3。}}
+
+{{知识点9}}{{encodeInto() 指定位置写入：encodeInto() 始终将输出放在数组起始位置。如需在特定偏移位置写入，可使用 TypedArray.prototype.subarray()：encoder.encodeInto(string, u8array.subarray(position)) 来实现偏移写入。}}
+
+{{知识点10}}{{TextDecoder 接口：TextDecoder 用于将特定编码的字节数组解码为 JavaScript 字符串。构造函数为 new TextDecoder(label, options)，其中 label 指定编码格式（默认 "utf-8"），options 包含 fatal 和 ignoreBOM 选项。它是 TextEncoder 的逆操作接口。}}
+
+{{知识点11}}{{TextDecoder 构造函数：new TextDecoder(label, options) 创建解码器实例。label 参数为可选的编码名称字符串，默认 "utf-8"；options 对象包含 fatal（布尔值，是否在解码错误时抛出异常，默认 false）和 ignoreBOM（布尔值，是否忽略字节序标记，默认 false）。}}
+
+{{知识点12}}{{TextDecoder.encoding 属性：TextDecoder.encoding 是只读属性，返回该解码器使用的字符编码名称的字符串。与 TextEncoder 不同，TextDecoder 的编码取决于构造时传入的 label 参数。}}
+
+{{知识点13}}{{TextDecoder.fatal 属性：TextDecoder.fatal 是只读布尔属性，指示错误模式是否为致命模式。当设置为 true 时，如果遇到无效字节序列，decode() 方法会抛出 TypeError 异常；默认为 false，此时无效字节会被替换为 U+FFFD 替换字符。}}
+
+{{知识点14}}{{TextDecoder.ignoreBOM 属性：TextDecoder.ignoreBOM 是只读布尔属性，指示解码器是否忽略字节序标记（Byte Order Mark, BOM）。默认为 false，意味着 BOM 会被自动检测并从输出中移除。设为 true 时，BOM 字节会被作为普通文本内容输出。}}
+
+{{知识点15}}{{TextDecoder.decode() 方法：decode(buffer, options) 方法接受一个 ArrayBuffer、TypedArray 或 DataView 作为输入，返回解码后的 JavaScript 字符串。options 对象可包含 stream 属性（布尔值），设为 true 时表示数据是流式传输的一部分，解码器会缓存不完整的字节序列等待后续数据。}}
+
+{{知识点16}}{{TextDecoder 解码非 UTF-8 文本示例：解码 Windows-1251 编码的俄语文本：const decoder = new TextDecoder("windows-1251"); const text = decoder.decode(new Uint8Array([207, 240, 232, 226, 229, 242])); 返回 "Привет"。这展示了 TextDecoder 支持多种编码格式的解码能力。}}
+
+{{知识点17}}{{TextEncoderStream 接口：TextEncoderStream 是 TextEncoder 的流式等价物，将字符串流转换为 UTF-8 编码的字节流。它实现了 TransformStream 接口的形状，可以与 ReadableStream.pipeThrough() 等流式方法配合使用。自 2022 年 9 月起在所有主流浏览器中可用。}}
+
+{{知识点18}}{{TextEncoderStream 构造函数与属性：new TextEncoderStream() 创建流式编码器实例。属性包括：encoding（只读，始终返回 "utf-8"）、readable（只读，返回控制的 ReadableStream 实例）、writable（只读，返回控制的 WritableStream 实例）。}}
+
+{{知识点19}}{{TextDecoderStream 接口：TextDecoderStream 是 TextDecoder 的流式等价物，将二进制编码的字节流转换为字符串流。与 TextEncoderStream 类似，它也实现了 TransformStream 接口的形状，支持与 ReadableStream.pipeThrough() 配合使用。自 2022 年 9 月起广泛可用。}}
+
+{{知识点20}}{{TextDecoderStream 构造函数与属性：new TextDecoderStream(label, options) 创建流式解码器实例，参数与 TextDecoder 构造函数相同。属性包括：encoding（只读，返回编码名称）、fatal（只读，是否致命错误模式）、ignoreBOM（只读，是否忽略 BOM）、readable（只读，返回 ReadableStream）、writable（只读，返回 WritableStream）。}}
+
+{{知识点21}}{{Encoding API 四大接口总结：Encoding API 提供四个核心接口——TextEncoder（同步编码）、TextDecoder（同步解码）、TextEncoderStream（流式编码）、TextDecoderStream（流式解码）。其中 TextEncoder/TextEncoderStream 只支持 UTF-8 编码输出，而 TextDecoder/TextDecoderStream 支持多种编码格式的解码。}}
+
+{{知识点22}}{{编码与解码的不对称性：Encoding API 的编码和解码操作是不对称的。TextEncoder 只能编码为 UTF-8，无法编码为其他格式；TextDecoder 可以解码 UTF-8 以及大量传统编码系统（legacy encodings），如 GBK、Big5、Shift_JIS、EUC-KR 等。设计上的不对称反映了 UTF-8 在 Web 上的主导地位。}}
+
+{{知识点23}}{{支持的编码格式——Unicode 系列：Encoding API 支持的 Unicode 编码包括 UTF-8（标签 "utf-8"、"utf8"、"unicode-1-1-utf-8"）、UTF-16LE（标签 "utf-16"、"utf-16le"）和 UTF-16BE（标签 "utf-16be"）。UTF-8 是 Web 文档的主流编码格式。}}
+
+{{知识点24}}{{支持的编码格式——ISO-8859 系列：支持 ISO-8859-2 到 ISO-8859-16 的多种编码，覆盖中欧（Latin2）、南欧（Latin3）、北欧（Latin4）、西里尔文、阿拉伯文、希腊文、希伯来文、泰文等语言区域。每个编码都有多个可互换的标签别名。}}
+
+{{知识点25}}{{支持的编码格式——Windows 代码页系列：支持 Windows-1250 到 Windows-1258 的代码页编码，分别对应中欧、西里尔文、西欧、希腊文、土耳其文、希伯来文、阿拉伯文、波罗的海文和越南文。其中 Windows-1252 是最常用的西欧编码，其标签包括 "ascii"、"us-ascii"、"latin1" 等。}}
+
+{{知识点26}}{{支持的编码格式——中文编码：支持 GBK（标签 "gbk"、"chinese"、"gb2312"、"x-gbk" 等）、GB18030（标签 "gb18030"）和 Big5（标签 "big5"、"big5-hkscs"、"cn-big5" 等）。GBK 用于简体中文，Big5 用于繁体中文，GB18030 是 GBK 的超集，支持更多字符。}}
+
+{{知识点27}}{{支持的编码格式——日文编码：支持三种日文编码：EUC-JP（Extended Unix Code for Japanese）、ISO-2022-JP（日本电子邮件标准编码）和 Shift_JIS（标签 "shift-jis"、"shift_jis"、"sjis"、"windows-31j" 等，最常用的日文编码之一）。}}
+
+{{知识点28}}{{支持的编码格式——韩文编码：支持 EUC-KR 编码（标签 "euc-kr"、"korean"、"ks_c_5601-1987"、"ksc5601"、"windows-949" 等），这是韩文的传统编码格式，基于 KS X 1001 标准。}}
+
+{{知识点29}}{{支持的编码格式——其他编码：还支持 IBM866（DOS 俄语编码）、KOI8-R/KOI8-U（俄语/乌克兰语编码）、Macintosh（Mac OS Roman 编码）、X-Mac-Cyrillic（Mac 西里尔文编码）和 X-User-Defined（用户自定义编码）等。每个编码可有多个标签别名。}}
+
+{{知识点30}}{{字节序标记（BOM）处理：BOM（Byte Order Mark）是放在文本文件开头的特殊标记，用于标识字节顺序和编码格式。UTF-8 BOM 为 EF BB BF。TextDecoder 默认检测并移除 BOM（ignoreBOM: false），设 ignoreBOM: true 则保留 BOM 字节作为文本内容。UTF-16 编码依赖 BOM 来区分 LE 和 BE 变体。}}
+
+{{知识点31}}{{流式解码中的 stream 选项：TextDecoder.decode() 方法的 options.stream 参数在处理网络流数据时至关重要。当 stream 设为 true 时，解码器会在数据块边界保留不完整的多字节序列，等待后续数据到达后继续解码。当最后一块数据到达时，stream 应设为 false（默认值）以确保所有缓冲数据被处理。}}
+
+{{知识点32}}{{与 Web Streams API 的集成：TextEncoderStream 和 TextDecoderStream 实现了 TransformStream 接口，可以无缝集成到 Web Streams API 管道中。典型用法：fetch(url).body.pipeThrough(new TextDecoderStream()) 可直接将网络响应的字节流转换为文本流，实现边下载边处理的流式架构。}}
+
+{{知识点33}}{{Web Workers 支持：Encoding API 的所有四个接口（TextEncoder、TextDecoder、TextEncoderStream、TextDecoderStream）均在 Web Workers 中可用，允许在后台线程中进行编解码操作，避免阻塞主线程，提升涉及大量文本处理的应用性能。}}
+
+{{知识点34}}{{与 ArrayBuffer 和 TypedArray 的关系：TextEncoder.encode() 返回 Uint8Array，TextDecoder.decode() 接受 ArrayBuffer、TypedArray 或 DataView 输入。这使得 Encoding API 与二进制数据处理 API 紧密集成，可方便地在文本和二进制数据间转换，适用于 WebSocket、Fetch API 等二进制通信场景。}}
+
+{{知识点35}}{{实际应用场景——文件读取：使用 FileReader 读取文件为 ArrayBuffer 后，可通过 TextDecoder 解码为文本：const reader = new FileReader(); reader.onload = () => { const text = new TextDecoder("utf-8").decode(reader.result); }。这是处理用户上传文件的常见模式。}}
+
+{{知识点36}}{{实际应用场景——WebSocket 通信：WebSocket 支持二进制帧传输，接收端可使用 TextDecoder 将 ArrayBuffer 消息解码为文本，发送端可使用 TextEncoder 将文本编码为 ArrayBuffer 后通过 send() 发送二进制帧，实现高效的文本通信。}}
+
+{{知识点37}}{{实际应用场景——Fetch API 流式处理：结合 Fetch API 的 Response.body（ReadableStream）和 TextDecoderStream，可实现流式文本处理：const response = await fetch(url); const reader = response.body.pipeThrough(new TextDecoderStream()).getReader(); 逐块读取文本数据，适用于大型文件下载和流式 API 响应处理。}}
+
+{{知识点38}}{{性能优化——避免重复创建实例：TextEncoder 和 TextDecoder 实例应被复用而非每次调用都创建新实例。构造函数开销虽小，但在高频调用场景下累积效应明显。推荐将 encoder/decoder 作为模块级常量或类的实例属性保存，如 const encoder = new TextEncoder() 在模块顶层创建。}}
+
+{{知识点39}}{{性能优化——encodeInto vs encode：当需要将编码结果写入预分配的缓冲区时，encodeInto() 比 encode() 更高效，因为它避免了创建新的 Uint8Array。在 WebAssembly 互操作、高频数据序列化等对内存敏感的场景中，应优先使用 encodeInto()。}}
+
+{{知识点40}}{{规范与标准：Encoding API 由 WHATWG 制定的 Encoding 规范定义（https://encoding.spec.whatwg.org/），该规范定义了 TextEncoder、TextDecoder、TextEncoderStream、TextDecoderStream 四个接口以及必须支持的编码标签列表。所有主流浏览器引擎（Blink、Gecko、WebKit）均已实现该规范。}}
+
+{{知识点41}}{{错误处理机制：TextDecoder 在解码遇到无效字节序列时，默认行为是插入 U+FFFD 替换字符（REPLACEMENT CHARACTER）。设置 fatal: true 后，遇到无效序列会抛出 TypeError。这一机制允许开发者根据应用场景选择容错或严格模式。}}
+
+{{知识点42}}{{编码标签别名机制：每个编码格式支持多个标签别名，如 UTF-8 的标签可以是 "utf-8"、"utf8" 或 "unicode-1-1-utf-8"。这些别名在构造 TextDecoder 时可以互换使用。规范定义了完整的标签到编码的映射表，确保跨浏览器一致性。}}
+
+{{知识点43}}{{与其他编码方案的对比：在 Encoding API 出现之前，开发者需要使用第三方库（如 iconv-lite、text-encoding）来进行非 UTF-8 编码的转换。Encoding API 是浏览器原生支持的标准化方案，性能更好且无需额外依赖。对于纯 UTF-8 编码，也可以使用 unescape(encodeURIComponent(str)) 等 hack 方式，但 API 更加清晰可靠。}}
+
+{{知识点44}}{{实际应用场景——CSV/TSV 文件解析：解析不同编码的 CSV 文件时，先用 FileReader 读取为 ArrayBuffer，再用 TextDecoder 指定正确编码（如 "gbk"、"shift_jis"）解码为文本，然后进行 CSV 解析。这是处理国际化数据导入的常见需求。}}
+
+{{知识点45}}{{实际应用场景——旧系统数据迁移：在对接使用传统编码的旧系统（如使用 GB2312 的老数据库、使用 EUC-JP 的日本系统）时，TextDecoder 可直接将原始字节数据解码为 JavaScript 字符串，无需服务器端转码，简化了数据迁移和系统集成流程。}}

@@ -1,0 +1,83 @@
+# 2025前端前端CSS Animations Level 2
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{CSS Animations Level 2 是 W3C CSS 动画模块的增量规范（Delta Specification），基于 Level 1 扩展，新增了动画组合（composition）、时间线控制（timeline）、动画范围（range）、动画触发器（trigger）等能力，使 CSS 动画从纯时间驱动进化为支持滚动驱动和视图驱动的多维动画系统。}}
+
+{{知识点2}}{{animation-composition 属性是 Level 2 新增的核心属性，用于指定当多个动画同时影响同一属性时的复合运算方式。支持三个值：replace（默认，效果值覆盖底层值）、add（效果值叠加到底层值之上）、accumulate（效果值与底层值累加合并）。}}
+
+{{知识点3}}{{animation-composition 的 replace 模式会完全替换底层值。例如底层 filter: blur(5px)，关键帧 filter: blur(10px)，最终结果为 blur(10px)，底层值被丢弃。}}
+
+{{知识点4}}{{animation-composition 的 add 模式会将效果值追加到底层值之后。例如底层 transform: translateX(30px) rotate(45deg)，关键帧 transform: translateX(100px)，最终效果为 translateX(30px) rotate(45deg) translateX(100px)，变换链按顺序叠加。}}
+
+{{知识点5}}{{animation-composition 的 accumulate 模式会将同类型值进行数学累加。例如底层 transform: translateX(30px) rotate(45deg)，关键帧 transform: translateX(100px)，最终效果为 translateX(130px) rotate(45deg)，30px 和 100px 被累加。}}
+
+{{知识点6}}{{animation-timeline 属性是 Level 2 引入的关键属性，用于指定控制动画进度的时间线。默认值 auto 表示使用文档默认时间线（DocumentTimeline），即传统的基于时间流逝的动画。}}
+
+{{知识点7}}{{animation-timeline 支持 scroll() 函数创建匿名滚动进度时间线。例如 animation-timeline: scroll(nearest inline) 表示使用最近祖先滚动容器的内联轴方向滚动来驱动动画进度。}}
+
+{{知识点8}}{{animation-timeline 支持 view() 函数创建匿名视图进度时间线。例如 animation-timeline: view(inline) 表示基于元素在滚动容器中的可见性变化来驱动动画，当元素进入视口时动画开始，离开时结束。}}
+
+{{知识点9}}{{scroll() 函数接受两个可选参数：<scroller> 和 <axis>。<scroller> 可选 root（根元素）、nearest（最近滚动容器，默认）或 self（元素自身）；<axis> 可选 block（默认）、inline、x 或 y，指定滚动方向轴。}}
+
+{{知识点10}}{{view() 函数接受两个可选参数：<axis> 和 <view-timeline-inset>。<axis> 指定观察轴方向，<view-timeline-inset> 控制视口边缘的内缩偏移量，用于调整动画开始和结束的触发时机。}}
+
+{{知识点11}}{{命名时间线（Named Timeline）允许通过 scroll-timeline-name 或 view-timeline-name 属性为时间线命名（使用 --dashed-ident 格式），然后在其他元素的 animation-timeline 中引用该名称，实现跨元素的动画驱动关系。}}
+
+{{知识点12}}{{scroll-timeline 是 scroll-timeline-name 和 scroll-timeline-axis 的简写属性。例如 scroll-timeline: --main-timeline block 命名了一个名为 --main-timeline 的块轴滚动时间线。}}
+
+{{知识点13}}{{view-timeline 是 view-timeline-name、view-timeline-axis 和 view-timeline-inset 的简写属性，用于定义视图进度时间线的名称、轴向和内缩范围。}}
+
+{{知识点14}}{{timeline-scope 属性用于扩展命名时间线的作用域，使其可以在非父子关系的元素间共享。默认情况下命名时间线只能被祖先元素使用，设置 timeline-scope 可以突破这一限制。}}
+
+{{知识点15}}{{animation-range 属性是 Level 2 新增的简写属性，用于定义动画在时间线上的起止范围。由 animation-range-start 和 animation-range-end 两个子属性组成。}}
+
+{{知识点16}}{{animation-range 支持 timeline-range-name 值如 cover、contain、entry、exit 等，用于精确控制滚动驱动动画在视口不同阶段的播放区间。例如 animation-range: entry 10% exit -25% 表示动画从进入阶段 10% 开始，到退出阶段 -25% 结束。}}
+
+{{知识点17}}{{animation-range 的 cover 范围表示从元素开始进入视口到完全离开视口的整个过程；contain 范围表示从元素完全进入视口到开始离开视口的区间。这些范围名称使动画区间定义更加语义化。}}
+
+{{知识点18}}{{animation-range 支持 length-percentage 值进行精确偏移控制。例如 animation-range: 20% 80% 表示动画在时间线的 20% 处开始，80% 处结束，而非默认的 0% 到 100%。}}
+
+{{知识点19}}{{@keyframes 规则在 Level 2 中得到增强，支持在关键帧选择器中使用 timeline-range-name 和 percentage 组合，例如 entry 50% 表示在进入范围的 50% 处触发该关键帧。}}
+
+{{知识点20}}{{Level 2 引入了 animation-trigger 系列属性（目前尚无浏览器支持），包括 animation-trigger、animation-trigger-type、animation-trigger-timeline、animation-trigger-range 等，用于基于滚动位置或其他条件触发动画。}}
+
+{{知识点21}}{{animation-trigger-type 属性定义触发器类型，决定动画如何被触发和反向执行。这为滚动驱动动画提供了更精细的进入/退出控制能力。}}
+
+{{知识点22}}{{CSS 动画事件（Animation Events）包括 animationstart（动画开始）、animationend（动画结束）、animationcancel（动画取消）和 animationiteration（动画迭代）四个事件，即使动画时长为 0 秒也会触发事件。}}
+
+{{知识点23}}{{animation-fill-mode 属性控制动画在执行前和执行后如何将样式应用到目标元素。backwards 在动画延迟期间应用第一帧样式，forwards 在动画结束后保留最后一帧样式，both 同时应用两者。}}
+
+{{知识点24}}{{animation-direction 属性控制动画的播放方向。normal 为正向播放，reverse 为反向播放，alternate 在奇数次正向、偶数次反向之间交替，alternate-reverse 则相反。}}
+
+{{知识点25}}{{animation-iteration-count 属性指定动画重复次数，接受正数或 infinite 关键字。例如 animation-iteration-count: 3 表示播放 3 次，infinite 表示无限循环。}}
+
+{{知识点26}}{{animation-play-state 属性控制动画的播放和暂停状态，值为 running（播放）或 paused（暂停）。暂停时动画保持当前帧状态，恢复后从暂停处继续。}}
+
+{{知识点27}}{{animation-delay 属性指定动画从元素加载到开始播放之间的延迟时间。正值表示延迟，负值表示动画立即开始但从中间某帧开始播放（跳过前 N 秒）。}}
+
+{{知识点28}}{{animation-timing-function 属性定义动画的速度曲线。Level 2 延续了 Level 1 的缓动函数体系，包括 ease、linear、ease-in、ease-out、ease-in-out 关键字，以及 cubic-bezier()、steps() 和 linear() 自定义函数。}}
+
+{{知识点29}}{{linear() 缓动函数允许在提供的停靠点之间进行线性插值，可以创建自定义的分段线性速度曲线。例如 linear(0, 0.25 50%, 0.25 75%, 1) 定义了在中间暂停的动画效果。}}
+
+{{知识点30}}{{steps() 缓动函数将动画分为指定数量的等长区间，支持 jump-start、jump-end、jump-none、jump-both 四种步进位置。jump-none 在两端不跳跃，jump-both 在两端都添加停顿。}}
+
+{{知识点31}}{{CSS 动画与 Web Animations API 深度集成。Level 2 明确了通过 JS 调用 setKeyframes()、updateTiming()、play()、pause()、reverse() 等方法后，CSS 属性的优先级关系——JS 修改会覆盖对应的 CSS 属性。}}
+
+{{知识点32}}{{CSSAnimation 接口是 Level 2 的重要 Web API 扩展，它继承自 Web Animations API 的 Animation 接口，代表由 CSS animation 属性生成的动画对象，可通过 element.getAnimations() 获取。}}
+
+{{知识点33}}{{动画的复合顺序（Composite Order）决定了多个动画影响同一属性时的叠加层次。Level 2 规定：CSS Transitions 最先，CSS Animations 次之，最后是其他动画。同类型动画按 DOM 树顺序和 animation-name 中的声明顺序排列。}}
+
+{{知识点34}}{{Owning Element（拥有元素）是 Level 2 中的重要概念，指应用了 animation-name 属性从而生成动画的元素或伪元素。拥有元素与动画的目标元素（target element）可能不同，因为可以通过 Web Animations API 修改 effect.target。}}
+
+{{知识点35}}{{当元素的 display 属性设为 none 且在忽略 Transitions 和 Animations 的级联源后也计算为 none 时，该元素上运行的动画将被终止。将 display 从 none 更新为其他值时，所有通过 animation-name 应用的动画将重新启动。}}
+
+{{知识点36}}{{prefers-reduced-motion 媒体查询与 CSS 动画配合使用，可以检测用户是否请求减少动画效果。开发者应据此提供无动画或简化动画的替代方案，提升无障碍访问体验。}}
+
+{{知识点37}}{{will-change 属性与动画性能优化密切相关。animation-fill-mode 设置为 forwards 时，动画属性的行为类似于包含在 will-change 集合中，动画期间创建的新层叠上下文在动画结束后会保留。}}
+
+{{知识点38}}{{CSS 滚动驱动动画（Scroll-driven Animations）是 Level 2 生态中最重要的扩展方向，它使动画进度与滚动位置绑定而非时间流逝，广泛用于视差效果、滚动进度指示器、元素进入/退出动画等场景。}}
+
+{{知识点39}}{{CSS 动画简写属性 animation 包含 animation-timeline 作为仅重置值（reset-only value）。这意味着在 animation 简写中使用 animation 会将 animation-timeline 重置为 auto，因此需要在 animation 简写之后单独声明 animation-timeline。}}
+
+{{知识点40}}{{CSS Animations Level 2 规范当前状态为工作草案（Working Draft），部分特性如 animation-trigger 系列属性尚未被任何浏览器实现，而 animation-composition、animation-timeline、animation-range 等已在主流浏览器中获得广泛支持。}}

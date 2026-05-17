@@ -1,0 +1,73 @@
+# 2025前端安全入门
+# 领域: 计算机IT
+# 学科: 前端框架
+# 来源: 2025前端安全入门
+# 描述: 前端安全核心知识点，涵盖XSS防护、CSP、CORS、HTTPS、子资源完整性、安全头部等关键主题
+
+{{XSS跨站脚本攻击概述}}跨站脚本攻击（Cross-Site Scripting，XSS）是一种代码注入攻击，攻击者在目标网站注入恶意脚本，当用户访问该页面时，脚本在用户浏览器中执行。XSS可以窃取Cookie、会话令牌、获取用户敏感信息，甚至伪装用户执行操作。XSS是OWASP Top 10中长期排名前列的Web安全威胁，2025年依然是前端安全第一大敌。
+
+{{XSS三种类型}}XSS分为三种主要类型：1）存储型XSS（Stored XSS）：恶意脚本被永久存储在目标服务器（如数据库、评论区），用户访问包含该数据的页面时触发；2）反射型XSS（Reflected XSS）：恶意脚本通过URL参数传递，服务器直接将参数值反射到响应页面中执行；3）DOM型XSS（DOM-based XSS）：漏洞存在于前端JavaScript代码中，通过修改DOM环境在客户端执行恶意脚本，完全不经过服务器。
+
+{{XSS防护核心策略}}防XSS的核心策略：1）输入验证——对所有用户输入进行严格校验，限制类型、长度、格式；2）输出编码——在不同上下文（HTML实体、JavaScript字符串、URL、CSS）中使用对应编码方式；3）使用安全API——优先使用textContent而非innerHTML，使用setAttribute而非直接拼接属性；4）启用CSP——限制可执行脚本来源。
+
+{{输出编码上下文}}不同上下文需要不同的编码方式：HTML上下文使用HTML实体编码（如<转为&lt;）；HTML属性上下文使用属性编码；JavaScript上下文使用Unicode转义（如<转为\\u003c）；URL上下文使用encodeURIComponent编码；CSS上下文使用CSS十六进制编码。错误使用编码方式会导致防护失效。
+
+{{CSP内容安全策略}}CSP（Content Security Policy）通过HTTP头部Content-Security-Policy或<meta>标签定义，限制页面可加载和执行的资源来源。CSP可有效防御XSS、数据注入、点击劫持等攻击。主要指令包括default-src（默认资源策略）、script-src（脚本来源）、style-src（样式来源）、img-src（图片来源）、connect-src（AJAX/WebSocket来源）、frame-ancestors（可嵌入的父页面来源）。
+
+{{CSP常用指令详解}}CSP核心指令：script-src控制脚本来源，禁止inline脚本和eval；style-src控制样式来源；img-src控制图片来源；font-src控制字体来源；connect-src控制fetch/XHR/WebSocket连接目标；frame-src控制iframe来源；base-uri限制<base>标签；form-limit限制表单提交目标；report-uri/report-to配置违规报告地址。
+
+{{CSP nonce与hash机制}}为允许特定内联脚本执行，CSP提供两种机制：1）nonce（随机数）——在script标签添加nonce属性，CSP头部声明允许的nonce值，每次请求生成唯一值；2）hash——对脚本内容计算SHA-256等哈希值，CSP头部声明允许的哈希值。2025年推荐使用strict-dynamic配合nonce，放弃unsafe-inline和unsafe-eval。
+
+{{CSP报告与监控}}CSP支持report-uri（已废弃）和report-to指令，当页面违反CSP策略时自动向指定地址发送违规报告。通过CSP报告可发现潜在XSS攻击和策略配置错误。建议先用Content-Security-Policy-Report-Only头部在不影响页面功能的情况下收集报告，逐步收紧策略后再正式启用。
+
+{{CORS跨域资源共享}}CORS（Cross-Origin Resource Sharing）是浏览器的跨域访问控制机制。浏览器默认执行同源策略，跨域请求需服务器通过Access-Control-Allow-Origin等头部明确授权。CORS分为简单请求（GET/HEAD/POST，使用标准Content-Type）和预检请求（OPTIONS，非简单请求前自动发送）。
+
+{{CORS安全配置要点}}安全配置CORS：1）避免使用Access-Control-Allow-Origin: *（通配符），应指定具体允许的域名；2）Access-Control-Allow-Credentials: true时不允许通配符；3）限制Access-Control-Allow-Methods为实际需要的HTTP方法；4）限制Access-Control-Allow-Headers为必要的请求头；5）合理设置Access-Control-Max-Age减少预检请求开销。
+
+{{HTTPS与TLS安全}}HTTPS通过TLS加密传输数据，防止中间人攻击、窃听和篡改。2025年HTTPS已是所有网站的标配。要点：1）强制使用TLS 1.2及以上版本，禁用TLS 1.0/1.1；2）使用强密码套件，禁用弱加密算法；3）配置HSTS头部强制HTTPS访问；4）启用OCSP Stapling加速证书验证。
+
+{{HSTS严格传输安全}}HSTS（HTTP Strict Transport Security）通过Strict-Transport-Security头部强制浏览器使用HTTPS访问站点。格式：Strict-Transport-Security: max-age=31536000; includeSubDomains; preload。max-age指定策略有效期（秒），includeSubDomains覆盖子域名，preload允许提交到浏览器预加载列表。首次访问仍可能被中间人攻击降级，配合预加载列表可彻底解决。
+
+{{安全Cookie配置}}Cookie安全属性：1）HttpOnly——禁止JavaScript通过document.cookie访问，防止XSS窃取Cookie；2）Secure——仅通过HTTPS传输；3）SameSite——控制跨站请求时Cookie的发送策略（Strict/Lax/None），Lax是2025年的合理默认值；4）设置合理的过期时间和Path/Domain作用域。敏感会话Cookie应同时设置HttpOnly、Secure和SameSite=Lax。
+
+{{CSRF跨站请求伪造}}CSRF（Cross-Site Request Forgery）利用用户已认证的会话，诱导用户在已登录状态下向目标站点发送恶意请求。防护手段：1）CSRF Token——在表单中嵌入随机Token，服务端验证；2）SameSite Cookie——设为Lax或Strict阻止跨站携带Cookie；3）验证Referer/Origin头部；4）关键操作要求二次确认（如密码确认）。
+
+{{CSRF Token实现}}CSRF Token实现方式：1）同步Token——服务端生成随机Token嵌入表单隐藏字段，提交时验证；2）双提交Cookie——Token同时写入Cookie和表单字段，服务端比较两者；3）自定义请求头——为AJAX请求添加自定义头部（如X-CSRF-Token），CORS机制确保跨站请求无法添加自定义头。2025年推荐使用SameSite Cookie作为主要防线，CSRF Token作为补充。
+
+{{点击劫持防护}}点击劫持（Clickjacking）通过在透明iframe中嵌入目标网站，诱导用户点击隐藏的按钮或链接。防护：1）X-Frame-Options头部——DENY禁止任何页面嵌入，SAMEORIGIN只允许同源嵌入；2）CSP frame-ancestors指令——更灵活的控制，支持指定允许嵌入的域名列表；3）frame-ancestors优先于X-Frame-Options。
+
+{{X-Content-Type-Options}}X-Content-Options: nosniff头部防止浏览器MIME类型嗅探。当服务器声明资源类型后，浏览器不尝试猜测实际类型。这对于防止上传的文本文件被当作可执行脚本执行至关重要。应为所有文本/脚本/样式资源设置此头部。2025年所有主要浏览器均支持并默认推荐启用。
+
+{{Referrer-Policy控制}}Referrer-Policy控制浏览器发送Referer信息的行为。推荐值：strict-origin-when-cross-origin（默认）——同源请求发送完整URL，跨域请求只发送源（origin），HTTPS降级到HTTP时不发送。安全敏感页面可设置no-referrer完全禁止发送。避免使用unsafe-url（跨域也发送完整URL，可能泄露敏感路径和查询参数）。
+
+{{Permissions-Policy权限策略}}Permissions-Policy（原Feature-Policy）控制浏览器功能API的访问权限。可限制的功能包括：摄像头(camera)、麦克风(microphone)、地理位置(geolocation)、支付(payment)、全屏(fullscreen)、USB等。例如Permissions-Policy: camera=(), microphone=()禁止当前页面使用摄像头和麦克风。对于不需要特殊权限的网站，应显式禁用所有敏感权限。
+
+{{子资源完整性SRI}}SRI（Subresource Integrity）通过在script/link标签添加integrity属性，验证外部资源在传输过程中未被篡改。格式：integrity="sha384-xxx"。浏览器在加载资源后计算哈希值，与integrity声明的值比较，不匹配则拒绝加载。使用CDN引入第三方库时应始终启用SRI，但注意CDN更新资源后需同步更新哈希值。
+
+{{第三方脚本安全风险}}第三方脚本（分析工具、广告SDK、社交插件等）是重大安全风险源。防护措施：1）使用SRI验证完整性；2）使用CSP限制脚本来源；3）用sandbox iframe隔离第三方脚本；4）定期审计第三方脚本行为；5）使用Content-Security-Policy-Report-Only监控；6）考虑自托管关键第三方库。2025年供应链攻击频发，第三方脚本安全审查愈发重要。
+
+{{前端依赖供应链安全}}供应链攻击通过污染npm包等依赖库注入恶意代码。防护：1）使用package-lock.json锁定版本；2）定期运行npm audit或yarn audit检查已知漏洞；3）使用Socket.dev等工具分析包行为；4）审查新依赖的维护者、下载量、代码质量；5）CI/CD中集成依赖安全检查；6）考虑使用pnpm的严格依赖提升模式减少攻击面。
+
+{{DOM安全操作}}安全的DOM操作原则：1）避免innerHTML插入用户数据，使用textContent或createElement；2）避免document.write；3）使用DOMPurify等库净化HTML；4）动态创建URL时验证协议（禁止javascript:和data:）；5）setInterval/setTimeout不接受字符串参数（等同eval）；6）谨慎使用dangerouslySetInnerHTML（React）/v-html（Vue）。
+
+{{安全的前端表单处理}}表单安全要点：1）客户端验证不能替代服务端验证；2）使用HTML5原生验证属性（required、pattern、type）作为第一道防线；3）敏感表单（登录、支付）添加CSRF保护；4）密码字段使用type="password"和autocomplete属性；5）提交后清除敏感数据；6）防止表单自动填充泄露信息。
+
+{{安全的URL处理}}URL安全处理：1）验证和净化用户输入的URL，防止javascript:协议注入；2）使用new URL()解析URL组件，避免正则解析错误；3）对URL参数使用encodeURIComponent编码；4）避免将未净化的用户输入拼接到href/src/action属性；5）使用URL验证库检查URL合法性；6）重定向URL使用白名单验证。
+
+{{Web存储安全}}Web存储（localStorage/sessionStorage）的安全注意事项：1）不要存储敏感信息（token、密码），因为无法设置HttpOnly，任何脚本都可访问；2）注意5-10MB的大小限制；3）使用sessionStorage存储临时数据（标签页关闭即清除）；4）存储数据时进行序列化/反序列化校验；5）清除过期数据防止信息泄露。
+
+{{安全编码实践}}前端安全编码实践：1）最小权限原则——只请求必要的权限和数据；2）默认安全——安全配置为默认值；3）深度防御——多层安全措施，不依赖单一防护；4）安全失败——异常情况下拒绝操作而非放行；5）不信任客户端——所有客户端数据均需服务端验证；6）保持依赖更新——定期更新框架和库版本。
+
+{{前端框架内置安全机制}}现代前端框架的安全机制：React默认转义JSX输出，使用dangerouslySetInnerHTML需显式声明；Vue默认HTML转义，v-html需谨慎使用；Angular内置DomSanitizer和XSS防护；Svelte默认HTML转义。但框架防护不是万能的，bypassHtmlEncoding、dangerouslySetInnerHTML等操作仍需开发者自行保证安全。
+
+{{浏览器安全模型同源策略}}同源策略是浏览器安全的基石。协议、域名、端口三者均相同才视为同源。同源策略限制：1）DOM访问——不同源的iframe无法访问彼此DOM；2）Cookie访问——只能访问同源Cookie；3）网络请求——跨域请求受CORS控制。部分API（如<script>、<img>标签加载）不受同源策略限制，这也是XSS和CSRF的利用点。
+
+{{安全头部完整清单}}2025年推荐的安全响应头部：Content-Security-Policy（内容安全策略）、Strict-Transport-Security（HSTS）、X-Content-Type-Options（禁用MIME嗅探）、X-Frame-Options（防点击劫持）、Referrer-Policy（控制Referer）、Permissions-Policy（功能权限）、Cross-Origin-Embedder-Policy（跨源嵌入）、Cross-Origin-Opener-Policy（跨源打开器）、Cross-Origin-Resource-Policy（跨源资源）。
+
+{{安全测试工具}}常用前端安全测试工具：1）OWASP ZAP——自动化安全扫描器；2）Burp Suite——Web安全测试平台；3）npm audit——Node.js依赖漏洞检查；4）ESLint安全插件（eslint-plugin-security）——代码静态分析；5）Snyk——持续依赖安全监控；6）Mozilla Observatory——网站安全头部评分；7）SecurityHeaders.com——安全头部检查。
+
+{{安全头部中间件配置}}常见框架安全头部配置：Express.js使用helmet中间件一键配置多个安全头部；Nginx通过add_header指令配置；Apache通过Header指令配置。建议在生产环境中默认启用所有推荐的安全头部，并使用SecurityHeaders.com等工具定期检查评分达到A+级别。
+
+{{Content-Security-Policy-Report-Only}}在正式启用CSP之前，使用Content-Security-Policy-Report-Only头部收集违规报告。该头部不会阻止资源加载，仅记录违规情况。通过分析报告，可以逐步调整CSP策略，确保不会误伤正常功能。经过充分测试后，切换到Content-Security-Policy正式启用。
+
+{{XSS过滤器注意事项}}现代浏览器已逐步废弃内置XSS过滤器（如Chrome的XSS Auditor已在2019年移除）。不要依赖浏览器的XSS过滤器作为安全措施，应由应用层面做好输入验证和输出编码。同时注意XSS过滤器本身可能被绕过或用于信息泄露攻击。

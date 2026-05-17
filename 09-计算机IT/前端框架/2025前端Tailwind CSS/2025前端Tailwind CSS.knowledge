@@ -1,0 +1,83 @@
+# 2025前端Tailwind CSS
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{Tailwind CSS 是一个功能优先（utility-first）的 CSS 框架，通过扫描项目中的 HTML 文件、JavaScript 组件和其他模板中的类名，生成对应的样式并写入静态 CSS 文件。它快速、灵活、可靠，且零运行时开销。开发者直接在 HTML 标记中组合大量单一用途的工具类来完成样式设计，无需编写自定义 CSS。}}
+
+{{知识点2}}{{Tailwind CSS v4 的核心架构变化：不再使用 tailwind.config.js 进行配置，而是通过 CSS 中的 @theme 指令定义设计令牌（design tokens）。@theme 替代了旧的 :root CSS 变量定义方式，因为它不仅定义变量，还会自动生成对应的工具类。安装方式也简化为 @import "tailwindcss" 一行代码。}}
+
+{{知识点3}}{{Tailwind CSS 的响应式设计采用移动优先（mobile-first）断点系统。无前缀的工具类在所有屏幕尺寸生效，带前缀的工具类（如 md:、lg:）仅在指定断点及以上生效。默认断点：sm（40rem/640px）、md（48rem/768px）、lg（64rem/1024px）、xl（80rem/1280px）、2xl（96rem/1536px）。}}
+
+{{知识点4}}{{暗黑模式支持：使用 dark: 前缀为任何工具类添加暗黑模式样式。默认使用 prefers-color-scheme 媒体查询，也可通过 @custom-variant dark (&:where(.dark, .dark *)) 切换为手动控制模式。还支持 data-theme 属性控制和系统主题检测的三路切换方案。}}
+
+{{知识点5}}{{状态变体（Variants）系统：通过前缀为工具类添加条件样式。支持 hover:、focus:、active:、visited:、first:、last:、odd:、even:、required:、disabled:、checked:、invalid: 等伪类变体，以及 before:、after:、placeholder:、selection: 等伪元素变体。变体可以堆叠使用，如 dark:md:hover:bg-fuchsia-600。}}
+
+{{知识点6}}{{颜色系统：Tailwind 包含丰富的内置调色板，每个颜色有 11 个色阶（50 最浅，950 最深）。支持 red、blue、green、purple、pink、indigo、sky、teal、emerald、cyan、orange、amber、yellow、lime、fuchsia、rose 等颜色，以及 slate、gray、zinc、neutral、stone 等中性色。颜色基于 OKLCH 色彩空间定义。}}
+
+{{知识点7}}{{颜色透明度调整：使用斜杠语法如 bg-black/75 调整颜色透明度（75 表示 75% 不透明度）。支持任意值如 bg-pink-500/[71.37%] 和 CSS 变量简写如 bg-cyan-400/(--my-alpha-value)。内置 --alpha() 函数可在 CSS 中调整颜色透明度。}}
+
+{{知识点8}}{{颜色自定义：通过 @theme 指令在 --color-* 命名空间下添加自定义颜色。使用 --color-*: initial 禁用所有默认颜色后完全自定义。支持 @theme inline 定义引用其他变量的颜色。颜色同时暴露为 CSS 变量，可在任意值或内联样式中使用。}}
+
+{{知识点9}}{{Flexbox 布局工具类：flex 创建弹性容器，flex-row/flex-col 设置主轴方向，justify-center/justify-between 控制主轴对齐，items-center/items-start 控制交叉轴对齐，flex-wrap 控制换行，flex-1/flex-auto/flex-none 控制伸缩，grow/shrink 控制增长和收缩。}}
+
+{{知识点10}}{{Grid 布局工具类：grid 创建网格容器，grid-cols-1 到 grid-cols-12 定义列数，col-span-* 控制列跨度，grid-rows-* 定义行数，row-span-* 控制行跨度，gap-* 设置间距，place-items-center 控制对齐，grid-flow-col/grid-flow-row 控制自动放置方向。}}
+
+{{知识点11}}{{间距系统：Tailwind 使用统一的间距比例尺。p-* 设置内边距，m-* 设置外边距。支持方向限定：px-*/py-*（水平/垂直）、pt-*/pr-*/pb-*/pl-*（四边）、ms-*/me-*（逻辑属性）。使用 --spacing-* 主题变量自定义间距比例。}}
+
+{{知识点12}}{{Typography 工具类：text-xs 到 text-9xl 控制字号，font-thin 到 font-black 控制字重，font-sans/font-serif/font-mono 控制字体族，tracking-tighter 到 tracking-widest 控制字间距，leading-none 到 leading-loose 控制行高，uppercase/lowercase/capitalize 控制文本转换。}}
+
+{{知识点13}}{{边框与圆角：border/border-2/border-4/border-8 设置边框宽度，border-color 设置颜色，rounded-sm 到 rounded-full 设置圆角。支持单边圆角如 rounded-t-lg、rounded-r-xl。使用 ring-* 创建轮廓环效果，outline-* 创建外轮廓。}}
+
+{{知识点14}}{{阴影效果：shadow-xs 到 shadow-2xl 设置盒子阴影大小，shadow-inner 设置内阴影，shadow-{color} 设置阴影颜色。内置 drop-shadow-* 滤镜阴影。支持 inset-shadow-* 内嵌阴影和自定义阴影值。阴影颜色通过 CSS 变量组合实现叠加。}}
+
+{{知识点15}}{{动画工具类：animate-spin（旋转加载）、animate-ping（雷达波纹）、animate-pulse（淡入淡出骨架屏）、animate-bounce（弹跳效果）、animate-none（禁用动画）。使用 @theme 中的 --animate-* 变量自定义动画及关键帧。motion-safe: 和 motion-reduce: 变体支持减弱动效偏好。}}
+
+{{知识点16}}{{过渡效果：transition 默认过渡颜色、背景色、边框、阴影、变换、滤镜等属性（150ms）。transition-all 过渡所有属性。transition-colors 仅过渡颜色相关属性。transition-opacity、transition-shadow、transition-transform 提供特定属性过渡。duration-* 控制时长，ease-* 控制缓动函数。}}
+
+{{知识点17}}{{容器查询（Container Queries）：使用 @container 标记元素为 inline-size 容器，然后用 @sm、@md 等变体根据容器大小设置样式。支持 @max-sm 等最大宽度变体、@sm:@max-md 范围查询。@container/{name} 命名容器实现嵌套容器查询。@container-size 标记尺寸容器支持 cqb 等单位。}}
+
+{{知识点18}}{{任意值（Arbitrary Values）：使用方括号语法 top-[117px]、bg-[#bada55]、text-[22px] 生成自定义值的工具类。支持 calc() 如 max-h-[calc(100dvh-(--spacing(6)))]。CSS 变量简写 fill-(--my-brand-color) 等同于 fill-[var(--my-brand-color)]。空格用下划线代替。}}
+
+{{知识点19}}{{任意属性（Arbitrary Properties）：使用方括号语法 [mask-type:luminance] 创建完全自定义的 CSS 属性工具类。支持 CSS 变量定义如 [--scroll-offset:56px] lg:[--scroll-offset:44px]。可在任意属性上使用变体修饰符。}}
+
+{{知识点20}}{{Group 和 Peer 模式：在父元素上添加 group 类，子元素使用 group-hover:、group-focus: 等变体响应父元素状态。group/{name} 命名区分嵌套组。peer 类用于响应兄弟元素状态，如 peer-invalid: 设置验证样式。group-has-* 和 peer-has-* 根据后代状态样式化。}}
+
+{{知识点21}}{{:has() 变体：使用 has-* 变体根据后代元素的状态或内容样式化父元素。如 has-checked:bg-indigo-50 根据子复选框选中状态改变父元素背景。支持 has-[:focus] 伪类组合和 has-[img] 元素选择器。group-has-* 和 peer-has-* 扩展到组和兄弟关系。}}
+
+{{知识点22}}{{@apply 指令：在自定义 CSS 中内联已有的工具类。如 .select2-dropdown { @apply rounded-b-lg shadow-md }。适用于第三方库样式覆盖场景。在 Vue/Svelte 组件的 <style> 块中使用时需要 @reference 指令导入主题变量以避免重复输出 CSS。}}
+
+{{知识点23}}{{@utility 指令：注册自定义工具类，支持 hover、focus、lg 等变体。如 @utility tab-4 { tab-size: 4 }。@custom-variant 指令添加自定义变体，如 @custom-variant theme-midnight (&:where([data-theme="midnight"] *))。@variant 指令在 CSS 中应用 Tailwind 变体。}}
+
+{{知识点24}}{{@source 指令：显式指定 Tailwind 自动内容检测未覆盖的源文件路径。如 @source "../node_modules/@my-company/ui-lib"。Tailwind 扫描项目文件寻找类名，自动生成所需 CSS，确保只输出实际使用的样式。}}
+
+{{知识点25}}{{CSS 层级（Layers）：Tailwind 使用 @layer theme、base、components、utilities 四个 CSS 层级。@layer base 添加基础样式（如 h1 字号），@layer components 添加组件类（如 .btn、.card）。层级确保工具类始终可覆盖组件样式，组件样式可覆盖基础样式。}}
+
+{{知识点26}}{{主题变量命名空间：@theme 中的变量按命名空间分类，自动生成对应工具类。--color-* 生成颜色工具类，--font-* 生成字体族，--text-* 生成字号，--font-weight-* 生成字重，--tracking-* 生成字间距，--leading-* 生成行高，--radius-* 生成圆角，--shadow-* 生成阴影，--animate-* 生成动画。}}
+
+{{知识点27}}{{断点自定义：使用 @theme 中的 --breakpoint-* 变量自定义断点。如 --breakpoint-xs: 30rem 或 --breakpoint-3xl: 120rem。使用 --breakpoint-*: initial 禁用所有默认断点后从头定义。注意始终使用相同单位（rem）以确保排序正确。}}
+
+{{知识点28}}{{Vite 集成：Tailwind CSS v4 推荐通过 @tailwindcss/vite 插件集成。安装 npm install tailwindcss @tailwindcss/vite，在 vite.config.ts 中添加 tailwindcss() 插件，在 CSS 文件中 @import "tailwindcss" 即可。支持 Laravel、SvelteKit、React Router、Nuxt、SolidJS 等框架。}}
+
+{{知识点29}}{{过滤器与变换：blur-sm 到 blur-3xl 控制模糊，brightness-* 控制亮度，contrast-* 控制对比度，grayscale 控制灰度，invert 控制反转，saturate-* 控制饱和度，sepia 控制褐色滤镜。使用 CSS 变量组合多个滤镜效果。transform、translate、scale、rotate 控制 2D 变换。}}
+
+{{知识点30}}{{滚动与溢出：overflow-auto/hidden/scroll/visible 控制溢出，scroll-smooth 启用平滑滚动，scroll-snap-type 控制滚动捕捉，snap-x/snap-y 设置捕捉方向，snap-start/snap-center/snap-end 设置捕捉对齐。overscroll-contain 防止滚动传播。}}
+
+{{知识点31}}{{表格与列表：table-auto/table-fixed 控制表格布局，border-collapse/border-separate 控制边框合并。list-disc/list-decimal/list-none 控制列表样式，list-inside/list-outside 控制列表标记位置。使用 divide-* 在子元素间添加分隔线。}}
+
+{{知识点32}}{{表单样式：accent-* 设置表单控件强调色，caret-* 设置光标颜色。appearance-none 移除默认表单样式。placeholder:text-gray-400 设置占位符样式。file: 变体设置文件输入按钮样式，autofill: 变体设置自动填充样式。form-* 变体可应用于 @tailwindcss/forms 插件。}}
+
+{{知识点33}}{{尺寸工具类：w-* 和 h-* 设置宽高，size-* 同时设置宽高。min-w-*/max-w-* 和 min-h-*/max-h-* 设置最小最大尺寸。支持百分比、视口单位（vw/vh/dvw/dvh）、auto、fit-content、min-content、max-content 等值。aspect-video 和 aspect-square 设置宽高比。}}
+
+{{知识点34}}{{定位与层级：static/relative/absolute/fixed/sticky 控制定位方式，top-*/right-*/bottom-*/left-* 设置偏移，inset-* 同时设置四边。z-0 到 z-50 控制层叠顺序，z-auto 使用自动值。float-left/float-right 控制浮动，clear-both 清除浮动。}}
+
+{{知识点35}}{{可见性与显示：hidden 隐藏元素（display:none），invisible 保持空间但不可见。block/inline-block/inline/flex/grid/table 控制 display 类型。opacity-0 到 opacity-100 控制透明度。pointer-events-none 禁用鼠标事件，cursor-* 改变光标样式。}}
+
+{{知识点36}}{{响应式设计中的范围查询：使用 max-sm:、max-md: 等最大宽度变体限制样式到特定断点以下。组合 md:max-xl:flex 实现范围查询（仅在 md 到 xl 之间生效）。md:max-lg:flex 精确针对单一断点。支持 min-[320px]: 和 max-[600px]: 任意值断点。}}
+
+{{知识点37}}{{类组合（Class Composition）：多个工具类可组合使用同一 CSS 属性。如 blur-sm 和 grayscale 都使用 filter 属性，Tailwind 通过 CSS 变量使它们可叠加。每个效果设置对应的 CSS 变量，filter 属性引用所有变量并回退到无值。此方法同样用于渐变、阴影颜色、变换等。}}
+
+{{知识点38}}{{--spacing() 函数：在 CSS 中使用 --spacing(4) 生成基于主题的间距值，编译为 calc(var(--spacing) * 4)。可在任意值中结合 calc() 使用，如 py-[calc(--spacing(4)-1px)]。--alpha() 函数在 CSS 中调整颜色透明度，编译为 color-mix()。}}
+
+{{知识点39}}{{不透明度与混色模式：opacity-* 控制元素整体透明度。mix-blend-mode 设置混合模式（如 mix-blend-multiply、mix-blend-screen）。background-blend-mode 设置背景混合模式。mask-* 系列工具类控制遮罩裁剪、合成、图像、模式、原点等。}}
+
+{{知识点40}}{{Tailwind CSS v3 到 v4 迁移要点：配置从 JavaScript (tailwind.config.js) 迁移到 CSS (@theme 指令)；@tailwindcss/postcss 和 @tailwindcss/vite 替代旧的 PostCSS 插件；@config 和 @plugin 指令用于兼容旧配置和插件；theme() 函数已弃用，推荐使用 CSS 主题变量；content 配置通过 @source 指令替代。}}

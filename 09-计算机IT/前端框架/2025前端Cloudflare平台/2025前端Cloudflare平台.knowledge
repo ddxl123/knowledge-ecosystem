@@ -1,0 +1,103 @@
+# 2025前端Cloudflare平台
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{Cloudflare Workers概述：Cloudflare Workers是Cloudflare的无服务器(Serverless)计算平台，允许开发者在全球300+数据中心部署和运行代码，无需管理基础设施。支持JavaScript、TypeScript、Python、Rust等多种语言，通过WebAssembly扩展语言支持。每个请求在隔离的V8沙箱中执行，冷启动时间极低（毫秒级），适合构建API、全栈应用和边缘计算逻辑。}}
+
+{{知识点2}}{{Workers运行时特性：Workers运行时基于V8引擎（与Chrome/Node.js相同引擎），但不是完整的Node.js环境。不支持Node.js原生模块（如fs、net），而是实现了Web标准API（如fetch、Request、Response、URL、crypto等）。Worker代码必须是ES模块格式，导出一个fetch处理函数。每次请求有CPU时间限制（免费版10ms/次，付费版可达30s/次），但Wall Clock时间无限制（可等待异步操作）。}}
+
+{{知识点3}}{{Workers静态资源(Static Assets)：2025年Workers支持直接部署静态资源到Cloudflare的CDN和缓存网络。前端构建产物（HTML、CSS、JS、图片等）可直接托管在Workers上，结合Pages Functions实现全栈应用。静态资源自动享受全球CDN加速和边缘缓存，无需额外配置。}}
+
+{{知识点4}}{{Workers框架支持：Workers原生支持主流前端框架，包括React、Vue、SvelteKit、Next.js、Astro、React Router、Nuxt、Remix、Angular等。每个框架都有官方框架指南(Framework Guides)，通过create-cloudflare(C3)工具可快速创建项目模板。框架应用可部署为全栈应用，后端逻辑运行在Workers上。}}
+
+{{知识点5}}{{Workers Bindings(绑定)：Bindings是Workers连接外部服务的核心机制，通过wrangler.jsonc配置文件声明绑定。支持的绑定类型包括：KV Namespace（键值存储）、D1 Database（SQL数据库）、R2 Bucket（对象存储）、Durable Objects（有状态对象）、Queues（消息队列）、AI（AI推理）、Vectorize（向量数据库）、Hyperdrive（数据库连接池）等。绑定在Worker代码中通过env对象访问。}}
+
+{{知识点6}}{{Workers Cron Triggers(定时触发器)：Workers支持Cron Triggers，可以按Cron表达式定时执行Worker代码。适用于定时任务、数据同步、定期报告等场景。配置方式为在wrangler.jsonc中添加triggers.crons数组。每个Cron Trigger执行有独立的CPU时间限制。免费计划限制为5个Cron Trigger，付费计划可达250个。}}
+
+{{知识点7}}{{Workers Smart Placement(智能放置)：Smart Placement是Workers的延迟优化功能，自动将Worker放置在离后端数据源（如数据库、外部API）最近的Cloudflare数据中心执行，而非默认的离用户最近的位置。适用于API代理、数据聚合等后端密集型场景，可显著降低端到端延迟。通过wrangler.jsonc中的placement.mode = "smart"启用。}}
+
+{{知识点8}}{{Workers定价模型：Workers提供免费版和付费版(Standard)。免费版：每天100,000次请求，每次10ms CPU时间。付费版：$5/月起，包含1000万次请求/月，每次30ms CPU时间，超出部分按$0.30/百万次请求计费。无出口带宽(egress)费用，这是相比AWS Lambda等竞品的显著优势。Pages Functions与Workers共享相同的计费模型。}}
+
+{{知识点9}}{{Cloudflare Pages概述：Cloudflare Pages是面向前端开发者的全栈部署平台，可将静态网站和全栈应用一键部署到Cloudflare全球网络。支持三种部署方式：Git集成（连接GitHub/GitLab自动部署）、直接上传(Direct Upload)、C3命令行工具创建。每次部署自动生成预览URL，支持一键回滚到历史版本。免费计划每月500次部署。}}
+
+{{知识点10}}{{Pages Functions：Pages Functions允许在Pages项目中添加服务端逻辑，无需独立服务器。Functions以文件系统路由方式定义（/functions目录下），支持中间件、参数路由等。底层运行在Workers运行时上，可使用所有Workers Bindings连接D1、KV、R2等服务。Functions与静态资源在同一域名下，避免CORS问题。}}
+
+{{知识点11}}{{Pages框架指南：Pages为每个主流框架提供详细的部署指南，包括React（Vite）、Vue、SvelteKit、Next.js、Astro、Nuxt、Hugo、Gatsby、Angular、Remix、Solid等。框架构建命令和输出目录在Pages项目设置中配置，支持自定义构建命令和环境变量。部分框架（如Next.js）需要使用@cloudflare/next-on-pages适配器。}}
+
+{{知识点12}}{{Pages回滚与重定向：Pages支持即时回滚(Rollbacks)，可将生产环境一键恢复到任意历史部署版本。支持配置重定向规则(redirects)，通过_redirects文件或Pages Dashboard设置301/302重定向、通配符重定向和代理(proxying)规则。还支持自定义域名、自定义404页面、环境变量管理等功能。}}
+
+{{知识点13}}{{Cloudflare R2概述：R2是Cloudflare的对象存储服务，与Amazon S3 API兼容。最大的卖点是零出口带宽费用(no egress fees)，存储和请求费用远低于AWS S3。适用于图片/视频存储、数据湖、机器学习模型存储、备份等场景。数据存储在Cloudflare全球网络中，支持通过公共URL直接访问或通过Workers绑定访问。}}
+
+{{知识点14}}{{R2核心功能：R2支持S3兼容API（可通过AWS SDK直接使用）、公共桶(Public Buckets)直接暴露内容到互联网、CORS跨域配置、位置提示(Location Hints)指定数据主存储区域、桶范围令牌(Bucket Scoped Tokens)实现细粒度访问控制。支持多部分上传(Multipart Upload)处理大文件，以及对象生命周期规则自动管理数据过期。}}
+
+{{知识点15}}{{R2定价：R2免费额度包括：每月10GB存储、每月100万次A类操作（写入）、每月1000万次B类操作（读取）。超出部分：存储$0.015/GB/月，A类操作$4.50/百万次，B类操作$0.36/百万次。最关键的是：出口带宽完全免费，这使得R2在CDN、媒体分发等场景下极具成本优势。}}
+
+{{知识点16}}{{Cloudflare D1概述：D1是Cloudflare的原生无服务器SQL数据库，基于SQLite语义构建。支持标准SQL语法，可通过Workers绑定或HTTP API访问。免费计划可创建数千个数据库（用于多租户隔离），定价基于查询量和存储量。内置灾难恢复，支持从SQLite文件直接导入数据。2025年D1已GA(正式发布)，性能和稳定性大幅提升。}}
+
+{{知识点17}}{{D1 Time Travel(时间旅行)：Time Travel是D1的备份和时间点恢复功能，允许将数据库恢复到过去30天内的任意一分钟状态。无需手动创建备份快照，系统自动维护WAL(Write-Ahead Log)。当数据误删或损坏时，可通过Time Travel精确恢复到出问题前的状态，极大降低了数据丢失风险。}}
+
+{{知识点18}}{{D1全球读复制(Read Replication)：D1支持全球读复制，通过在不同地理区域创建只读副本(Read Replicas)，将读查询延迟降低到最近副本的数据中心。写操作仍在主数据库执行，读操作自动路由到最近的副本。适用于读多写少的全球应用，可显著提升用户体验。副本同步延迟通常在秒级。}}
+
+{{知识点19}}{{D1 Worker API使用：在Worker中使用D1需要先在wrangler.jsonc中配置d1_databases绑定，然后通过env.DB访问。支持db.prepare()预编译SQL、db.exec()执行多条语句、db.batch()批量执行事务。查询结果包含results数组和meta元数据。支持参数化查询防止SQL注入，支持RETURNING子句获取插入/更新后的数据。}}
+
+{{知识点20}}{{Workers KV概述：KV(Key-Value)是Cloudflare的全球低延迟键值存储，专为高读取量场景优化。数据在全球边缘节点缓存，读取延迟极低（通常<50ms）。适用于缓存API响应、存储用户配置/偏好、存储认证信息等场景。通过Workers绑定或REST API访问。键为字符串，值可以是字符串、ArrayBuffer或ReadableStream。}}
+
+{{知识点21}}{{KV API操作：KV的核心操作包括：put(key, value)写入键值对（支持TTL过期时间）、get(key)读取值（支持getWithMetadata获取元数据）、list()列出所有键（支持前缀过滤和分页）、delete(key)删除键。写入操作通过最终一致性传播到全球，通常在60秒内全球可见。读取操作从最近的边缘节点返回，实现极低延迟。}}
+
+{{知识点22}}{{KV定价与限制：KV免费计划：每月1000次写入、10万次读取、1GB存储。付费计划（$5/月Workers计划包含）：每月100万次写入、1000万次读取、1GB存储。KV的限制包括：单个值最大25MB、单个键最大512字节、每次list最多返回1000个键。KV适合读多写少的场景，写入有最终一致性延迟，不适合需要强一致性的场景。}}
+
+{{知识点23}}{{Durable Objects概述：Durable Objects是Cloudflare的有状态无服务器构建块，每个对象有全局唯一名称和持久化存储。与普通Worker不同，Durable Objects可协调多个客户端之间的交互，适用于协作编辑、实时聊天、多人游戏、AI代理等场景。每个对象自动在首次请求附近创建，空闲时休眠，需要时快速唤醒。支持数百万个对象在全球分布。}}
+
+{{知识点24}}{{Durable Objects SQLite存储：2025年Durable Objects的SQLite存储已GA(正式发布)，新DO类应使用SQLite存储。通过sql.exec()方法执行SQL查询，支持事务、索引等SQLite特性。SQLite存储与DO实例共置，提供强一致性和快速访问。每个DO实例有独立的SQLite数据库，数据量上限为1GB。SQLite存储还支持Storage API的get/put/delete操作。}}
+
+{{知识点25}}{{Durable Objects WebSocket Hibernation：Durable Objects支持WebSocket Hibernation（休眠）模式，允许在不活跃时释放内存，同时保持WebSocket连接。客户端连接断开后重新连接时，DO可快速恢复。配合alarm API可实现定时唤醒执行任务。这使得构建大规模实时应用（聊天室、游戏服务器）更加经济高效。}}
+
+{{知识点26}}{{Cloudflare Queues概述：Queues是Cloudflare的消息队列服务，与Workers集成，提供保证交付(guaranteed delivery)的消息传递。支持Worker到Worker通信、批量处理、延迟消息、死信队列(Dead Letter Queues)等功能。无出口带宽费用。适用于异步任务处理、事件驱动架构、数据管道、微服务间通信等场景。}}
+
+{{知识点27}}{{Queues配置与使用：通过wrangler.jsonc配置queues绑定，创建生产者(Producer)和消费者(Consumer)Worker。生产者通过env.QUEUE.send(message)发送消息，消费者通过queue(batch)处理函数接收。支持批量大小(batch size)和批量等待时间(batching timeout)配置。支持消息重试策略和最大重试次数。还支持Pull Consumers从外部基础设施通过HTTP拉取消息。}}
+
+{{知识点28}}{{Cloudflare Workflows概述：Workflows是2025年推出的新产品，用于构建持久化多步骤应用。链式执行多个步骤，自动重试失败任务，状态持久化（可持续数分钟到数周）。支持暂停等待外部事件（如人工审批）。适用于AI应用流水线、数据处理、用户生命周期管理、审批系统等场景。基于Durable Objects构建，提供内置可观测性。}}
+
+{{知识点29}}{{Workflows核心API：Workflows通过WorkflowEntrypoint类定义，run方法接收event和step参数。step.do('name', fn)执行一个步骤并持久化结果；step.waitForEvent('name', {event, timeout})暂停等待外部事件触发；step.sleep('name', duration)暂停指定时间。每个步骤的结果被持久化，失败时自动重试，整个Workflow可从上次成功步骤恢复。}}
+
+{{知识点30}}{{Workers AI概述：Workers AI是Cloudflare的无服务器AI推理平台，在全球GPU上运行开源机器学习模型。提供50+开源模型（文本生成、图像分类、对象检测、语音识别等）。通过env.AI.run(model, params)调用，支持从Workers、Pages或REST API访问。按使用量付费(pay-for-what-you-use)，包含在Workers付费计划中。}}
+
+{{知识点31}}{{AI Gateway：AI Gateway是Cloudflare的AI应用可观测性和控制层，为Workers AI及其他AI提供商（OpenAI、Anthropic等）提供统一的代理层。功能包括：请求缓存（减少重复调用成本）、速率限制、请求重试、模型回退(fallback)、用量分析和日志。通过一个端点路由到不同的AI后端，简化多模型管理。}}
+
+{{知识点32}}{{Vectorize向量数据库：Vectorize是Cloudflare的向量数据库服务，专为AI应用设计。支持语义搜索、推荐系统、异常检测、RAG(检索增强生成)等场景。可与Workers AI配合使用，将文本嵌入(embedding)存储到Vectorize中，然后通过向量相似度搜索检索相关上下文提供给LLM。支持元数据过滤和命名空间隔离。}}
+
+{{知识点33}}{{Hyperdrive数据库连接加速：Hyperdrive是Cloudflare的数据库连接池和缓存服务，解决无服务器环境连接传统数据库（PostgreSQL、MySQL）的连接数爆炸问题。Hyperdrive维护连接池并缓存查询结果，使得Workers可以高效连接到Cloudflare外部的数据库。支持自动连接复用和查询结果缓存，显著降低数据库延迟和连接数。}}
+
+{{知识点34}}{{Wrangler CLI工具：Wrangler是Cloudflare开发平台的命令行工具。核心命令包括：wrangler dev（本地开发服务器，支持热重载）、wrangler deploy（部署Worker到Cloudflare）、wrangler pages deploy（部署Pages项目）、wrangler d1（管理D1数据库）、wrangler r2（管理R2存储桶）、wrangler kv（管理KV命名空间）、wrangler queues（管理队列）。配置文件为wrangler.jsonc或wrangler.toml。}}
+
+{{知识点35}}{{Wrangler配置文件(wrangler.jsonc)：wrangler.jsonc是Worker项目的核心配置文件，支持JSON with Comments格式。主要配置项包括：name（Worker名称）、main（入口文件路径）、compatibility_date（运行时兼容日期）、compatibility_flags（兼容性标志）、bindings（各种服务绑定）、triggers（Cron触发器）、placement（Smart Placement）、observability（可观测性）。环境特定配置通过[env.production]等方式定义。}}
+
+{{知识点36}}{{C3项目创建工具(create-cloudflare)：C3是Cloudflare的项目脚手架工具，通过npx create-cloudflare@latest运行。交互式选择模板（Workers、Pages、各类框架），自动初始化项目结构、安装依赖、配置wrangler。支持的模板包括Hello World Worker、React/Vue/Svelte应用、API服务、定时任务等。创建后可通过wrangler dev立即本地开发。}}
+
+{{知识点37}}{{Workers本地开发(wrangler dev)：wrangler dev启动本地开发服务器，模拟Cloudflare Workers运行时环境。支持热重载(HMR)，代码修改后自动刷新。本地运行时会连接到真实的Cloudflare服务（D1、KV、R2等绑定），实现本地-远程混合开发。支持--local标志强制使用本地模拟器，以及--remote标志连接远程服务。监听默认端口8787。}}
+
+{{知识点38}}{{Workers环境与Secrets：Workers支持多环境部署（staging、production等），每个环境可有不同的变量和绑定配置。环境变量通过vars配置，敏感信息通过wrangler secret put命令设置Secrets（不在配置文件中明文存储）。在代码中通过env.VARIABLE_NAME访问环境变量和Secrets。Pages项目通过Dashboard或wrangler pages secret管理环境变量。}}
+
+{{知识点39}}{{Workers可观测性(Observability)：Workers提供内置的可观测性功能，包括实时日志(Logs)和指标分析(Metrics & Analytics)。通过wrangler tail命令实时查看Worker日志。Dashboard中可查看请求数、错误率、CPU时间、延迟分布等指标。在wrangler.jsonc中通过observability.enabled = true启用增强日志，支持结构化日志和自定义日志级别。}}
+
+{{知识点40}}{{Cloudflare全球网络：Workers和Pages运行在Cloudflare的全球网络上，覆盖300+城市的数据中心。每个请求默认在离用户最近的边缘节点执行，实现极低延迟。Cloudflare的Anycast网络技术确保请求自动路由到最近的数据中心。对于全球分布的应用，无需手动配置多区域部署，代码自动在全球执行。}}
+
+{{知识点41}}{{Workers与传统Serverless对比：相比AWS Lambda、Google Cloud Functions等传统Serverless平台，Workers的优势包括：1)无冷启动（毫秒级启动）；2)无出口带宽费用；3)更简单的部署模型（一条命令部署）；4)Web标准API（无需学习特定SDK）；5)更细粒度的计费（按请求计费而非按100ms计费）。劣势包括：无Node.js完整API、CPU时间限制、不支持长时间运行任务（但Workflows弥补了此不足）。}}
+
+{{知识点42}}{{R2与S3 API兼容性：R2实现了S3兼容API，意味着现有的AWS S3 SDK和工具（如boto3、aws-cli、s3cmd等）可以直接连接R2，只需更改endpoint URL。这使得从S3迁移到R2非常简单，通常只需修改endpoint和认证信息。支持的操作包括：GetObject、PutObject、DeleteObject、ListObjects、MultipartUpload等核心S3操作。}}
+
+{{知识点43}}{{D1与传统数据库对比：D1相比传统数据库（PostgreSQL、MySQL）的特点：1)基于SQLite，SQL语法兼容但不完全相同；2)无服务器架构，无需管理实例；3)自动扩展，按查询量计费；4)内置Time Travel备份；5)支持全球读复制。限制包括：单数据库最大10GB、不支持存储过程/触发器、不支持外键级联删除（需手动处理）、并发写入有排队机制。}}
+
+{{知识点44}}{{Durable Objects vs KV vs D1选型：选择Cloudflare存储方案的指南：KV适合读多写少的简单键值数据（配置、缓存），延迟最低但有最终一致性；D1适合结构化关系数据（SQL查询），支持复杂查询但延迟比KV高；Durable Objects适合需要强一致性和协调的有状态场景（实时协作、游戏），每个实例独立但有1GB存储上限。三者可组合使用。}}
+
+{{知识点45}}{{Workers Cron与Queue组合模式：一种常见的架构模式是：Cron Trigger Worker定期扫描数据源，将任务发送到Queue，Queue Consumer Worker并行处理任务。这种模式利用了Cron的定时能力和Queue的异步处理能力，实现了可靠的批处理流水线。支持死信队列处理失败消息，支持批量处理优化吞吐量。}}
+
+{{知识点46}}{{Workers AI + RAG架构：使用Workers AI和Vectorize构建RAG(检索增强生成)应用的架构：1)将文档文本通过Workers AI的嵌入模型生成向量；2)存储到Vectorize向量数据库；3)用户查询时，先通过Vectorize相似度搜索检索相关文档；4)将检索到的上下文和用户问题一起发送给LLM生成回答。整个流程可在单个Worker中完成。}}
+
+{{知识点47}}{{Cloudflare Images与Stream：Cloudflare Images是图像处理服务，支持上传、调整大小、优化和分发图像。Cloudflare Stream是视频服务，支持上传、转码、存储和流式播放视频。两者可与R2配合使用，R2存储原始文件，Images/Stream处理和分发。Images支持AVIF/WebP自动转换，Stream支持HLS自适应码率播放。}}
+
+{{知识点48}}{{Cloudflare Zaraz：Zaraz是Cloudflare的第三方工具管理服务，将Google Analytics、Facebook Pixel、Hotjar等第三方脚本从客户端迁移到Cloudflare边缘执行。优势包括：提升页面加载速度（减少客户端JS）、增强隐私保护（数据不直接发送到第三方）、简化合规管理。通过Workers在服务端执行第三方工具逻辑，前端只需加载轻量级Zaraz脚本。}}
+
+{{知识点49}}{{Workers安全特性：Workers提供多层安全机制：1)V8沙箱隔离，每个请求独立执行；2)自动HTTPS/TLS加密；3)DDoS防护（Cloudflare网络级别）；4)WAF(Web Application Firewall)规则；5)访问策略(Access Policies)限制Worker访问；6)Secrets安全管理敏感信息；7)CORS配置控制跨域访问。Workers代码不直接访问文件系统或网络套接字，安全性高于传统服务器。}}
+
+{{知识点50}}{{Cloudflare开发者平台生态全景：2025年Cloudflare开发者平台形成完整的全栈开发生态：计算层(Workers)、前端部署(Pages)、对象存储(R2)、SQL数据库(D1)、键值存储(KV)、有状态对象(Durable Objects)、消息队列(Queues)、工作流(Workflows)、AI推理(Workers AI)、向量数据库(Vectorize)、数据库加速(Hyperdrive)、图像处理(Images)、视频服务(Stream)、AI代理控制(AI Gateway)、第三方工具管理(Zaraz)。所有服务通过Bindings无缝集成，统一计费，零出口带宽费用。}}

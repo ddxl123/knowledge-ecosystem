@@ -1,0 +1,83 @@
+# 2025前端前端WebSocketStream
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{WebSocketStream 是 WebSockets API 的一部分，是一个基于 Promise 的 API，用于连接 WebSocket 服务器。它使用 Streams API 来发送和接收数据，可以利用流的背压（backpressure）机制自动调节读写速度，避免应用中出现数据瓶颈。}}
+
+{{知识点2}}{{WebSocketStream 是实验性技术，目前尚未纳入任何正式规范。标准化工作在 WHATWG websockets 仓库中进行（PR #48）。在生产环境中使用需谨慎，浏览器支持有限且 API 可能变更。}}
+
+{{知识点3}}{{WebSocketStream 与传统 WebSocket 的核心区别：传统 WebSocket 基于事件（onmessage/onopen/onclose），而 WebSocketStream 基于 Promise 和 Streams API，提供更现代的异步编程模型。}}
+
+{{知识点4}}{{WebSocketStream 构造函数语法：new WebSocketStream(url) 或 new WebSocketStream(url, options)。url 参数为 WebSocket 服务器地址，允许的协议方案为 "ws"、"wss"、"http" 和 "https"。}}
+
+{{知识点5}}{{WebSocketStream 构造函数的 options 参数支持两个可选属性：protocols（子协议字符串或字符串数组）和 signal（AbortSignal 实例，用于在握手完成前中止连接）。}}
+
+{{知识点6}}{{protocols 选项用于指定客户端希望使用的子协议，如 "amqp" 或 "mqtt"。子协议可从 IANA WebSocket Subprotocol Name Registry 中选择，也可以是客户端和服务器共同理解的自定义名称。}}
+
+{{知识点7}}{{signal 选项接受一个 AbortSignal 对象，主要用于实现连接超时。它仅在连接建立前（即 opened promise 解析前）有效，连接建立后对 signal 的中止不会关闭已建立的连接。}}
+
+{{知识点8}}{{使用 AbortSignal.timeout() 实现连接超时示例：new WebSocketStream("wss://example.com/queue", { signal: AbortSignal.timeout(5000) })，如果握手超过 5 秒未完成则自动中止。}}
+
+{{知识点9}}{{如果 URL 方案不是 "ws"、"wss"、"http" 或 "https"，构造函数会抛出 SyntaxError DOMException。}}
+
+{{知识点10}}{{WebSocketStream 的 url 只读属性返回创建实例时传入的 WebSocket 服务器 URL 字符串。}}
+
+{{知识点11}}{{opened 是 WebSocketStream 的只读属性，返回一个 Promise。当 WebSocket 连接成功打开时，Promise 会解析为一个包含 readable、writable、extensions 和 protocol 属性的对象。如果连接失败，Promise 会被拒绝。}}
+
+{{知识点12}}{{opened 解析对象的 readable 属性是一个 ReadableStream 实例，用于接收服务器发送的数据。调用其 getReader() 方法可获得 ReadableStreamDefaultReader 来逐块读取数据。}}
+
+{{知识点13}}{{opened 解析对象的 writable 属性是一个 WritableStream 实例，用于向服务器发送数据。调用其 getWriter() 方法可获得 WritableStreamDefaultWriter 来逐块写入数据。}}
+
+{{知识点14}}{{opened 解析对象的 extensions 属性表示应用于 WebSocketStream 的扩展，目前尚未定义扩展，返回空字符串，未来可能会定义。}}
+
+{{知识点15}}{{opened 解析对象的 protocol 属性表示打开当前 WebSocket 连接所使用的子协议字符串。如果未使用子协议，则返回空字符串。}}
+
+{{知识点16}}{{closed 是 WebSocketStream 的只读属性，返回一个 Promise。当 WebSocket 连接关闭时，Promise 解析为包含 closeCode（关闭代码）和 reason（关闭原因字符串）的对象。如果连接未正常关闭，Promise 会被拒绝。}}
+
+{{知识点17}}{{WebSocketStream 的 close() 方法用于关闭 WebSocket 连接。可选接受一个 options 对象，包含 closeCode（关闭代码数字）和 reason（人类可读的关闭原因字符串，最大长度 123 字节，自动 UTF-8 编码）。}}
+
+{{知识点18}}{{close() 方法的有效关闭代码为 1000，以及 3000 到 4999 之间的任意数字。如果 reason 超过 123 字节限制，会抛出 SyntaxError DOMException。}}
+
+{{知识点19}}{{关闭底层的 WritableStream 或 WritableStreamDefaultWriter 也会关闭 WebSocket 连接，这是另一种隐式关闭方式。}}
+
+{{知识点20}}{{WebSocketStream 使用流的背压（backpressure）机制自动调节数据读写速率。当数据到达速度超过客户端读取速度时，底层 Streams API 会向服务器施加背压；write() 操作仅在安全时才会执行。}}
+
+{{知识点21}}{{背压通过内部队列和排队策略实现。队列有一个高水位线（high water mark），当队列中未处理的数据块总大小超过高水位线时，desiredSize 降为零或负数，流会自动减慢数据生成速度。}}
+
+{{知识点22}}{{WebSocketStream 在 Web Workers 中可用，这使得可以在后台线程中处理 WebSocket 数据流，避免阻塞主线程。}}
+
+{{知识点23}}{{使用 readable.getReader() 获取的 ReadableStreamDefaultReader，通过 while 循环反复调用 reader.read() 来读取数据，返回 { value, done } 对象。当 done 为 true 时表示流已结束。}}
+
+{{知识点24}}{{使用 writable.getWriter() 获取的 WritableStreamDefaultWriter，通过 writer.write(data) 方法向 WebSocket 连接写入数据。write 操作返回 Promise，应在 try...catch 中处理可能的错误。}}
+
+{{知识点25}}{{WebSocketStream 的特性检测方式：使用 "WebSocketStream" in self 判断当前环境是否支持该 API。}}
+
+{{知识点26}}{{WebSocketStream 的 opened promise 在连接成功后解析，这意味着不需要像传统 WebSocket 那样监听 onopen 事件，直接 await 即可获得可读写流。}}
+
+{{知识点27}}{{WebSocketStream 相比传统 WebSocket 的优势：1) Promise 化的 API 更符合现代异步编程范式；2) 自动背压控制防止数据积压；3) 可与 Streams API 的管道链（pipe chain）组合使用。}}
+
+{{知识点28}}{{Streams API 的管道链机制允许使用 pipeThrough() 将流通过 TransformStream 进行数据格式转换（如编解码、压缩解压），或使用 pipeTo() 将流导向最终的 WritableStream 目标。}}
+
+{{知识点29}}{{WebSocketStream 数据以块（chunk）的形式在流中传输。一个块可以是单个字节，也可以是一定大小的 TypedArray。单个流可以包含不同大小和类型的块。}}
+
+{{知识点30}}{{ReadableStream 支持 tee 操作（ReadableStream.tee()），可以将一个可读流分成两个相同的副本，由两个独立的 reader 分别读取。这在需要同时将数据流式传输到浏览器和缓存的 Service Worker 场景中非常有用。}}
+
+{{知识点31}}{{WebSocketStream 的连接关闭处理模式：使用 wss.closed.then() 或 await wss.closed 来监听连接关闭事件，获取关闭代码和原因。而传统 WebSocket 使用 onclose 事件回调。}}
+
+{{知识点32}}{{WebSocketStream 的错误处理：opened promise 在连接失败时会被拒绝，应使用 try...catch 包裹 await wss.opened 来处理连接错误。写入操作也应在 try...catch 中处理流已关闭后的写入错误。}}
+
+{{知识点33}}{{WebSocketStream 设计文档由 Chrome 团队维护，提出了将 Streams API 集成到 WebSocket API 中的设计方案，旨在解决传统 WebSocket 缺乏流量控制的问题。}}
+
+{{知识点34}}{{WebSocketStream 与传统 WebSocket 的对比：传统 WebSocket 使用 onmessage 回调接收数据，无法暂停接收，高速数据场景下可能导致内存溢出；WebSocketStream 通过背压机制天然解决了这个问题。}}
+
+{{知识点35}}{{WebSocketStream 的 close() 方法与传统 WebSocket 的 close() 方法的区别：WebSocketStream 的 close() 不返回值，关闭信息通过 closed promise 获取；传统 WebSocket 的 close() 也没有返回值，但关闭信息通过 onclose 事件的 CloseEvent 获取。}}
+
+{{知识点36}}{{WebSocketStream 的 protocols 选项等同于传统 WebSocket 构造函数的第二个参数，用于协商子协议。两者功能相同，但 WebSocketStream 中以 options 对象的形式传递。}}
+
+{{知识点37}}{{WebSocketStream 可以与 async/await 语法完美配合：await wss.opened 获取读写流，await reader.read() 读取数据，await writer.write() 写入数据，await wss.closed 监听关闭。整个 API 设计为 Promise-first。}}
+
+{{知识点38}}{{WebSocketStream 的安全最佳实践：生产环境中应使用 wss://（WebSocket Secure）协议而非 ws://，确保数据传输加密。localhost 开发环境可使用 ws://。}}
+
+{{知识点39}}{{WebSocketStream 的当前浏览器支持状态：截至 2025 年，主要由 Chromium 内核浏览器（Chrome、Edge）支持，属于实验性功能。Firefox 和 Safari 的支持状态需要查阅最新的兼容性表格。}}
+
+{{知识点40}}{{WebSocketStream 的 opened promise 解析时返回的 readable 和 writable 流，遵循 Streams API 的锁定规则：同一时间只能有一个 reader 读取 readable 流，只能有一个 writer 写入 writable 流。如需切换 reader，需先取消当前 reader。}}

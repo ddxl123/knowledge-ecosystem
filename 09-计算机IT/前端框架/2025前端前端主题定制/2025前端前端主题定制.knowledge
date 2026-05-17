@@ -1,0 +1,163 @@
+# 2025前端前端主题定制
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}
+CSS自定义属性（CSS Custom Properties）是前端主题定制的基础技术。使用双横线前缀声明变量（如 --main-color: #333），通过 var() 函数引用。变量遵循CSS级联规则，可在 :root 上定义全局主题变量，在组件作用域内覆盖。自定义属性区分大小写，支持任何有效的CSS值。
+来源: MDN Web Docs - Using CSS custom properties
+
+{{知识点2}}
+prefers-color-scheme 是CSS媒体特性，用于检测用户操作系统的颜色方案偏好。取值为 light（浅色偏好）和 dark（深色偏好）。通过 @media (prefers-color-scheme: dark) 媒体查询可以为暗色模式提供不同的样式，无需JavaScript干预，是最基础的暗色模式实现方式。
+来源: MDN Web Docs - prefers-color-scheme
+
+{{知识点3}}
+color-scheme CSS属性允许元素声明它能舒适渲染的颜色方案。可选值包括 normal、light、dark、light dark、only light。该属性影响画布表面颜色、滚动条默认颜色、表单控件默认颜色等浏览器提供的UI。自2022年1月起被所有主流浏览器广泛支持。
+来源: MDN Web Docs - color-scheme property
+
+{{知识点4}}
+only关键字用于 color-scheme 属性可禁止浏览器覆盖元素的颜色方案。例如 color-scheme: only light 可以关闭Chrome的Auto Dark Theme功能，防止浏览器自动将页面强制转换为暗色模式，适用于需要精确控制颜色表现的场景。
+来源: MDN Web Docs - color-scheme property
+
+{{知识点5}}
+@media (prefers-color-scheme: dark) 媒体查询可应用于嵌入式SVG和iframe元素。SVG必须以嵌入方式使用（如 img src="circle.svg"），而非内联在HTML中。跨域的svg和iframe元素也允许使用 prefers-color-scheme，嵌入元素会继承父元素的color-scheme。
+来源: MDN Web Docs - prefers-color-scheme
+
+{{知识点6}}
+@property CSS at-rule允许对自定义属性进行更精细的定义。可以关联类型（syntax）、设置默认值（initial-value）和控制继承（inherits）。例如 @property --logo-color { syntax: "<color>"; inherits: false; initial-value: #c0ffee; }，使自定义属性支持类型检查和动画。
+来源: MDN Web Docs - Using CSS custom properties
+
+{{知识点7}}
+Design Tokens（设计令牌）是设计系统中最小的样式单元，代表一个单独的设计决策，如颜色、间距、字体大小。W3C Design Tokens Community Group制定了标准的Design Tokens格式规范（2025.10版），使用JSON文件格式在不同工具之间交换设计令牌数据。
+来源: W3C Design Tokens Format Module 2025.10
+
+{{知识点8}}
+Design Tokens规范定义了Token Properties（令牌属性），包括name（名称）和value（值）两个必需属性，以及description（描述）、type（类型）、extensions（扩展）和deprecated（废弃）等可选属性。令牌名称存在字符限制规则。
+来源: W3C Design Tokens Format Module 2025.10
+
+{{知识点9}}
+Design Tokens中的Group（组）用于组织和结构化令牌。组可以包含属性如 $deprecated 和 $extensions，支持组扩展（Group Extension）实现继承语义。规范明确定义了循环引用检测机制和引用解析规则，使用JSON Pointer进行引用集成。
+来源: W3C Design Tokens Format Module 2025.10
+
+{{知识点10}}
+Design Tokens支持Alias（别名/引用）机制，一个令牌可以引用另一个令牌的值。这实现了令牌间的关联关系，修改源令牌会自动传播到所有引用处。规范支持当前引用语法（推荐）和JSON Pointer两种引用格式。
+来源: W3C Design Tokens Format Module 2025.10
+
+{{知识点11}}
+Composite Design Token（复合设计令牌）是一种特殊类型的令牌，其值由多个属性组成。例如一个阴影令牌可能包含偏移、模糊、颜色等多个子属性。这种结构适合表达需要多个值组合的复杂设计决策。
+来源: W3C Design Tokens Format Module 2025.10
+
+{{知识点12}}
+Tailwind CSS提供dark:变体实现暗色模式。默认使用prefers-color-scheme媒体查询，也支持通过CSS选择器手动切换。在Tailwind CSS v4中，通过 @custom-variant dark (&:where(.dark, .dark *)) 自定义变体，当HTML元素包含dark类时激活暗色模式工具类。
+来源: Tailwind CSS Docs - Dark mode
+
+{{知识点13}}
+Tailwind CSS暗色模式支持三种切换策略：系统主题跟随（默认）、类名切换（.dark类）、数据属性切换（data-theme="dark"）。数据属性方式通过 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *)) 实现。
+来源: Tailwind CSS Docs - Dark mode
+
+{{知识点14}}
+三路主题切换（Light/Dark/System）是现代应用常见需求。实现方式是结合自定义暗色选择器和 window.matchMedia("(prefers-color-scheme: dark)") API。用户选择"light"或"dark"时存储到localStorage，选择"system"时移除localStorage项并跟随系统偏好。为避免FOUC（无样式内容闪烁），切换脚本应内联在head中。
+来源: Tailwind CSS Docs - Dark mode
+
+{{知识点15}}
+FOUC（Flash of Unstyled Content，无样式内容闪烁）是主题切换时的常见问题。用户在暗色模式下刷新页面可能先看到浅色主题再切换到暗色。解决方案包括：在head中内联主题检测脚本、使用cookie传递服务端渲染的主题、利用meta标签预设color-scheme。
+来源: MDN Web Docs - Color scheme
+
+{{知识点16}}
+Design Tokens的三层架构模型是现代设计系统的核心。第一层是Global Tokens（全局令牌），定义原始值如色板颜色；第二层是Alias Tokens（语义令牌），赋予含义如 --color-primary；第三层是Component Tokens（组件令牌），针对具体组件如 --button-bg-color。
+来源: Material Design 3 Color System
+
+{{知识点17}}
+Material Design 3（M3）的颜色系统基于动态色彩（Dynamic Color）。从单一种子颜色（seed color）通过算法自动生成完整的色彩方案，包括Primary、Secondary、Tertiary、Neutral等色组。每组包含不同色调级别，同时生成浅色和深色变体。
+来源: Material Design 3 - Color System
+
+{{知识点18}}
+CSS light-dark() 函数是2024-2025年新增的CSS特性，简化了颜色方案相关的值声明。语法为 light-dark(light-color, dark-color)，自动根据当前活跃的颜色方案选择对应颜色。要求元素声明了 color-scheme: light dark 才能生效。
+来源: MDN Web Docs / CSS Color Level 4
+
+{{知识点19}}
+主题变量的命名规范对可维护性至关重要。推荐使用语义化命名而非具体值命名。例如使用 --color-bg-primary 而非 --color-white，使用 --color-text-muted 而非 --color-gray-500。语义化命名使得主题切换时只需改变量值而无需修改引用处。
+来源: Design Systems社区最佳实践
+
+{{知识点20}}
+CSS变量的级联特性使其天然支持主题切换。通过在不同选择器（如 :root、.dark-theme、.light-theme）上定义不同的变量值，组件使用 var() 引用时会自动获取当前作用域内的值，无需修改组件代码。
+来源: MDN Web Docs - Using CSS custom properties
+
+{{知识点21}}
+CSS-in-JS方案（如styled-components、Emotion）的主题定制通过ThemeProvider组件实现。ThemeProvider将主题对象注入React组件树，组件通过props.theme访问主题变量。暗色模式切换通过替换ThemeProvider的theme prop实现。
+来源: Styled Components官方文档
+
+{{知识点22}}
+Next.js App Router中的主题定制需要特别注意服务端渲染（SSR）问题。推荐使用next-themes库，它通过cookie和data属性实现主题持久化，避免hydration mismatch。支持system偏好检测、自定义属性（如data-theme）和flash-free主题切换。
+来源: Next.js文档 / next-themes
+
+{{知识点23}}
+Vue 3的主题定制可通过provide/inject注入主题配置，结合CSS自定义属性实现。推荐方案是创建useTheme composable，管理主题状态（浅色/深色/跟随系统），通过修改根元素的data属性或class触发CSS变量重定义。
+来源: Vue 3官方文档
+
+{{知识点24}}
+高对比度模式是无障碍访问的重要需求。CSS提供了 prefers-contrast 媒体特性检测用户是否请求更高或更低的对比度。取值包括no-preference、more、less、custom。在Windows上对应高对比度模式，在macOS上对应增加对比度辅助功能设置。
+来源: MDN Web Docs - prefers-contrast
+
+{{知识点25}}
+减少动画偏好也影响主题切换行为。prefers-reduced-motion 媒体特性检测用户是否请求减少动画。主题切换过渡动画应尊重此设置：当用户偏好减少运动时，切换应即时生效而非使用CSS transition或animation。
+来源: MDN Web Docs - prefers-reduced-motion
+
+{{知识点26}}
+CSS Color Level 5引入了 relative color syntax，允许基于已有颜色计算新颜色。例如 oklch(from var(--primary) calc(l - 0.1) c h) 可以基于主色自动生成较暗变体，非常适合主题系统中自动生成颜色层级，减少手动定义大量色值。
+来源: CSS Color Level 5规范
+
+{{知识点27}}
+图片和媒体资源在暗色模式下需要特殊处理。方案包括：使用CSS filter对图片做反色/调暗处理；提供两套图片资源通过picture元素和media查询切换；使用SVG图标配合currentColor自动适配主题色；使用mix-blend-mode实现自动适配。
+来源: CSS-Tricks / Web.dev
+
+{{知识点28}}
+表单控件在主题定制中需要特别关注。color-scheme属性会影响表单控件的默认渲染样式，但自定义样式需要额外处理。暗色模式下需确保输入框背景色、边框、占位符文字、聚焦状态等均有足够的对比度和视觉区分。
+来源: MDN Web Docs - color-scheme
+
+{{知识点29}}
+Sass/SCSS的主题管理通过变量和mixin实现。SCSS变量是编译时确定的，不支持运行时切换。运行时主题切换需配合CSS自定义属性。最佳实践是用SCSS管理编译时常量（断点、字体栈），用CSS变量管理主题相关值（颜色、间距）。
+来源: Sass官方文档
+
+{{知识点30}}
+Tailwind CSS v4的CSS-first配置方式改变了主题定制模式。主题变量通过 @theme 指令在CSS中定义，取代了之前的tailwind.config.js。例如 @theme { --color-primary: #3b82f6; --spacing-18: 4.5rem; }，使主题变量与CSS原生变量体系更紧密集成。
+来源: Tailwind CSS v4文档
+
+{{知识点31}}
+多品牌/白标主题是企业级应用常见需求。实现方式包括：定义主题包（theme package）包含完整的Design Tokens集合；运行时动态加载CSS文件；使用CSS变量层叠实现品牌切换；构建时生成多套主题CSS。推荐使用CSS变量方案以支持运行时无缝切换。
+来源: 设计系统社区最佳实践
+
+{{知识点32}}
+Persisted Theme（持久化主题）的实现涉及三个层次：localStorage持久化用户偏好；系统偏好通过matchMedia API检测；服务端可通过cookie获取主题设置实现SSR时的正确渲染。完整的持久化方案需要处理首次访问、用户选择、系统变化三种场景。
+来源: Web.dev / MDN Web Docs
+
+{{知识点33}}
+CSS @layer（级联层）可用于管理主题相关的样式优先级。将基础样式、主题样式、组件样式放入不同层，通过层顺序控制优先级。例如 @layer base, theme, components; 可确保主题覆盖基础样式，组件样式覆盖主题样式。
+来源: MDN Web Docs - @layer
+
+{{知识点34}}
+CSS color-mix() 函数允许在两个颜色之间混合，可用于主题系统中生成中间色值。例如 color-mix(in oklch, var(--primary) 50%, var(--secondary)) 混合主色和次色。支持指定颜色空间（srgb、oklch、oklab等），为动态主题生成提供强大能力。
+来源: CSS Color Level 5规范
+
+{{知识点35}}
+Viewport元标签中的 color-scheme meta name 可在HTML层面声明页面支持的颜色方案。例如 <meta name="color-scheme" content="light dark"> 告知浏览器页面同时支持浅色和深色方案，使浏览器可提前设置正确的背景色和表单控件样式，减少闪烁。
+来源: MDN Web Docs - HTML meta color-scheme
+
+{{知识点36}}
+Design Tokens工具链包括：Style Dictionary（Amazon开源，将令牌转换为多平台格式）、Token Studio（Figma插件，可视化管理令牌）、Cobalt UI（W3C DTCG规范参考实现）、Tokens Studio for Figma。这些工具实现了设计到开发的自动化流程。
+来源: W3C Design Tokens Community Group / GitHub
+
+{{知识点37}}
+CSS Scope Tree API和@scope规则为组件级主题提供了新的可能。@scope允许限定样式的作用范围，结合CSS变量可在组件内部定义独立的主题作用域，不影响外部样式。这使得微前端场景下的主题隔离成为可能。
+来源: MDN Web Docs - @scope
+
+{{知识点38}}
+色彩无障碍标准（WCAG 2.1/2.2）要求文本与背景的对比度满足特定标准：普通文本至少4.5:1（AA级），大文本至少3:1。主题切换时必须确保两个主题都满足对比度要求。推荐使用OKLCH色彩空间定义色值，因为它更准确地反映人眼感知的亮度。
+来源: WCAG 2.2 / Web.dev
+
+{{知识点39}}
+OKLCH和OKLAB是2024-2025年前端色彩管理的新趋势。与HSL相比，OKLCH在感知均匀性上更优，修改亮度不会影响色相和饱和度。在主题系统中使用OKLCH可以更精确地控制颜色的明暗变体生成，CSS原生支持 oklch() 函数。
+来源: CSS Color Level 4规范
+
+{{知识点40}}
+微前端架构下的主题一致性是复杂挑战。推荐方案：主应用定义全局Design Tokens；子应用通过CSS变量继承主题；使用postMessage或自定义事件同步主题切换；避免子应用使用内联样式覆盖全局主题变量。Module Federation场景下可共享主题配置包。
+来源: 微前端社区实践

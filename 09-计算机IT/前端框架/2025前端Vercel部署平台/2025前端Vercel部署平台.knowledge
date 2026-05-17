@@ -1,0 +1,103 @@
+# 2025前端Vercel部署平台
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{Vercel是什么：Vercel是一个统一的云平台，用于构建、部署和扩展AI驱动的应用程序。它支持静态站点、多租户SaaS、微前端和AI Agent等多种应用类型，被称为"AI Cloud"。}}
+
+{{知识点2}}{{Vercel的核心定位：Vercel将自己定位为AI Cloud，不仅提供传统的前端部署能力，还深度集成AI基础设施，包括v0 AI开发助手、AI SDK、AI Gateway等。}}
+
+{{知识点3}}{{Vercel支持的框架：Vercel对主流前端框架提供一等支持，包括Next.js、SvelteKit、Nuxt、TanStack、Astro、Remix、Vite和Create React App等，通常无需额外配置即可部署。}}
+
+{{知识点4}}{{Next.js与Vercel的关系：Next.js由Vercel公司开发和维护，Vercel对Next.js提供最深度的集成支持，包括Runtime Cache、原生OG图片生成等独有功能。}}
+
+{{知识点5}}{{Git驱动的部署：Vercel支持连接GitHub、GitLab和Bitbucket等Git仓库，每次push自动触发部署，无需手动操作。}}
+
+{{知识点6}}{{预览环境（Preview Environment）：当向非生产分支推送代码或创建PR时，Vercel会自动生成预览部署URL，方便团队在合并前测试和审查变更。每个部署同时生成分支URL和commit URL两种预览链接。}}
+
+{{知识点7}}{{生产环境（Production Environment）：将代码合并到生产分支（通常是main）时自动触发生产部署，Vercel会将生产域名指向新部署，用户立即看到最新版本。}}
+
+{{知识点8}}{{本地开发环境：使用Vercel CLI的vercel link和vercel env pull命令，可以将项目环境变量拉取到本地.env.local文件，实现本地开发与云端环境一致。}}
+
+{{知识点9}}{{自定义环境：Pro和Enterprise团队可创建自定义环境（如staging、QA），每个环境可配置独立的环境变量、绑定域名和分支追踪。}}
+
+{{知识点10}}{{Vercel Functions：Vercel Functions允许在无服务器环境下运行服务端代码，无需管理服务器。它根据流量自动扩缩容，支持Node.js、Python等多种运行时。}}
+
+{{知识点11}}{{Fluid Compute（流体计算）：Vercel的Fluid Compute是混合执行模型，结合了无服务器的灵活性和传统服务器的能力。它支持优化并发、动态扩缩容、后台处理、自动冷启动优化和跨区域故障转移。自2025年4月23日起，新项目默认启用Fluid Compute。}}
+
+{{知识点12}}{{优化并发（Optimized Concurrency）：Fluid Compute允许在单个函数实例内处理多个调用，利用I/O等待时间执行其他请求，减少冷启动、降低延迟并节省计算成本。支持Node.js和Python运行时。}}
+
+{{知识点13}}{{后台处理（Background Processing）：通过waitUntil API，可以在完成用户请求后继续执行后台任务（如日志记录、分析），实现响应式用户体验。}}
+
+{{知识点14}}{{冷启动优化：Fluid Compute通过自动字节码优化和生产部署的函数预热来减少冷启动的影响。}}
+
+{{知识点15}}{{跨区域故障转移：当一个可用区出现问题时，Vercel自动在同一区域的另一个可用区进行故障转移；如果整个区域不可用，则自动将流量重定向到最近的区域。}}
+
+{{知识点16}}{{Vercel CDN：Vercel的CDN是全球分布式网络，拥有126+个接入点（PoPs），覆盖51个国家和20+个Vercel区域。与传统CDN不同，它是框架感知的，能根据构建配置自动应用缓存策略。}}
+
+{{知识点17}}{{增量静态再生成（ISR）：ISR允许在不重新部署的情况下更新静态内容。Vercel缓存页面并以静态方式提供，同时在后台按计划或按请求重新生成页面。}}
+
+{{知识点18}}{{图像优化（Image Optimization）：Vercel自动优化图像以适应Web使用，支持Next.js、SvelteKit、Nuxt和Astro等框架。}}
+
+{{知识点19}}{{路由中间件（Routing Middleware）：中间件代码在请求被处理之前执行，可以修改响应。由于它在缓存之前运行，是个性化静态生成内容的有效方式。所有主流框架均支持。}}
+
+{{知识点20}}{{重写与重定向：Vercel CDN支持Rewrites（将公共URL映射到不同的后端路径）和Redirects（返回新的URL给客户端），以及反向代理外部后端。}}
+
+{{知识点21}}{{构建输出API（Build Output API）：基于文件系统的规范，定义产生Vercel部署的目录结构。主要面向框架作者，用于将自定义框架与Vercel平台功能集成。}}
+
+{{知识点22}}{{Vercel AI SDK：TypeScript工具包，用于构建AI驱动的应用。提供统一API调用任何LLM（如OpenAI、Anthropic），支持文本生成、结构化数据生成、工具调用和流式响应，抽象了不同模型提供商之间的差异。}}
+
+{{知识点23}}{{AI Gateway：Vercel的AI Gateway可以路由到任何AI提供商，并提供自动故障转移能力，确保AI服务的高可用性。}}
+
+{{知识点24}}{{v0 AI开发助手：Vercel的AI驱动开发工具，用于快速迭代想法和生成UI代码。}}
+
+{{知识点25}}{{Vercel Marketplace：提供丰富的集成市场，涵盖AI提供商、数据库、CMS、分析和存储等第三方服务。}}
+
+{{知识点26}}{{Vercel定价计划 - Hobby：免费计划，适合个人项目。包含1M边缘请求/月、100GB快速数据传输/月，支持自动CI/CD、WAF、全球CDN、Fluid Compute和DDoS防护。}}
+
+{{知识点27}}{{Vercel定价计划 - Pro：$20/用户/月，适合团队和生产应用。包含10M边缘请求/月（超出后$2/1M）、1TB快速数据传输/月（超出后$0.15/GB）、$20用量抵扣、更快构建、冷启动预防和团队协作。}}
+
+{{知识点28}}{{Vercel定价计划 - Enterprise：自定义价格，提供高级安全和性能保障。包括SCIM和目录同步、托管WAF规则集（OWASP）、多区域计算和故障转移、99.99% SLA和高级支持。}}
+
+{{知识点29}}{{Web应用防火墙（WAF）：Vercel提供可配置的WAF，支持自定义防火墙规则和IP封禁。Hobby计划最多3条规则，Pro计划最多40条，Enterprise计划最多1000条。}}
+
+{{知识点30}}{{Bot管理：Vercel提供自动化DDoS缓解、AI Bot过滤规则集和Bot Protection规则集。BotID是不可见的CAPTCHA，无需用户手动干预即可防护复杂Bot。Pro计划Deep Analysis检查$1/1000次。}}
+
+{{知识点31}}{{HTTPS和TLS：所有Vercel部署自动配置HTTPS证书，支持TLS 1.2/1.3加密，无需手动管理SSL证书。}}
+
+{{知识点32}}{{滚动发布（Rolling Releases）：Vercel支持以增量方式逐步推出新部署，降低全量发布的风险。}}
+
+{{知识点33}}{{即时回滚（Instant Rollback）：生产环境出现问题时，可以快速回滚到之前的部署版本，实现快速恢复。}}
+
+{{知识点34}}{{版本偏斜保护（Skew Protection）：通过版本锁定确保客户端和服务器使用相同版本的应用程序，防止版本不一致导致的错误。}}
+
+{{知识点35}}{{可观测性套件（Observability）：Vercel提供完整的监控和调试工具，包括Functions性能指标、CPU使用量、节省的GB-Hours等，帮助监控AI工作流和应用性能。}}
+
+{{知识点36}}{{速度洞察（Speed Insights）：在Vercel仪表板中提供Core Web Vitals数据，包括加载速度、响应性和视觉稳定性指标，帮助优化用户体验。}}
+
+{{知识点37}}{{Vercel Analytics：提供详细的网站性能分析，包括热门页面、来源引用和用户人口统计等指标。}}
+
+{{知识点38}}{{Vercel Toolbar：浏览器内工具栏，支持反馈、Feature Flags管理、草稿预览、实时内容编辑、性能/布局/无障碍检查等功能。}}
+
+{{知识点39}}{{Feature Flags（功能标志）：Vercel原生支持Feature Flags，控制应用中功能的可见性，配合Toolbar可实时预览不同标志状态。}}
+
+{{知识点40}}{{草稿模式（Draft Mode）：允许在网站上预览未发布的无头CMS内容，方便内容编辑工作流。}}
+
+{{知识点41}}{{部署保护（Deployment Protection）：保护应用免受未授权访问，支持RBAC（基于角色的访问控制）管理团队权限。}}
+
+{{知识点42}}{{MCP Servers：Vercel支持创建MCP服务器，让AI Agent能够与你的系统进行交互，是构建Agent工具链的重要组成部分。}}
+
+{{知识点43}}{{Vercel Sandbox：为不可信代码提供安全执行环境，适用于需要运行用户提交代码的场景。}}
+
+{{知识点44}}{{声明部署（Claim Deployments）：允许AI Agent部署项目，之后人类开发者可以接管该部署，实现Agent与人类协作的工作流。}}
+
+{{知识点45}}{{Vercel CLI命令行工具：vercel命令用于部署（vercel --prod部署到生产），vercel link用于关联项目，vercel env pull用于拉取环境变量到本地。}}
+
+{{知识点46}}{{多运行时支持：Vercel Functions支持多种运行时（Node.js、Python等），不同路由可以使用不同运行时，满足多样化的技术需求。}}
+
+{{知识点47}}{{流式SSR（Streaming SSR）：Vercel支持流式服务端渲染，允许逐步将HTML发送到客户端，提升首屏加载速度。Next.js、SvelteKit、TanStack、Astro和Remix均支持此特性。}}
+
+{{知识点48}}{{私有区域间网络：Vercel运营私有的低延迟网络，连接各PoPs和计算区域，确保全球范围内的高性能请求加速。}}
+
+{{知识点49}}{{流量负载均衡：Vercel自动进行流量负载均衡和区域故障转移，确保应用的高可用性。}}
+
+{{知识点50}}{{速率限制（Rate Limiting）：Vercel支持请求频率控制，Hobby计划包含1M允许请求/月，Pro计划从$0.50/1M允许请求开始计费。}}

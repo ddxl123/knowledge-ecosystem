@@ -1,0 +1,123 @@
+# 2025前端Nuxt.js入门
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}
+Nuxt.js 是一个基于 Vue.js 的免费开源全栈框架，旨在提供直观、高性能的 Web 应用开发体验。它由 Vue.js 核心团队成员创建，当前最新主要版本为 Nuxt 3/4，底层基于 Vue 3 + Vite 构建，提供类型安全、生产级的全栈 Web 应用开发能力。
+
+{{知识点2}}
+Nuxt.js 的核心优势在于"约定优于配置"的设计理念。通过约定的目录结构，Nuxt 自动化处理路由、代码分割、服务端渲染、自动导入等重复性任务，开发者只需专注于编写业务逻辑和 `.vue` 文件即可。
+
+{{知识点3}}
+Nuxt 默认使用 Vite 作为构建工具，支持开发时的热模块替换（HMR）和生产环境的代码打包。Vite 提供极速的开发服务器启动和模块热更新，显著提升开发体验。
+
+{{知识点4}}
+Nuxt 内置零配置 TypeScript 支持。框架会自动生成类型定义和 `tsconfig.json`，开发者无需手动学习 TypeScript 配置即可编写类型安全的代码，享受 IDE 的自动补全和类型检查。
+
+{{知识点5}}
+Nuxt 支持服务端渲染（SSR）作为默认渲染模式。SSR 将 Vue 组件在服务端渲染为 HTML 字符串，直接发送给浏览器，带来更快的首屏加载时间、更好的 SEO 表现和更好的无障碍访问支持。
+
+{{知识点6}}
+SSR 的核心优势包括：更快的初始页面加载（用户可立即看到渲染好的 HTML）；更好的搜索引擎优化（爬虫可直接索引 HTML 内容）；在低性能设备上表现更好（减少客户端 JavaScript 执行量）；更好的无障碍性（屏幕阅读器可直接读取内容）。
+
+{{知识点7}}
+Nuxt 提供灵活的渲染模式切换。通过 `nuxt.config` 中的 `ssr: false` 可全局禁用 SSR 变为纯客户端渲染（SPA）；使用 `nuxt generate` 命令可将整个应用静态生成为纯静态文件部署；通过 `routeRules` 可实现混合渲染（Hybrid Rendering），对不同路由使用不同渲染策略。
+
+{{知识点8}}
+文件系统路由（File-based Routing）是 Nuxt 的核心特性之一。在 `app/pages/` 目录下创建的 `.vue` 文件会自动映射为应用路由。例如 `app/pages/index.vue` 对应 `/` 路由，`app/pages/about.vue` 对应 `/about` 路由，无需手动配置 vue-router。
+
+{{知识点9}}
+动态路由通过文件名中的方括号实现。例如 `pages/users/[id].vue` 会匹配 `/users/123` 等动态路径。使用 `[[slug]]`（双方括号）表示可选参数。在组件中可通过 `useRoute()` 或 `$route.params` 访问路由参数。
+
+{{知识点10}}
+Nuxt 自动导入（Auto-imports）机制允许开发者无需显式 `import` 即可使用 Vue API（如 `ref`、`computed`）、Nuxt 组件和自定义组合式函数。与传统全局声明不同，Nuxt 的自动导入保留了类型提示、IDE 支持，并且只打包生产代码中实际使用的部分（tree-shaking）。
+
+{{知识点11}}
+`useFetch` 是 Nuxt 最常用的数据获取组合式函数，是对底层 `$fetch` 的包装。它确保数据在 SSR 时只获取一次，获取结果通过 payload 传递给客户端，避免了服务端和客户端重复请求的问题。
+
+{{知识点12}}
+`useAsyncData` 与 `useFetch` 类似但提供更细粒度的控制。适用于需要自定义请求逻辑的场景。两者共享相同的选项和模式，都会在服务端获取数据后通过 payload 转发给客户端。
+
+{{知识点13}}
+`$fetch` 是 Nuxt 内置的最基础网络请求函数（基于 ofetch 库），全局自动导入。它适合纯客户端的事件驱动请求（如表单提交），但不具备请求去重和导航拦截能力，不建议用于组件初始化数据获取。
+
+{{知识点14}}
+Nuxt 使用 Vue 的 `<Suspense>` 组件在底层管理异步数据加载。在所有异步数据可用之前，`<Suspense>` 会阻止页面导航，确保用户不会看到未加载完成的页面。可配合 `<NuxtLoadingIndicator>` 显示页面切换进度条。
+
+{{知识点15}}
+`useState` 是 Nuxt 提供的 SSR 友好的状态管理组合式函数，是 `ref` 的增强替代。它的值在服务端渲染后会在客户端水合（hydration）时保持，并通过唯一 key 在所有组件间共享。注意：`useState` 中的数据会被序列化为 JSON，不能包含类、函数或 Symbol。
+
+{{知识点16}}
+状态管理最佳实践：永远不要在 `<script setup>` 或 `setup()` 函数外部定义 `const state = ref()`，这会导致服务端请求间状态共享和内存泄漏。正确做法是使用组合式函数包装：`const useX = () => useState('x')`。
+
+{{知识点17}}
+Nuxt 支持与 Pinia 状态管理库集成。通过安装 `@pinia/nuxt` 模块，可以在 Nuxt 中使用 `defineStore` 创建全局 store，结合 `callOnce` 工具函数在应用初始化时异步获取数据填充 store。
+
+{{知识点18}}
+布局系统（Layouts）允许将通用 UI 模式提取为可复用的布局组件。在 `app/layouts/` 目录下创建布局文件，使用 `<NuxtLayout>` 包裹 `<NuxtPage>`，页面通过 `definePageMeta({ layout: 'custom' })` 指定使用哪个布局。未指定布局时使用 `default.vue`。
+
+{{知识点19}}
+布局文件必须有单个根元素（不能是 `<slot />`），以支持路由切换时的过渡动画。如果应用只有一个布局，建议直接在 `app.vue` 中处理而不使用布局系统。
+
+{{知识点20}}
+Nuxt 的 server 目录提供全栈能力。`server/api/` 目录下的文件自动注册为 `/api` 前缀的 API 路由；`server/routes/` 下的文件注册为无前缀的服务器路由；`server/middleware/` 下的文件作为服务器中间件在每个请求前执行。
+
+{{知识点21}}
+服务器路由使用 `defineEventHandler()` 定义处理器。处理器可以直接返回 JSON 数据、Promise 或使用 `event.node.res.end()` 发送响应。在页面中可通过 `useFetch('/api/hello')` 统一调用这些 API。
+
+{{知识点22}}
+服务器中间件（Server Middleware）运行在每个请求之前，用于添加/检查请求头、记录日志或扩展请求上下文。中间件处理器不应返回任何内容，只负责检查或扩展请求上下文，或抛出错误。
+
+{{知识点23}}
+Nuxt 服务端路由底层由 h3 框架驱动，提供丰富的请求处理工具函数。可在 `server/utils/` 目录下定义自定义工具函数，这些函数在服务端目录中会被自动导入。
+
+{{知识点24}}
+Nuxt 的组件自动加载机制：放在 `app/components/` 目录下的 Vue 组件会自动注册，无需手动导入即可在模板中使用。组件名称基于文件路径自动生成（kebab-case），支持按需异步加载以优化性能。
+
+{{知识点25}}
+Nuxt 插件系统允许在应用初始化时执行代码。在 `app/plugins/` 目录下创建插件文件，使用 `defineNuxtPlugin()` 定义。插件可用于注册全局组件、注入辅助函数、初始化第三方库等。
+
+{{知识点26}}
+Nuxt 中间件（Route Middleware）用于在路由导航前后执行逻辑，如权限验证、日志记录等。在 `app/middleware/` 目录下创建中间件文件，使用 `defineNuxtRouteMiddleware()` 定义，可通过 `navigateTo()` 实现路由跳转或重定向。
+
+{{知识点27}}
+运行时配置（Runtime Config）和公共配置（App Config）是 Nuxt 管理配置的两种方式。运行时配置支持环境变量，敏感信息只在服务端可用；公共配置在客户端和服务端都可用，适合存放非敏感的公开配置。
+
+{{知识点28}}
+Nuxt 模块生态系统提供了丰富的扩展能力。通过 `nuxt.config` 的 `modules` 配置项引入社区模块（如 `@pinia/nuxt`、`@nuxtjs/tailwindcss`、`@nuxt/image` 等），可快速集成各种功能而无需手动配置。
+
+{{知识点29}}
+`callOnce` 工具函数确保某段异步逻辑只执行一次，即使在 SSR 和客户端水合过程中也不会重复执行。常用于应用初始化时的全局数据获取场景。
+
+{{知识点30}}
+`navigateTo()` 是 Nuxt 提供的编程式路由导航工具函数，可在组合式函数、中间件和服务端中使用，支持指定目标路由、重定向状态等参数。
+
+{{知识点31}}
+`definePageMeta` 是一个编译器宏，用于在页面组件中定义路由元数据（如布局、中间件、页面标题等）。这些元数据在构建时被提取，不会增加客户端运行时的代码体积。
+
+{{知识点32}}
+Nuxt 的 payload 机制是 SSR 数据传输的核心。当 API 调用在服务端执行时，获取的数据通过 payload（JavaScript 对象）转发给客户端，客户端在水合时直接使用这些数据而无需重新请求。可通过 Nuxt DevTools 的 Payload 标签页检查。
+
+{{知识点33}}
+Nuxt 支持代码分割（Code Splitting）自动优化。框架自动将代码拆分为更小的块，减少初始加载时间。页面组件、布局组件默认使用异步导入（async import），按需加载。
+
+{{知识点34}}
+Nuxt 无厂商锁定，支持部署到各种环境：传统 Node.js 服务器、无服务器函数（Serverless）、边缘计算（Edge）、静态托管等。通过 Nitro 引擎，Nuxt 可以适配几乎所有部署目标。
+
+{{知识点35}}
+Nuxt DevTools 是一个强大的开发调试工具，提供组件树检查、路由查看、模块管理、payload 数据检查、性能分析等功能，极大提升开发调试效率。在开发模式下默认可用。
+
+{{知识点36}}
+`<NuxtPage>` 是替代 Vue Router 的 `<router-view>` 的 Nuxt 专用组件，用于渲染当前路由对应的页面内容。必须在 `app.vue` 或布局组件中使用才能显示页面。
+
+{{知识点37}}
+`<NuxtLayout>` 组件用于启用布局系统。将其包裹在 `<NuxtPage>` 外层，支持通过 `name` prop 动态切换布局。布局切换时支持过渡动画效果。
+
+{{知识点38}}
+`<NuxtLoadingIndicator>` 组件在页面导航时显示进度条，提升用户体验。它在路由切换期间自动显示加载指示器，防止用户认为页面无响应。
+
+{{知识点39}}
+Nuxt 的 `app.vue` 是应用的根组件，所有页面内容都在其中渲染。如果不需要文件系统路由，可以只使用 `app.vue` 来构建单页应用，此时 vue-router 不会被引入以减小包体积。
+
+{{知识点40}}
+Nuxt 应用的推荐目录结构包括：`app/`（前端应用代码，含 pages、components、composables、layouts、plugins、middleware 等子目录）、`server/`（服务端代码，含 api、routes、middleware、utils 等子目录）、`public/`（静态资源）和 `nuxt.config.ts`（配置文件）。

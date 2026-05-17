@@ -1,0 +1,103 @@
+# 2025前端Screen Capture API
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{Screen Capture API概述：Screen Capture API 是一个相对简单的 Web API，其核心方法是 MediaDevices.getDisplayMedia()，用于让用户选择屏幕或屏幕的一部分进行捕获，返回一个 MediaStream 对象。该 API 主要用于屏幕共享、屏幕录制、视频会议等场景。}}
+
+{{知识点2}}{{getDisplayMedia()方法签名：getDisplayMedia() 是 MediaDevices 接口上的方法，语法为 navigator.mediaDevices.getDisplayMedia(options)，可选传入 options 对象指定返回 MediaStream 的要求。调用后浏览器会弹出选择界面，让用户选择要共享的屏幕区域。}}
+
+{{知识点3}}{{getDisplayMedia()返回值：getDisplayMedia() 返回一个 Promise，解析为 MediaStream 对象，包含一个视频轨道（来自用户选择的屏幕区域）和一个可选的音频轨道。视频轨道是必须的，如果 video 选项设为 false，Promise 会以 TypeError 拒绝。}}
+
+{{知识点4}}{{video选项参数：options 对象中的 video 属性可以是布尔值或 MediaTrackConstraints 实例，默认值为 true。设为 true 时表示返回的 MediaStream 包含视频轨道。这是 getDisplayMedia() 的必需参数。}}
+
+{{知识点5}}{{audio选项参数：options 对象中的 audio 属性可以是布尔值或 MediaTrackConstraints 实例，默认值为 false。设为 true 时表示返回的 MediaStream 包含音频轨道（如果所选显示表面支持且可用）。浏览器对音频轨道的支持各不相同。}}
+
+{{知识点6}}{{controller选项参数：options 对象中的 controller 属性接受一个 CaptureController 实例，用于在捕获会话中进一步操作捕获的显示表面。通过将 CaptureController 传入 getDisplayMedia() 调用来关联捕获会话。}}
+
+{{知识点7}}{{monitorTypeSurfaces选项：控制浏览器是否在屏幕捕获选项中提供整个屏幕供用户选择。值为 "include" 或 "exclude"。该选项旨在防止企业员工在视频会议应用中因误操作泄露私密信息。不能同时设为 "exclude" 且 displaySurface 设为 "monitor"，否则会抛出 TypeError。}}
+
+{{知识点8}}{{preferCurrentTab选项：布尔值，设为 true 时指示浏览器将当前标签页作为最突出的捕获源显示给用户，即在"选择要共享的内容"中单独显示"此标签页"选项。适用于演示文稿应用等只需共享当前标签页的场景。}}
+
+{{知识点9}}{{selfBrowserSurface选项：枚举值 "include" 或 "exclude"，指定浏览器是否允许用户选择当前标签页进行捕获。设为 "exclude" 可避免视频会议应用意外共享自身显示内容导致的"无限镜像大厅"效应。}}
+
+{{知识点10}}{{surfaceSwitching选项：枚举值 "include" 或 "exclude"，指定浏览器是否显示一个控件，允许用户在屏幕共享期间动态切换共享的标签页。这比每次切换都要重新走一遍共享流程要方便得多。}}
+
+{{知识点11}}{{systemAudio选项：枚举值 "include" 或 "exclude"，指定浏览器是否在提供给用户的音频源选项中包含系统音频。}}
+
+{{知识点12}}{{windowAudio选项：枚举值 "exclude"、"window" 或 "system"，指示当用户选择窗口共享时浏览器应提供哪些音频共享选项。"exclude" 表示不共享音频，"window" 表示仅共享该窗口的音频，"system" 表示共享所有系统音频。}}
+
+{{知识点13}}{{显示表面类型(displaySurface)：MediaTrackConstraints 中的 displaySurface 约束指示要捕获的显示表面类型，可选值为 "browser"（浏览器标签页）、"monitor"（整个显示器）或 "window"（窗口）。}}
+
+{{知识点14}}{{可见显示表面 vs 逻辑显示表面：可见显示表面是完全在屏幕上可见的内容，如最前端的窗口或标签页、整个屏幕。逻辑显示表面是部分或完全被遮挡的内容。出于安全原因，被遮挡部分通常会被模糊或替换为颜色/图案。}}
+
+{{知识点15}}{{鼠标光标设置(cursor)：MediaTrackSettings 中的 cursor 属性指示当前捕获的显示表面是否包含鼠标光标。值为 "always"（始终可见）、"motion"（仅鼠标移动时可见）或 "never"（不包含光标）。}}
+
+{{知识点16}}{{suppressLocalAudioPlayback约束：MediaTrackConstraints 中的 suppressLocalAudioPlayback 约束控制当标签页被捕获时，该标签页中的音频是否继续从用户本地扬声器播放。设为 true 表示抑制本地播放，适用于需要静音捕获的场景。}}
+
+{{知识点17}}{{logicalSurface约束：MediaTrackConstraints 中的 logicalSurface 约束指示流中的视频是否代表逻辑显示表面（可能不完全在屏幕上可见或完全在屏幕外）。设为 true 表示要捕获逻辑显示表面。}}
+
+{{知识点18}}{{screenPixelRatio设置：MediaTrackSettings 中的 screenPixelRatio 属性表示捕获显示表面的像素物理大小与捕获屏幕上 CSS 像素逻辑大小之间的比率。不能用作约束或能力值，仅作为只读设置。}}
+
+{{知识点19}}{{Transient Activation要求：getDisplayMedia() 必须在瞬态激活（Transient Activation）上下文中调用，例如事件处理程序中。如果在非用户交互触发的上下文中调用，会抛出 InvalidStateError 异常。}}
+
+{{知识点20}}{{安全上下文要求：Screen Capture API 仅在安全上下文（HTTPS）中可用。非安全 HTTP 页面无法使用此 API，这是为了保护用户隐私和安全。}}
+
+{{知识点21}}{{权限策略(Permissions Policy)：Screen Capture API 受 Permissions-Policy: display-capture 指令控制。如果当前浏览实例不被允许访问屏幕共享（例如被权限策略禁止），getDisplayMedia() 会抛出 NotAllowedError。}}
+
+{{知识点22}}{{getDisplayMedia()异常类型：API 可能抛出多种 DOMException：AbortError（一般错误）、InvalidStateError（非瞬态激活调用）、NotAllowedError（用户拒绝或权限策略禁止）、NotFoundError（无可用捕获源）、NotReadableError（硬件/OS 错误）、OverconstrainedError（约束不兼容）、TypeError（无效选项组合）。}}
+
+{{知识点23}}{{捕获源不可枚举：出于隐私和安全原因，屏幕共享源不能使用 enumerateDevices() 枚举。同时 devicechange 事件也不会在 getDisplayMedia() 可用源发生变化时触发。}}
+
+{{知识点24}}{{约束不改变可用源列表：约束永远不会改变 Screen Sharing API 可用的源列表。这确保 Web 应用不能通过限制源列表直到只剩一个选项来强制用户共享特定内容。}}
+
+{{知识点25}}{{Screen Capture API扩展 - Element Capture API：Element Capture API 将捕获区域限制为指定的渲染 DOM 元素及其后代。通过 RestrictionTarget.fromElement() 创建实例，然后调用 BrowserCaptureMediaStreamTrack.restrictTo() 进行限制。}}
+
+{{知识点26}}{{Screen Capture API扩展 - Region Capture API：Region Capture API 将捕获区域裁剪到指定 DOM 元素渲染的屏幕区域。通过 CropTarget.fromElement() 创建实例，然后调用 BrowserCaptureMediaStreamTrack.cropTo() 进行裁剪。}}
+
+{{知识点27}}{{BrowserCaptureMediaStreamTrack接口：表示单个视频轨道，扩展了 MediaStreamTrack 类。提供 clone()（返回未裁剪、未限制的克隆）、cropTo()（裁剪到指定 DOM 元素区域）和 restrictTo()（限制到指定 DOM 元素）方法。属于实验性技术。}}
+
+{{知识点28}}{{CaptureController接口：提供方法来操作通过 getDisplayMedia() 捕获的显示表面。构造函数为 new CaptureController()。提供 zoomLevel 属性和 increaseZoomLevel()、decreaseZoomLevel()、resetZoomLevel() 等缩放控制方法。属于实验性技术，需要安全上下文。}}
+
+{{知识点29}}{{CaptureController焦点控制：CaptureController 的 setFocusBehavior() 方法控制被捕获的标签页/窗口是否获得焦点，还是焦点保持在包含捕获应用的标签页上。可设为 "focus-captured-surface"（聚焦被捕获表面）或 "no-focus-change"（不改变焦点）。}}
+
+{{知识点30}}{{CaptureController滚动转发：CaptureController 的 forwardWheel() 方法开始将引用元素上触发的 wheel 事件转发到关联捕获显示表面的视口，允许捕获方远程滚动被捕获的内容。}}
+
+{{知识点31}}{{CaptureController缩放控制：CaptureController 提供完整的缩放控制：getSupportedZoomLevels() 获取支持的缩放级别列表、increaseZoomLevel() 增大缩放、decreaseZoomLevel() 减小缩放、resetZoomLevel() 重置到初始级别 100。zoomlevelchange 事件在缩放级别变化时触发。}}
+
+{{知识点32}}{{CropTarget接口：提供静态方法 fromElement()，返回一个 CropTarget 实例，用于将捕获的视频轨道裁剪到指定元素渲染的区域。配合 BrowserCaptureMediaStreamTrack.cropTo() 使用。属于实验性技术。}}
+
+{{知识点33}}{{RestrictionTarget接口：提供静态方法 fromElement()，返回一个 RestrictionTarget 实例，用于将捕获的视频轨道限制到指定的 DOM 元素。配合 BrowserCaptureMediaStreamTrack.restrictTo() 使用。与 CropTarget 不同，RestrictionTarget 限制的是元素及其后代的渲染区域。}}
+
+{{知识点34}}{{屏幕共享中的音频捕获：getDisplayMedia() 最常用于捕获屏幕视频，但也支持捕获音频。音频源可能是所选窗口、整个计算机音频系统或用户麦克风的组合。使用前应检查浏览器兼容性。}}
+
+{{知识点35}}{{音频约束参数示例：捕获屏幕时可指定详细的音频约束，如 echoCancellation（回声消除）、noiseSuppression（噪声抑制）、sampleRate（采样率，如 44100）和 suppressLocalAudioPlayback（抑制本地音频播放）。}}
+
+{{知识点36}}{{共享期间的捕获指示器：当显示捕获生效时，正在共享屏幕内容的机器会显示某种形式的指示器，让用户知道正在进行共享。这是浏览器内置的隐私保护机制。}}
+
+{{知识点37}}{{屏幕捕获的典型使用模式：典型的屏幕捕获流程为：创建显示选项对象 → 调用 getDisplayMedia() 获取流 → 用户选择共享内容 → 处理返回的 MediaStream（可附加到 video 元素显示、传给 MediaRecorder 录制、或发送给 WebRTC 对等方）。}}
+
+{{知识点38}}{{使用 async/await 进行屏幕捕获：推荐使用 async/await 语法调用 getDisplayMedia()。示例：const stream = await navigator.mediaDevices.getDisplayMedia({video: true})。需要在 try/catch 块中处理用户拒绝等情况。}}
+
+{{知识点39}}{{使用 Promise 进行屏幕捕获：也可以使用 Promise 直接风格调用 getDisplayMedia()。示例：navigator.mediaDevices.getDisplayMedia(options).then(stream => {...}).catch(err => {...})。两种写法功能等价。}}
+
+{{知识点40}}{{停止屏幕捕获：停止屏幕捕获需要遍历 MediaStream 的所有轨道并调用 track.stop()。示例：stream.getTracks().forEach(track => track.stop())。停止后浏览器的共享指示器也会消失。}}
+
+{{知识点41}}{{displayMediaOptions 完整示例：完整的选项对象包含 video（displaySurface 约束）、audio（suppressLocalAudioPlayback）、preferCurrentTab、selfBrowserSurface、systemAudio、surfaceSwitching、monitorTypeSurfaces 等属性，用于精细控制捕获行为。}}
+
+{{知识点42}}{{屏幕捕获与 WebRTC 结合：Screen Capture API 常与 WebRTC 配合使用，通过 RTCPeerConnection 将捕获的屏幕流发送给远程对等方，实现实时屏幕共享功能。这是视频会议应用的核心技术栈。}}
+
+{{知识点43}}{{屏幕捕获与 MediaRecorder 结合：Screen Capture API 可与 MediaRecorder API 结合使用，将捕获的屏幕流录制为视频文件。通过 new MediaRecorder(stream) 创建录制器，监听 dataavailable 事件获取录制数据。}}
+
+{{知识点44}}{{屏幕捕获中的视频元素显示：捕获的 MediaStream 可以直接附加到 HTML video 元素显示。示例：const video = document.createElement('video'); video.srcObject = stream; video.play()。这是本地预览捕获内容的常用方式。}}
+
+{{知识点45}}{{Permissions Policy 指令 display-capture：HTTP 响应头中的 Permissions-Policy: display-capture 指令控制页面及其子框架是否被允许使用 Screen Capture API。可以设为 () 禁用或 () 允许所有来源。子框架需要单独声明权限。}}
+
+{{知识点46}}{{捕获标签页 vs 捕获窗口 vs 捕获屏幕：三种主要的捕获模式对应 displaySurface 的三个值："browser" 捕获浏览器标签页（最佳质量、支持标签页切换）、"window" 捕获应用窗口、"monitor" 捕获整个显示器（可能包含敏感信息）。}}
+
+{{知识点47}}{{屏幕捕获的隐私考量：Screen Capture API 设计了多层隐私保护：用户必须手动选择共享内容、浏览器显示共享指示器、捕获源不可枚举、约束不能限制源列表、被遮挡内容自动模糊、安全上下文要求等。}}
+
+{{知识点48}}{{浏览器兼容性概述：Screen Capture API 核心功能（getDisplayMedia()）在主流浏览器中得到广泛支持：Chrome 72+、Firefox 66+、Safari 13+、Edge 79+。但音频捕获、Element Capture、Region Capture 等扩展功能的支持程度各不相同。}}
+
+{{知识点49}}{{使用 getUserMedia 与 getDisplayMedia 的区别：getUserMedia() 用于获取摄像头/麦克风等用户媒体设备的流，而 getDisplayMedia() 用于获取屏幕/窗口/标签页的捕获流。两者参数格式类似，但 getDisplayMedia() 有屏幕捕获特有的选项如 displaySurface、selfBrowserSurface 等。}}
+
+{{知识点50}}{{W3C 规范状态：Screen Capture API 的 W3C 规范包括 mediacapture-screen-share（主规范）、mediacapture-region（Region Capture 和 Element Capture）。主规范已处于推荐标准阶段，扩展 API 仍在草案或工作草案阶段。}}

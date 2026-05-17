@@ -1,0 +1,87 @@
+# 2025前端前端CSS Anchor Positioning
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{CSS Anchor Positioning 概述：CSS Anchor Positioning 是 CSS 的一个模块（CSS Anchor Positioning Module），允许将一个元素（锚定元素）的位置和大小绑定到另一个元素（锚元素）上。它提供了纯 CSS 的方式来实现 tooltip、弹出菜单、下拉选择等 UI 组件的定位，无需 JavaScript 计算。规范分为 Level 1 和 Level 2 两个版本。}}
+
+{{知识点2}}{{核心应用场景：Anchor Positioning 主要用于以下场景：1）表单控件旁的错误提示消息；2）UI 元素旁的 tooltip 或信息框；3）快速配置 UI 元素的设置/选项对话框；4）导航栏或按钮旁的下拉/弹出菜单。这些场景的共同特点是需要将一个元素"系"在另一个元素旁边。}}
+
+{{知识点3}}{{anchor-name 属性：anchor-name 属性用于将一个元素声明为锚元素，并为其指定名称。值必须是 <dashed-ident>（以 -- 开头的自定义标识符），如 --my-anchor。一个元素可以有多个锚名称（逗号分隔）。默认值为 none。设置 anchor-name: none 会取消该元素的锚元素身份及与定位元素的关联。}}
+
+{{知识点4}}{{position-anchor 属性：position-anchor 属性用于将一个定位元素（position: absolute 或 fixed 的元素）关联到一个锚元素。其值应与目标锚元素的 anchor-name 属性值一致。设置后，该元素成为"锚定定位元素"（anchor-positioned element），其位置可相对于锚元素来设置。默认值为 none。}}
+
+{{知识点5}}{{显式关联与隐式关联：建立锚元素与定位元素的关联有两种方式。显式关联通过 CSS 的 anchor-name 和 position-anchor 属性实现。隐式关联发生在特定语义场景中：1）使用 Popover API 的 popovertarget/commandfor 属性关联弹出层和控件时；2）自定义 select 元素（appearance: base-select）的下拉选择器与 select 元素之间。}}
+
+{{知识点6}}{{anchor() 函数语法：anchor() 函数用于在 inset 属性中设置定位元素相对于锚元素某条边的距离。语法为 anchor(<anchor-name> <anchor-side>, <fallback>)。其中 anchor-name 可省略（使用默认锚），anchor-side 指定参考边，fallback 是可选的回退值。返回一个 <length> 值，可在 calc() 等函数中使用。}}
+
+{{知识点7}}{{anchor() 函数的 anchor-side 参数：anchor-side 指定相对于锚元素的哪条边进行定位。有效值包括：物理值（top、right、bottom、left）、逻辑值（start、end、self-start、self-end）、inside（与 inset 属性同侧）、outside（与 inset 属性反侧）、center（轴中心）、百分比（从起始边 0% 到结束边 100% 的距离）。物理/逻辑值必须与 inset 属性的轴方向兼容。}}
+
+{{知识点8}}{{anchor() 函数的回退值机制：如果 anchor() 函数无效（如指定的锚名称不存在、未关联锚元素、或 anchor-side 与 inset 属性轴不兼容），则使用第二个参数作为回退值。例如 top: anchor(--my-anchor bottom, 50px)，若锚不存在，top 值回退为 50px。若无回退值且函数无效，则该 inset 属性表现如同 auto。}}
+
+{{知识点9}}{{anchor() 函数的兼容性规则：anchor-side 参数的物理/逻辑值必须与设置它的 inset 属性轴方向兼容。物理值 top/bottom 只能用于垂直方向的 inset 属性，left/right 只能用于水平方向。逻辑值 start/end/self-start/self-end 可用于任何方向的 inset 属性，因为它们会自动适配当前书写模式。建议优先使用逻辑值以支持国际化。}}
+
+{{知识点10}}{{anchor-size() 函数：anchor-size() 函数用于根据锚元素的尺寸来设置定位元素的大小、位置或外边距。语法为 anchor-size(<anchor-name> <anchor-size>, <fallback>)。anchor-size 参数可选值为：width（锚元素宽度）、height（锚元素高度）、block（锚元素包含块的块方向长度）、inline（包含块的内联方向长度）、self-block（锚元素自身的块方向长度）、self-inline（自身的内联方向长度）。}}
+
+{{知识点11}}{{anchor-size() 函数的自动推断：当省略 anchor-size 参数时，会自动匹配属性所在轴对应的尺寸。例如 width: anchor-size() 等同于 width: anchor-size(width)，top: anchor-size() 等同于 top: anchor-size(height)。注意：可以跨轴引用，如 width: anchor-size(height) 是合法的。}}
+
+{{知识点12}}{{anchor-size() 函数适用的属性：anchor-size() 可用于尺寸属性（width、height、min-width、max-height、block-size、inline-size 等）、inset 属性（top、left、bottom、right 及逻辑版本）和 margin 属性（margin-left、margin-block-start 等）。返回一个 <length> 值。}}
+
+{{知识点13}}{{position-area 属性概述：position-area 是 anchor() 函数的替代方案，提供更声明式的定位方式。它基于一个 3×3 的网格（position-area grid）来定位元素，锚元素占据中心格子。网格的行由 top/center/bottom（或逻辑/坐标等价物）表示，列由 left/center/right 表示。定位元素的包含块被设置为对应的网格区域。}}
+
+{{知识点14}}{{position-area 属性的取值方式：position-area 接受两个 <position-area> 关键字。1）单格定位：如 top left、bottom center；2）跨两格：使用 span- 前缀，如 top span-left（顶部行跨左中两格）；3）跨三格：使用 span-all，如 bottom span-all（底部行跨全部三格）。单关键字时有隐式推断：center 等同于 center center，top 等同于 top span-all。}}
+
+{{知识点15}}{{position-area 的逻辑和坐标关键字：除物理值（top/left/right/bottom/center）外，position-area 还支持逻辑关键字（block-start/block-end/inline-start/inline-end）和坐标关键字（x-start/x-end/y-start/y-end）。span 前缀同样适用于这些变体，如 span-inline-start、span-x-end、span-block-end 等。}}
+
+{{知识点16}}{{position-area 对默认对齐的调整：当设置了 position-area 后，自对齐属性（align-self、justify-self 等）的 normal 值会自动调整。如果 position-area 在某个轴指定了 center 区域，该轴默认对齐为 anchor-center；否则对齐方向与指定区域相反（如指定 start 区域则默认 end 对齐）。同时，inset 属性的 auto 值会表现如同 0。}}
+
+{{知识点17}}{{position-area 与弹出层（Popover）配合注意事项：使用 position-area 定位弹出层时，弹出层的默认样式（margin 和 inset）可能与期望的定位冲突。建议手动重置：margin: 0; inset: auto;。CSS 工作组正在研究方案以避免此问题。}}
+
+{{知识点18}}{{anchor-center 对齐值：anchor-center 是一个特殊的关键字值，可用于自对齐属性（align-self、justify-self 等），将定位元素在指定轴上居中于其锚元素。当 position-area 在某轴指定 center 时，该轴的默认对齐会自动变为 anchor-center。}}
+
+{{知识点19}}{{anchor-scope 属性概述：anchor-scope 属性用于限制锚名称的可见范围，解决多个同名锚元素导致的冲突问题。当多个锚元素具有相同的 anchor-name 时，定位元素默认关联到 DOM 顺序中最后一个同名锚元素。anchor-scope 将锚名称的作用域限制在特定子树内，使每个定位元素只关联同一子树内的锚元素。}}
+
+{{知识点20}}{{anchor-scope 属性的取值：anchor-scope: none（默认）表示不限制作用域；anchor-scope: all 表示限制所有锚名称到当前子树；anchor-scope: --my-anchor, --my-anchor2 表示只限制指定的锚名称到当前子树。典型用法是在重复组件的容器上设置 anchor-scope，确保每个实例的定位元素只关联自己实例内的锚元素。}}
+
+{{知识点21}}{{position-try-fallbacks 属性概述：position-try-fallbacks 属性为锚定定位元素提供一个或多个备选位置（回退方案）。当默认位置导致元素溢出包含块或视口时，浏览器会按顺序尝试这些备选方案，使用第一个不会导致溢出的方案。如果所有方案都失败，则回退到原始位置。这解决了 tooltip 在页面边缘被截断的问题。}}
+
+{{知识点22}}{{预定义回退策略（try-tactic）：position-try-fallbacks 支持三种预定义的翻转策略：1）flip-block：沿块轴翻转位置（如从锚元素上方翻转到下方）；2）flip-inline：沿内联轴翻转位置（如从左侧翻转到右侧）；3）flip-start：沿对角线翻转位置（交换 start 和 end 属性）。这些策略会镜像元素位置和 margin 偏移。}}
+
+{{知识点23}}{{组合回退策略：多个 try-tactic 或自定义选项可以用空格组合成单个回退选项。例如 flip-block flip-inline 表示同时沿两个轴翻转。浏览器会将各变换组合在一起应用。组合时先应用自定义 @position-try 选项，再应用 try-tactic 变换。注意：position-area 值不能参与组合。}}
+
+{{知识点24}}{{position-area 值作为回退选项：position-area 的值可以直接用作 position-try-fallbacks 的回退选项。例如 position-try-fallbacks: top, right, bottom 会创建基于对应 position-area 的回退方案。这比预定义翻转策略更灵活，可以精确控制每个回退位置。但 position-area 回退值不能与其他值组合使用。}}
+
+{{知识点25}}{{@position-try 自定义回退选项：@position-try 规则用于创建自定义的回退选项。语法为 @position-try --name { descriptor-list }。描述符可包括：position-area、inset 属性、margin 属性、尺寸属性、自对齐属性和 position-anchor。当回退选项被应用时，其描述符值会覆盖元素上原有的同名属性值。}}
+
+{{知识点26}}{{position-try-order 属性：position-try-order 属性用于改变回退选项的优先顺序。例如，可以优先选择具有更多可用高度或宽度的回退方案，而不是按列表顺序尝试。与 position-try-fallbacks 配合使用，可通过简写属性 position-try 同时声明两者。}}
+
+{{知识点27}}{{position-visibility 属性：position-visibility 属性定义在什么条件下隐藏锚定定位元素。取值包括：1）always：始终显示；2）anchors-valid：当 position-anchor 不指向有效锚元素时隐藏；3）anchors-visible：当锚元素完全不可见（溢出或被遮挡）时隐藏；4）no-overflow：当定位元素开始溢出时隐藏。默认值为 anchors-visible。隐藏时元素表现为 visibility: hidden（强隐藏）。}}
+
+{{知识点28}}{{回退选项与条件隐藏的选择：大多数情况下，使用 position-try-fallbacks 重新定位比使用 position-visibility 隐藏更好，因为重新定位可以保持内容可见和可用。position-visibility 适用于锚元素消失时定位元素也没有意义的场景，如锚元素是一个测验问题，定位元素是其答案。}}
+
+{{知识点29}}{{锚定容器查询（Anchored Container Queries）：CSS Anchor Positioning Level 2 引入了锚定容器查询，允许根据当前激活的回退选项来有条件地应用样式。例如，当 tooltip 从锚元素上方移动到下方时，可以通过容器查询调整箭头方向。这解决了回退位置改变后样式需要同步更新的问题。}}
+
+{{知识点30}}{{HTML anchor 全局属性：除了 CSS 的 anchor-name/position-anchor 关联方式外，HTML 提供了 anchor 全局属性，可以隐式地将一个元素与另一个具有匹配 id 的元素关联。例如 <div id="btn"> 和 <div anchor="btn">，后者会自动关联到前者。这提供了声明式的 HTML 级别关联方式。}}
+
+{{知识点31}}{{伪元素作为锚元素：anchor-name 属性支持在所有生成主盒（principal box）的元素上使用，包括伪元素。::before 和 ::after 生成的伪元素，以及 UI 特性如 range input 的 thumb（::-webkit-slider-thumb）都可以作为锚元素。伪元素默认隐式关联到其原始元素，除非另行指定。}}
+
+{{知识点32}}{{包含块的改变：当一个元素通过 anchor positioning 被关联到锚元素后，其包含块（containing block）会发生改变——不再基于最近的定位祖先，而是基于锚元素。这是 anchor positioning 与传统绝对/固定定位的关键区别之一。}}
+
+{{知识点33}}{{锚元素的可见性要求：锚元素必须是可见的 DOM 节点，关联和定位才能生效。如果锚元素被隐藏（如 display: none、visibility: hidden、content-visibility: hidden），则定位元素会回退到相对于最近定位祖先来定位。可以使用 position-visibility 来处理锚元素消失的情况。}}
+
+{{知识点34}}{{移除锚关联的方式：要移除显式锚关联，可以将锚元素的 anchor-name 设为 none 或不同的值，或将定位元素的 position-anchor 设为 none 或不存在的名称。对于隐式关联（如 Popover API 或自定义 select），只能通过第二种方式（设置 position-anchor: none）来移除。}}
+
+{{知识点35}}{{@position-try 的描述符优先级：当 @position-try 自定义回退选项被应用时，其中定义的描述符值优先于元素上通过普通 CSS 设置的同名属性值。当用户滚动导致不同的回退选项被应用或回退选项被移除时，之前应用的值会被取消。这是一种"临时覆盖"机制。}}
+
+{{知识点36}}{{position-try 简写属性：position-try 是 position-try-order 和 position-try-fallbacks 的简写属性，可以在一个声明中同时指定两者。这简化了回退选项的配置代码。}}
+
+{{知识点37}}{{Anchor Positioning 的浏览器兼容性：CSS Anchor Positioning 的核心特性（anchor-name、position-anchor、anchor()、position-area、position-try-fallbacks 等）在 Chrome 125+（2024年5月）和 Edge 中已获得支持。Safari 18.2+（2024年底）也加入了支持。Firefox 的支持状态需查询最新数据。该特性已进入 Baseline（跨浏览器可用）状态。}}
+
+{{知识点38}}{{Anchor Positioning 与传统方案的对比：传统实现 tooltip/popover 定位需要 JavaScript（如 Popper.js/Floating UI）来计算位置、处理滚动、检测溢出并翻转方向。CSS Anchor Positioning 将这些能力内置于浏览器，声明式实现，性能更好，代码更简洁，且与浏览器的布局引擎深度集成。}}
+
+{{知识点39}}{{Anchor Positioning 的规范结构：CSS Anchor Positioning 分为两个规范级别。Level 1（css-anchor-position-1）定义了核心功能：锚命名、关联、anchor()/anchor-size() 函数、position-area、position-try 回退机制和 position-visibility。Level 2（css-anchor-position-2）扩展了锚定容器查询等高级特性。}}
+
+{{知识点40}}{{实际代码示例 - 基础定位：以下是一个基本的锚定定位示例。CSS：.anchor { anchor-name: --my-anchor; } .tooltip { position: fixed; position-anchor: --my-anchor; top: anchor(--my-anchor bottom); left: anchor(--my-anchor center); margin-top: 8px; transform: translateX(-50%); }。这将 tooltip 放在锚元素正下方居中位置，间距 8px。}}
+
+{{知识点41}}{{实际代码示例 - 使用 position-area：用 position-area 简化定位的示例。CSS：.anchor { anchor-name: --my-anchor; } .tooltip { position: fixed; position-anchor: --my-anchor; position-area: block-start span-inline-center; margin-block-end: 8px; }。这将 tooltip 放在锚元素上方居中，比 anchor() 函数更简洁。}}
+
+{{知识点42}}{{实际代码示例 - 完整回退方案：综合使用回退机制的示例。CSS：.tooltip { position: fixed; position-anchor: --my-anchor; position-area: top; position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline; position-visibility: anchors-visible; }。当默认位置溢出时依次尝试翻转，锚元素不可见时自动隐藏。}}

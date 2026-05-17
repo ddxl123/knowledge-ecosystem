@@ -1,0 +1,83 @@
+# 2025前端前端CSS Starting Style
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{@starting-style 是 CSS 的一个 at-rule（@规则），用于定义元素在首次渲染或从 display:none 变为可见时的起始样式值，从而启用首次样式更新时的过渡动画。它解决了 CSS 过渡默认不在元素初始样式更新时触发的问题。}}
+
+{{知识点2}}{{@starting-style 的基本语法有两种形式：独立块形式 @starting-style { selector { declarations } } 和嵌套形式 selector { @starting-style { declarations } }。独立块包含完整的选择器和声明，嵌套块只包含声明。}}
+
+{{知识点3}}{{CSS 过渡默认不在元素的初始样式更新时触发，也不在 display 类型从 none 变为其他值时触发。这是为了避免意外行为。@starting-style 通过提供起始样式值来覆盖此默认行为。}}
+
+{{知识点4}}{{@starting-style 特别适用于为顶层（top layer）元素创建进入和退出过渡动画，包括 popover 元素和 modal dialog 元素。这些元素在显示时会被提升到顶层并从 display:none 变为可见。}}
+
+{{知识点5}}{{@starting-style 仅与 CSS transitions（过渡）相关。当使用 CSS animations（动画）实现类似效果时，不需要 @starting-style，因为 @keyframes 本身就可以定义起始状态。}}
+
+{{知识点6}}{{理解 @starting-style 需要掌握三个样式状态：起始样式状态（starting-style state）、过渡状态（transitioned state）和默认状态（default state）。进入和退出过渡可能不同。}}
+
+{{知识点7}}{{元素首次在 DOM 中渲染时，或从 display:none 过渡到可见值时，会从 @starting-style 样式过渡。当它返回时，不再使用 @starting-style 样式，而是过渡到默认状态的样式。}}
+
+{{知识点8}}{{@starting-style at-rule 与"原始规则"具有相同的特异性（specificity）。为确保起始样式被应用，应将 @starting-style 放在原始规则之后。如果放在之前，原始样式会覆盖起始样式。}}
+
+{{知识点9}}{{嵌套形式的 @starting-style 使用 CSS 嵌套语法，将 @starting-style 块放在选择器内部。这种方式更简洁，适用于大多数场景。但注意嵌套选择器（&）不能代表伪元素。}}
+
+{{知识点10}}{{对于伪元素如 ::backdrop，不能使用嵌套形式的 @starting-style（因为嵌套选择器 & 不能表示伪元素），必须使用独立块形式。}}
+
+{{知识点11}}{{transition-behavior: allow-discrete 是启用离散属性过渡的关键属性值。它允许 display、content-visibility 等离散属性参与过渡动画。可在 transition 简写属性中指定。}}
+
+{{知识点12}}{{display 属性需要加入过渡属性列表并设置 allow-discrete，以确保元素在进入和退出动画期间保持可见。否则退出动画将不可见——popover 会直接消失。}}
+
+{{知识点13}}{{overlay CSS 属性用于控制顶层元素是否实际在顶层渲染。它只能由浏览器设置，不能通过作者样式修改，但可以添加到 transition-property 列表中以延迟从顶层移除。}}
+
+{{知识点14}}{{transition overlay 属性可确保元素从顶层的移除被延迟到动画结束。不这样做可能导致元素过快地从覆盖层中移除，使动画不流畅。同样需要 allow-discrete。}}
+
+{{知识点15}}{{离散动画（discrete animation）通常在动画进行到 50% 时在两个值之间翻转。但当从/到 display:none 或 content-visibility:hidden 动画时，浏览器会确保过渡内容在整个动画期间可见。}}
+
+{{知识点16}}{{从 display:none 到 block 的动画，display 值在动画 0% 时就翻转为 block，确保全程可见。从 block 到 none 的动画，display 值在动画 100% 时才翻转为 none。}}
+
+{{知识点17}}{{content-visibility 动画不需要 @starting-style 来提供起始值，因为 content-visibility 不会像 display 那样将元素从 DOM 中隐藏，它只是跳过元素内容的渲染。}}
+
+{{知识点18}}{{@starting-style 在 Chrome 117+、Edge 117+、Firefox 129+、Safari 17.5+ 中受支持。2024年中期基本实现全主流浏览器支持，是现代 CSS 的重要特性。}}
+
+{{知识点19}}{{@starting-style 的过渡效果适用于多种 CSS 属性，包括 opacity、transform、background-color、scale 等可动画属性。通过组合多个属性可以创建复杂的进入/退出动画效果。}}
+
+{{知识点20}}{{Popover API 元素的典型进入动画配置：在 [popover] 上设置 opacity:0 和 transform:scaleX(0) 作为退出最终状态，在 [popover]:popover-open 上设置 opacity:1 和 transform:scaleX(1) 作为打开状态，在 @starting-style 中为 popover-open 设置 opacity:0 和 transform:scaleX(0) 作为进入起始值。}}
+
+{{知识点21}}{{@starting-style 支持为 ::backdrop 伪元素设置起始样式，例如使背景色从透明过渡到半透明黑色 rgb(0 0 0 / 25%)，为 popover 和 dialog 提供背景遮罩的淡入效果。}}
+
+{{知识点22}}{{transition 简写属性可以同时指定 opacity、transform、overlay 和 display 的过渡，配合 allow-discrete 值：transition: opacity 0.7s, transform 0.7s, overlay 0.7s allow-discrete, display 0.7s allow-discrete。也可简写为 transition: all 0.7s allow-discrete。}}
+
+{{知识点23}}{{当使用 @starting-style 为 DOM 中新添加的元素创建过渡时，元素首次添加到 DOM 时会从 @starting-style 过渡到目标样式。之后移除类名时，元素过渡到默认样式而非 @starting-style 样式。}}
+
+{{知识点24}}{{@starting-style 的设计理念是：只在元素"首次出现"时使用起始样式作为过渡起点。一旦元素在 DOM 中可见，它就拥有了"历史"，后续过渡基于实际当前样式而非起始样式。}}
+
+{{知识点25}}{{Dialog 元素的过渡动画同样需要 @starting-style。通过 dialog[open] 选择器设置打开状态样式，在 @starting-style 中设置起始值，配合 transition 属性实现平滑的对话框打开/关闭动画。}}
+
+{{知识点26}}{{@starting-style 可以在 CSS 文件中的任何位置声明，但由于特异性相同，必须放在原始规则之后才能生效。这是 CSS 层叠规则的自然结果。}}
+
+{{知识点27}}{{对于动态创建并添加到 DOM 的元素（如 JavaScript createElement 后 appendChild），@starting-style 提供了纯 CSS 方案来实现进入动画，无需 JavaScript 的 setTimeout hack。}}
+
+{{知识点28}}{{退出动画的实现通常需要配合 JavaScript：先添加触发退出动画的类（如 .fade-out），等待动画完成（transitionend 事件或 setTimeout），然后再从 DOM 中移除元素。}}
+
+{{知识点29}}{{@starting-style 与 CSS 嵌套规范兼容，可以在嵌套选择器中使用。这使得在组件化的 CSS 中定义起始样式更加自然和简洁。}}
+
+{{知识点30}}{{使用 @starting-style 时，transition 属性应设置在元素的默认规则（如 [popover]）上，而不是在 :popover-open 选择器上。这样确保无论进入还是退出方向，过渡都能正常工作。}}
+
+{{知识点31}}{{@starting-style 的正式语法定义为：@starting-style { <rule-list> }。其中 <rule-list> 包含一个或多个完整的 CSS 规则集（选择器+声明块）。}}
+
+{{知识点32}}{{@starting-style 不影响元素的计算样式或布局。它仅在过渡发生时提供一个"虚拟的"起始状态，用于计算过渡的起始值。不触发过渡时，@starting-style 中的声明完全被忽略。}}
+
+{{知识点33}}{{当多个 @starting-style 规则匹配同一元素时，遵循 CSS 标准的层叠和特异性规则来决定哪个起始样式生效。特异性相同时，后声明的规则优先。}}
+
+{{知识点34}}{{在实际项目中，@starting-style 常与 Popover API、Dialog 元素、CSS 嵌套、transition-behavior: allow-discrete 等现代 CSS 特性组合使用，形成完整的进入/退出动画方案，替代传统的 JavaScript 动画库。}}
+
+{{知识点35}}{{@starting-style 属于 CSS Transitions Level 2 规范的一部分。该规范扩展了 CSS 过渡能力，引入了离散属性过渡、display 过渡和起始样式等关键功能。}}
+
+{{知识点36}}{{使用 @starting-style 的最佳实践：始终在原始规则之后声明 @starting-style 块；为 display 和 overlay 属性添加 allow-discrete；使用 transition 简写属性保持代码简洁；在必要时为 ::backdrop 伪元素单独声明独立的 @starting-style 块。}}
+
+{{知识点37}}{{在不支持 @starting-style 的浏览器中，元素仍然会正常显示，只是不会出现进入过渡动画——元素会直接出现在最终状态。退出动画如果只依赖 transition 而不依赖 @starting-style，通常仍然可以工作。}}
+
+{{知识点38}}{{@starting-style 与 will-change 属性配合使用时需谨慎。will-change 会提前创建合成层，可能影响过渡的触发时机。建议只在确认需要优化时才使用 will-change。}}
+
+{{知识点39}}{{对于响应式设计中的动画，可以在 @starting-style 中配合媒体查询使用，为不同视口大小定义不同的起始样式和动画效果，虽然这种用法相对少见。}}
+
+{{知识点40}}{{@starting-style 的引入标志着纯 CSS 可以完整实现进入/退出动画，不再需要依赖 JavaScript 库如 GSAP 或 Framer Motion 来处理简单的元素显隐动画。这是 CSS 平台能力的重要提升。}}

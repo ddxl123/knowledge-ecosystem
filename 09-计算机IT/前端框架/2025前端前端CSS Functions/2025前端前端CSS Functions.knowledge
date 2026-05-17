@@ -1,0 +1,108 @@
+# 2025前端前端CSS Functions
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}
+CSS Functions（CSS函数）是CSS值语法中的功能符号，用于在属性值中执行计算、获取环境变量、操作颜色等。CSS函数以函数名加括号的形式书写，如 `function(arguments)`。CSS函数是现代CSS的核心能力之一，使CSS从纯声明式语言进化为具备动态计算能力的样式语言。根据MDN文档，CSS值函数涵盖数学函数、变换函数、颜色函数、滤镜函数等多个类别。
+
+{{知识点2}}
+calc() 是CSS中最基础的数学函数，允许在CSS属性值中执行基本算术运算。语法为 `calc(expression)`，支持加(+)、减(-)、乘(*)、除(/)四种运算符。运算遵循标准的运算符优先级规则。所有操作数（除了 `<number>` 类型）必须带有适当的单位后缀，如 px、em、% 等。来源：MDN Web Docs - calc() CSS function。
+
+{{知识点3}}
+calc() 支持混合单位计算，这是其最强大的特性之一。例如 `calc(100% - 30px)` 可以将百分比与像素混合运算，解决传统CSS无法在不同单位间做计算的痛点。`calc(2em * 5)` 则可以进行单位与数值的乘法运算。但需注意：乘法运算中只能有一个操作数带单位（如 `200px * 4px` 无效），除法中两个操作数可以带相同类型单位（如 `100vw / 1px` 返回无单位值）。
+
+{{知识点4}}
+calc() 的返回值类型可以是 `<length>`、`<frequency>`、`<angle>`、`<time>`、`<flex>`、`<resolution>`、`<percentage>`、`<number>` 或 `<integer>`。当期望 `<integer>` 类型时，calc() 表达式的结果会四舍五入到最近的整数。例如 `calc(1.4)` 结果为1，`calc(1.5)` 结果为2（向正无穷方向舍入）。
+
+{{知识点5}}
+calc() 遵循IEEE-754浮点数运算标准，这意味着它能处理 infinity 和 NaN 等特殊值。calc() 可以嵌套使用，内层的 calc() 等价于普通括号。calc() 不能用于计算固有尺寸值（如 auto、fit-content），此时需要使用 calc-size() 函数。calc() 还支持在相对颜色语法中操作颜色通道，如 `lch(from aquamarine l c calc(h + 180))`。
+
+{{知识点6}}
+min() 函数接受一个或多个逗号分隔的表达式参数，返回其中最小（最负）的值。语法为 `min(value1, value2, ...)`。min() 常用于设置属性的最大允许值。例如 `width: min(50vw, 200px)` 表示宽度取 50vw 和 200px 中较小的那个，即最多200px，但在视口小于400px时会按比例缩小。
+
+{{知识点7}}
+min() 的参数可以是数学表达式、字面值或其他表达式（如 attr()）。每个参数可以使用不同的单位。min() 允许嵌套 max() 和其他 min() 函数。表达式支持加减乘除运算，遵循标准运算符优先级，但 + 和 - 运算符两侧必须有空格。min() 可以提供两个以上的参数来施加多个约束。
+
+{{知识点8}}
+max() 函数接受一个或多个逗号分隔的表达式参数，返回其中最大（最正）的值。语法为 `max(value1, value2, ...)`。max() 常用于设置属性的最小允许值。例如 `width: max(20vw, 400px)` 表示宽度取 20vw 和 400px 中较大的那个，即至少400px，在视口大于2000px时会按比例增大。
+
+{{知识点9}}
+max() 在响应式字体大小设置中非常实用。例如 `font-size: max(4vw, 2em, 2rem)` 确保字体至少为2rem，但在大屏幕上可以更大。为保证无障碍性，建议在 max() 内嵌套 min() 来同时限制最小和最大字体大小，如 `font-size: max(min(0.5vw, 0.5em), 1rem)`。来源：MDN Web Docs。
+
+{{知识点10}}
+clamp() 函数是 min() 和 max() 的组合，接受三个参数：最小值(min)、首选值(val)和最大值(max)。语法为 `clamp(min, val, max)`。clamp(MIN, VAL, MAX) 等价于 `max(MIN, min(VAL, MAX))`。它确保值不会低于最小值也不会高于最大值，同时在中间范围内使用首选值。
+
+{{知识点11}}
+clamp() 最经典的应用是实现流体排版（Fluid Typography）。例如 `font-size: clamp(1rem, 2.5vw, 2rem)` 使字体大小随视口缩放，但不会小于1rem也不会大于2rem。这等价于传统的流体排版技术，但只需一行代码且无需媒体查询。来源：MDN Web Docs 及 CSS-Tricks Fluid Typography。
+
+{{知识点12}}
+clamp() 的三个参数可以使用不同单位，也可以是数学表达式。min 和 max 参数可以使用 `none` 关键字。clamp() 支持嵌套 min() 和 max() 函数。实际应用中常在 clamp() 内使用 min() 和 max() 来实现更复杂的约束逻辑，如 `width: clamp(min(10vw, 20rem), 300px, max(90vw, 55rem))`。
+
+{{知识点13}}
+var() 函数用于插入CSS自定义属性（CSS变量）的值。语法为 `var(--custom-property-name, fallback)`。第一个参数是以 `--` 开头的自定义属性名，第二个可选参数是后备值。当自定义属性未定义或值无效时使用后备值。var() 是实现CSS主题系统、设计令牌和动态样式的核心机制。
+
+{{知识点14}}
+var() 的后备值在以下情况会被使用：自定义属性未在适用的规则上声明且未通过 @property 注册初始值；自定义属性被设为 initial 关键字且未注册；自定义属性的声明值在计算值时无效（如循环依赖）。后备值允许包含逗号，如 `var(--foo, red, blue)` 的后备值是 `red, blue`。
+
+{{知识点15}}
+var() 支持嵌套后备值，实现多级降级策略。例如 `background-color: var(--main-bg-color, var(--backup-bg-color, white))` 先尝试 --main-bg-color，再尝试 --backup-bg-color，最后使用 white。自定义属性的值可以跨文件使用，即使在不同的CSS文件中声明也能正确解析。自定义属性名区分大小写。
+
+{{知识点16}}
+var() 函数不能用于属性名、选择器或除属性值以外的任何地方。使用 var() 时，包含它的属性声明在解析时被视为有效，只有在计算值时才会验证替换后的值是否有效。如果替换后值无效且没有后备值，var() 解析为无效值。通过 @property 注册自定义属性可以指定语法类型和初始值，提供更可靠的后备行为。
+
+{{知识点17}}
+env() 函数用于插入浏览器定义的环境变量值。语法为 `env(environment-variable, fallback)`。最常用的环境变量是 safe-area-inset-* 系列（top、right、bottom、left），用于处理iPhone刘海屏等非矩形显示器的安全区域。例如 `padding-bottom: env(safe-area-inset-bottom)` 确保内容不被设备UI遮挡。
+
+{{知识点18}}
+env() 支持的浏览器定义环境变量包括：safe-area-inset-*（安全区域内边距）、safe-area-max-inset-*（最大安全区域内边距，为常量）、titlebar-area-*（PWA标题栏区域）、keyboard-inset-*（虚拟键盘区域）、preferred-text-scale（用户首选字体缩放因子）、viewport-segment-*（折叠设备视口分段）。
+
+{{知识点19}}
+env() 的 fallback 语法与 var() 类似，第一个逗号之后的所有内容都被视为后备值。env() 可用于属性值或属性值的任何部分，也可用于媒体查询规则中。当 env() 替换无效且无后备值时，使用属性的初始值或继承值（而非忽略声明）。环境变量是全局作用域的，由用户代理定义。
+
+{{知识点20}}
+CSS数学函数还包括一系列高级函数：round() 基于舍入策略计算舍入数值；mod() 计算模运算（与除数同号）；rem() 计算余数（与被除数同号）；progress() 计算一个值在起始值和结束值之间的位置（返回0到1的数值）。这些函数在 CSS Values and Units Module Level 4 中定义。
+
+{{知识点21}}
+CSS三角函数包括 sin()、cos()、tan()、asin()、acos()、atan() 和 atan2()。这些函数可以用于创建复杂的几何布局和动画效果。例如 `rotate: calc(sin(45deg) * 90deg)` 或配合 calc() 实现圆形排列等效果。三角函数的引入使CSS具备了更强大的数学计算能力。
+
+{{知识点22}}
+CSS指数函数包括 pow()（幂运算）、sqrt()（平方根）、hypot()（斜边长度）、log()（对数）和 exp()（指数）。此外还有 abs()（绝对值）、sign()（符号函数，返回-1、0或1）。这些函数在 CSS Values and Units Module Level 4 中定义，进一步扩展了CSS的数学能力。
+
+{{知识点23}}
+calc-size() 是较新的CSS函数，用于对固有尺寸值（如 auto、fit-content、max-content、min-content）进行计算，这是普通 calc() 不支持的。例如 `calc-size(fit-content, size * 0.5)` 可以将 fit-content 尺寸减半。calc-size() 解决了长期以来CSS无法对固有尺寸做数学运算的限制。
+
+{{知识点24}}
+CSS变换函数（Transform Functions）用于对元素进行几何变换，包括：translate()（平移）、rotate()（旋转）、scale()（缩放）、skew()（倾斜）、matrix()（矩阵变换）。每个函数都有2D和3D版本，如 translateX()、translateY()、translateZ()、translate3d() 等。变换通过笛卡尔坐标系描述，原点在元素左上角。
+
+{{知识点25}}
+CSS颜色函数包括 rgb()、hsl()、hwb()、lch()、oklch()、lab()、oklab()、color() 等。color-mix() 函数可以在指定颜色空间中混合两个或多个颜色，语法为 `color-mix(in <color-space>, color1 percentage, color2 percentage)`。支持多种颜色空间：srgb、display-p3、lab、oklab、lch、oklch 等。
+
+{{知识点26}}
+color-mix() 函数选择正确的颜色空间很重要：CIE XYZ 或 srgb-linear 适合模拟物理混光效果；Oklab 适合感知均匀的颜色渐变；Oklch 适合避免混合时颜色变灰（最大化色度）。color-mix() 还支持色相插值方法（shorter hue、longer hue、increasing hue、decreasing hue），以及混合两个以上的颜色。
+
+{{知识点27}}
+CSS滤镜函数包括 blur()（模糊）、brightness()（亮度）、contrast()（对比度）、drop-shadow()（投影）、grayscale()（灰度）、hue-rotate()（色相旋转）、invert()（反色）、opacity()（透明度）、saturate()（饱和度）、sepia()（褐色滤镜）。这些函数可用于 filter 和 backdrop-filter 属性，可链式组合使用。
+
+{{知识点28}}
+CSS计数器函数包括 counters() 和 counter()，用于在CSS中操作计数器值。attr() 函数用于获取HTML元素属性值并用于CSS。content 属性还支持 string()、leader()、target-counter()、target-counters()、target-text() 等函数。url() 和 image() 函数用于引用外部资源。
+
+{{知识点29}}
+在实际开发中，CSS函数的最佳实践包括：使用 clamp() 替代媒体查询实现响应式设计；使用 var() + CSS自定义属性构建主题系统；使用 calc() 处理不同单位的混合计算；使用 min()/max() 设置响应式尺寸的上下限；使用 env() 适配刘海屏和折叠屏设备。CSS函数可以自由嵌套组合使用。
+
+{{知识点30}}
+CSS函数的浏览器兼容性整体良好。calc()、var() 自2015年起获得全面支持。min()、max()、clamp() 在2020年左右获得全面支持。env() 在2019-2021年间逐步获得支持。CSS数学函数（三角函数、指数函数等）在2023年获得全面支持。calc-size() 和 progress() 等较新函数仍在逐步推进中。可通过 @supports 特性查询检测支持情况。
+
+{{知识点31}}
+CSS函数与JavaScript的协作模式：CSS变量可通过 JavaScript 的 `getComputedStyle()` 读取、通过 `element.style.setProperty()` 修改，实现运行时动态主题切换。CSS env() 变量由浏览器提供，不可通过JavaScript直接修改。CSS数学函数在浏览器渲染时计算，比等价的JavaScript计算更高效，因为可以利用GPU加速和浏览器优化的布局引擎。
+
+{{知识点32}}
+CSS Typed Arithmetic（CSS类型化算术）是 calc() 的一个重要概念。乘法运算中只能有一个操作数带单位（如 `200px * 2` 有效，`200px * 4px` 无效，因为 800px² 无意义）。除法中两个操作数可以带相同类型单位，结果为无单位数值（如 `100vw / 1px` 返回数值），该数值可用于其他需要 `<number>` 类型的属性或函数中。
+
+{{知识点33}}
+CSS函数中的数学常量包括 `e`（自然常数≈2.718）和 `pi`（圆周率≈3.14159），以及 `infinity`、`-infinity` 和 `NaN`。这些常量可在 calc() 及其他数学函数中直接使用，如 `calc(pi * 2)` 表示 2π。这些常量在 CSS Values and Units Module Level 4 中定义，序列化规则有专门说明。
+
+{{知识点34}}
+使用 min() 控制最大字体大小时需注意无障碍性：确保字体至少能缩放200%以保证可读性（不依赖辅助技术的缩放功能）。使用 max() 控制文本大小时，确保文本始终足够大以供阅读。建议使用嵌套的 min() 和 max() 组合，如 `font-size: max(min(0.5vw, 0.5em), 1rem)`。来源：MDN Web Docs WCAG指南。
+
+{{知识点35}}
+CSS函数在响应式设计中的典型应用场景：1）`width: min(90%, 1200px)` 实现最大宽度容器；2）`font-size: clamp(1rem, 2.5vw, 2rem)` 实现流体排版；3）`padding: max(1rem, 3vw)` 确保最小内边距；4）`gap: calc(1rem + 1vw)` 实现响应式间距；5）`height: calc(100vh - env(safe-area-inset-bottom))` 适配安全区域。这些模式已成为现代CSS布局的标准实践。

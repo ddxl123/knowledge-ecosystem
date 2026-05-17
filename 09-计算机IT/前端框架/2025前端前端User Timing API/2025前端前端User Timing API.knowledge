@@ -1,0 +1,95 @@
+# 2025前端前端User Timing API
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{User Timing API 是什么？User Timing API 是浏览器 Performance API 的一部分，允许开发者在代码关键路径中添加自定义的性能标记（mark）和测量（measure），用于精确度量应用特定功能的执行时间。它弥补了浏览器只能自动采集资源加载等指标、无法感知应用内部逻辑耗时的不足。}}
+
+{{知识点2}}{{User Timing API 的核心优势。相比 Date.now() 或 performance.now()，User Timing API 的优势在于：(1) 标记和测量都有名称，便于管理和检索；(2) 与浏览器开发者工具的 Performance 面板深度集成；(3) 可通过 PerformanceObserver 被动监听；(4) 纳入浏览器统一的性能时间线（Performance Timeline）。}}
+
+{{知识点3}}{{performance.mark() 方法。performance.mark(name) 用于在性能时间线中创建一个命名的 PerformanceMark 条目。name 参数是字符串，标识该标记。返回值是 PerformanceMark 对象。可以创建多个同名标记。}}
+
+{{知识点4}}{{performance.mark() 的参数。基本形式为 mark(name)，高级形式为 mark(name, markOptions)。markOptions 可包含：detail（任意元数据，需可结构化克隆）、startTime（自定义时间戳，默认为 performance.now()）。}}
+
+{{知识点5}}{{PerformanceMark 接口。PerformanceMark 是 entryType 为 "mark" 的 PerformanceEntry 对象。属性包括：entryType（返回 "mark"）、name（标记名称）、startTime（DOMHighResTimeStamp 时间戳）、duration（始终为 0）、detail（任意元数据）。}}
+
+{{知识点6}}{{PerformanceMark 的构造函数。new PerformanceMark(name, options) 可创建不在浏览器性能时间线中的标记，适用于需要手动管理的场景。通过 performance.mark() 创建的标记会自动加入性能时间线。}}
+
+{{知识点7}}{{performance.mark() 的 startTime 选项。默认使用 performance.now() 作为时间戳，但可以通过 markOptions.startTime 设定为任意 DOMHighResTimeStamp。这在需要与事件时间戳对齐时非常有用，如 clickEvent.timeStamp。}}
+
+{{知识点8}}{{performance.mark() 的 detail 选项。detail 属性可以存放任意结构化可克隆的数据，如对象、字符串、数字等。例如 performance.mark("login-started", { detail: { htmlElement: myElement.id } })。}}
+
+{{知识点9}}{{performance.mark() 的保留名称。不能使用已废弃的 PerformanceTiming 接口中的属性名作为标记名称，如 "navigationStart"、"domContentLoadedEventEnd" 等，否则会抛出 SyntaxError。}}
+
+{{知识点10}}{{performance.measure() 方法。performance.measure(name, startMark, endMark) 用于创建一个命名的 PerformanceMeasure 条目，计算两个标记之间的时间差。name 是测量名称，startMark 和 endMark 是标记名称字符串。返回 PerformanceMeasure 对象。}}
+
+{{知识点11}}{{performance.measure() 的五种调用形式。(1) measure(name)：起始为 0，结束为 performance.now()；(2) measure(name, startMark)：从指定标记到当前；(3) measure(name, startMark, endMark)：两个标记之间；(4) measure(name, measureOptions)：使用选项对象；(5) measure(name, measureOptions, endMark)：选项加结束标记。}}
+
+{{知识点12}}{{performance.measure() 的 measureOptions。measureOptions 对象可包含：detail（任意元数据）、start（起始时间戳或标记名）、end（结束时间戳或标记名）、duration（持续时间毫秒数）。start/end/duration 三者只能指定其中两个或更少。}}
+
+{{知识点13}}{{PerformanceMeasure 接口。PerformanceMeasure 是 entryType 为 "measure" 的 PerformanceEntry 对象。属性包括：entryType（返回 "measure"）、name（测量名称）、startTime（起始时间戳）、duration（DOMHighResTimeStamp 持续时间）、detail（任意元数据）。}}
+
+{{知识点14}}{{performance.measure() 的 duration 计算。duration 等于结束时间戳减去起始时间戳。结束时间戳的确定优先级：(1) measureOptions.end；(2) endMark 标记的 startTime；(3) start + duration；(4) performance.now()。}}
+
+{{知识点15}}{{performance.measure() 的异常类型。可能抛出：TypeError（参数歧义，如同时指定 end 和 endMark）、SyntaxError（引用了不存在的标记名称）、DataCloneError（detail 无法序列化）、RangeError（detail 为非 null 但不可克隆）。}}
+
+{{知识点16}}{{PerformanceObserver 接口。PerformanceObserver 用于被动监听性能条目的创建，是获取自定义性能数据的推荐方式。创建方式：new PerformanceObserver(callback)，callback 接收 PerformanceObserverEntryList 和 observer 两个参数。}}
+
+{{知识点17}}{{PerformanceObserver.observe() 方法。调用 observer.observe({ entryTypes: ["measure", "mark"] }) 来订阅指定类型的性能条目。支持的 entryTypes 包括 "mark"、"measure"、"resource"、"navigation"、"paint" 等。}}
+
+{{知识点18}}{{PerformanceObserver 的 disconnect() 和 takeRecords()。disconnect() 停止观察，回调不再接收新条目。takeRecords() 返回当前缓冲区中的条目列表并清空。这两个方法用于控制观察者的生命周期。}}
+
+{{知识点19}}{{PerformanceObserver.supportedEntryTypes 静态属性。返回当前浏览器支持的 entryType 值数组，可用于特性检测。例如检查浏览器是否支持 "mark" 类型：PerformanceObserver.supportedEntryTypes.includes("mark")。}}
+
+{{知识点20}}{{performance.getEntries() 方法。获取所有性能条目。可以遍历后通过 entry.entryType 过滤出 "mark" 或 "measure" 类型。注意此方法只返回调用时已存在的条目，不会通知新增条目。}}
+
+{{知识点21}}{{performance.getEntriesByType(entryType) 方法。按类型过滤性能条目，如 performance.getEntriesByType("mark") 返回所有标记，performance.getEntriesByType("measure") 返回所有测量。比 getEntries() 更高效。}}
+
+{{知识点22}}{{performance.getEntriesByName(name, entryType) 方法。按名称和可选类型获取特定性能条目。如 performance.getEntriesByName("login-duration", "measure") 获取名为 "login-duration" 的测量条目。适用于精确查找。}}
+
+{{知识点23}}{{performance.clearMarks() 方法。清除所有或指定名称的性能标记。不传参数清除所有标记，传入名称字符串如 performance.clearMarks("myMarker") 则只清除该名称的标记。用于释放性能缓冲区内存。}}
+
+{{知识点24}}{{performance.clearMeasures() 方法。清除所有或指定名称的性能测量。用法与 clearMarks() 对称。performance.clearMeasures() 清除所有，performance.clearMeasures("myMeasure") 清除指定名称。}}
+
+{{知识点25}}{{performance.now() 与 Date.now() 的区别。(1) 精度：performance.now() 可达微秒级（5μs 或 100μs），Date.now() 只有毫秒级；(2) 时钟：performance.now() 基于单调时钟不受系统调时影响，Date.now() 受系统时钟调整影响；(3) 基准：performance.now() 相对于 timeOrigin，Date.now() 相对于 Unix 纪元。}}
+
+{{知识点26}}{{performance.now() 的安全限制。为防止时序攻击和指纹识别，performance.now() 的精度受跨源隔离状态影响：跨源隔离上下文精度为 5 微秒，非隔离上下文为 100 微秒。可通过 crossOriginIsolated 属性检查。}}
+
+{{知识点27}}{{DOMHighResTimeStamp 类型。User Timing API 使用的时间戳类型，是双精度浮点数，单位为毫秒，精度高于 Date.now() 的整数毫秒。performance.now()、PerformanceEntry.startTime、PerformanceEntry.duration 都返回此类型。}}
+
+{{知识点28}}{{PerformanceEntry 基础接口。PerformanceMark 和 PerformanceMeasure 都继承自 PerformanceEntry。通用只读属性：name（条目名称）、entryType（条目类型）、startTime（起始时间戳）、duration（持续时间）。}}
+
+{{知识点29}}{{Chrome DevTools 可视化。在 Chrome DevTools 的 Performance 面板中，performance.mark() 创建的标记显示为竖线，performance.measure() 显示为色块，直观展示时间区间。可在 Timings 行和自定义轨道中查看。}}
+
+{{知识点30}}{{DevTools Extensibility API。Chrome 支持在 detail 中嵌入 devtools 结构化对象，实现自定义性能轨道。包含 dataType（"marker" 或 "track-entry"）、color（颜色主题）、properties（键值对数组）、tooltipText（提示文本）、track（轨道名）、trackGroup（分组名）。}}
+
+{{知识点31}}{{User Timing API 与 Performance Timeline 的关系。User Timing API 是 Performance Timeline 的扩展。Performance Timeline 定义了性能条目的统一模型和检索接口（getEntries 系列方法和 PerformanceObserver），User Timing 在此基础上提供了自定义标记和测量的能力。}}
+
+{{知识点32}}{{User Timing API 在 Web Workers 中可用。PerformanceMark 和 PerformanceMeasure 都支持在 Web Worker 上下文中使用，使得可以在后台线程中进行性能测量而不阻塞主线程。}}
+
+{{知识点33}}{{与事件时间戳结合测量用户交互。可利用 click 事件的 event.timeStamp 作为 measure 的 start 参数，精确测量从用户点击到 UI 更新的延迟。如 performance.measure("login-click", { start: clickEvent.timeStamp, end: marker.startTime })。}}
+
+{{知识点34}}{{User Timing API 的 W3C 规范。User Timing 规范由 W3C Web Performance 工作组维护，定义了 performance.mark()、performance.measure()、PerformanceMark、PerformanceMeasure 等接口。最新版本为 User Timing Level 3。}}
+
+{{知识点35}}{{与 Navigation Timing API 的区别。Navigation Timing 自动采集页面导航相关的性能数据（DNS、TCP、TTFB 等），而 User Timing 需要开发者手动在代码中放置标记来测量自定义操作的耗时。两者互补。}}
+
+{{知识点36}}{{与 Resource Timing API 的区别。Resource Timing 自动记录每个资源（图片、脚本、CSS 等）的加载时间，entryType 为 "resource"。User Timing 则用于应用逻辑层面的自定义测量，entryType 为 "mark" 或 "measure"。}}
+
+{{知识点37}}{{将性能数据发送到分析服务。通过 performance.measure() 获取的 duration 可以发送到后端分析服务。常见做法：const measure = performance.measure("task", "start", "end"); navigator.sendBeacon("/analytics", JSON.stringify({ name: measure.name, duration: measure.duration }));。}}
+
+{{知识点38}}{{避免性能缓冲区溢出。浏览器对性能条目缓冲区有大小限制。长时间运行的应用应定期调用 clearMarks() 和 clearMeasures() 清理已处理的数据，防止内存增长。也可在 PerformanceObserver 回调中及时处理。}}
+
+{{知识点39}}{{测量异步操作的耗时。User Timing API 天然适合测量异步操作，如 fetch 请求、动画帧、Promise 链等。模式为：在异步操作开始前 mark，在回调或 Promise resolve 时再次 mark，然后 measure 计算差值。}}
+
+{{知识点40}}{{React 中使用 User Timing API。React 内部使用 User Timing API 标记组件渲染阶段。开发者也可在组件生命周期中自定义标记，如在 componentDidMount 中 mark 开始，在 componentDidUpdate 中 mark 结束并 measure。React DevTools Profiler 也依赖这些数据。}}
+
+{{知识点41}}{{多个同名标记的行为。performance.mark("task") 可以多次调用，每次都会创建新的 PerformanceMark 条目，不会覆盖之前的。使用 getEntriesByName("task", "mark") 会返回所有同名标记的数组。}}
+
+{{知识点42}}{{performance.measure() 中使用时间戳替代标记名。start 和 end 参数可以是 DOMHighResTimeStamp 数值而非标记名字符串。如 performance.measure("task", { start: 100.5, end: 200.3 })。这提供了更灵活的测量方式。}}
+
+{{知识点43}}{{User Timing API 的浏览器兼容性。PerformanceMark 和 PerformanceMeasure 自 2017 年 9 月起已在所有主流浏览器中可用（Baseline: Widely available）。PerformanceObserver 自 2020 年 1 月起广泛可用。支持 Web Workers。}}
+
+{{知识点44}}{{性能标记的命名最佳实践。(1) 使用描述性名称如 "checkout-started"、"search-completed"；(2) 使用连字符或点号分隔单词；(3) 避免与 PerformanceTiming 属性名冲突；(4) 保持命名一致性，便于团队协作和自动化分析。}}
+
+{{知识点45}}{{结合 PerformanceObserver 过滤特定标记。可以在 observe 回调中通过 entry.name 过滤特定标记，或使用 buffered: true 选项获取在 observer 创建之前已记录的条目：observer.observe({ type: "mark", buffered: true })。}}
+
+{{知识点46}}{{performance.timeOrigin 属性。返回当前浏览上下文创建时的高精度时间戳（DOMHighResTimeStamp），是 performance.now() 的基准时间。可用于将 performance.now() 的相对时间转换为绝对时间：absoluteTime = performance.timeOrigin + performance.now()。}}

@@ -1,0 +1,101 @@
+# 2025Linux运维基础
+# 领域: 计算机IT
+# 学科: Linux运维
+# 来源: 2025Linux运维基础
+# 描述: Linux运维核心知识点
+
+{{知识点1}}{{Linux常用文件操作命令 - ls: 列出目录内容，-l详细模式，-a显示隐藏文件，-h人类可读大小；cp: 复制文件/目录，-r递归复制；mv: 移动/重命名；rm: 删除文件，-rf强制递归删除；mkdir: 创建目录，-p递归创建父目录；touch: 创建空文件或更新时间戳；cat: 查看文件内容；less/more: 分页查看；head/tail: 查看文件头尾内容，tail -f可实时跟踪日志。}}
+
+{{知识点2}}{{Linux文件系统层次结构 - /: 根目录，所有目录的起点；/bin: 基本用户命令；/sbin: 系统管理命令；/etc: 配置文件目录；/home: 用户主目录；/var: 可变数据（日志、缓存等）；/tmp: 临时文件；/usr: 用户程序和数据；/opt: 第三方软件安装目录；/proc: 虚拟文件系统，反映内核和进程信息；/dev: 设备文件；/mnt: 临时挂载点；/boot: 启动相关文件。}}
+
+{{知识点3}}{{文件权限管理（chmod/chown） - Linux权限分三组：owner/group/other，每组包含r(读4)/w(写2)/x(执行1)。chmod 755 file 表示owner=rwx,group=r-x,other=r-x。chown user:group file 修改文件所有者。chmod +x file 添加执行权限。umask设置默认权限掩码，常见umask 022表示新建文件权限为644，目录为755。SUID(4)、SGID(2)、Sticky bit(1)为特殊权限位。}}
+
+{{知识点4}}{{用户与组管理 - useradd创建用户，-d指定主目录，-s指定shell；userdel -r删除用户及主目录；usermod修改用户属性（-aG追加组）；passwd设置/修改密码。groupadd创建组；groupdel删除组；gpasswd管理组成员。/etc/passwd存储用户信息，/etc/shadow存储密码哈希，/etc/group存储组信息。su切换用户，sudo以root权限执行命令。}}
+
+{{知识点5}}{{grep文本搜索 - 基本语法：grep [选项] 'pattern' file。-i忽略大小写，-v反向匹配，-n显示行号，-r递归搜索目录，-c统计匹配行数，-E扩展正则（等同egrep），-l只显示文件名。常用正则：.匹配任意字符，*匹配前一字符0次或多次，^行首，$行尾，[abc]字符集，\d数字。管道组合：ps aux | grep nginx。}}
+
+{{知识点6}}{{find文件查找 - find [路径] [条件] [动作]。-name按名称匹配（支持通配符），-iname忽略大小写，-type f/d/l按类型，-size +/-10M按大小，-mtime +/-N按修改时间，-user按所有者。-exec对结果执行命令：find /var -name "*.log" -mtime +30 -exec rm {} \;。locate基于数据库快速查找（需updatedb）。which/whereis查找命令位置。}}
+
+{{知识点7}}{{管道与重定向 - 管道|将前一个命令的输出作为下一个命令的输入。重定向：>覆盖写入，>>追加写入，<输入重定向，2>错误重定向，&>全部重定向。/dev/null黑洞设备，丢弃所有输出。tee命令同时输出到屏幕和文件：command | tee output.log。here document：cat <<EOF ... EOF。xargs将标准输入转为命令参数。}}
+
+{{知识点8}}{{Vim编辑器基础 - 三种模式：普通模式（ESC）、插入模式（i/a/o）、命令行模式（:）。常用操作：i进入插入模式，:w保存，:q退出，:wq保存退出，:q!强制退出不保存。移动：h/j/k/l左/下/上/右，gg文件开头，G文件末尾，:n跳到第n行。编辑：dd删除行，yy复制行，p粘贴，u撤销，Ctrl+r重做。搜索：/keyword向下搜索，?keyword向上，n下一个。:%s/old/new/g全局替换。}}
+
+{{知识点9}}{{进程管理基础 - ps查看进程，aux显示所有进程详细信息，-ef另一种风格。top/htop实时监控进程状态。kill发送信号，-9强制终止（SIGKILL），-15优雅终止（SIGTERM）。nohup command &后台运行且不受终端关闭影响。jobs查看后台任务，fg/bg前后台切换。systemctl管理systemd服务。pstree显示进程树。nice/renice调整进程优先级。}}
+
+{{知识点10}}{{systemd服务管理 - systemctl start/stop/restart/status服务名：启停重启查看状态。systemctl enable/disable服务名：开机自启/取消自启。systemctl list-units --type=service：列出所有服务。journalctl -u 服务名 -f：查看服务日志。服务文件位于/usr/lib/systemd/system/或/etc/systemd/system/。[Unit]定义描述和依赖，[Service]定义启动命令和行为，[Install]定义安装方式。systemctl daemon-reload重载配置。}}
+
+{{知识点11}}{{网络基础配置 - ip addr show查看IP地址（替代ifconfig）。ip route show查看路由表。/etc/sysconfig/network-scripts/或/etc/netplan/存放网络配置文件。DNS配置：/etc/resolv.conf。hostnamectl set-hostname设置主机名。NetworkManager管理工具：nmcli dev show查看设备，nmcli con up/down连接名。ping测试连通性，traceroute追踪路由，mtr结合两者。}}
+
+{{知识点12}}{{SSH远程管理 - ssh user@host远程登录，-p指定端口，-i指定私钥。ssh-keygen生成密钥对，ssh-copy-id user@host推送公钥实现免密登录。scp传输文件：scp file user@host:/path。rsync同步文件：rsync -avz src/ dst/，支持增量传输和远程同步。/etc/ssh/sshd_config配置SSH服务：Port、PermitRootLogin、PasswordAuthentication等。ssh-agent管理密钥。}}
+
+{{知识点13}}{{防火墙配置 - firewalld（CentOS 7+）：firewall-cmd --state查看状态，--list-all查看规则，--add-port=80/tcp开放端口，--permanent永久生效，--reload重载。iptables经典工具：iptables -L列出规则，-A追加规则，-D删除，-I插入。规则链：INPUT/OUTPUT/FORWARD。-s源地址，-d目标地址，-p协议，--dport目标端口，-j动作（ACCEPT/DROP/REJECT）。}}
+
+{{知识点14}}{{磁盘与存储管理 - df -h查看磁盘使用率。du -sh目录查看目录大小。fdisk -l查看磁盘分区。fdisk /dev/sdX交互式分区。mkfs.ext4/xfs格式化分区。mount /dev/sdX1 /mnt挂载，umount卸载。/etc/fstab配置开机自动挂载。lsblk查看块设备树。LVM管理：pvcreate/vgcreate/lvcreate创建物理卷/卷组/逻辑卷，支持动态扩容。blkid查看UUID。}}
+
+{{知识点15}}{{日志管理 - /var/log/为日志目录。重要日志：messages/syslog系统日志，secure/auth.log安全日志，boot.log启动日志，dmesg内核日志。journalctl查看systemd日志，-u指定服务，-f实时跟踪，--since/--until时间过滤，-p指定优先级。logrotate日志轮转配置：/etc/logrotate.conf和/etc/logrotate.d/。rsyslog配置文件/etc/rsyslog.conf。tail -f /var/log/messages实时查看。}}
+
+{{知识点16}}{{软件包管理 - YUM/DNF（RHEL系）：yum install/remove/update包名，yum search搜索，yum info查看信息，yum list installed已安装列表，yum clean all清理缓存。DNF为YUM替代品，语法兼容。APT（Debian系）：apt install/remove/update，apt search搜索，apt list --installed。源配置：/etc/yum.repos.d/（YUM），/etc/apt/sources.list（APT）。rpm -qa查询已安装RPM包。}}
+
+{{知识点17}}{{Shell脚本基础 - #!/bin/bash声明解释器。变量：VAR=value（等号无空格），$VAR引用，${VAR}明确边界。条件判断：if [ condition ]; then ... elif ... else ... fi。比较运算：-eq等于，-ne不等于，-gt大于，-lt小于，-ge大于等于，-le小于等于。字符串：-z空串，-n非空，==相等。文件：-f存在且为文件，-d目录，-e存在，-r可读，-w可写，-x可执行。}}
+
+{{知识点18}}{{Shell脚本循环与函数 - for循环：for i in list; do ... done，或for ((i=0;i<10;i++))。while循环：while [ condition ]; do ... done。case语句：case $var in pattern) commands;; esac。函数定义：func_name() { commands; return value; }。$1-$9位置参数，$#参数个数，$@所有参数，$?上一条命令返回值，$$当前脚本PID。read读取用户输入。}}
+
+{{知识点19}}{{Cron定时任务 - crontab -e编辑，-l查看，-r删除。格式：分 时 日 月 周 命令。示例：0 2 * * * /backup.sh（每天凌晨2点），*/5 * * * * check.sh（每5分钟），0 9-18 * * 1-5（工作日9-18点每小时）。特殊字符串：@reboot启动时，@daily每天，@weekly每周。/etc/cron.d/系统级定时任务。/var/log/cron日志。注意脚本需有执行权限并使用绝对路径。}}
+
+{{知识点20}}{{Docker基础 - docker pull拉取镜像，docker images列出本地镜像，docker rmi删除镜像。docker run -d -p 80:80 --name mynginx nginx运行容器，-d后台，-p端口映射，--name命名。docker ps查看运行中容器，-a所有容器。docker exec -it container_id /bin/bash进入容器。docker stop/start/restart/rm管理容器。docker logs查看容器日志。Dockerfile构建自定义镜像。}}
+
+{{知识点21}}{{Dockerfile编写 - FROM指定基础镜像。RUN执行命令（构建时）。CMD容器启动命令（可被覆盖）。ENTRYPOINT入口点（不易覆盖）。COPY/ADD复制文件到镜像。WORKDIR设置工作目录。ENV设置环境变量。EXPOSE声明端口。VOLUME声明挂载点。ARG构建参数。多阶段构建可减小镜像体积。docker build -t name:tag .构建镜像。.dockerignore排除不需要的文件。}}
+
+{{知识点22}}{{Docker Compose - docker-compose.yml定义多容器应用。version声明版本。services定义各服务。image指定镜像或build指定Dockerfile路径。ports端口映射，volumes卷挂载，environment环境变量，depends_on依赖关系，restart重启策略。docker-compose up -d启动，down停止并清理，logs查看日志，ps查看状态，exec进入容器。networks自定义网络，named volumes持久化数据。}}
+
+{{知识点23}}{{Nginx基础配置 - 安装：yum/apt install nginx。主配置文件：/etc/nginx/nginx.conf。server块定义虚拟主机，listen监听端口，server_name域名，root网站根目录，index默认页面。location匹配URL：=精确，~正则，~*不区分大小写正则，^~前缀优先。proxy_pass反向代理到后端服务。nginx -t测试配置，nginx -s reload重载。access_log/error_log日志配置。}}
+
+{{知识点24}}{{系统性能监控 - top/htop查看CPU和内存使用。vmstat报告系统整体性能（CPU、内存、IO）。iostat查看磁盘IO统计。free -h查看内存使用（total/used/free/buff/cache/available）。sar系统活动报告，可查看历史数据。nload/iftop网络流量监控。dstat综合监控工具。/proc/cpuinfo CPU信息，/proc/meminfo内存信息。uptime系统负载（1/5/15分钟平均）。}}
+
+{{知识点25}}{{内存管理 - free -h查看内存：total总量，used已用，free空闲，buff/cache缓冲/缓存，available可用（含可回收缓存）。swap交换空间：swapon -s查看，mkswap格式化，swapon启用。/proc/sys/vm/swappiness控制swap倾向（0-100，越低越少用swap）。OOM Killer内存不足时终止进程。vm.drop_caches手动释放缓存（1页缓存，2目录项，3全部）。}}
+
+{{知识点26}}{{网络诊断工具 - ping测试连通性和延迟。traceroute追踪数据包路径。netstat -tlnp查看监听端口（-tTCP，-l监听，-n数字显示，-p进程）。ss替代netstat更高效。nmap端口扫描工具。curl/wget下载和HTTP请求，curl -I查看响应头。dig/nslookup DNS查询。tcpdump抓包分析。telnet测试端口连通性。nc(netcat)网络调试工具。}}
+
+{{知识点27}}{{SELinux安全机制 - SELinux提供强制访问控制（MAC）。三种模式：enforcing强制执行，permissive仅警告，disabled关闭。getenforce查看当前模式，setenforce 0/1切换。配置文件：/etc/selinux/config。安全上下文：ls -Z查看，chcon修改，restorecon恢复默认。semanage管理SELinux策略，如semanage port -a -t http_port_t -p tcp 8080。setsebool设置布尔值。ausearch/audit2why分析审计日志。}}
+
+{{知识点28}}{{TCP/IP网络基础 - OSI七层模型：物理层/数据链路层/网络层/传输层/会话层/表示层/应用层。TCP/IP四层：网络接口层/网络层/传输层/应用层。TCP三次握手：SYN→SYN-ACK→ACK。四次挥手：FIN→ACK→FIN→ACK。IP地址分类：A类(1-126)，B类(128-191)，C类(192-223)。子网掩码划分网络和主机部分。常见端口：SSH(22)、HTTP(80)、HTTPS(443)、MySQL(3306)。}}
+
+{{知识点29}}{{DNS域名解析 - 域名层次：根域(.)→顶级域(.com/.cn)→二级域→子域。解析流程：本地缓存→hosts文件→本地DNS服务器→根DNS→顶级域DNS→权威DNS。记录类型：A(IPv4地址)、AAAA(IPv6)、CNAME(别名)、MX(邮件)、NS(域名服务器)、PTR(反向解析)、TXT(文本记录)。dig example.com A查询A记录。/etc/resolv.conf配置DNS服务器。systemd-resolved现代DNS管理。}}
+
+{{知识点30}}{{RAID磁盘阵列 - RAID0条带化，性能好无冗余。RAID1镜像，冗余好容量减半。RAID5条带化+分布式奇偶校验，至少3块盘，允许坏1块。RAID6双重校验，允许坏2块。RAID10镜像+条带，性能和冗余兼顾，至少4块盘。mdadm管理软件RAID：mdadm --create创建，--detail查看，--manage管理。/proc/mdstat查看RAID状态。硬件RAID通过控制器卡管理。}}
+
+{{知识点31}}{{LVM逻辑卷管理 - 三层结构：PV(物理卷)→VG(卷组)→LV(逻辑卷)。pvcreate /dev/sdb创建物理卷。vgcreate vg_name /dev/sdb创建卷组。lvcreate -L 10G -n lv_name vg_name创建逻辑卷。扩容流程：添加PV→vgextend扩展VG→lvextend扩展LV→resize2fs/xfs_growfs扩展文件系统。lvreduce缩减（需先缩减文件系统）。快照：lvcreate -s创建快照用于备份。pvs/vgs/lvs查看状态。}}
+
+{{知识点32}}{{Shell脚本实战技巧 - 数组：arr=(a b c)，${arr[0]}访问，${arr[@]}所有元素。字符串操作：${#var}长度，${var:offset:length}截取，${var/old/new}替换。awk文本处理：awk '{print $1}'打印第一列，-F指定分隔符，NR行号，NF列数。sed流编辑器：sed 's/old/new/g'替换，sed -i原地编辑，sed '/pattern/d'删除匹配行。sort排序，uniq去重，wc统计行/词/字节数。}}
+
+{{知识点33}}{{系统安全加固 - 禁用root SSH登录：PermitRootLogin no。使用密钥认证替代密码。配置fail2ban防暴力破解。定期更新系统：yum update/apt upgrade。最小权限原则，避免使用root操作。审计日志：auditd服务，auditctl管理规则。文件完整性：aide/rpm -V。关闭不需要的服务和端口。配置/etc/security/limits.conf资源限制。pam模块加强认证。iptables/firewalld限制访问。}}
+
+{{知识点34}}{{备份策略 - 全量备份：完整复制所有数据。增量备份：只备份自上次备份后变化的数据。差异备份：备份自上次全量备份后变化的数据。rsync增量同步利器：rsync -avz --delete source/ dest/。tar打包压缩：tar -czf backup.tar.gz /path（-zgzip），tar -cjf（-jbzip2）。mysqldump数据库备份。自动化备份脚本+crontab。异地备份（rsync到远程/对象存储）。定期验证备份可恢复性。}}
+
+{{知识点35}}{{Ansible自动化运维 - 无Agent，基于SSH。inventory定义主机清单。playbook用YAML编写自动化任务。ad-hoc命令：ansible all -m ping，-m指定模块，-a参数。常用模块：command/shell执行命令，copy复制文件，yum/apt包管理，service/systemd服务管理，template模板渲染，user用户管理，file文件属性。roles组织复杂playbook。ansible-playbook playbook.yml执行。vault加密敏感数据。}}
+
+{{知识点36}}{{容器网络基础 - bridge（默认）：容器通过虚拟网桥通信，docker0网桥。host：容器共享宿主机网络栈。none：无网络。overlay：跨主机容器通信（Docker Swarm/K8s）。macvlan：容器获得独立MAC地址。docker network create创建自定义网络。容器间通过服务名DNS解析。端口映射-p host:container。docker inspect查看容器网络详情。CNI(Container Network Interface)标准接口规范。}}
+
+{{知识点37}}{{Kubernetes基础概念 - Pod最小调度单元，包含一个或多个容器。Deployment管理Pod副本和滚动更新。Service提供稳定的网络访问入口（ClusterIP/NodePort/LoadBalancer）。Namespace逻辑隔离。ConfigMap/Secret管理配置和密钥。PV/PVC持久化存储。Ingress管理外部HTTP路由。kubectl命令：get/describe/create/apply/delete/logs/exec。YAML声明式管理。}}
+
+{{知识点38}}{{日志分析与ELK - ELK Stack：Elasticsearch存储和搜索，Logstash收集和处理，Kibana可视化。Filebeat轻量级日志采集器。日志收集流程：应用→Filebeat→Logstash→Elasticsearch→Kibana。Elasticsearch倒排索引，支持全文搜索。Logstash filter插件：grok解析、mutate转换、date时间处理。常见使用场景：集中日志管理、故障排查、安全审计、性能分析。替代方案：Loki+Grafana更轻量。}}
+
+{{知识点39}}{{系统启动流程 - BIOS/UEFI→Bootloader(GRUB)→内核加载→init/systemd。GRUB配置：/boot/grub2/grub.cfg，/etc/default/grub修改后grub2-mkconfig重建。systemd启动目标：multi-user.target(命令行)，graphical.target(图形)。systemctl set-default设置默认目标。启动服务：systemctl enable设置开机自启。systemd-analyze分析启动时间，blame查看各服务耗时。单用户模式：内核参数加single/1或rd.break。}}
+
+{{知识点40}}{{Linux内核参数调优 - /etc/sysctl.conf或/etc/sysctl.d/配置。sysctl -p加载配置。关键参数：net.ipv4.tcp_max_syn_backlog(SYN队列)，net.core.somaxconn(最大连接队列)，net.ipv4.tcp_tw_reuse(TIME_WAIT重用)，vm.swappiness(swap倾向)，fs.file-max(最大文件描述符)，net.ipv4.ip_forward(IP转发)。ulimit -n设置进程最大打开文件数。/etc/security/limits.conf永久配置。性能调优需根据实际负载逐步调整。}}
+
+{{知识点41}}{{Shell脚本调试与规范 - bash -x script.sh启用调试模式（打印每条命令）。set -e命令失败立即退出。set -u使用未定义变量报错。set -o pipefail管道失败时报错。shellcheck静态分析工具检查脚本问题。编写规范：变量用${}引用，字符串用双引号，路径用变量而非硬编码，添加注释和usage函数，使用函数模块化，错误处理和日志记录。trap捕获信号做清理。}}
+
+{{知识点42}}{{网络文件系统 - NFS(Network File System)：服务器端安装nfs-utils，配置/etc/exports（/share client_ip(rw,sync,no_root_squash)），启动nfs-server。客户端mount -t nfs server:/share /mnt。autofs自动挂载。SMB/CIFS（Windows共享）：samba服务，smbclient测试。GlusterFS分布式文件系统。Ceph统一存储（块/文件/对象）。网络存储性能受带宽和延迟影响。}}
+
+{{知识点43}}{{监控与告警 - Prometheus拉取式指标采集，PromQL查询语言。Grafana可视化仪表盘。Zabbix企业级监控，支持Agent/SNMP/JMX等多种采集方式。告警规则：CPU>90%、内存>85%、磁盘>90%、服务宕机。监控四要素：指标(Metrics)、日志(Logs)、追踪(Traces)、告警(Alerts)。常用监控项：CPU使用率、内存使用率、磁盘IO、网络流量、进程数、连接数。自定义监控脚本+阈值告警。}}
+
+{{知识点44}}{{Git版本控制基础 - git init初始化仓库。git clone克隆远程仓库。git add暂存文件，git commit -m "msg"提交。git push推送到远程，git pull拉取并合并。git branch分支管理，git checkout/switch切换分支，git merge合并。git log查看提交历史，git diff查看差异。git stash暂存工作区。.gitignore忽略文件。SSH密钥或HTTPS token认证。GitLab/GitHub/Gitea代码托管平台。}}
+
+{{知识点45}}{{数据库运维基础 - MySQL：systemctl start mysqld启动。mysql -u root -p登录。常用操作：SHOW DATABASES/SHOW TABLES/DESCRIBE表结构。备份：mysqldump -u root -p dbname > backup.sql。恢复：mysql -u root -p dbname < backup.sql。主从复制配置。PostgreSQL：systemctl start postgresql。psql客户端。pg_dump备份。Redis：systemctl start redis。redis-cli客户端。持久化：RDB快照/AOF日志。}}
+
+{{知识点46}}{{故障排查思路 - 检查系统日志：dmesg、journalctl、/var/log/。检查资源使用：top(CPU)、free(内存)、df(磁盘)、ss(网络)。检查服务状态：systemctl status。检查端口监听：ss -tlnp。检查网络连通：ping、traceroute、curl。分层排查：硬件→内核→系统→服务→应用→网络。常见问题：磁盘满(df -h)、内存泄漏(top)、僵尸进程(ps aux | grep Z)、文件句柄耗尽(lsof)、DNS故障(dig)。}}
+
+{{知识点47}}{{容器安全实践 - 使用最小基础镜像（Alpine/distroless）。不以root用户运行容器。只读文件系统。限制容器资源（CPU/内存）。扫描镜像漏洞（Trivy/Clair）。签名和验证镜像。网络策略限制容器间通信。Secret管理（K8s Secrets/Vault）。定期更新基础镜像。禁止特权模式（--privileged）。seccomp和AppArmor限制系统调用。日志审计容器行为。}}
+
+{{知识点48}}{{Linux文本处理三剑客 - grep搜索，sed编辑，awk分析。grep过滤行，sed修改行内容，awk按列处理。awk '{print $1,$3}'打印第1和第3列。awk -F: '{print $1}' /etc/passwd以冒号分隔打印用户名。awk 'NR>=5 && NR<=10'打印5-10行。awk '{sum+=$1} END{print sum}'求和。sed '3d'删除第3行。sed -n '5,10p'打印5-10行。组合使用：cat file | grep error | awk '{print $4}' | sort | uniq -c。}}

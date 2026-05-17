@@ -1,0 +1,83 @@
+# 2025前端Netlify部署平台
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{Netlify是一个面向现代前端开发的云部署平台，提供从构建、部署到扩展的一体化解决方案。它支持AI Agent、Serverless和全球CDN分发，被数百万开发者使用。}}
+
+{{知识点2}}{{Netlify的核心理念是Git驱动部署——每次代码推送自动生成新部署，支持原子部署（Atomic Deploys），确保站点在上传过程中永远不会处于不一致状态。}}
+
+{{知识点3}}{{netlify.toml是Netlify的核心配置文件，存放在项目根目录，用于指定构建命令、发布目录、重定向规则、环境变量等。netlify.toml中的设置优先于Netlify UI中的设置。}}
+
+{{知识点4}}{{netlify.toml中的[build]区块支持以下键：base（基础目录）、publish（发布目录）、command（构建命令）、environment（环境变量）、processing（后处理设置）。构建命令在Bash shell中运行。}}
+
+{{知识点5}}{{Netlify自动检测项目使用的前端框架并配置构建设置。支持的框架包括Angular、Astro、Create React App、Eleventy、Gatsby、Next.js、Nuxt、Remix、SvelteKit、Qwik、Hugo、Jekyll等。}}
+
+{{知识点6}}{{Netlify Serverless Functions允许运行服务端代码而无需管理服务器。支持TypeScript、JavaScript和Go语言。函数与站点一起版本控制、构建和部署，自动处理服务发现和API网关。}}
+
+{{知识点7}}{{Serverless Functions的默认配置包括：us-east-2区域（2023年10月后创建的站点）、1024MB内存、同步函数60秒执行限制、后台函数15分钟执行限制、缓冲同步函数6MB请求/响应负载限制。}}
+
+{{知识点8}}{{Background Functions是Netlify的异步长时间运行函数，允许最长15分钟的执行时间，适用于生成站点地图、处理媒体资源、批量发送邮件等场景。}}
+
+{{知识点9}}{{Scheduled Functions（定时函数）允许按Cron表达式定时触发函数执行，适用于定期数据同步、报表生成等定时任务场景。}}
+
+{{知识点10}}{{Netlify Edge Functions基于Deno运行时在网络边缘执行，使用TypeScript和JavaScript编写。可用于本地化内容、A/B测试、用户认证、个性化内容、请求重定向等场景。}}
+
+{{知识点11}}{{Edge Functions在距离用户最近的全球边缘节点执行，支持响应缓存以进一步提升性能。函数与站点一起版本控制和部署，支持Deploy Previews和回滚。}}
+
+{{知识点12}}{{Netlify支持响应流（Response Streaming），同步函数可以流式传输响应，让内容更快地呈现给用户，提升用户体验。}}
+
+{{知识点13}}{{Netlify Blobs是一个高可用的Blob存储服务，可用作简单的键值存储或基础数据库。针对频繁读取和不频繁写入进行了优化，支持可配置的一致性模型。}}
+
+{{知识点14}}{{Netlify Blobs支持从Functions、Edge Functions、Build Plugins和Netlify CLI进行CRUD操作。每个Blob属于单个站点，站点可以有多个命名空间（stores）。}}
+
+{{知识点15}}{{Netlify Deploy Previews（部署预览）为每个Pull Request自动生成独立的预览URL，团队可以审查、分享、批准后再部署到生产环境。支持无限数量的部署预览。}}
+
+{{知识点16}}{{Netlify支持一键回滚（One-click Rollbacks），可以快速将站点恢复到任何之前成功部署的版本，极大降低了部署风险。}}
+
+{{知识点17}}{{Skew Protection（偏差保护）解决版本偏差问题——当用户浏览器缓存了旧版本客户端代码，而服务端已更新时，Netlify会将请求路由到正确的服务器版本。目前支持Astro和Next.js。}}
+
+{{知识点18}}{{Netlify提供全局CDN分发，所有静态资源自动通过全球边缘网络分发，确保全球用户都能快速访问。CDN从第一次部署开始就自动生效。}}
+
+{{知识点19}}{{Netlify Image CDN提供图片优化和自动转换功能，可在边缘节点对图片进行格式转换、尺寸调整等操作，减少带宽消耗并提升加载速度。}}
+
+{{知识点20}}{{Netlify支持自定义域名和自动SSL/TLS证书。用户可以轻松绑定自己的域名，Netlify自动管理HTTPS证书的签发和续期。}}
+
+{{知识点21}}{{Netlify提供环境变量管理功能，可以在Netlify UI中安全存储敏感值（如API密钥），支持作用域设置、团队审计日志追踪，也可通过CLI和API访问。}}
+
+{{知识点22}}{{Netlify支持重定向和重写规则配置，可在netlify.toml中定义[[redirects]]规则，也支持_redirects文件。用于URL重写、301/302重定向、代理请求等。}}
+
+{{知识点23}}{{Netlify支持Build Plugins（构建插件）扩展构建过程的功能。插件可通过netlify.toml中的[[plugins]]区块配置，支持自定义构建验证、性能分析、SEO检查等。}}
+
+{{知识点24}}{{Netlify Forms是内置的表单处理功能，无需后端代码即可接收和管理HTML表单提交。支持通知集成和垃圾邮件过滤。}}
+
+{{知识点25}}{{Netlify Identity提供用户认证和身份管理服务，支持注册、登录、密码恢复等功能，可集成到Functions中用于保护API端点。}}
+
+{{知识点26}}{{Netlify的定价采用基于Credit（信用额度）的模型。Free计划300 credits、Personal $9/月1000 credits、Pro $20/月3000 credits（无限成员）、Enterprise自定义价格无限credits。}}
+
+{{知识点27}}{{Netlify Credit消耗标准：生产部署15 credits/次、计算10 credits/GB-hour、带宽20 credits/GB、Web请求2 credits/万次。AI推理费用因模型而异。}}
+
+{{知识点28}}{{Netlify提供Rate Limiting（速率限制）和防火墙流量规则，保护站点免受恶意流量攻击。Enterprise计划还提供私有网络连接（Private Connectivity）。}}
+
+{{知识点29}}{{Netlify支持Monorepo（单体仓库）配置，可以在同一仓库中管理多个站点，通过base目录或package目录指定不同的配置文件位置。}}
+
+{{知识点30}}{{Netlify CLI是命令行工具，支持本地开发、部署、函数管理等操作。可以本地测试Functions和Edge Functions，直接从命令行部署站点。}}
+
+{{知识点31}}{{Netlify支持Branch Deploys（分支部署），可以为特定Git分支创建独立部署，适用于开发环境、测试环境等多环境管理。}}
+
+{{知识点32}}{{Netlify的Build Hooks（构建钩子）允许通过HTTP POST请求触发新的部署，可与外部系统（如CMS更新、定时任务）集成实现自动部署。}}
+
+{{知识点33}}{{Netlify提供30天和1天的可观测性（Observability）数据，包括函数指标、分析数据、构建日志等，帮助开发者监控站点性能和运行状态。}}
+
+{{知识点34}}{{Netlify支持Secret Scanning（密钥扫描），自动检测代码中可能泄露的敏感信息（如API密钥），防止安全凭证意外提交到仓库。}}
+
+{{知识点35}}{{Netlify Enterprise提供99.99% SLA、SSO/SAML、审计日志、合规认证、日志导出、组织管理等企业级功能，以及24/7/365专属支持。}}
+
+{{知识点36}}{{Netlify支持AI Gateway，提供AI模型访问能力。平台内置Agent Runners支持AI Agent构建，可以同时使用AI和代码两种方式构建应用。}}
+
+{{知识点37}}{{Netlify的Ignore Builds机制会自动检测基础目录中是否有文件变更，如果没有变更则跳过构建。也可以在netlify.toml中自定义ignore命令覆盖默认行为。}}
+
+{{知识点38}}{{Netlify支持Netlify Database，提供结构化数据存储能力，与Blobs存储互补。Database适合结构化查询，Blobs适合非结构化键值存储。}}
+
+{{知识点39}}{{Netlify的Visual Editor（可视化编辑器）允许非技术用户直接在页面上编辑内容，支持与各种CMS和内容源集成，实现内容的可视化管理。}}
+
+{{知识点40}}{{Netlify Extensions（扩展）是Netlify SDK构建的集成，可以在构建部署生命周期中运行。通过netlify.toml中的[[integrations]]区块配置扩展设置。}}

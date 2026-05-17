@@ -1,0 +1,117 @@
+# 2025前端前端样式方案
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}
+CSS Modules 是一种 CSS 模块化方案，通过在构建时将 CSS 类名自动转换为唯一的哈希类名（如 `.title` → `.title_abc123`），实现样式作用域隔离。每个 CSS 文件就是一个独立的模块，导出一个类名映射对象，在 JS 中通过 `styles.title` 方式引用。CSS Modules 是 CSS 规范的原生扩展，不依赖运行时，构建时生成最终 CSS 文件。
+
+{{知识点2}}
+CSS Modules 的核心原理：构建工具（如 Webpack 的 css-loader）在编译阶段解析 CSS 文件，将所有类名替换为全局唯一的哈希名称。使用 `:local(.className)` 声明局部作用域（默认），`:global(.className)` 声明全局作用域。组件中通过 `import styles from './Button.module.css'` 导入，用 `styles.button` 访问生成的唯一类名。
+
+{{知识点3}}
+CSS Modules 的优势：天然的作用域隔离避免了样式冲突；零运行时开销，纯构建时处理；与原生 CSS 语法完全兼容，学习成本低；支持组合（composes）实现样式复用；可与任何框架（React/Vue/Svelte）配合使用；调试时可通过 source map 定位源文件。
+
+{{知识点4}}
+CSS Modules 的 `composes` 机制：通过 `composes: className from './file.css'` 可以从其他模块导入并组合类名。也可以在同文件内组合：`.base { color: red } .special { composes: base; font-weight: bold }`。`composes` 是 CSS Modules 特有的组合原语，不等同于 Sass 的 `@extend`，它只合并类名而不复制 CSS 规则。
+
+{{知识点5}}
+Tailwind CSS 是一个原子化（Utility-First）CSS 框架，核心理念是提供大量预定义的单一用途工具类（如 `flex`、`pt-4`、`text-center`、`hover:blue`），通过在 HTML 中直接组合这些类来构建 UI，而非编写自定义 CSS。Tailwind v4（2025年发布）采用全新的 Oxide 引擎，性能大幅提升，配置文件从 `tailwind.config.js` 迁移到 CSS 文件中的 `@theme` 指令。
+
+{{知识点6}}
+Tailwind CSS 的工作原理：扫描所有 HTML 文件、JS 组件和模板中的类名，通过 JIT（Just-In-Time）引擎按需生成对应的 CSS 样式，写入静态 CSS 文件。Tailwind v4 作为 Vite 插件运行（`@tailwindcss/vite`），集成方式为在 Vite 配置中添加 `tailwindcss()` 插件，并在 CSS 中 `@import "tailwindcss"`。零运行时，纯构建时产物。
+
+{{知识点7}}
+Tailwind CSS 的优势：开发速度快，无需命名类名和切换文件；CSS 体积随项目增长趋于平稳（工具类高度复用）；内置设计约束保证视觉一致性；支持响应式变体（`sm:`、`md:`、`lg:`）和状态变体（`hover:`、`focus:`、`dark:`）；组件可跨项目复制粘贴；2025年已成为最流行的 CSS 框架之一。
+
+{{知识点8}}
+Tailwind CSS 与内联样式（inline styles）的区别：内联样式每个值都是魔法数字，Tailwind 从预定义设计系统中选择；内联样式无法处理 hover/focus 等状态，Tailwind 通过状态变体轻松实现；内联样式不支持媒体查询，Tailwind 响应式变体开箱即用；Tailwind 生成的类可被 PurgeCSS 等工具优化压缩。
+
+{{知识点9}}
+Tailwind CSS v4 的新特性：全新 Oxide 引擎（基于 Rust 重写），构建速度提升 10x+；CSS-first 配置（使用 `@theme` 替代 JS 配置文件）；原生 CSS 变量集成；自动内容检测（无需手动配置 content 路径）；内置 `@import` 支持；作为 Vite 插件深度集成。
+
+{{知识点10}}
+Styled Components 是最流行的 CSS-in-JS 库之一，利用 ES6 的标签模板字面量（Tagged Template Literals）允许开发者在 JS 中直接编写 CSS 来定义组件样式。它消除了组件和样式之间的映射关系，将样式作为组件的底层构造。当前最新版本为 v7 alpha，支持现代 CSS 特性。
+
+{{知识点11}}
+Styled Components 的核心用法：通过 `styled.div`、`styled.button` 等方法创建带样式的组件。支持通过 props 动态调整样式：`const Button = styled.button` `` `background: ${props => props.primary ? 'palevioletred' : 'white'};` ``。可通过 `extend` 方法扩展已有组件样式，通过 `as` 属性动态切换渲染的 HTML 元素。
+
+{{知识点12}}
+Styled Components 的优势：真正的样式作用域隔离（每个组件生成唯一类名）；支持动态样式（基于 props 条件渲染）；自动添加厂商前缀；支持主题（ThemeProvider）；内置 SSR 支持；支持嵌套选择器和媒体查询；与 React 生态深度集成。
+
+{{知识点13}}
+Styled Components 的性能考量：运行时需要 JS 执行来注入样式（有性能开销）；不应在 render 方法内声明 styled 组件（会导致每次渲染重新创建）；SSR 时需要收集和注入关键 CSS 以避免闪烁。v7 引入了编译时优化（SWC 插件）来减少运行时开销。
+
+{{知识点14}}
+UnoCSS 是由 Anthony Fu 创建的即时按需原子化 CSS 引擎，定位为 Tailwind CSS 的高性能替代方案。它的核心理念是"虚拟 CSS"——不预设固定的类名集合，而是通过可组合的预设（Preset）系统按需生成 CSS。UnoCSS 号称比 Tailwind 快 5-10 倍，因为它通过纯字符串匹配而非正则解析来识别类名。
+
+{{知识点15}}
+UnoCSS 的架构设计：核心引擎（Core）只负责将类名转换为 CSS 规则，所有具体的类名规则都由预设（Preset）提供。官方预设包括：`@unocss/preset-uno`（Tailwind/Windi CSS 兼容）、`@unocss/preset-icons`（图标 CSS）、`@unocss/preset-attributify`（属性化模式）、`@unocss/preset-tagify`（标签化模式）。用户可编写自定义预设扩展规则。
+
+{{知识点16}}
+UnoCSS 的预设系统：预设是一组规则、变体和主题的集合。`presetUno` 提供了与 Tailwind/Windi CSS 兼容的完整工具类；`presetIcons` 可将任意图标库（Iconify）转为纯 CSS 图标（支持 UnoCSS/SVG/背景图模式）；`presetAttributify` 允许用 HTML 属性代替 class 指定样式（如 `<div text="sm blue">`）。
+
+{{知识点17}}
+Emotion 是另一个主流的 CSS-in-JS 库，提供强大且可预测的样式组合能力。它有三种使用方式：`@emotion/css`（框架无关）、`@emotion/react`（React 专用，支持 css prop 和主题）、`@emotion/styled`（类似 Styled Components 的 styled API）。Emotion 的灵感来源于 styled-components 和 glamorous。
+
+{{知识点18}}
+Emotion 与 Styled Components 的对比：两者都是运行时 CSS-in-JS 方案；Emotion 提供了更灵活的 API（css 函数、css prop、styled API 三种选择），Styled Components 专注于 styled API；Emotion 的 `@emotion/react` 包支持零配置 SSR，Styled Components 需要额外设置；Emotion 支持框架无关使用，Styled Components 主要面向 React。
+
+{{知识点19}}
+Panda CSS 是一个 CSS-in-JS 引擎，结合了 CSS-in-JS 的开发体验和原子化 CSS 的性能优势。它通过静态分析扫描 JS/TS 文件中的 JSX 样式 props 和函数调用，按需（JIT）生成原子化 CSS。Panda CSS 在构建时生成样式（通过 CLI 或 PostCSS 插件），不产生运行时开销。
+
+{{知识点20}}
+Panda CSS 的核心特性：类型安全的样式编写（TypeScript 一等支持）；支持 JSX 样式 props（类似 Styled System）；内置 Recipes API（类似 CVA/Stitches）用于组件变体定义；零运行时（构建时生成 CSS）；支持 Token 系统定义设计变量；提供可视化 Studio 工具。
+
+{{知识点21}}
+Vanilla Extract 是一个零运行时的 CSS-in-TS/CSS-in-JS 方案。样式文件使用 TypeScript 编写（`.css.ts`），在构建时编译为纯 CSS 文件。它提供 `style`、`styleVariants`、`createTheme` 等 API，完全类型安全。灵感来源于 CSS Modules 但提供了更强的类型检查和主题系统。
+
+{{知识点22}}
+Vanilla Extract 的优势：真正的零运行时（所有样式在构建时提取为 CSS）；TypeScript 完整类型支持；内置主题/变体系统；与主流构建工具（Vite/Webpack/ESBuild）集成；支持 Sprites 优化；提供 Sprinkles API 实现原子化样式 props。
+
+{{知识点23}}
+CSS-in-JS 方案的整体分类：运行时方案（Styled Components、Emotion）——样式在浏览器中通过 JS 注入，灵活但有性能开销；零运行时方案（Vanilla Extract、Panda CSS、Linaria）——样式在构建时提取为静态 CSS，兼顾开发体验和性能；编译时原子化方案（Tailwind CSS、UnoCSS）——直接在 HTML 中使用工具类。
+
+{{知识点24}}
+原子化 CSS（Atomic CSS）概念：将样式拆分为最小粒度的单一属性类（如 `m-0` 表示 `margin: 0`，`text-red` 表示颜色红色），通过组合这些原子类来构建 UI。优势是 CSS 体积可控（不随组件数量线性增长）、高度复用。劣势是 HTML 中类名较多。Tailwind CSS、UnoCSS、Windi CSS、Tachyons 都是原子化 CSS 框架。
+
+{{知识点25}}
+CSS 预处理器（Sass/SCSS、Less、Stylus）：在原生 CSS 基础上增加变量、嵌套、混入（Mixin）、函数、继承等编程能力，通过编译器转换为标准 CSS。Sass 是最流行的预处理器，支持 `.sass`（缩进语法）和 `.scss`（类 CSS 语法）。Less 语法更接近 CSS。Stylus 语法最灵活。2025年原生 CSS 已支持变量（custom properties）和嵌套，预处理器的使用有所减少。
+
+{{知识点26}}
+CSS 变量（Custom Properties）与预处理器变量的区别：CSS 变量（`--main-color: red`）是浏览器原生支持的，可在运行时通过 JS 动态修改，支持级联继承；预处理器变量（`$main-color: red`）在编译时静态替换为固定值，不支持运行时修改。2025年前端更倾向使用 CSS 原生变量。
+
+{{知识点27}}
+PostCSS 是 CSS 的转换工具，通过插件系统扩展 CSS 能力。它可以：自动添加浏览器前缀（Autoprefixer）；解析未来 CSS 语法（postcss-preset-env）；压缩 CSS（cssnano）；与 Tailwind CSS（v3 及以前）、Panda CSS 等集成。PostCSS 在 Vite/Webpack 等构建工具中作为标准 CSS 处理管线使用。
+
+{{知识点28}}
+CSS-in-JS 的运行时性能问题：Styled Components 和 Emotion 等运行时方案需要在浏览器中执行 JS 来创建样式规则，这会：阻塞首次渲染（FOUT 闪烁）；增加 bundle 体积；在频繁重渲染时产生性能瓶颈。2024-2025 年趋势是向零运行时方案迁移（如 Panda CSS、vanilla-extract）或回归工具类方案（Tailwind/UnoCSS）。
+
+{{知识点29}}
+样式方案选型指南（2025）：追求极致性能 → Tailwind CSS v4 或 UnoCSS（零运行时、构建时优化）；偏好 CSS-in-JS 但要零运行时 → Panda CSS 或 vanilla-extract；习惯传统 CSS 但要模块化 → CSS Modules；已有 Styled Components 项目 → 考虑迁移到零运行时方案；需要跨框架兼容 → CSS Modules 或 UnoCSS。
+
+{{知识点30}}
+Tailwind CSS v4 的 `@theme` 指令：替代传统 JS 配置文件，在 CSS 中直接定义设计令牌。例如 `@theme { --color-primary: #3b82f6; --spacing-18: 4.5rem; }` 可定义自定义颜色和间距。使用 CSS 原生变量语法，与浏览器开发者工具无缝集成，支持级联和覆盖。
+
+{{知识点31}}
+UnoCSS 的 Attributify 模式：允许用 HTML 属性代替 class 指定样式。例如 `<button bg="blue-400 hover:blue-500" text="sm white" font="mono light">`。这种模式解决了原子化 CSS 中 class 属性过长的问题，提高了可读性。通过 `presetAttributify()` 预设启用。
+
+{{知识点32}}
+CSS Modules 与 Vue SFC 的关系：Vue 单文件组件（SFC）的 `<style scoped>` 功能原理与 CSS Modules 类似但不同。`scoped` 通过给组件元素添加 `data-v-xxxx` 属性选择器实现作用域隔离；CSS Modules 通过哈希类名实现。Vue 也支持 `<style module>` 语法直接使用 CSS Modules。两者可按需选择。
+
+{{知识点33}}
+Styled Components 的 Theming 机制：通过 `ThemeProvider` 组件注入主题对象，子组件通过 `props.theme` 访问主题变量。支持嵌套主题（内层覆盖外层）。`createGlobalStyle` 用于定义全局样式。ServerStyleSheet 用于 SSR 场景收集样式。v7 新增了 React Native 现代 CSS 支持。
+
+{{知识点34}}
+Windi CSS 是 UnoCSS 的前身项目，同样采用按需生成策略（相比 Tailwind 的全量扫描更高效）。Windi CSS 引入了属性化模式和自动值推导等创新特性。UnoCSS 吸收了 Windi CSS 的最佳实践并重写了核心引擎。Windi CSS 已停止维护，推荐迁移到 UnoCSS。
+
+{{知识点35}}
+CSS 架构方法论：BEM（Block-Element-Modifier）通过命名约定（如 `.card__title--large`）组织 CSS 选择器，实现伪作用域隔离；OOCSS（面向对象 CSS）强调结构与皮肤分离、容器与内容分离；SMACSS 将样式分为 Base/Layout/Module/State/Theme 五类；ITCSS（倒三角 CSS）按特异性从低到高组织文件层级。这些方法论在 2025 年仍有参考价值，但已被工具化方案（CSS Modules/Tailwind）部分取代。
+
+{{知识点36}}
+Tailwind CSS 的 JIT 引擎工作流程：1）扫描源文件提取类名；2）匹配类名到 Tailwind 规则；3）按需生成 CSS；4）写入输出文件。v4 的 Oxide 引擎用 Rust 重写了核心扫描逻辑，缓存机制更加智能，增量构建速度极快。支持 `@apply` 指令将工具类组合为自定义 CSS 规则。
+
+{{知识点37}}
+CSS-in-JS 的服务端渲染（SSR）：Styled Components 通过 `ServerStyleSheet` 在服务端收集样式并注入 HTML；Emotion 的 `@emotion/react` 支持零配置 SSR。零运行时方案（vanilla-extract、Panda CSS）天然支持 SSR，因为它们输出的是静态 CSS 文件。Tailwind CSS 输出的也是静态 CSS，SSR 无需特殊处理。
+
+{{知识点38}}
+CSS 框架对比总结（2025）：Tailwind CSS v4 — 工具类方案标杆，社区最大，零运行时；UnoCSS — 高性能替代，预设系统灵活，适合深度定制；Styled Components — 经典 CSS-in-JS，React 生态绑定，有运行时开销；Emotion — 灵活的 CSS-in-JS，支持多种使用模式；Panda CSS — 下一代 CSS-in-JS，零运行时；CSS Modules — 最简单的模块化方案，框架无关。

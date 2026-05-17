@@ -1,0 +1,108 @@
+# 2025前端Jest测试框架
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}
+Jest 是由 Meta（Facebook）维护的 JavaScript 测试框架，零配置即可使用。它集断言库、Mock 库、测试运行器和代码覆盖率于一体，是前端最流行的单元测试方案之一。安装命令：npm install --save-dev jest，在 package.json 中配置 "test": "jest" 即可运行。
+
+{{知识点2}}
+test() 是 Jest 最核心的全局函数，用于定义一个测试用例。接受三个参数：测试名称（字符串）、测试函数（同步或异步）和可选超时时间（毫秒，默认5000ms）。示例：test('adds 1 + 2 to equal 3', () => { expect(sum(1, 2)).toBe(3); })。test 的别名是 it()，功能完全相同。
+
+{{知识点3}}
+describe() 用于将相关测试分组为测试套件（test suite），支持嵌套。示例：describe('math operations', () => { test(...); test(...); })。describe 内部的 beforeEach/afterEach/beforeAll/afterAll 仅对该 describe 块内的测试生效。还支持 describe.skip() 跳过整个套件和 describe.only() 仅运行该套件。
+
+{{知识点4}}
+生命周期钩子 beforeAll(fn, timeout) 在当前文件（或 describe 块）所有测试运行前执行一次，适合做全局初始化（如数据库连接）。afterAll(fn, timeout) 在所有测试完成后执行一次，适合做全局清理。若函数返回 Promise，Jest 会等待其 resolve。
+
+{{知识点5}}
+生命周期钩子 beforeEach(fn, timeout) 在每个测试用例运行前执行，适合重置状态。afterEach(fn, timeout) 在每个测试用例运行后执行，适合清理临时数据。这些钩子在 describe 块内时仅对该块内的测试生效。
+
+{{知识点6}}
+expect(value) 是 Jest 断言的入口函数，配合 matcher（匹配器）使用。核心理念：expect 的参数是代码实际产出值，matcher 的参数是期望值。示例：expect(result).toBe(3)。
+
+{{知识点7}}
+toBe(value) 使用 Object.is 进行严格相等比较，适用于原始值（string、number、boolean）。toEqual(value) 进行深度相等比较，适用于对象和数组（递归比较每个属性）。toStrictEqual(value) 比 toEqual 更严格，会检查 undefined 属性和数组空位。
+
+{{知识点8}}
+匹配器 .not 用于取反断言。示例：expect(value).not.toBe(0)。.resolves 用于断言 Promise 成功 resolve 的值，如 await expect(promise).resolves.toBe('lemon')。.rejects 用于断言 Promise 被 reject，如 await expect(promise).rejects.toThrow('error')。
+
+{{知识点9}}
+toBeTruthy() 断言值为真值（truthy），toBeFalsy() 断言值为假值（falsy）。toBeDefined() 断言值不是 undefined，toBeUndefined() 断言值是 undefined。toBeNull() 断言值是 null。toBeNaN() 断言值是 NaN。
+
+{{知识点10}}
+toBeGreaterThan(number) 断言大于，toBeGreaterThanOrEqual(number) 断言大于等于。toBeLessThan(number) 断言小于，toBeLessThanOrEqual(number) 断言小于等于。这些匹配器支持 number 和 bigint 类型。toBeCloseTo(number, numDigits?) 用于浮点数近似比较，可指定小数位精度。
+
+{{知识点11}}
+toContain(item) 断言数组或字符串包含指定项。对数组使用 includes 比较，对字符串使用 indexOf 比较。toContainEqual(item) 断言数组中包含深度相等的某一项（类似 toEqual 的比较方式）。
+
+{{知识点12}}
+toMatch(regexp | string) 断言字符串匹配正则表达式或子字符串。toMatchObject(object) 断言对象匹配给定对象的结构（允许实际对象有额外属性）。toHaveProperty(keyPath, value?) 断言对象拥有指定路径的属性，可选检查属性值。
+
+{{知识点13}}
+toHaveLength(number) 断言对象有 length 属性且等于指定值，适用于数组、字符串等。toBeInstanceOf(Class) 断言值是指定类的实例，使用 instanceof 运算符。
+
+{{知识点14}}
+toHaveBeenCalled() 断言 mock 函数已被调用过。toHaveBeenCalledTimes(number) 断言精确调用次数。toHaveBeenCalledWith(arg1, arg2, ...) 断言使用指定参数调用。toHaveBeenLastCalledWith(...) 断言最后一次调用的参数。toHaveBeenNthCalledWith(n, ...) 断言第 n 次调用的参数。
+
+{{知识点15}}
+toHaveReturned() 断言 mock 函数至少返回过一次。toHaveReturnedTimes(number) 断言返回次数。toHaveReturnedWith(value) 断言至少有一次返回了指定值。toHaveLastReturnedWith(value) 断言最后一次返回值。toHaveNthReturnedWith(n, value) 断言第 n 次返回值。
+
+{{知识点16}}
+jest.fn(implementation?) 创建一个 mock 函数。无参数时返回 undefined，可传入函数作为默认实现。示例：const mock = jest.fn(x => x * 2)。所有 mock 函数都有 .mock 属性，记录调用信息：.mock.calls（调用参数数组）、.mock.results（返回值数组）、.mock.instances（实例数组）、.mock.contexts（this 上下文数组）。
+
+{{知识点17}}
+mockReturnValue(value) 设置 mock 函数的默认返回值。mockReturnValueOnce(value) 设置下一次调用的返回值（可链式调用）。mockImplementation(fn) 设置 mock 的实现函数。mockImplementationOnce(fn) 设置下一次调用的实现。链式调用示例：mock.mockReturnValueOnce(10).mockReturnValueOnce('x').mockReturnValue(true)。
+
+{{知识点18}}
+jest.mock(moduleName) 自动模拟整个模块。Jest 会用 mock 版本替换指定模块，无需手动实现。示例：jest.mock('axios') 后，axios 的所有方法变为 mock 函数，可用 mockResolvedValue 等配置返回值。jest.requireActual(moduleName) 获取模块的真实实现，用于部分 mock 场景。
+
+{{知识点19}}
+jest.spyOn(object, methodName) 创建一个 spy 监听对象方法的调用，同时保留原始实现。可链式 .mockImplementation() 替换实现或 .mockReturnValue() 替换返回值。spy.restore() 恢复原始实现。示例：const spy = jest.spyOn(console, 'log').mockImplementation()。
+
+{{知识点20}}
+jest.useFakeTimers() 启用假定时器，替换 setTimeout、setInterval、clearTimeout、clearInterval 等原生定时器函数。jest.useRealTimers() 恢复真实定时器。配置项 { legacyFakeTimers: true } 使用旧版实现。假定时器让测试中不再需要实际等待时间流逝。
+
+{{知识点21}}
+jest.runAllTimers() 立即执行所有待处理的定时器回调。jest.runOnlyPendingTimers() 仅执行当前排队的定时器（不执行定时器回调中新增的定时器），适用于递归定时器场景避免无限循环。jest.advanceTimersByTime(ms) 将时间快进指定毫秒数，执行该时间范围内所有定时器。jest.advanceTimersToNextTimer() 快进到下一个定时器。
+
+{{知识点22}}
+toMatchSnapshot() 创建或比对快照。首次运行时生成 .snap 文件记录序列化输出，后续运行比对输出是否一致。不匹配时测试失败。使用 jest --updateSnapshot 或 -u 标志更新快照。toMatchInlineSnapshot() 将快照内联在测试文件中，无需单独的 .snap 文件。
+
+{{知识点23}}
+快照测试适用于 UI 组件输出、API 响应格式等场景。快照文件应随代码提交并参与 Code Review。使用 pretty-format 使快照可读。可通过 expect.addSnapshotSerializer() 自定义序列化方式。toMatchSnapshot(propertyMatchers?, hint?) 支持属性匹配器来忽略动态值。
+
+{{知识点24}}
+expect.anything() 匹配除 null 和 undefined 外的任意值。expect.any(constructor) 匹配指定构造函数创建的任意实例。expect.arrayContaining(array) 匹配包含指定所有元素的数组。expect.objectContaining(object) 匹配包含指定属性的对象。expect.stringContaining(string) 匹配包含子串的字符串。expect.stringMatching(regexp) 匹配正则的字符串。
+
+{{知识点25}}
+expect.assertions(number) 断言在测试中恰好执行了指定次数的断言，常用于异步测试确保所有断言都执行了。expect.hasAssertions() 断言至少执行了一个断言。这两个工具防止异步测试因未执行断言而"假通过"。
+
+{{知识点26}}
+jest.config.js 是 Jest 推荐的配置文件格式，也支持 .ts/.mjs/.mts/.cjs/.cts/.json 扩展名。可使用 defineConfig() 辅助函数。配置也可放在 package.json 的 "jest" 字段中。使用 mergeConfig() 可合并多个配置。Jest 自动发现命名为 jest.config.* 的文件。
+
+{{知识点27}}
+testEnvironment 配置测试环境。默认值为 "node"，前端项目通常设置为 "jsdom"（模拟浏览器 DOM）。还支持自定义环境。testMatch 配置测试文件匹配模式，默认匹配 __tests__ 目录下的 .js/.ts 文件和 *.test.*/*.spec.* 文件。testRegex 用正则匹配测试文件。
+
+{{知识点28}}
+transform 配置文件转换器。默认使用 babel-jest 转换 JS/TS 文件。可配置 TypeScript：安装 ts-jest 或 @swc/jest 并在 transform 中指定。moduleNameMapper 配置模块路径映射，常用于处理 CSS/图片等资源文件（映射到 identity-obj-proxy 或自定义 mock）。
+
+{{知识点29}}
+collectCoverage 启用代码覆盖率收集。coverageDirectory 指定覆盖率报告输出目录。coverageReporters 配置报告格式（如 text、lcov、clover）。coverageThreshold 设置覆盖率阈值，未达标时测试失败。coveragePathIgnorePatterns 排除不需要收集覆盖率的路径。
+
+{{知识点30}}
+test.concurrent(name, fn) 允许测试并发执行（默认测试串行）。test.each(table) 参数化测试，用表格数据驱动多组测试。支持数组格式和模板字符串格式。示例：test.each([[1,1,2],[2,2,4]])('add(%i+%i)', (a,b,expected) => { expect(a+b).toBe(expected) })。
+
+{{知识点31}}
+test.skip(name, fn) 跳过指定测试。test.only(name, fn) 仅运行指定测试（调试时常用）。test.todo(name) 标记待实现的测试（会显示在报告中但不执行）。test.failing(name, fn) 标记预期失败的测试（通过反而报错）。这些修饰符也适用于 describe。
+
+{{知识点32}}
+clearMocks 在每个测试前自动清除 mock 的调用记录、实例和结果（相当于 jest.clearAllMocks()）。resetMocks 在每个测试前重置 mock（清除记录并恢复 jest.fn 的默认实现）。restoreMocks 在每个测试前恢复所有 mock 的原始实现（相当于 jest.restoreAllMocks()）。通常推荐开启 restoreMocks: true。
+
+{{知识点33}}
+setupFiles 指定在测试框架初始化前运行的文件（在 test environment 创建前）。setupFilesAfterEnv 指定在测试框架初始化后运行的文件（在 test environment 创建后），常用于引入 @testing-library/jest-dom 等扩展匹配器。globalSetup 和 globalTeardown 在所有测试套件运行前/后执行一次。
+
+{{知识点34}}
+jest 配置中的 projects 选项支持在单仓库（monorepo）中运行多组不同配置的测试。每个 project 可有独立的配置。示例：projects: [{ displayName: 'unit', testMatch: '**/*.test.js' }, { displayName: 'e2e', testMatch: '**/*.e2e.js' }]。
+
+{{知识点35}}
+@jest/globals 模块提供显式导入方式：import { describe, expect, test, jest } from '@jest/globals'。TypeScript 项目必须显式导入才能获得正确类型推断。默认情况下 Jest 将这些 API 注入全局环境，可通过 injectGlobals: false 禁用全局注入。

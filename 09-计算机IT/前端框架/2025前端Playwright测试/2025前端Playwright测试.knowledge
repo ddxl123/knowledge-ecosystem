@@ -1,0 +1,138 @@
+# 2025前端Playwright测试
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}
+Playwright 是由 Microsoft 开发的开源端到端（E2E）测试框架，专为现代 Web 应用设计。它集成了测试运行器、断言库、测试隔离、并行执行和丰富的调试工具于一体。Playwright 支持三大浏览器引擎：Chromium、WebKit 和 Firefox，可在 Windows、Linux 和 macOS 上运行，支持有头（headed）和无头（headless）模式，并原生支持 Chrome Android 和 Mobile Safari 的移动设备模拟。
+
+{{知识点2}}
+Playwright 的系统要求：Node.js 20.x、22.x 或 24.x；Windows 11+ 或 Windows Server 2019+ 或 WSL；macOS 14（Sonoma）及以上；Debian 12/13、Ubuntu 22.04/24.04（x86-64 或 arm64）。安装命令为 `npm init playwright@latest`，会自动下载浏览器二进制文件并生成项目脚手架。
+
+{{知识点3}}
+Playwright 项目脚手架包含三个核心文件：`playwright.config.ts`（测试配置文件）、`tests/example.spec.ts`（示例测试）和 `package.json`。配置文件集中管理目标浏览器、超时时间、重试策略、项目定义、报告器等所有测试选项。
+
+{{知识点4}}
+`playwright.config.ts` 是 Playwright 的核心配置文件，使用 `defineConfig` 函数定义。关键配置项包括：`testDir`（测试文件目录）、`fullyParallel`（是否完全并行）、`forbidOnly`（CI 中禁止 test.only）、`retries`（重试次数）、`workers`（工作线程数）、`reporter`（报告器类型）、`use`（通用选项如 baseURL、trace）、`projects`（浏览器项目配置）和 `webServer`（本地开发服务器配置）。
+
+{{知识点5}}
+Locators（定位器）是 Playwright 自动等待和重试机制的核心。每次使用定位器执行操作时，Playwright 都会在页面中实时查找最新的 DOM 元素。推荐的内置定位器按优先级排列：`getByRole()`（基于无障碍角色）、`getByText()`（文本内容）、`getByLabel()`（表单标签）、`getByPlaceholder()`（占位符）、`getByAltText()`（替代文本）、`getByTitle()`（title 属性）和 `getByTestId()`（data-testid 属性）。
+
+{{知识点6}}
+`page.getByRole()` 是最推荐的定位器，它基于 W3C 的 ARIA 角色规范，反映用户和辅助技术对页面的感知方式。使用时应同时传入可访问名称以精确定位元素，如 `page.getByRole('button', { name: 'Sign in' })`。角色定位器涵盖 button、checkbox、heading、link、list、table 等多种 HTML 元素的隐式和显式角色。
+
+{{知识点7}}
+Playwright 的自动等待（Auto-waiting）机制是其核心特性之一。在执行每个操作前，Playwright 会自动等待元素变为可操作状态（actionable），无需手动添加 `wait` 或 `sleep`。断言也设计为会持续重试直到条件满足或超时，消除了因竞态条件导致的不稳定测试（flaky tests）。
+
+{{知识点8}}
+测试断言使用 `expect` 函数，分为同步通用断言（如 `toEqual`、`toContain`、`toBeTruthy`）和异步 Web 断言（如 `toHaveText`、`toBeVisible`）。异步断言会自动重试直到条件满足，默认超时为 5 秒。可通过配置 `expect.timeout` 全局设置，也可为单个断言传入 `{ timeout: 10000 }` 参数。
+
+{{知识点9}}
+常用的自动重试断言包括：`toBeAttached()`（元素已附加）、`toBeChecked()`（复选框已选中）、`toBeDisabled()`（元素禁用）、`toBeEditable()`（元素可编辑）、`toBeEmpty()`（容器为空）、`toBeEnabled()`（元素启用）、`toBeFocused()`（元素获得焦点）、`toBeHidden()`（元素不可见）、`toBeInViewport()`（元素在视口内）、`toBeVisible()`（元素可见）、`toContainText()`（包含文本）、`toHaveAttribute()`（有属性）、`toHaveCSS()`（有 CSS 属性）、`toHaveURL()`（URL 匹配）等。
+
+{{知识点10}}
+Playwright Test 有多层超时机制：测试超时（默认 30 秒）控制每个测试的总执行时间；断言超时（默认 5 秒）控制自动重试断言的等待时间；全局超时控制整个测试运行的最大时长。可分别在配置文件中全局设置，也可在单个测试中通过 `test.setTimeout()` 或 `test.slow()`（三倍超时）覆盖。
+
+{{知识点11}}
+Fixtures（夹具）是 Playwright Test 的核心概念，用于为每个测试建立隔离的环境。内置夹具包括：`page`（隔离的页面实例）、`context`（隔离的浏览器上下文）、`browser`（共享的浏览器实例）、`browserName`（当前浏览器名称）和 `request`（隔离的 API 请求上下文）。夹具是按需加载的，只有测试需要的夹具才会被创建。
+
+{{知识点12}}
+自定义 Fixtures 通过 `test.extend()` 方法创建，支持依赖组合和按需初始化。相比 `beforeEach/afterEach` 钩子，Fixtures 的优势包括：封装设置和清理在同一处、可在测试文件间复用、按需加载、支持组合依赖。自定义夹具常用于封装页面对象、测试数据、认证状态等。
+
+{{知识点13}}
+Test Isolation（测试隔离）是 Playwright 的重要设计原则。每个测试在独立的浏览器上下文中运行，拥有自己的 `page` 和 `context`，测试间互不影响。一个浏览器实例可包含多个上下文，每个上下文可包含多个页面。这种隔离模型提高了测试的可复现性，防止级联失败。
+
+{{知识点14}}
+测试钩子（Hooks）包括 `test.beforeAll`（所有测试前执行一次）、`test.afterAll`（所有测试后执行一次）、`test.beforeEach`（每个测试前执行）和 `test.afterEach`（每个测试后执行）。`beforeEach/afterEach` 共享测试超时，`beforeAll/afterAll` 有独立的超时值。钩子中可通过 `testInfo.setTimeout()` 动态调整超时。
+
+{{知识点15}}
+`test.describe()` 用于将相关测试分组为测试套件（test suite）。支持嵌套分组，可在套件级别设置钩子。配合 `test.only()`（仅运行当前测试）、`test.skip()`（跳过测试）、`test.fixme()`（标记为待修复）和 `test.fail()`（标记为预期失败）等修饰符灵活控制测试执行。
+
+{{知识点16}}
+Codegen（代码生成器）是 Playwright 的测试录制工具，通过 `npx playwright codegen <URL>` 启动。它会打开浏览器窗口和 Playwright Inspector，自动记录用户交互并生成测试代码。Codegen 智能推荐最佳定位器，优先使用 role、text 和 test-id。支持录制操作、断言（可见性/文本/值），以及设备模拟。
+
+{{知识点17}}
+Playwright Inspector 是一个强大的调试工具，提供可视化定位器选择、代码录制、逐步执行和断点调试功能。在 Codegen 模式下，可以使用 Pick Locator 按钮悬停选择元素、在定位器编辑器中实时编辑和预览匹配结果，并直接复制到代码中。
+
+{{知识点18}}
+Trace Viewer（跟踪查看器）是 Playwright 的时间旅行调试工具。通过配置 `trace: 'on-first-retry'` 可在首次重试失败测试时自动收集跟踪数据。跟踪包含每个操作的截图、DOM 快照、网络请求和控制台日志。使用 `npx playwright show-trace trace.zip` 打开查看，支持逐步回放测试过程。
+
+{{知识点19}}
+UI Mode（UI 模式）通过 `npx playwright test --ui` 启动，提供交互式测试运行体验。功能包括：watch 模式过滤测试、实时步骤查看、时间旅行调试、跟踪集成。特别适合开发阶段的测试调试和快速反馈。
+
+{{知识点20}}
+Page Object Model（POM，页面对象模型）是 Playwright 推荐的测试组织模式。将页面交互逻辑封装为独立的类，测试代码只调用页面对象的方法。这提高了代码的可维护性和复用性。Playwright 的 Locators API 天然支持 POM 模式，可在页面对象类中定义定位器属性。
+
+{{知识点21}}
+Browser Context（浏览器上下文）提供独立的浏览器会话，支持并行运行多个独立会话。非持久化上下文不会将浏览数据写入磁盘。上下文支持设置 Cookies、LocalStorage、地理位置、语言、时区、视口大小、用户代理等。通过 `browser.newContext()` 创建，通过 `context.close()` 销毁。
+
+{{知识点22}}
+认证状态管理（Authentication）是 Playwright 的重要功能。推荐方案是创建 `auth.setup.ts` 文件执行一次登录，通过 `page.context().storageState()` 保存认证状态到文件（如 `playwright/.auth/user.json`），然后在测试项目的 `use.storageState` 中引用该文件。所有测试启动时即处于已认证状态，无需重复登录。
+
+{{知识点23}}
+Projects（项目配置）允许在单一配置中定义多个浏览器/设备组合。每个 project 可指定不同的浏览器、视口、设备模拟等。通过 `devices` 预设快速配置常用设备，如 `Desktop Chrome`、`iPhone 13`、`Pixel 5` 等。项目间可通过 `dependencies` 声明依赖关系，如认证 setup 项目。
+
+{{知识点24}}
+webServer 配置项可在测试前自动启动本地开发服务器。配置 `command`（启动命令）、`url`（等待的 URL）、`reuseExistingServer`（是否复用已运行的服务器）。服务器就绪后自动开始测试，测试完成后自动关闭。在 CI 环境中通常不复用已有服务器。
+
+{{知识点25}}
+`testMatch` 和 `testIgnore` 配置项用于通过 glob 模式或正则表达式过滤测试文件。`testMatch` 指定要包含的测试文件模式，`testIgnore` 指定要排除的文件模式。默认匹配 `**/*.spec.ts` 格式的文件。
+
+{{知识点26}}
+Parallelization（并行化）是 Playwright 的内置能力。`fullyParallel: true` 启用完全并行模式，测试文件和测试用例均可并行执行。`workers` 配置并行工作线程数，在 CI 中通常设为 1 以避免资源竞争。Playwright 自动管理并行执行和资源分配。
+
+{{知识点27}}
+Retries（重试机制）通过 `retries` 配置项设置。通常在 CI 中设置为 2 次重试，本地开发时不重试。重试时自动收集跟踪数据（需配置 `trace: 'on-first-retry'`）。配合 `forbidOnly: !!process.env.CI` 确保 CI 中不会遗留 `test.only`。
+
+{{知识点28}}
+Reporters（报告器）提供测试结果的多种展示方式。内置报告器包括：`html`（HTML 报告，提供可过滤的仪表板）、`list`（终端列表输出）、`json`（JSON 格式）、`junit`（JUnit XML 格式，适合 CI 集成）。HTML 报告器支持按浏览器、通过/失败/跳过/不稳定等状态过滤，点击测试可查看详情、错误、附件和步骤。
+
+{{知识点29}}
+Screenshots（截图）和 Videos（视频录制）是 Playwright 的调试辅助功能。通过 `use.screenshot` 配置截图策略（`off`、`on`、`only-on-failure`），通过 `use.video` 配置视频录制策略。截图和视频自动作为测试附件附加到报告中，便于失败分析。
+
+{{知识点30}}
+Network Interception（网络拦截）允许在测试中拦截和修改网络请求。通过 `page.route()` 方法拦截请求，可修改请求头、响应体、模拟 API 响应或模拟网络错误。这对测试离线场景、API 错误处理和 mock 数据非常有用。
+
+{{知识点31}}
+API Testing（API 测试）是 Playwright 的内置功能，通过 `request` 夹具提供隔离的 API 请求上下文。支持 GET、POST、PUT、DELETE 等 HTTP 方法，可设置请求头、认证信息和请求体。API 测试可与 E2E 测试共享认证状态，适合测试前后端交互场景。
+
+{{知识点32}}
+Global Setup 和 Global Teardown 通过 `globalSetup` 和 `globalTeardown` 配置项指定，在所有测试开始前和结束后各执行一次。适合执行一次性环境准备（如数据库初始化、种子数据）和清理工作。它们在独立的 Node.js 进程中运行，不共享浏览器上下文。
+
+{{知识点33}}
+`page.addLocatorHandler()` 方法（v1.42+）用于处理意外弹出的覆盖层（如注册弹窗、Cookie 同意框）。当检测到指定定位器可见时，自动执行处理函数移除覆盖层，使测试继续正常执行。适用于非确定性出现的 UI 干扰元素。
+
+{{知识点34}}
+`page.addInitScript()` 在页面导航或子 frame 加载前注入脚本，用于修改 JavaScript 运行环境。典型用途包括 mock `Math.random`、注入测试辅助函数、拦截 API 调用等。脚本在文档创建后、页面脚本执行前运行。
+
+{{知识点35}}
+Mobile Emulation（移动设备模拟）通过 `devices` 预设实现。支持模拟 iPhone、Pixel 等设备的视口大小、User-Agent、触摸事件等。Chrome 支持 Android 原生模拟，WebKit 支持 Mobile Safari 模拟。可在 Codegen 中直接使用设备模拟录制测试。
+
+{{知识点36}}
+`page.route()` 和 `page.unroute()` 用于请求路由和拦截。可基于 URL 模式匹配请求，提供自定义响应或修改请求。支持 mock API 响应、模拟慢网络、模拟错误响应等。路由规则在整个页面生命周期内生效，直到被 `unroute()` 移除。
+
+{{知识点37}}
+Multiple Pages/Tabs（多页面/标签页）处理通过监听 `page` 事件实现。当页面打开新标签页时，通过 `context.on('page', handler)` 捕获新页面。Playwright 的 `page` 对象和 `context` 对象支持多页面并行操作，适合测试多窗口交互场景。
+
+{{知识点38}}
+文件上传通过 `locator.setInputFiles()` 方法实现，支持单文件和多文件上传。可传入文件路径数组或 `FilePayload` 对象（包含 name、mimeType、buffer）。文件下载通过 `download` 事件监听，使用 `download.saveAs()` 保存到指定路径。
+
+{{知识点39}}
+`outputDir` 配置项指定测试产物（截图、视频、跟踪文件等）的存储目录，默认为 `test-results`。在认证状态管理中，将 `storageState` 路径设在 `testProject.outputDir` 下可自动在每次运行前清理，避免过期认证状态影响测试。
+
+{{知识点40}}
+Sharding（分片）用于在 CI 中将测试拆分到多个机器上并行执行。通过 `--shard=x/y` 命令行参数指定当前分片（第 x 个，共 y 个）。Playwright 自动按测试文件分配，配合多个 CI job 实现大规模并行测试，显著缩短总执行时间。
+
+{{知识点41}}
+`test.step()` 用于在测试中创建子步骤，改善测试报告的可读性。每个步骤在报告中显示为可折叠的层级结构，包含独立的时间和状态。适合将复杂测试拆分为逻辑步骤，便于定位失败点。
+
+{{知识点42}}
+Playwright 支持多种语言：JavaScript、TypeScript、Python、Java 和 .NET。TypeScript 是默认选择，提供完整的类型检查和代码补全。所有语言共享相同的浏览器自动化能力和测试设计理念。JavaScript 文件中可通过 `// @ts-check` 启用 VS Code 的类型检查。
+
+{{知识点43}}
+Visual Regression Testing（视觉回归测试）通过 `expect(locator).toHaveScreenshot()` 和 `expect(page).toHaveScreenshot()` 实现。首次运行生成基准截图，后续运行与基准对比。支持配置 `maxDiffPixels`（允许的差异像素数）和 `maxDiffPixelRatio`（允许的差异比例）控制容差。
+
+{{知识点44}}
+Storage State 是 Playwright 管理浏览器持久化状态的核心机制。通过 `context.storageState({ path })` 导出当前上下文的 Cookies 和 LocalStorage，通过配置 `use.storageState` 在新上下文中恢复状态。支持分区 Cookies（CHIPS）和第三方 Cookie 管理。
+
+{{知识点45}}
+Headed vs Headless 模式：默认以无头模式运行（不显示浏览器窗口），通过 `--headed` 命令行参数切换为有头模式。有头模式适合本地开发调试，无头模式适合 CI 环境和性能要求高的场景。也可在配置文件中通过 `use.headless: false` 全局设置。

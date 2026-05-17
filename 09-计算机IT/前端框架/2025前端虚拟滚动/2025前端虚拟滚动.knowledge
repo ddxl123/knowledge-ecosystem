@@ -1,0 +1,83 @@
+# 2025前端虚拟滚动
+# 领域: 计算机IT
+# 学科: 前端框架
+# 来源: 2025前端虚拟滚动
+# 描述: 前端虚拟滚动核心知识点
+
+{{虚拟滚动定义}}{{虚拟滚动（Virtual Scrolling）是一种前端性能优化技术，只渲染用户可视区域内的DOM元素，而非一次性渲染全部数据列表。当用户滚动时，动态替换可见区域的元素，从而大幅减少DOM节点数量、降低内存占用、提升渲染性能。适用于需要展示大量数据（数万至数十万条）的场景。}}
+
+{{虚拟滚动核心原理}}{{虚拟滚动的核心原理是：1）维护一个固定高度的滚动容器；2）在容器内部创建一个撑满全部数据总高度的占位元素（padding/spacer）；3）根据滚动偏移量计算当前可见区域应显示的数据索引范围；4）只渲染该范围内的DOM元素，并通过绝对定位或transform将其放置在正确位置；5）监听滚动事件，实时更新可见区域。本质是用少量DOM模拟完整列表的滚动体验。}}
+
+{{虚拟滚动解决的问题}}{{虚拟滚动主要解决三个性能问题：1）DOM节点过多导致的渲染性能下降——当列表有10万条数据时，直接渲染会产生10万个DOM节点，浏览器难以承受；2）内存占用过高——大量DOM节点消耗大量内存；3）首次渲染（FCP/LCP）时间过长——浏览器需要布局、绘制所有节点。虚拟滚动将同时存在的DOM节点控制在几十个以内，从根本上解决这些问题。}}
+
+{{虚拟滚动关键指标—Overscan}}{{Overscan（预渲染区域）是虚拟滚动中的关键配置参数，指在可视区域上下（或左右）额外渲染的元素数量。默认值通常为1-5个。增大Overscan可以减少快速滚动时的白屏闪烁，但会增加渲染负担。设置合理的Overscan值需要在流畅度和性能之间找到平衡，一般推荐3-10个。}}
+
+{{虚拟滚动关键指标—estimateSize}}{{estimateSize（预估尺寸）是虚拟滚动中每个列表项的预估高度/宽度。虚拟滚动需要知道每项的尺寸来计算总滚动高度和元素位置。对于固定高度的列表项，直接返回固定值即可；对于动态高度的列表项，需要提供一个预估值，渲染后再通过实际测量修正。预估偏差过大会导致滚动条跳动。}}
+
+{{虚拟滚动关键指标—动态尺寸测量}}{{动态尺寸测量（Dynamic Sizing）指虚拟滚动中列表项高度不固定时的处理方案。通常做法是：先用estimateSize给出预估高度进行布局，渲染完成后通过ResizeObserver或getBoundingClientRect测量实际高度，再更新内部缓存。TanStack Virtual通过virtualItem.measureElement方法实现此功能，react-virtuoso则内置自动测量机制。}}
+
+{{虚拟滚动与无限滚动的区别}}{{虚拟滚动和无限滚动是两个不同概念：虚拟滚动是渲染优化技术，限制同时渲染的DOM节点数；无限滚动是数据加载策略，当用户滚动到底部时自动加载更多数据。两者可以结合使用——用无限滚动分批获取数据，用虚拟滚动优化渲染。虚拟滚动的列表高度固定（等于总数据量×每项高度），无限滚动的列表高度随数据增长。}}
+
+{{虚拟滚动与分页的对比}}{{虚拟滚动相比传统分页的优势：1）用户体验更流畅，无需点击翻页；2）保持滚动连续性，适合浏览型场景；3）可与搜索/过滤无缝结合。劣势：1）实现复杂度更高；2）不利于SEO（内容不在DOM中）；3）Ctrl+F无法搜索到未渲染的内容；4）无障碍访问需要额外处理。分页适合精确查找场景，虚拟滚动适合浏览/探索场景。}}
+
+{{TanStack Virtual概述}}{{TanStack Virtual（原react-virtual）是由TanStack团队维护的无头（Headless）虚拟滚动库，支持React、Vue、Svelte、Solid、Lit和Angular等框架。它不提供任何UI组件或样式，只提供虚拟化逻辑，开发者完全控制渲染输出。2025年最新版本提供垂直/水平/网格虚拟化、固定/动态尺寸、窗口滚动等功能，包体积仅10-15KB。}}
+
+{{TanStack Virtual核心API—useVirtualizer}}{{useVirtualizer是TanStack Virtual在React中的核心Hook。必需参数：count（总数据量）、getScrollElement（获取滚动容器的函数）、estimateSize（预估每项尺寸的函数）。返回值包含getVirtualItems()获取当前可见项列表、getTotalSize()获取总滚动高度。每个virtualItem包含index、key、start（起始位置）、size（尺寸）、end（结束位置）等属性。}}
+
+{{TanStack Virtual配置项详解}}{{TanStack Virtual的关键配置项：count-数据总数；getScrollElement-滚动容器引用；estimateSize-预估尺寸函数；overscan-预渲染数量（默认1）；horizontal-是否水平方向；paddingStart/paddingEnd-起止内边距；scrollPaddingStart/scrollPaddingEnd-滚动时的内边距；initialOffset-初始滚动位置（SSR友好）；getItemKey-自定义key生成函数；rangeExtractor-自定义可见范围提取逻辑。}}
+
+{{TanStack Virtual网格虚拟化}}{{TanStack Virtual支持网格（Grid）虚拟化，通过同时创建垂直和水平两个Virtualizer实现。垂直Virtualizer控制行的虚拟化，水平Virtualizer控制列的虚拟化。适用于大数据表格、图片墙、日历视图等二维滚动场景。开发者可分别配置行列的count、estimateSize等参数，实现灵活的二维虚拟化。}}
+
+{{TanStack Virtual窗口滚动模式}}{{TanStack Virtual支持window scrolling模式，通过useWindowVirtualizer Hook实现。此时滚动容器不是某个div元素，而是浏览器窗口本身。适用于页面级别的长列表场景，如社交媒体时间线、商品目录页等。虚拟滚动逻辑与普通模式一致，只是监听window的scroll事件而非元素的scroll事件。}}
+
+{{react-window概述}}{{react-window是由Brian Vaughn（React核心团队成员）维护的虚拟滚动React库，是react-virtualized的轻量替代品。提供FixedSizeList、VariableSizeList、FixedSizeGrid、VariableSizeGrid四种组件。API简洁，专注于列表和网格虚拟化，不包含react-virtualized中的表格、集合等其他组件。包体积约6KB，使用广泛。}}
+
+{{react-window使用方式}}{{react-window的基本用法：导入FixedSizeList组件，传入height（容器高度）、width（容器宽度）、itemCount（数据总数）、itemSize（每项高度）等props。通过children render function定义每项的渲染逻辑，该函数接收index和style参数，style用于绝对定位。VariableSizeList额外接受itemSize函数而非固定值，支持动态高度。}}
+
+{{react-window局限性}}{{react-window的主要局限：1）不支持动态高度的自动测量——VariableSizeList需要预先知道每项高度或手动调用resetAfterIndex；2）不支持窗口级滚动；3）不支持粘性头部（sticky headers）；4）项目维护活跃度下降，更新频率较低；5）不支持水平和垂直同时虚拟化（需要嵌套使用）。这些局限促使开发者转向TanStack Virtual或react-virtuoso。}}
+
+{{react-virtuoso概述}}{{react-virtuoso是由Petyo Ivanov维护的React虚拟滚动库，专注于解决react-window的痛点。核心特点：1）自动动态高度测量，无需预知每项尺寸；2）内置窗口滚动支持；3）支持分组（Grouped）模式和表格模式；4）支持粘性头部；5）支持自动滚动到底部（聊天场景）；6）支持搜索引擎优化的初始渲染。是2025年React生态中最功能丰富的虚拟滚动库。}}
+
+{{react-virtuoso使用方式}}{{react-virtuoso的基本用法：导入Virtuoso组件，传入totalCount（数据总数）和itemContent（渲染函数）。itemContent接收(index, data)参数，无需指定style。react-virtuoso会自动测量每项的实际高度并缓存。支持overscan、initialTopMostItemIndex、followOutput（自动跟随最新内容）等配置。对于表格场景，使用TableVirtuoso组件。}}
+
+{{react-virtuoso高级功能}}{{react-virtuoso的高级功能包括：1）分组模式（GroupedVirtuoso）——支持按分组显示并支持分组头部粘性定位；2）表格模式（TableVirtuoso）——直接渲染<table>结构，支持<thead>固定；3）聊天模式——followOutput="smooth"实现新消息自动滚动到底部；4）上下同时加载（atTopStateChange回调）；5）自定义滚动容器（customScrollParent）；6）resizeObserver自动检测尺寸变化。}}
+
+{{虚拟滚动实现—滚动容器设置}}{{虚拟滚动的第一步是设置滚动容器。容器需要：1）固定高度（height）；2）overflow: auto或overflow: scroll以启用滚动；3）通过ref获取DOM引用供虚拟化库使用。容器内部需要一个占位元素（sentinel），其高度等于所有数据项的总高度，用于撑起正确的滚动条范围。占位元素通常使用position: relative，可见项使用position: absolute进行定位。}}
+
+{{虚拟滚动实现—可见范围计算}}{{可见范围的计算逻辑：1）获取滚动容器的scrollTop值；2）确定可见区域的起始偏移量startOffset = scrollTop - overscan * itemSize；3）确定可见区域的结束偏移量endOffset = scrollTop + containerHeight + overscan * itemSize；4）根据每项尺寸计算startIndex = Math.floor(startOffset / itemSize)和endIndex = Math.ceil(endOffset / itemSize)；5）clamp确保索引在有效范围内。对于动态尺寸，需要遍历累积高度或使用二分查找。}}
+
+{{虚拟滚动实现—定位策略}}{{虚拟列表项的定位有两种策略：1）绝对定位（absolute positioning）——每项设置position: absolute和top值（或transform: translateY），这是最常用的方式，react-window和TanStack Virtual默认使用此策略；2）Flex布局+padding——通过padding-top和padding-bottom模拟滚动偏移，减少绝对定位的使用。绝对定位方式实现简单、兼容性好，但需要每项都有明确的高度值。}}
+
+{{虚拟滚动实现—动态高度处理}}{{动态高度（Dynamic Height）是虚拟滚动的最大挑战。处理方案：1）预估+测量——先用estimateSize预估布局，渲染后用ResizeObserver测量实际尺寸并更新缓存；2）缓存已测量的高度——避免重复测量，提升性能；3）高度变化时重置后续项位置——当某项实际高度与预估不同，需要更新其后所有项的start位置；4）TanStack Virtual和react-virtuoso均内置此机制。}}
+
+{{虚拟滚动实现—ResizeObserver集成}}{{ResizeObserver是虚拟滚动实现动态尺寸测量的关键浏览器API。使用方式：在每个虚拟列表项渲染后，通过ResizeObserver监听其尺寸变化。当尺寸变化时，回调中获取新的高度值，更新虚拟化器的缓存。TanStack Virtual的measureElement内部即使用ResizeObserver。需注意：1）兼容性（现代浏览器均支持）；2）避免回调风暴（使用requestAnimationFrame节流）；3）及时断开观察避免内存泄漏。}}
+
+{{虚拟滚动实现—滚动事件优化}}{{滚动事件处理是虚拟滚动的性能关键。优化策略：1）使用requestAnimationFrame节流——避免每帧多次计算；2）passive: true事件监听——告知浏览器不会preventDefault，提升滚动流畅度；3）使用IntersectionObserver替代部分scroll监听——观察哨兵元素判断滚动方向和位置；4）避免在滚动回调中触发重排（reflow）——批量读取DOM属性后再批量写入；5）TanStack Virtual内部已做优化处理。}}
+
+{{虚拟滚动实现—键盘导航支持}}{{虚拟滚动列表的键盘导航需要特殊处理：1）管理焦点——使用roving tabindex或aria-activedescendant模式；2）确保键盘滚动时焦点跟随——当用户按上下键移动焦点到不可见项时，需要触发滚动使该项可见；3）支持Home/End键跳转到首尾；4）react-virtuoso提供useContext钩子暴露scrollToIndex方法辅助实现。无障碍访问是虚拟滚动的常见短板。}}
+
+{{虚拟滚动实现—列表项Key管理}}{{虚拟列表项的Key管理至关重要：1）使用数据的唯一标识（如id）而非数组索引作为Key——避免滚动时组件状态错乱；2）TanStack Virtual的getItemKey配置和react-window的itemKey属性均支持自定义Key；3）Key变化会导致组件卸载重建而非复用，影响性能和动画连续性；4）对于分组或排序后的列表，确保Key在整个数据集范围内唯一。}}
+
+{{虚拟滚动实现—滚动到指定位置}}{{滚动到指定位置（scrollToIndex）是常见需求。实现方式：1）TanStack Virtual通过virtualizer.scrollToIndex(index, { align: 'start'|'center'|'end' })实现，支持smooth平滑滚动；2）react-window通过ref.current.scrollToItem(index, align)实现；3）react-virtuoso通过VirtuosoRef.scrollToIndex({ index, align })实现。需要注意：如果目标项尚未测量（动态高度），可能需要先滚动到附近再微调。}}
+
+{{虚拟滚动实现—SSR支持}}{{服务端渲染（SSR）场景下的虚拟滚动需要注意：1）服务端无法获知客户端视口高度，需要提供initialRect或默认渲染前N项；2）TanStack Virtual支持initialRect配置初始容器尺寸和initialOffset配置初始滚动位置；3）react-virtuoso通过initialItemCount控制首次渲染数量；4）首屏应渲染足够多的项以填满视口，客户端hydration后切换为虚拟化模式。}}
+
+{{虚拟滚动与表格虚拟化}}{{表格虚拟化是虚拟滚动的重要应用场景，但比列表更复杂：1）需要同时处理行和列的虚拟化（二维虚拟化）；2）需要支持固定表头（sticky header）和固定列（sticky column）；3）需要保持<td>与<th>的对齐；4）react-virtuoso的TableVirtuoso直接渲染原生<table>结构，语义正确且支持表头固定；5）TanStack Table配合TanStack Virtual可实现高度自定义的虚拟表格。}}
+
+{{虚拟滚动与图片列表}}{{虚拟化图片列表的特殊考虑：1）图片加载前高度未知，需要设定占位高度或使用aspect-ratio；2）懒加载配合——可见区域内的<img>才设置src，可使用loading="lazy"或IntersectionObserver；3）图片加载完成后可能改变列表项高度，需触发重新测量；4）对于瀑布流（Masonry）布局，每项高度不一致且需要特殊的位置计算逻辑，TanStack Virtual支持配置实现Masonry。}}
+
+{{虚拟滚动性能基准}}{{虚拟滚动的性能基准参考：1）未虚拟化的1万条列表：首次渲染约200-500ms，滚动时掉帧明显；2）虚拟化后的1万条列表：首次渲染<16ms，滚动稳定60FPS；3）虚拟化后的10万条列表：首次渲染仍<16ms，因为只渲染可见的20-50条；4）内存占用：未虚拟化1万条约50-100MB DOM内存，虚拟化后约2-5MB。性能提升倍数可达10-100倍，具体取决于列表项复杂度。}}
+
+{{虚拟滚动常见陷阱}}{{虚拟滚动的常见陷阱：1）忘记设置容器高度——导致容器高度为0无法滚动；2）estimateSize偏差过大——导致滚动条跳动、位置计算错误；3）动态高度未及时测量——导致列表项重叠或空白；4）在scroll回调中执行昂贵操作——导致卡顿；5）忽略无障碍访问——屏幕阅读器无法正确读取未渲染的内容；6）过度虚拟化——数据量<100条时虚拟滚动反而增加复杂度和开销。}}
+
+{{虚拟滚动选择指南}}{{2025年虚拟滚动库选择建议：1）简单固定高度列表→react-window（API简洁、生态成熟）；2）需要动态高度自动测量→react-virtuoso（开箱即用、功能全面）；3）需要最大灵活性和框架无关→TanStack Virtual（Headless设计、支持多框架）；4）需要表格虚拟化→react-virtuoso的TableVirtuoso或TanStack Table+Virtual组合；5）需要分组/聊天模式→react-virtuoso；6）新项目推荐TanStack Virtual或react-virtuoso。}}
+
+{{虚拟滚动在Vue生态中的实现}}{{Vue生态中的虚拟滚动方案：1）@tanstack/vue-virtual——TanStack Virtual的Vue适配器，API与React版本一致；2）vue-virtual-scroller——Vue 2/3均支持的虚拟滚动组件，提供RecycleScroller和DynamicScroller；3）element-plus的el-virtual-list——Element Plus内置虚拟列表组件；4）Naive UI的NVirtualList——基于ResizeObserver的动态高度虚拟列表。Vue 3组合式API使虚拟滚动的集成更加灵活。}}
+
+{{虚拟滚动在移动端的优化}}{{移动端虚拟滚动的特殊优化：1）使用transform: translate3d开启GPU加速，避免top/left动画引起的重排；2）处理弹性滚动（iOS橡皮筋效果）——overscroll-bounce可能导致scrollTop为负值；3）移动端触摸滚动的passive事件监听；4）减少同时渲染的DOM数量（移动端GPU/内存更受限）；5）使用will-change: transform提示浏览器优化；6）测试低端Android设备的性能表现。}}
+
+{{虚拟滚动与CSS Container Queries}}{{CSS Container Queries（容器查询）为虚拟滚动带来新可能：1）可根据容器尺寸而非视口尺寸调整列表项布局；2）响应式虚拟列表——容器变宽时切换为网格布局，变窄时切换为单列；3）与TanStack Virtual的网格模式配合，可实现自适应列数的虚拟网格；4）减少媒体查询的使用，组件化程度更高。这是2025年前端CSS的新特性与虚拟滚动的结合趋势。}}
+
+{{虚拟滚动与Web Components}}{{虚拟滚动在Web Components中的实现：1）TanStack Virtual是框架无关的，可直接在Custom Element中使用其核心Virtualizer类；2）Lit框架通过@tanstack/lit-virtual适配器支持虚拟滚动；3）Shadow DOM中的滚动容器需要注意事件冒泡和样式隔离；4）虚拟滚动逻辑封装为Web Component可实现跨框架复用；5）需注意ResizeObserver在Shadow DOM中的行为一致性。}}
+
+{{虚拟滚动测试策略}}{{虚拟滚动的测试策略：1）单元测试——验证可见范围计算逻辑、边界条件（首项、末项、空列表）；2）集成测试——使用React Testing Library模拟滚动事件，验证DOM中渲染的项数和内容正确；3）性能测试——使用Lighthouse或Web Vitals监控虚拟化前后的LCP、CLS指标变化；4）E2E测试——使用Playwright/Cypress测试滚动交互、键盘导航、动态数据加载等完整流程。}}

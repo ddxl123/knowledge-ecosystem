@@ -1,0 +1,125 @@
+# 2025前端FileUpload
+# 领域: 计算机IT
+# 学科: 前端框架
+# 来源: 2025前端FileUpload
+# 描述: 前端文件上传核心知识点
+
+{{File API基础}}
+File API是浏览器提供的原生API，用于在Web应用中异步读取用户选择的文件内容。File对象继承自Blob，包含name（文件名，只读字符串）、size（文件大小，64位整数，单位字节）、type（MIME类型，无法确定时为空字符串）三个核心属性。File对象可从input元素的FileList获取，也可从拖放操作的DataTransfer对象获取。File API自2015年起已被所有主流浏览器广泛支持。
+
+{{input type="file"元素}}
+HTML的input[type="file"]是文件上传的基础元素。设置multiple属性允许用户选择多个文件；accept属性可限制文件类型（如accept="image/*"仅接受图片）；webkitdirectory属性允许选择整个目录。通过隐藏input并用label包装，可以完全自定义上传按钮的外观样式。files属性返回FileList对象，通过change事件监听文件选择变化。
+
+{{FileReader读取文件}}
+FileReader接口用于异步读取File或Blob对象的内容。核心方法包括：readAsArrayBuffer()读取为ArrayBuffer、readAsDataURL()读取为data:URL（适合图片预览）、readAsText()读取为文本字符串、readAsBinaryString()读取为二进制字符串。FileReader有三种状态：EMPTY(0)、LOADING(1)、DONE(2)。支持progress、load、error、abort等事件。注意FileReader只能读取用户明确选择的文件，不能按路径读取文件系统。
+
+{{FormData上传}}
+FormData是文件上传的核心数据结构，用于构建表单数据并通过XMLHttpRequest或fetch发送。使用append()方法添加文件：const formData = new FormData(); formData.append('file', fileObj)。支持附加额外字段如文件名、用户ID等。与fetch配合使用时，浏览器会自动设置Content-Type为multipart/form-data并生成boundary分隔符，无需手动指定。
+
+{{fetch API上传}}
+fetch是2025年最推荐的文件上传方式，替代了传统的XMLHttpRequest。基本用法：fetch('/upload', { method: 'POST', body: formData })。fetch返回Promise，支持async/await语法。注意：fetch本身不提供上传进度监听，需要结合XMLHttpRequest的upload.onprogress或使用ReadableStream来实现进度追踪。fetch不支持取消上传（需使用AbortController）。
+
+{{XMLHttpRequest上传}}
+XMLHttpRequest是传统的文件上传方式，优势在于提供原生的上传进度监听。通过xhr.upload.onprogress事件可获取loaded和total属性计算上传百分比。XMLHttpRequest.upload对象专门用于追踪上传进度，是实现进度条的关键API。虽然fetch更现代，但在需要精确进度监控的场景下，XMLHttpRequest仍然不可替代。
+
+{{上传进度监听}}
+实现上传进度追踪有两种方式：1）使用XMLHttpRequest的xhr.upload.onprogress事件，通过e.loaded/e.total计算百分比；2）使用fetch + ReadableStream，通过读取request body的流来追踪已发送字节数。关键事件包括：onloadstart（开始）、onprogress（进行中）、onload（完成）、onerror（错误）、onabort（取消）。进度信息可用于更新UI进度条，提升用户体验。
+
+{{拖拽上传原理}}
+拖拽上传基于HTML Drag and Drop API。核心事件链：dragenter（拖入）→ dragover（悬停）→ drop（释放）。实现要点：必须在dragover事件中调用e.preventDefault()，否则drop事件不会触发。从e.dataTransfer.files获取拖入的文件列表。注意：dragstart和dragend事件在从操作系统拖入文件时不会触发，需用dragenter和dragleave检测。全局需监听dragover和drop事件并preventDefault()以阻止浏览器默认打开文件行为。
+
+{{拖拽上传dropEffect控制}}
+通过DataTransfer.dropEffect可控制拖放操作的视觉反馈。"copy"表示复制（默认拖放文件时），"move"表示移动，"link"表示创建链接，"none"表示不允许放置。在dragover事件中根据文件类型动态设置dropEffect（如非图片文件设为none），可给用户即时的视觉反馈，告知哪些文件可以上传。
+
+{{react-dropzone库}}
+react-dropzone是React生态中最流行的拖拽上传组件库，基于hooks API设计。核心hook useDropzone返回getRootProps和getInputProps，通过展开运算符绑定到容器元素。支持配置项：accept（文件类型限制）、maxSize/minSize（文件大小限制）、maxFiles（最大文件数）、onDrop回调。拖拽状态通过isDragActive、isDragAccept、isDragReject反映，便于自定义不同状态的UI样式。
+
+{{react-dropzone文件验证}}
+react-dropzone内置文件验证机制。accept属性支持MIME类型映射（如{'image/*': ['.png', '.jpg']}）和扩展名数组。maxSize/minSize以字节为单位限制文件大小。validator自定义函数可添加任意验证逻辑（如文件名规则、文件内容检查）。验证失败的文件会出现在fileRejections中，包含file对象和errors数组，可据此显示具体错误信息。
+
+{{分片上传原理}}
+分片上传（Chunked Upload）将大文件切割成多个小块逐个上传。核心步骤：1）计算文件总分片数（file.size / chunkSize）；2）使用Blob.slice(start, end)切割文件；3）为每个分片附加序号、文件标识等元数据；4）按序或并发上传各分片；5）所有分片上传完成后通知服务端合并。典型分片大小为1-5MB。优势：突破单次上传大小限制、支持并行上传提速、支持断点续传。
+
+{{Blob.slice方法}}
+Blob.slice()是分片上传的核心方法，语法：blob.slice(start, end, contentType)。start和end为字节偏移量，contentType指定切片MIME类型。返回新的Blob对象而非修改原对象。结合File继承自Blob的特性，可直接对用户选择的文件调用slice()进行切割。注意：切片是零拷贝操作，不会实际复制数据，性能开销很小。
+
+{{断点续传实现}}
+断点续传在分片上传基础上实现。核心思路：1）生成文件唯一标识（如文件名+大小+最后修改时间的hash）；2）上传前先查询服务端已接收的分片列表；3）只上传缺失的分片；4）全部完成后请求服务端合并。前端需持久化已上传分片信息（localStorage或IndexedDB），即使页面刷新也能恢复。服务端需维护分片状态，支持分片查询接口和合并接口。
+
+{{文件唯一标识生成}}
+为实现断点续传，需为每个文件生成稳定的唯一标识。推荐方案：使用spark-md5对文件内容计算MD5哈希，但大文件全量计算耗时长。替代方案：组合文件名+文件大小+最后修改时间戳（file.lastModified）生成标识，速度快但理论上有碰撞风险。最佳实践：先用组合标识做快速判断，必要时再用MD5校验。Web Crypto API的SubtleCrypto.digest()也可用于计算哈希。
+
+{{并发控制与队列管理}}
+分片上传需控制并发数量，避免同时发起过多请求。常用方案：1）Promise.allSettled + 信号量（Semaphore）模式，限制最大并发数为3-6；2）使用p-limit等并发控制库；3）自实现任务队列，维护pending列表，完成一个再启动下一个。还需实现重试机制：单个分片失败后指数退避重试（如1s、2s、4s），最多重试3次。AbortController可用于取消单个分片的请求。
+
+{{上传取消功能}}
+使用AbortController实现上传取消。创建controller = new AbortController()，传递signal到fetch请求：fetch(url, { signal: controller.signal })。调用controller.abort()取消请求。对于分片上传，需维护所有分片的AbortController，批量取消时遍历调用abort()。取消后需清理状态（标记为已取消、停止后续分片）。XMLHttpRequest也有abort()方法可直接取消。
+
+{{大文件上传内存优化}}
+处理大文件时需注意内存管理。避免使用FileReader.readAsDataURL()读取整个文件（会占用大量内存）。分片上传时使用Blob.slice()而非读取为ArrayBuffer，slice是零拷贝操作。使用ReadableStream进行流式上传，避免一次性将整个文件加载到内存。对于超大文件（>4GB），注意JavaScript中Number精度限制，使用BigInt处理字节偏移量。
+
+{{服务端合并策略}}
+前端分片上传完成后，需通知服务端合并文件。常见方案：1）前端发送合并请求，携带文件标识和总分片数，服务端按序号拼接所有分片；2）服务端在收到最后一个分片时自动触发合并；3）使用tus等标准协议，由协议层处理合并。合并时需校验：分片完整性（MD5校验）、分片顺序、分片数量。合并完成后删除临时分片文件释放存储。
+
+{{Web Worker加速上传}}
+Web Worker可用于在后台线程处理文件操作，避免阻塞UI线程。适用于：文件哈希计算（spark-md5在Worker中运行避免卡顿）、文件切片、加密压缩等CPU密集型任务。通过postMessage传递File对象（可转移所有权）或ArrayBuffer。Worker中可使用FileReader但不能直接访问DOM。2025年SharedWorker和Service Worker也可用于跨页面的上传任务协调。
+
+{{图片预览与压缩}}
+上传前预览图片使用URL.createObjectURL(file)或FileReader.readAsDataURL()。createObjectURL更高效（无需读取文件内容），但需在不需要时调用URL.revokeObjectURL()释放内存。客户端压缩使用Canvas API：绘制图片到canvas → canvas.toBlob(callback, 'image/jpeg', quality)。quality参数控制压缩质量（0-1）。也可使用browser-image-compression库简化操作。注意：EXIF信息在压缩后可能丢失，需手动保留旋转方向。
+
+{{文件类型验证}}
+前端文件验证应包含多层检查：1）accept属性（基础过滤，仅基于扩展名）；2）file.type检查MIME类型（可被用户绕过）；3）文件头魔数（Magic Number）校验（最可靠，如PNG文件头为89 50 4E 47）；4）使用FileReader读取文件头几个字节进行二进制校验。注意：前端验证仅为用户体验优化，真正的安全校验必须在服务端执行，因为所有前端验证都可被绕过。
+
+{{上传限流与节流}}
+在进度回调中频繁更新UI可能导致性能问题。使用requestAnimationFrame节流进度更新，确保每帧最多更新一次。对于批量上传，使用节流控制同时上传的文件数量。Lodash的throttle/debounce也可用于进度回调的节流。2025年更推荐使用CSS transform和will-change优化进度条动画性能，避免频繁修改width属性触发重排。
+
+{{Tus可恢复上传协议}}
+Tus是开放的可恢复上传协议（Resumable Upload Protocol），由Transloadit维护。核心特性：基于HTTP，支持断点续传、并行上传、上传恢复。客户端通过HEAD请求查询已上传字节数，通过PATCH请求追加数据。协议扩展包括：Creation（创建上传）、Expiration（过期）、Checksum（校验）、Termination（终止）、Concatenation（拼接）。前端实现：tus-js-client库提供完整的客户端支持。
+
+{{tus-js-client使用}}
+tus-js-client是Tus协议的JavaScript客户端库。核心用法：创建tus.Upload实例，传入File对象和endpoint配置。支持事件回调：onProgress（进度）、onSuccess（成功）、onError（错误）。自动处理断点续传：使用localStorage存储上传URL和偏移量，页面刷新后可恢复。支持并行分片上传（parallelUploads选项）。与react-dropzone等拖拽库可无缝集成。
+
+{{Uppy上传框架}}
+Uppy是2025年最全面的模块化文件上传框架，由Transloadit团队开发（与tus同团队）。支持多种来源：本地文件、URL、Google Drive、Dropbox、Instagram等。核心插件架构：Dashboard（UI面板）、DragDrop（拖拽区）、ProgressBar（进度条）、StatusBar（状态栏）。传输协议支持：Tus、XHR Upload、AWS S3 Multipart。提供React、Vue、Svelte组件封装。完全开源（MIT协议）。
+
+{{FilePond上传组件}}
+FilePond是轻量级、高度可定制的文件上传组件。特性：拖拽上传、图片预览与裁剪、客户端图片缩放与优化、异步文件处理管道、多文件上传。支持React/Vue/Angular/Svelte框架集成。内置图片优化插件（File Encode、Image Preview、Image Crop、Image Resize、Image Transform）。CSS完全可定制，支持多种动画效果。npm周下载量超过20万。
+
+{{Multipart编码格式}}
+multipart/form-data是文件上传的标准HTTP编码格式。浏览器在使用FormData时自动生成Content-Type头和boundary分隔符。每个字段以boundary行开头，包含Content-Disposition和可选的Content-Type。文件字段的Content-Type为文件的MIME类型。手动构造multipart请求复杂且易出错，推荐始终使用FormData API。2025年HTTP/2和HTTP/3下multipart仍然广泛使用。
+
+{{多文件批量上传}}
+批量上传需考虑：1）使用input[multiple]允许选择多文件；2）限制最大文件数（maxFiles配置）；3）并发控制（同时上传3-5个文件）；4）单文件失败不影响其他文件；5）整体进度与单文件进度双重展示；6）支持暂停/恢复整个队列。react-dropzone的onDrop回调接收acceptedFiles和fileRejections两个数组，便于分别处理通过和未通过验证的文件。
+
+{{S3直传上传}}
+S3直传（Direct Upload）让前端直接上传文件到S3，无需经过应用服务器。方案：1）后端生成预签名URL（Presigned URL），前端通过PUT请求直传S3；2）S3 Multipart Upload，使用AWS SDK的createMultipartUpload API分片上传。优势：减轻服务器带宽压力、支持CDN加速、利用S3的高可用性。Uppy的AwsS3插件和tus的S3扩展都内置了S3直传支持。
+
+{{服务端签名直传流程}}
+典型的S3签名直传流程：1）前端请求后端获取上传凭证（STS Token或预签名URL）；2）后端生成临时凭证返回前端；3）前端使用凭证直接上传到S3；4）S3回调通知后端上传完成；5）后端记录文件元信息。安全考虑：凭证有时效性（通常15-60分钟）、限制可上传的路径和大小、使用STS临时凭证而非长期密钥。
+
+{{Cloudflare R2上传}}
+Cloudflare R2是S3兼容的对象存储，免出口流量费。上传方式与S3直传类似：使用S3兼容API和预签名URL。R2支持分片上传（Multipart Upload），最大单文件5TB。2025年越来越多项目选择R2替代S3以降低成本。前端使用AWS SDK for JavaScript（@aws-sdk/client-s3）即可对接R2，只需更换endpoint。
+
+{{文件上传安全}}
+文件上传安全要点：1）前端验证文件类型（MIME和扩展名）仅为体验，安全校验在服务端；2）限制文件大小，防止DoS攻击；3）禁止上传可执行文件（.exe、.sh、.php）；4）重命名文件，避免路径遍历攻击；5）上传目录设置不可执行权限；6）使用Content-Disposition: attachment防止浏览器直接执行；7）扫描文件内容（ClamAV等）；8）CORS策略限制上传来源。
+
+{{上传进度条UI设计}}
+进度条设计最佳实践：1）区分不确定进度（indeterminate）和确定进度；2）显示上传速度和剩余时间估算；3）分片上传时可显示每个分片的状态（待上传/上传中/已完成/失败）；4）使用CSS动画避免JS频繁操作DOM；5）上传完成后给予明确的成功/失败反馈；6）支持点击取消按钮；7）大批量上传时使用折叠列表展示单文件进度。技术实现：CSS transition + transform，避免width动画触发layout重排。
+
+{{Service Worker离线上传}}
+Service Worker可实现离线文件上传：将待上传文件存储在IndexedDB/Caches API中，注册后台同步（Background Sync API），网络恢复后自动上传。navigator.serviceWorker.ready.then(reg => reg.sync.register('upload-queue'))。注意：Background Sync API在Safari中支持有限。替代方案：使用navigator.onLine检测网络状态变化，在online事件触发时恢复上传队列。
+
+{{IndexedDB存储上传队列}}
+IndexedDB适合存储上传队列和断点续传状态。存储内容：文件标识、已上传分片列表、上传状态（pending/uploading/completed/failed）、元数据。IndexedDB支持存储Blob和ArrayBuffer，无需base64编码。使用idb库（Jake Archibald开发）简化IndexedDB操作，提供Promise API。注意IndexedDB有存储配额限制（通常为磁盘空间的一定比例），超大文件可能需要分段存储。
+
+{{Clipboard API粘贴上传}}
+通过Clipboard API实现粘贴上传：监听paste事件，从e.clipboardData.items获取剪贴板内容。items[i].kind === 'file'时调用items[i].getAsFile()获取File对象。支持粘贴图片（如截图）和文件。注意：浏览器安全限制，只能访问用户主动粘贴的内容。2025年部分浏览器支持navigator.clipboard.read()读取剪贴板文件，但需要用户明确授权。
+
+{{拖拽上传区域状态设计}}
+拖拽上传区域应有清晰的状态反馈：1）默认状态：虚线边框+上传图标+提示文字；2）拖入状态（isDragActive）：边框高亮+背景色变化+文字变为"释放上传"；3）拖入有效文件（isDragAccept）：绿色高亮；4）拖入无效文件（isDragReject）：红色高亮+提示不支持的文件类型；5）上传中：进度条覆盖；6）上传成功/失败：图标和颜色反馈。使用CSS transition实现状态切换的平滑动画。
+
+{{文件预览生成}}
+不同类型文件的预览策略：图片使用URL.createObjectURL()或FileReader.readAsDataURL()；视频使用URL.createObjectURL()设置为video.src；PDF使用URL.createObjectURL()嵌入iframe或embed元素；文本文件使用FileReader.readAsText()读取内容；音频使用Audio API播放。预览大文件时注意内存管理，及时revokeObjectURL。2025年浏览器支持更多文件预览格式，包括Office文档（通过第三方库如pdf.js）。
+
+{{Web Crypto API文件校验}}
+Web Crypto API提供SubtleCrypto.digest()方法计算文件哈希。支持SHA-1、SHA-256、SHA-384、SHA-512算法。用法：const hash = await crypto.subtle.digest('SHA-256', arrayBuffer)。对于大文件，分块读取并增量更新哈希（使用增量哈希库如hash-wasm）。返回值为ArrayBuffer，需转为十六进制字符串。Web Crypto API在Worker中也可使用，适合将哈希计算放到后台线程。

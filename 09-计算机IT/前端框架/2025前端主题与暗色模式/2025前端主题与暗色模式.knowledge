@@ -1,0 +1,95 @@
+# 2025前端主题与暗色模式
+# 领域: 计算机IT
+# 学科: 前端框架
+# 来源: 2025前端主题与暗色模式
+# 描述: 前端主题与暗色模式核心知识点
+
+{{prefers-color-scheme媒体特性概述}}{{prefers-color-scheme是CSS媒体特性(Media Feature)，用于检测用户是否偏好亮色或暗色界面。取值为light（用户偏好亮色主题或未表达偏好）和dark（用户偏好暗色主题）。语法：@media (prefers-color-scheme: dark) { ... }。属于Media Queries Level 5规范，所有主流浏览器均已支持。}}
+
+{{prefers-color-scheme基本用法}}{{-- 最常见用法是以亮色为默认，通过@media (prefers-color-scheme: dark)覆盖为暗色。示例：body { background: #fff; color: #222; } @media (prefers-color-scheme: dark) { body { background: #121212; color: #eee; } }。也可反向设计：以暗色为默认，用@media (prefers-color-scheme: light)覆盖。}}
+
+{{prefers-color-scheme与SVG和iframe嵌入元素}}{{prefers-color-scheme可在嵌入的SVG和iframe中使用，根据网页父元素的color-scheme设置样式。SVG必须以<img>标签嵌入（非内联），才支持通过prefers-color-scheme响应主题变化。跨域的<svg>和<iframe>元素也允许使用此媒体特性。}}
+
+{{CSS color-scheme属性}}{{color-scheme CSS属性允许元素声明支持的配色方案，浏览器会据此调整画布颜色、滚动条、表单控件等系统UI的默认颜色。取值：normal、light、dark、light dark、only light。自2022年1月起所有主流浏览器均已支持(Baseline)。在:root上设置color-scheme: light dark;可让整个页面适配用户偏好。}}
+
+{{color-scheme的only关键字}}{{only关键字禁止用户代理覆盖该元素的配色方案。例如color-scheme: only light;可阻止Chrome的Auto Dark Theme功能对特定元素强制应用暗色。注意：only dark无效，因为强制暗色可能导致不可读内容，所有主流浏览器默认使用亮色模式。}}
+
+{{light-dark()颜色函数}}{{light-dark()是CSS Color Module Level 5引入的函数，接受两个参数：第一个用于亮色方案，第二个用于暗色方案。语法：color: light-dark(#333, #efefec);。使用前必须在:root设置color-scheme: light dark;。支持颜色值和图片值两种形式，也可配合var()使用自定义属性。}}
+
+{{light-dark()与image值}}{{light-dark()不仅支持颜色值，还支持图片值。可用于根据主题切换背景图、图标等：background-image: light-dark(url("light.png"), url("dark.png"));。第二个参数也接受none关键字，生成无自然尺寸的完全透明图像。}}
+
+{{meta标签color-scheme}}{{-- 在HTML <head>中使用<meta name="color-scheme" content="light dark">可在CSS加载前告知浏览器支持的配色方案，防止页面加载时的闪烁(FOUC)。content值与CSS color-scheme属性一致。此标签应放在任何CSS样式信息之前。only dark无效，因为可能导致不可读内容。}}
+
+{{防闪烁策略(FOUC Prevention)}}{{-- 页面初始加载时，如果CSS尚未生效，暗色内容可能短暂显示为亮色（闪烁）。最佳实践：1)在<head>最前面添加<meta name="color-scheme">；2)内联关键CSS变量定义；3)使用localStorage保存用户偏好并在<head>中内联JS读取，确保首次渲染即正确。}}
+
+{{CSS自定义属性主题系统}}{{使用CSS自定义属性(CSS Variables)构建主题系统是最灵活的方案。在:root定义变量：:root { --bg: #fff; --text: #222; --accent: #0033cc; }，暗色主题用类覆盖：:root.dark { --bg: #121212; --text: #eee; --accent: #809fff; }。所有组件使用var()引用变量，主题切换只需改变量值。}}
+
+{{body类切换主题}}{{通过JavaScript切换body上的类名实现主题切换。方法：document.body.classList.toggle('dark-theme');。CSS中用body.dark-theme选择器定义暗色样式。此方法简单直接，适合中小型项目，但需注意CSS特异性管理。}}
+
+{{单独样式表切换主题}}{{为每个主题创建独立CSS文件（如light-theme.css和dark-theme.css），通过JavaScript动态修改<link>标签的href属性切换。优点是样式完全隔离，缺点是切换时可能有短暂闪烁，且增加HTTP请求数。}}
+
+{{localStorage持久化用户主题偏好}}{{使用localStorage保存用户的主题选择，确保刷新后保持一致。保存：localStorage.setItem('theme', 'dark');。读取：const theme = localStorage.getItem('theme');。建议在<head>中内联读取脚本，避免主题闪烁。也可使用cookie服务端渲染场景。}}
+
+{{matchMedia检测系统偏好}}{{JavaScript中使用window.matchMedia('(prefers-color-scheme: dark)')检测系统主题偏好。返回MediaQueryList对象，.matches属性为true表示暗色模式。可通过addEventListener('change', callback)监听系统主题实时变化。}}
+
+{{三态主题切换（系统/亮色/暗色）}}{{最佳实践是提供三种选项：跟随系统、强制亮色、强制暗色。跟随系统时移除手动类名并使用prefers-color-scheme；强制时添加对应类名覆盖媒体查询。UI上可用三段式开关或下拉菜单实现。}}
+
+{{主题切换过渡动画}}{{切换主题时添加平滑过渡可提升体验。对背景色和文字色添加transition：*, *::before, *::after { transition: background-color 0.3s, color 0.3s; }。注意不要全局应用transition，会影响其他动画性能。建议限定需要过渡的属性和元素。}}
+
+{{暗色模式背景色设计原则}}{{暗色模式背景不应使用纯黑(#000)，推荐使用深灰色(如#121212、#1a1a2e)。纯黑背景上的白色文字会产生强烈对比，导致眼睛疲劳。Google Material Design推荐#121212作为暗色背景基准。叠加层(如卡片)使用稍亮的灰色区分层次。}}
+
+{{暗色模式文字颜色设计}}{{暗色模式文字不应使用纯白(#fff)，推荐使用降低不透明度的白色(如rgba(255,255,255,0.87)或#e0e0e0)。高优先级文字用更高不透明度，次要文字降低。链接颜色需要在暗色背景上保持可辨识性，通常需要提高亮度和饱和度。}}
+
+{{暗色模式对比度与无障碍}}{{暗色模式必须保持WCAG 2.1对比度要求：正文文字至少4.5:1，大文字至少3:1。暗色背景上过亮的文字会导致光晕效应(halation)，反而降低可读性。使用工具如WebAIM Contrast Checker验证每个颜色组合的对比度。}}
+
+{{暗色模式图片与媒体处理}}{{图片在暗色模式下可能过于刺眼。处理方式：1)使用CSS filter: brightness(0.8)或contrast(0.9)降低亮度；2)为暗色模式准备专用图片资源；3)使用<picture>标签配合media属性切换；4)对logo等使用SVG并利用currentColor或CSS变量适配。}}
+
+{{暗色模式阴影处理}}{{亮色模式的box-shadow在暗色背景上几乎不可见。暗色模式需要：1)使用更浅的阴影颜色(如rgba(0,0,0,0.5))；2)增加阴影扩散半径；3)考虑使用边框或发光效果替代阴影；4)或使用亮色阴影(如rgba(255,255,255,0.05))营造微妙的层次感。}}
+
+{{暗色模式表单元素适配}}{{表单控件(输入框、下拉框、按钮)在暗色模式下需要特别注意。使用color-scheme属性可让浏览器自动调整原生控件样式。自定义样式需处理：输入框背景色、placeholder颜色、focus环颜色、disabled状态颜色、select箭头图标等。}}
+
+{{CSS系统颜色值}}{{CSS系统颜色值(如Canvas、CanvasText、Link、VisitedText等)会自动跟随color-scheme设置变化。使用这些值可减少手动适配工作，但跨浏览器一致性较差，主要用于需要与系统UI完美融合的场景。}}
+
+{{accent-color属性与主题}}{{accent-color CSS属性可快速设置表单控件(复选框、单选框、进度条等)的强调色，自动适配亮暗主题。设置：accent-color: #0066ff;。浏览器会自动处理不同状态下的颜色变化，减少自定义样式需求。自2022年起广泛支持。}}
+
+{{CSS color-contrast()函数}}{{CSS Color Module 5草案中的color-contrast()函数可自动从候选颜色中选择与背景对比度最高的颜色。语法：color: color-contrast(var(--bg) vs #fff, #000);。此功能仍在草案阶段，尚未广泛实现，但代表了未来主题适配的方向。}}
+
+{{CSS color-mix()与主题}}{{color-mix()函数可在两个颜色间混合，适合创建主题色的变体。例如：background: color-mix(in srgb, var(--primary) 10%, transparent);可生成主色的半透明变体用于hover状态。支持srgb、lab、oklch等色彩空间。自2023年起广泛支持。}}
+
+{{OKLCH色彩空间与主题设计}}{{OKLCH(Lightness-Chroma-Hue)色彩空间提供感知均匀的颜色模型，适合构建主题调色板。在OKLCH中，调整亮度(L)不影响色调和饱和度，便于生成一致的亮暗变体。CSS使用：oklch(0.7 0.15 250)。2025年所有主流浏览器均已支持。}}
+
+{{Tailwind CSS暗色模式}}{{Tailwind CSS提供dark:变体实现暗色模式。在tailwind.config.js中设置darkMode: 'class'(基于类名)或darkMode: 'media'(基于系统偏好)。使用：<div class="bg-white dark:bg-gray-900 text-black dark:text-white">。推荐使用class模式以支持手动切换。}}
+
+{{React主题系统实现}}{{React中实现主题系统的常见方案：1)使用Context创建ThemeContext，提供theme和toggleTheme；2)使用CSS变量，在根元素切换类名；3)使用styled-components或Emotion的ThemeProvider；4)使用next-themes等库处理SSR和主题持久化。}}
+
+{{next-themes库}}{{next-themes是Next.js生态中最流行的暗色模式库。特性：支持系统偏好检测、localStorage持久化、SSR无闪烁、自定义主题属性名、类名或data属性模式。使用<ThemeProvider attribute="class" defaultTheme="system">包裹应用，配合useTheme()钩子切换。}}
+
+{{Vue主题系统实现}}{{Vue 3中实现主题切换：1)使用provide/inject共享主题状态；2)使用CSS变量配合响应式ref；3)使用vueuse的useColorScheme和useDark组合式函数；4)在Nuxt中使用@nuxtjs/color-mode模块自动处理SSR和持久化。}}
+
+{{CSS Layers与主题管理}}{{CSS @layer规则可将主题样式隔离到独立层，控制优先级。例如：@layer base, components, themes;。将主题变量放在themes层，基础样式放在base层，确保主题覆盖不与组件样式冲突。适合大型项目的样式架构。}}
+
+{{CSS Scope与主题封装}}{{CSS @scope规则允许样式限定在特定DOM子树内，适合组件级主题隔离。例如：@scope (.card) to (.card-content) { :scope { background: var(--card-bg); } }。可实现同一页面不同区域使用不同主题的需求。}}
+
+{{CSS prefers-contrast媒体特性}}{{prefers-contrast媒体特性检测用户是否偏好高对比度或低对比度。取值：no-preference、more、less、custom。可配合暗色模式使用：@media (prefers-color-scheme: dark) and (prefers-contrast: more) { ... }。适用于无障碍场景。}}
+
+{{CSS prefers-reduced-motion}}{{prefers-reduced-motion检测用户是否偏好减少动画。主题切换过渡动画应尊重此设置：@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }。暗色模式切换动画不应在用户禁用动画时播放。}}
+
+{{Chrome Auto Dark Mode}}{{Chrome浏览器的Auto Dark Mode自动为未适配暗色模式的网页强制应用暗色样式。开发者可通过color-scheme: only light;在:root或特定元素上禁用此功能。建议主动适配暗色模式而非依赖自动转换，因为自动转换效果往往不理想。}}
+
+{{Server-Side Rendering主题策略}}{{SSR框架(Next.js/Nuxt)的主题适配需特别注意：1)首次服务端渲染使用亮色默认值；2)客户端hydration时读取localStorage/cookie应用正确主题；3)使用suppressHydrationWarning防止水合警告；4)可在<head>中内联脚本提前设置class，避免闪烁。}}
+
+{{主题切换的API设计模式}}{{主题切换的API设计模式包括：1)类名模式：html[data-theme="dark"]或body.dark；2)CSS变量模式：在:root切换变量值；3)属性选择器模式：[data-theme="dark"]选择器；4)媒体查询模式：仅使用prefers-color-scheme。推荐类名+CSS变量组合，兼顾灵活性和性能。}}
+
+{{暗色模式与图片srcset}}{{使用<picture>标签和media属性为不同主题提供不同图片资源：<picture><source srcset="dark-logo.png" media="(prefers-color-scheme: dark)"><img src="light-logo.png"></picture>。注意：此方式基于系统偏好，不响应手动切换。手动切换需用JavaScript配合。}}
+
+{{CSS高光色与高亮}}{{::selection伪元素和highlight相关的CSS属性需要适配暗色模式。::selection { background: var(--selection-bg); color: var(--selection-text); }。scrollbar-color属性也需适配：scrollbar-color: var(--thumb) var(--track);。这些细节点影响暗色模式的整体体验。}}
+
+{{CSS color-mix创建主题色阶}}{{利用color-mix()生成一致的主题色阶。例如生成primary色的10个梯度：for each step, mix primary with white(light) or black(dark)。在CSS中：--primary-100: color-mix(in oklch, var(--primary) 10%, white); --primary-900: color-mix(in oklch, var(--primary) 90%, black);。实现一致且感知均匀的色阶系统。}}
+
+{{CSS Custom Highlight API与暗色模式}}{{CSS Custom Highlight API允许自定义文本选择高亮样式，需适配暗色模式。通过::highlight(custom-highlight)伪元素设置样式，结合CSS变量在亮暗主题间切换高亮颜色。适用于代码编辑器、搜索结果高亮等场景。}}
+
+{{Figma到代码的主题Token工作流}}{{2025年主流设计到开发工作流：1)在Figma中定义Design Tokens(颜色、间距等)；2)使用Tokens Studio插件同步到JSON；3)Style Dictionary将Token转换为CSS变量、SCSS变量等多平台格式；4)代码中直接引用生成的变量。实现设计与开发的主题一致性。}}
+
+{{View Transitions API与主题切换}}{{View Transitions API可实现平滑的主题切换动画。使用document.startViewTransition(() => { document.documentElement.classList.toggle('dark'); })可触发页面级别的过渡动画。支持自定义过渡效果：@view-transition { navigation: auto; }。提供原生级的主题切换体验，无需第三方库。}}
+
+{{CSS @property与类型化主题变量}}{{@property规则可声明CSS自定义属性的类型、初始值和继承性。例如：@property --theme-bg { syntax: '<color>'; inherits: true; initial-value: #ffffff; }。类型化变量支持transition动画，可在主题切换时实现颜色值的平滑插值，无需JavaScript。}}

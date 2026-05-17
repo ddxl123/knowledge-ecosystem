@@ -1,0 +1,87 @@
+# 2025前端前端CSS Inheritance
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{CSS继承机制概述：CSS继承是指当元素未显式设置某个可继承属性的值时，该元素会获取其父元素该属性的计算值（computed value）。只有文档的根元素（html）会获取属性规范中定义的初始值（initial value）。继承是CSS级联（cascade）机制的核心组成部分。}}
+
+{{知识点2}}{{可继承属性（Inherited Properties）：可继承属性会自动从父元素传递给子元素。典型例子包括：color、font-family、font-size、font-weight、line-height、text-align、text-indent、visibility、cursor、direction、letter-spacing、word-spacing、white-space、border-collapse、border-spacing、caption-side、list-style-type、list-style-position、list-style-image、quotes、writing-mode等。这些属性通常与文本排版和视觉呈现相关。}}
+
+{{知识点3}}{{不可继承属性（Non-inherited Properties）：不可继承属性不会从父元素传递，子元素会使用该属性的初始值。典型例子包括：margin、padding、border、width、height、display、position、top/right/bottom/left、float、clear、overflow、z-index、background、box-shadow、text-decoration、transform、transition等。这些属性通常与布局和盒子模型相关。}}
+
+{{知识点4}}{{inherit关键字：inherit关键字允许开发者显式指定继承。它可以用于任何CSS属性，无论该属性默认是否可继承。对可继承属性使用inherit等同于自然继承行为；对不可继承属性使用inherit则强制从父元素获取值。例如设置em { border: inherit; }会让em元素继承父元素的border样式。}}
+
+{{知识点5}}{{initial关键字：initial关键字将属性重置为其规范定义的初始值。初始值是CSS规范中为每个属性定义的默认值，不一定等同于浏览器的默认样式。例如color的初始值是canvastext（通常为黑色），而非浏览器显示的颜色。在可继承属性上使用initial可能会产生意外效果，因为它会中断继承链。}}
+
+{{知识点6}}{{unset关键字：unset关键字根据属性是否可继承而表现不同——对可继承属性表现如同inherit，对不可继承属性表现如同initial。这使得它成为一种"智能重置"工具。例如color: unset会继承父元素颜色，而border: unset会使用border的初始值（none）。}}
+
+{{知识点7}}{{revert关键字：revert关键字将属性的级联值回滚到当前样式来源之前的状态。在作者样式（author origin）中使用revert会回滚到用户样式或用户代理样式；在用户样式中使用revert会回滚到用户代理默认样式；在用户代理样式中使用revert等同于unset。这使得revert比initial更智能，能保留浏览器的默认样式差异。}}
+
+{{知识点8}}{{revert-layer关键字：revert-layer是CSS Cascade Layers（级联层）中的关键字，用于将属性值回滚到前一个级联层中匹配规则的值。如果当前层没有其他层可回退，则回退到当前层的计算值。如果当前层中也没有匹配规则，则回退到前一个样式来源的值。此关键字在所有现代浏览器中已广泛支持。}}
+
+{{知识点9}}{{all属性与继承控制：all是一个简写属性，可一次性将元素的所有CSS属性设置为同一个继承控制值（initial、inherit、unset、revert、revert-layer），但不影响unicode-bidi、direction和自定义属性。例如all: unset会将所有可继承属性设为继承，所有不可继承属性设为初始值。}}
+
+{{知识点10}}{{继承的计算值传播：子元素继承的是父元素的计算值（computed value），而非指定值（specified value）。计算值是将相对值转换为绝对值后的结果。例如父元素font-size: 2em会被计算为绝对像素值，子元素继承的也是这个计算后的像素值，而非2em这个相对值。}}
+
+{{知识点11}}{{根元素的初始值：文档的根元素（html）不会从任何父元素继承值，因此它对所有属性都使用初始值（除非显式设置）。这确保了继承链有一个明确的起点。例如如果页面未指定color，根元素使用color的初始值（通常为黑色）。}}
+
+{{知识点12}}{{CSS级联优先级顺序：CSS级联算法按以下顺序决定属性值：①相关性过滤（选择器是否匹配）②来源和重要性（user-agent < user < author < animation < author!important < user!important < user-agent!important < transition）③特异性（specificity）④作用域接近度（scoping proximity）⑤源顺序。继承的值在此过程中作为"回退"机制存在。}}
+
+{{知识点13}}{{color属性的继承行为：color是最典型的可继承属性。当p { color: green; }时，p内部的em、strong、span等子元素都会显示绿色，除非显式覆盖。这使得全文统一文本颜色变得简单——只需在body或容器上设置一次color。}}
+
+{{知识点14}}{{font-family的继承：font-family是可继承属性。在body上设置font-family后，所有后代元素都会使用该字体（除非被覆盖）。这使得全局字体设置非常高效。但需注意，某些元素（如input、textarea、button、select）的用户代理样式可能会覆盖继承的字体。}}
+
+{{知识点15}}{{line-height的继承：line-height是可继承属性。当使用无单位数值（如line-height: 1.5）时，子元素会继承这个系数而非计算值，因此子元素会根据自身的font-size重新计算行高。但如果使用带单位的值（如line-height: 24px），子元素会继承固定的24px，可能导致子元素文字与行高不匹配。推荐使用无单位值。}}
+
+{{知识点16}}{{font-size继承与相对单位：font-size是可继承属性。使用相对单位（如em、%）时需特别注意嵌套放大/缩小问题。例如父元素font-size: 1.2em，子元素若也设font-size: 1.2em，则子元素实际大小为1.2×1.2=1.44倍根字号。使用rem单位或显式继承可避免此问题。}}
+
+{{知识点17}}{{visibility的继承特性：visibility是可继承属性。当父元素设置visibility: hidden时，所有子元素也会隐藏，即使子元素设置visibility: visible也无法显示（因为继承的是hidden值）。但若子元素显式设置visibility: visible，则子元素可以覆盖继承的hidden值变为可见。}}
+
+{{知识点18}}{{text-align的继承：text-align是可继承属性。在容器上设置text-align: center后，所有文本内容（包括inline、inline-block子元素）都会居中对齐，除非被覆盖。这使得页面文本对齐的全局控制变得简单。}}
+
+{{知识点19}}{{cursor的继承特性：cursor是可继承属性。在body上设置cursor: pointer后，鼠标在页面任何元素上都会显示手型指针。当需要在特定区域恢复默认鼠标样式时，需显式设置cursor: default或cursor: auto。}}
+
+{{知识点20}}{{border的非继承特性：border是不可继承属性。父元素设置border后，子元素不会自动获得边框。如果需要子元素继承边框样式，必须使用border: inherit显式继承。这是一个常见的设计决策——边框通常用于定义单个元素的视觉边界。}}
+
+{{知识点21}}{{margin和padding的非继承：margin和padding都是不可继承属性。这意味着每个元素的内外边距必须独立设置。设计响应式布局时，常利用CSS自定义属性（如--spacing: 1rem）配合var()函数来模拟"继承"间距的效果。}}
+
+{{知识点22}}{{background的非继承：background（包括background-color、background-image等）是不可继承属性。父元素的背景不会传递给子元素。子元素默认透明（transparent），会透过自身显示父元素的背景。这是透明子元素"看起来"继承了背景的根本原因。}}
+
+{{知识点23}}{{display的非继承与revert：display是不可继承属性，其初始值为inline。但浏览器的用户代理样式表会为不同HTML元素设置不同的display值（如div为block、span为inline）。使用display: initial会将所有元素重置为inline，而display: revert会恢复浏览器的默认display值。因此revert在display上更实用。}}
+
+{{知识点24}}{{强制不可继承属性继承的用例：有时需要强制不可继承属性继承父元素值。常见场景包括：①组件库中子组件继承父组件的边框样式 ②阴影效果的一致性 ③overflow行为的统一。使用inherit关键字即可实现，如.child { overflow: inherit; }。}}
+
+{{知识点25}}{{CSS自定义属性与继承：CSS自定义属性（CSS Custom Properties，即CSS变量）默认是可继承的。定义在根元素上的--primary-color等变量，所有后代都可以通过var()使用。这是CSS变量设计的核心优势之一——天然支持继承和主题系统。}}
+
+{{知识点26}}{{@layer级联层与继承：CSS Cascade Layers（@layer）不影响继承本身，但影响属性值的来源优先级。当同一属性在不同层中定义时，后声明的层优先级更高。revert-layer关键字专门用于在层之间回滚属性值，这是CSS Cascade Level 5引入的重要特性。}}
+
+{{知识点27}}{{继承与!important的交互：!important提升的是声明的优先级，不影响继承机制。当一个属性通过继承获得值时，如果子元素有对应的!important声明，子元素的!important声明会胜出。没有!important的显式声明也会覆盖继承值，因为显式声明的优先级天然高于继承值。}}
+
+{{知识点28}}{{伪元素的继承行为：::before和::after等伪元素会继承其宿主元素的属性值。这使得在伪元素上设置样式非常方便——通常只需设置content和少量覆盖属性。例如父元素color: blue时，::before伪元素的文本也默认为蓝色。}}
+
+{{知识点29}}{{Shadow DOM中的继承：Web Components的Shadow DOM中的元素可以从宿主元素（host element）继承CSS属性。:host伪类选择器用于定义宿主元素的样式，Shadow DOM内的元素可以继承这些样式。::slotted()选择器允许为插入槽（slot）中的内容设置继承样式。CSS custom properties可以穿透Shadow DOM边界。}}
+
+{{知识点30}}{{继承与表格元素：多个与表格相关的CSS属性是可继承的：border-collapse（边框合并模式）、border-spacing（边框间距）、caption-side（标题位置）。table元素上设置border-collapse: collapse后，所有嵌套的table都会继承此行为，无需重复设置。}}
+
+{{知识点31}}{{继承与列表样式：list-style-type、list-style-position、list-style-image都是可继承属性。在ul或ol上设置list-style-type: none后，嵌套列表也会继承此设置（通常用于去除默认列表符号）。如果只想去除顶层列表符号，需在子ul/ol上显式恢复。}}
+
+{{知识点32}}{{继承的实际调试技巧：①使用浏览器DevTools的Computed面板查看属性值来源，继承的属性会显示"Inherited from [父元素]" ②使用Cascade Layers面板查看层优先级 ③继承值在Computed面板中显示为灰色文本，区别于显式设置的黑色文本 ④可通过--force-dark-mode标志测试继承行为。}}
+
+{{知识点33}}{{CSS Cascade Level 5规范进展：CSS Cascading and Inheritance Level 5规范（截至2025年）引入了revert-layer和revert-rule关键字，扩展了级联层机制。继承的基本机制自CSS1以来保持不变，但控制继承的工具集在不断增强。规范由W3C CSS Working Group维护。}}
+
+{{知识点34}}{{继承与!important的最佳实践：避免在全局样式中对可继承属性使用!important，因为它会导致子元素难以覆盖该值。如果需要全局强制某个值，考虑使用CSS Cascade Layers而非!important。使用@layer base { }将基础样式放入低优先级层是更优雅的方案。}}
+
+{{知识点35}}{{继承性能考量：CSS继承本身几乎没有性能开销，因为浏览器在构建渲染树时会自然地计算继承值。但深层嵌套的DOM结构中，过多依赖继承可能导致样式计算时间增加。实践中，继承的性能影响远小于过度使用复杂选择器或!important的影响。}}
+
+{{知识点36}}{{继承与CSS作用域（@scope）：CSS @scope at-rule允许定义样式的作用范围，影响继承链。在@scope规则中，样式只对作用域内的元素生效，但继承仍然遵循DOM结构。@scope的接近度（proximity）在级联优先级中作为特异性相同时的额外判定因素。}}
+
+{{知识点37}}{{方向性和书写模式继承：direction和unicode-bidi是可继承属性，用于控制文本方向（LTR/RTL）。writing-mode也是可继承属性，控制文本排列方向（水平/垂直）。这些属性通过继承在整个文档中保持一致的文本方向，是国际化（i18n）的关键机制。}}
+
+{{知识点38}}{{opacity与继承的区别：opacity不是可继承属性，但它会影响整个元素及其所有内容的透明度。这与继承不同——设置父元素opacity: 0.5不会让子元素的opacity属性变为0.5，但子元素在视觉上会以50%透明度渲染，因为opacity影响的是整个合成层。}}
+
+{{知识点39}}{{font-variant的继承特性：font-variant及其子属性（font-variant-caps、font-variant-numeric、font-variant-ligatures等）都是可继承属性。在容器上设置font-variant-numeric: oldstyle-nums后，所有数字都会使用旧式数字样式，适用于正文排版风格的统一控制。}}
+
+{{知识点40}}{{text-decoration的非继承与覆盖：text-decoration是非可继承属性，但其视觉效果会"传播"给后代文本。这是一种"伪继承"行为。要覆盖祖先的text-decoration，子元素需要显式设置text-decoration: none。CSS Text Decoration Level 4规范提供了更精细的text-decoration控制属性。}}
+
+{{知识点41}}{{继承与组件化开发：在React、Vue等组件化框架中，CSS继承机制尤为重要。全局样式（如font-family、color）通过继承自然传播到所有组件，而组件局部样式通过CSS Modules、Scoped CSS等机制隔离。理解继承有助于避免样式冲突和设计可复用的组件主题系统。}}
+
+{{知识点42}}{{CSS Reset与继承策略：CSS Reset（如normalize.css、modern-normalize）通过显式设置属性值来标准化浏览器默认样式，而非依赖继承。推荐的策略是：①使用CSS Reset建立一致基线 ②利用继承设置全局文本样式 ③使用CSS自定义属性传递设计令牌 ④使用Cascade Layers组织样式优先级。}}

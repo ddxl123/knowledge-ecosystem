@@ -1,0 +1,87 @@
+# 2025消息队列入门
+# 领域: 计算机IT
+# 学科: 消息队列
+# 来源: 2025消息队列入门
+# 描述: 消息队列核心知识点
+
+{{消息队列定义}}{{消息队列（Message Queue，简称MQ）是一种应用程序之间的通信方法，通过在消息的传输过程中保存消息实现异步通信。生产者将消息发送到队列，消费者从队列中获取消息，实现应用解耦、异步处理和流量削峰。}}
+
+{{消息队列核心作用}}{{消息队列三大核心作用：1）应用解耦——生产者和消费者无需感知对方存在，通过MQ中转；2）异步处理——将非关键路径异步化，提升响应速度；3）流量削峰——高并发场景下缓冲请求，保护下游系统不被击垮。}}
+
+{{生产者（Producer）}}{{消息的发送方，负责创建消息并发送到消息队列。生产者不关心消息如何被消费，只负责将消息投递到指定的Topic或Queue中。}}
+
+{{消费者（Consumer）}}{{消息的接收方，从消息队列中获取并处理消息。消费者可以是单个实例或消费者组，消费模式包括推模式（Push）和拉模式（Pull）。}}
+
+{{Broker}}{{消息队列的服务端节点，负责接收、存储和分发消息。一个MQ集群通常由多个Broker组成，Broker之间通过集群协议实现数据同步和高可用。}}
+
+{{Topic（主题）}}{{消息的逻辑分类单位，生产者将消息发送到指定Topic，消费者订阅感兴趣的Topic。一个Topic可以包含多个分区（Partition）或队列（Queue），以实现并行消费。}}
+
+{{队列模型（Queue Model）}}{{点对点消息模型，每条消息只能被一个消费者消费。典型实现是RabbitMQ的Queue，消息被消费后即从队列中移除。适用于任务分发场景。}}
+
+{{发布订阅模型（Pub/Sub Model）}}{{一条消息可以被多个消费者同时消费。生产者发布消息到Topic，所有订阅该Topic的消费者都能收到消息。适用于广播通知、事件驱动架构。}}
+
+{{Kafka概述}}{{Apache Kafka是分布式流处理平台，由LinkedIn开发，2011年开源。核心特性：高吞吐量（百万级TPS）、持久化存储、水平扩展。2025年Kafka 4.0已移除ZooKeeper依赖，使用KRaft模式实现自管理。}}
+
+{{Kafka分区（Partition）}}{{Kafka Topic的并行单元，每个Topic可以有多个Partition。消息在Partition内有序，通过Key的哈希决定写入哪个Partition。分区数决定了消费者的最大并行度。}}
+
+{{Kafka副本机制（Replication）}}{{每个Partition有多个副本（Leader+Follower），Leader处理读写请求，Follower同步数据。通过ISR（In-Sync Replicas）机制保证数据一致性，replication.factor控制副本数。}}
+
+{{Kafka消费者组（Consumer Group）}}{{多个消费者组成一个组，共同消费一个Topic。同一组内每个Partition只能被一个消费者消费，不同组独立消费。通过消费者组实现负载均衡和消息广播。}}
+
+{{Kafka Offset管理}}{{消费者在每个Partition中的消费位置由Offset标识。Kafka 0.9+将Offset存储在内部Topic（__consumer_offsets）中。消费者提交Offset的方式包括自动提交和手动提交。}}
+
+{{Kafka KRaft模式}}{{Kafka 3.0引入、4.0正式移除ZooKeeper的共识机制。使用Raft协议在Kafka节点间选举Controller，元数据存储在内部Topic中，简化部署和运维。}}
+
+{{RabbitMQ概述}}{{RabbitMQ是基于AMQP协议的开源消息中间件，由Erlang语言开发。特点：可靠性高、灵活路由、支持多种协议（AMQP、MQTT、STOMP）。适用于企业级应用集成和复杂路由场景。}}
+
+{{AMQP协议}}{{Advanced Message Queuing Protocol，RabbitMQ遵循的开放标准消息协议。核心组件：Exchange（交换机）、Queue（队列）、Binding（绑定）、Connection/Channel（连接/通道）。AMQP 1.0是最新标准。}}
+
+{{RabbitMQ Exchange类型}}{{RabbitMQ四种Exchange类型：1）Direct——精确匹配Routing Key；2）Fanout——广播到所有绑定队列；3）Topic——通配符匹配Routing Key（*匹配一个词，#匹配多个词）；4）Headers——基于消息头属性匹配。}}
+
+{{RabbitMQ消息确认机制}}{{RabbitMQ通过ACK机制保证消息可靠消费。消费者处理完成后发送ACK，MQ才删除消息。支持自动ACK（autoAck）和手动ACK（manualAck），生产建议使用手动ACK并设置prefetch限制未确认消息数。}}
+
+{{RocketMQ概述}}{{Apache RocketMQ是阿里巴巴开源的分布式消息中间件，2012年开源。特点：低延迟、高可靠、支持事务消息和延迟消息。在国内互联网公司广泛使用，是Apache顶级项目。}}
+
+{{RocketMQ核心组件}}{{RocketMQ四大组件：1）NameServer——注册中心，管理Broker路由信息；2）Broker——消息存储和转发；3）Producer——消息生产者；4）Consumer——消息消费者。NameServer集群无状态，Broker定期注册心跳。}}
+
+{{RocketMQ事务消息}}{{RocketMQ特色功能，实现分布式事务的最终一致性。流程：1）发送半消息（Half Message）；2）执行本地事务；3）根据结果提交或回滚；4）回查机制处理超时未确认的半消息。基于两阶段提交实现。}}
+
+{{RocketMQ延迟消息}}{{消息发送后不会立即投递，到达设定时间后才被消费者可见。RocketMQ支持18个固定的延迟等级（1s/5s/10s/30s/1m/2m等），5.0版本后支持任意时间延迟。适用于订单超时取消等场景。}}
+
+{{消息模型对比}}{{三种主流消息模型对比：队列模型（点对点，RabbitMQ默认）——每条消息只被一个消费者处理；发布订阅模型（Kafka/RocketMQ）——消息可被多个消费者组消费；混合模型（RocketMQ）——同一组内队列模型，不同组间发布订阅。}}
+
+{{可靠投递（生产端）}}{{保证消息从生产者到Broker的可靠性：1）同步发送+重试机制；2）事务消息（RocketMQ）；3）Kafka的acks=all配置要求所有ISR确认；4）发送确认回调处理失败消息。核心原则：发送失败必须有补偿机制。}}
+
+{{可靠消费（消费端）}}{{保证消息被正确消费：1）手动ACK确认机制；2）失败重试（RabbitMQ的retry/死信队列）；3）幂等消费（防重复处理）；4）消费进度持久化。关键点：消费失败不能丢消息，也不能无限重试。}}
+
+{{幂等性（Idempotency）}}{{同一操作执行多次与执行一次效果相同。消息消费的幂等性保证：1）唯一消息ID+去重表；2）数据库唯一约束；3）乐观锁版本号；4）Redis SETNX去重。分布式消息系统中幂等性是必须考虑的设计要素。}}
+
+{{顺序消息}}{{保证消息按照发送顺序被消费。实现方式：1）Kafka——同一Partition内天然有序，通过Key路由到同一Partition；2）RocketMQ——MessageQueueSelector选择同一队列；3）全局有序只能使用单分区/单队列（牺牲性能）。}}
+
+{{死信队列（Dead Letter Queue）}}{{消费失败达到最大重试次数后，消息进入死信队列。作用：1）避免毒消息阻塞正常消费；2）保留失败消息供人工排查；3）支持死信消息重新投递。RabbitMQ通过x-dead-letter-exchange配置，RocketMQ自动创建%DLQ%Topic。}}
+
+{{消息积压（Backlog）}}{{消费者处理速度跟不上生产速度，导致消息堆积。排查步骤：1）检查消费者是否正常运行；2）增加消费者实例数；3）优化消费逻辑（批量处理、异步化）；4）临时扩容Topic分区数。预防：监控消费延迟、设置告警阈值。}}
+
+{{消息过滤}}{{消费者只消费感兴趣的消息。过滤方式：1）Kafka——消费者端自行过滤或使用KSQL；2）RocketMQ——支持Tag过滤和SQL92表达式过滤（Broker端执行）；3）RabbitMQ——通过Routing Key和Exchange类型实现路由过滤。}}
+
+{{消息持久化}}{{消息写入磁盘保证不丢失。Kafka——顺序写磁盘+页缓存，性能接近内存；RabbitMQ——持久化队列+持久化消息+集群镜像；RocketMQ——顺序写CommitLog+异步刷盘/同步刷盘。同步刷盘更可靠但性能低，异步刷盘性能高但可能丢少量消息。}}
+
+{{消息TTL（Time To Live）}}{{消息的存活时间，超过TTL未被消费则自动删除或转入死信队列。RabbitMQ支持队列级和消息级TTL；RocketMQ默认保留48小时（可配置）；Kafka通过retention.ms配置保留时间。TTL用于处理过期消息、防止无限积压。}}
+
+{{消息重试机制}}{{消费失败后的自动重试策略。RabbitMQ——配置x-delivery-limit或手动nack+requeue；RocketMQ——默认16次重试，间隔递增（10s到2h）；Kafka——需要自行实现重试逻辑（Spring Kafka提供RetryTemplate）。重试间隔建议采用指数退避。}}
+
+{{消息去重}}{{防止重复消息被多次处理。策略：1）业务层去重——消息ID+Redis/数据库判重；2）RocketMQ不支持自动去重，需业务实现；3）Kafka的Exactly Once语义（幂等Producer+事务）；4）设置合理的消费超时和ACK时机减少重复投递。}}
+
+{{消息压缩}}{{减少网络传输和存储开销。Kafka支持gzip、snappy、lz4、zstd压缩，可在Producer端或Broker端压缩；RabbitMQ不支持消息级压缩但支持传输层压缩；RocketMQ支持zip和lz4。大消息场景压缩可显著提升吞吐量。}}
+
+{{消息大小限制}}{{不同MQ对单条消息大小的限制：Kafka默认1MB（可调至10MB+，但不建议）；RabbitMQ默认128MB但实际建议不超过几MB；RocketMQ默认4MB。大消息建议：1）消息体存引用（URL/文件ID）；2）消息分割；3）外部存储+消息引用。}}
+
+{{集群与高可用}}{{消息队列的高可用方案：Kafka——Partition多副本+ISR机制，少数Broker宕机不影响服务；RabbitMQ——镜像队列（经典）或Quorum Queue（Raft共识，推荐）；RocketMQ——Broker主从同步/异步复制，Dledger自动选主。}}
+
+{{消息队列监控}}{{监控核心指标：1）生产速率/消费速率；2）消息积压量（消费延迟）；3）Broker磁盘使用率；4）消费者Lag；5）消息投递延迟；6）错误率和重试率。工具：Kafka——Kafka Manager/CMAK；RabbitMQ——Management Plugin；RocketMQ——Dashboard。}}
+
+{{消息队列选型建议}}{{2025年主流MQ选型：Kafka——大数据流处理、日志收集、超高吞吐场景；RabbitMQ——企业应用集成、复杂路由、低延迟场景；RocketMQ——电商交易、事务消息、国内生态。新兴选择：Pulsar（存算分离、多租户）、Redpanda（Kafka兼容、C++实现）。}}
+
+{{消息队列在微服务中的应用}}{{微服务架构中MQ的典型应用：1）服务间异步通信——解耦服务依赖；2）事件驱动架构（EDA）——通过事件触发后续处理；3）CQRS模式——命令和查询分离；4）Saga分布式事务——通过消息协调跨服务事务。Spring Cloud Stream提供统一抽象。}}
+
+{{Exactly-Once语义}}{{消息恰好被处理一次的保证。Kafka通过幂等Producer（enable.idempotence=true）+事务API实现端到端Exactly-Once；RocketMQ通过事务消息实现最终一致性。注意：真正的Exactly-Once需要消费端也实现幂等，本质上是At-Least-Once + 幂等消费。}}

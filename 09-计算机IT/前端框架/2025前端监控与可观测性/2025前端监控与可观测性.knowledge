@@ -1,0 +1,116 @@
+# 2025前端监控与可观测性
+# 领域: 计算机IT
+# 学科: 前端框架
+# 来源: 2025前端监控与可观测性
+# 描述: 前端监控与可观测性核心知识点
+
+{{前端监控概述}}
+前端监控是通过在Web应用中集成数据采集SDK，实时收集运行时的错误、性能和用户行为数据，帮助开发团队发现、诊断和优化线上问题的工程实践。2025年前端监控已从简单的错误上报发展为涵盖错误监控、性能监控、用户行为追踪、日志采集的全链路可观测性体系。
+
+{{可观测性三大支柱}}
+可观测性(Observability)的三大支柱是：日志(Logs)、指标(Metrics)和追踪(Traces)。在前端领域，日志包括控制台输出和自定义日志事件；指标包括Web Vitals、API耗时等量化数据；追踪包括分布式链路追踪，将前端请求与后端服务关联。
+
+{{Core Web Vitals}}
+Core Web Vitals是Google提出的衡量Web用户体验的三项核心指标，2025年的组成包括：LCP(Largest Contentful Paint)衡量加载性能、INP(Interaction to Next Paint)衡量交互响应性、CLS(Cumulative Layout Shift)衡量视觉稳定性。这三项指标直接影响Google搜索排名。
+
+{{LCP最大内容绘制}}
+LCP(Largest Contentful Paint)测量页面中最大的图片或文本块从页面开始加载到渲染完成的时间。被视为LCP候选元素的包括：img元素、SVG中的image元素、video元素的poster图片、带有background-image的元素以及文本节点块。良好的LCP应在2.5秒以内。
+
+{{INP交互到下一帧绘制}}
+INP(Interaction to Next Paint)在2024年5月取代FID成为Core Web Vitals指标。与FID仅测量首次输入延迟不同，INP考虑页面生命周期内所有用户交互的响应时间，取第98百分位数(50次以上交互时)。INP使用Event Timing API测量，涵盖输入延迟、事件处理和下一帧渲染的完整过程。良好INP应低于200毫秒。
+
+{{CLS累积布局偏移}}
+CLS(Cumulative Layout Shift)量化页面加载过程中页面布局意外偏移的程度。它通过将影响分数(impact fraction)和距离分数(distance fraction)相乘来计算。良好CLS应低于0.1。常见导致CLS的因素包括：无尺寸的图片/视频、动态注入的内容、Web字体导致的FOIT/FOUT。
+
+{{TTFB首字节时间}}
+TTFB(Time to First Byte)是浏览器发起请求到接收到响应第一个字节之间的时间。包含DNS查询、TCP握手、TLS握手和服务器处理时间。可通过PerformanceNavigationTiming的responseStart属性测量。对于使用103 Early Hints的站点，TTFB通常指103中间响应的时间。良好的TTFB应低于800毫秒。
+
+{{FCP首次内容绘制}}
+FCP(First Contentful Paint)测量页面开始加载到页面内容的任何部分在屏幕上渲染的时间。页面内容包括文本、图片(包括背景图片)、非白色canvas或SVG。FCP是用户感知页面加载速度的关键指标，良好FCP应在1.8秒以内。
+
+{{FID首次输入延迟(已废弃)}}
+FID(First Input Delay)曾是Core Web Vitals指标之一，测量用户首次与页面交互到浏览器能够开始处理事件处理程序的时间。2024年5月被INP取代。FID仅关注首次交互的输入延迟，而INP考虑所有交互的完整响应周期。
+
+{{Performance API}}
+Performance API是浏览器提供的内置性能测量接口，可获取高精度时间戳并显示在开发者工具中。主要接口包括Performance(主接口)、PerformanceObserver(观察新性能条目)、PerformanceEntry(性能条目基类)。所有性能条目都有name、duration、startTime和type属性。
+
+{{PerformanceObserver}}
+PerformanceObserver接口用于监听性能测量事件，当新的性能条目被记录到浏览器性能时间线时收到通知。支持的entryType包括mark、measure、navigation、resource、paint、longtask、long-animation-frame等。使用observe({entryTypes: [...]})方法指定要观察的类型。
+
+{{PerformanceNavigationTiming}}
+PerformanceNavigationTiming替代了已废弃的PerformanceTiming API，提供页面导航事件的详细时间数据。包含navigationStart、fetchStart、domainLookupStart/End、connectStart/End、requestStart、responseStart、domLoading、domInteractive、domContentLoadedEventStart/End、domComplete、loadEventStart/End等关键时间节点。
+
+{{PerformanceResourceTiming}}
+PerformanceResourceTiming测量网络加载资源(如图片、脚本、fetch调用)的时间指标。可追踪重定向开始/结束时间、fetch开始、DNS查询开始/结束时间、响应开始/结束时间。对于分析第三方资源加载性能和API请求耗时非常有用。
+
+{{Long Animation Frames API}}
+Long Animation Frames API(LoAF)用于识别占用渲染时间并阻塞其他任务执行的长动画帧。与Long Tasks API类似但提供了更详细的信息，包括导致长帧的具体脚本信息(通过PerformanceScriptTiming)。这是诊断INP问题的重要工具。
+
+{{Long Tasks API}}
+Long Tasks API检测占用主线程超过50毫秒的任务。当主线程被长时间占用时，用户交互响应会延迟，直接影响INP指标。通过PerformanceLongTaskTiming接口获取长任务的详细信息，包括任务归因(通过TaskAttributionTiming)。
+
+{{Sentry前端错误监控}}
+Sentry是最流行的开源前端错误监控平台。提供JavaScript SDK自动捕获未处理的异常和Promise rejection，支持Source Map上传以还原压缩代码的原始堆栈。2025年Sentry提供Frontend Dashboard自动展示Core Web Vitals、事务性能、错误率等数据。
+
+{{Sentry性能监控}}
+Sentry的性能监控通过分布式追踪(Distributed Tracing)捕获应用全栈的详细性能数据。自动检测N+1查询、连续数据库查询可合并、主线程阻塞等性能问题。Trace Explorer支持按任意属性切片分析性能数据，计算p50/p95/p99耗时。
+
+{{Sentry Session Replay}}
+Sentry Session Replay录制用户会话的视频回放，与性能追踪数据双向关联。从任何trace可跳转到对应replay查看用户实际体验，从replay时间线可点击任意span深入性能细节。帮助理解"某操作耗时多久"和"对用户造成了什么影响"。
+
+{{Sentry追踪配置}}
+Sentry JS SDK通过browserTracingIntegration()启用自动插桩，支持页面加载、路由导航、HTTP请求等自动追踪。tracesSampleRate设置统一采样率(0到1)，tracesSampler函数提供基于上下文的精细采样控制。tracePropagationTargets控制哪些URL启用追踪传播。
+
+{{Sentry Span Metrics}}
+Span Metrics允许在span上添加自定义属性来监控性能和调试应用。可基于span数据计算自定义指标，构建Dashboard和告警。配合Trace Explorer可快速定位特定端点、版本、用户群组的性能问题。
+
+{{RUM真实用户监控}}
+RUM(Real User Monitoring)是通过在真实用户浏览器中运行的JavaScript采集代码，收集每位用户的性能和体验数据。与实验室合成测试不同，RUM反映的是真实用户在真实设备、真实网络条件下的体验。是前端可观测性的核心数据来源。
+
+{{合成监控vs真实用户监控}}
+合成监控(Synthetic Monitoring)在受控环境中使用模拟用户脚本定期测试，可发现回归问题但不代表真实用户。RUM在真实环境中采集数据，反映实际体验但数据量大且噪声多。最佳实践是两者结合使用：合成监控用于基线和回归检测，RUM用于真实用户体验分析。
+
+{{前端错误监控分类}}
+前端错误可分为：JavaScript运行时错误(未捕获异常)、Promise rejection、资源加载错误(CSS/JS/图片加载失败)、网络请求错误(API调用失败)、框架级错误(React/Vue组件错误边界)、Web Worker错误。每种错误类型需要不同的捕获和处理策略。
+
+{{Source Map与错误还原}}
+前端代码通常经过压缩(minify)和混淆(mangle)，直接上报的错误堆栈难以阅读。Source Map文件记录压缩代码与源码的映射关系，监控平台通过上传Source Map将错误堆栈还原为源码位置。2025年主流工具支持Source Map隐藏(不暴露源码)和自动上传。
+
+{{用户行为追踪}}
+用户行为追踪记录用户在页面上的操作序列，包括页面访问(PV/UV)、点击事件、滚动深度、表单交互、自定义业务事件等。结合性能数据可分析特定操作的性能影响。Sentry的Session Replay可与行为追踪结合，提供完整的用户旅程视图。
+
+{{前端日志采集}}
+前端日志采集将console.log/warn/error等输出以及自定义日志事件上报到服务端。Sentry 2025年支持Logs功能，trace期间产生的日志自动关联到对应trace，为每个操作提供诊断上下文。日志采集需注意：避免采集敏感信息、控制日志量级、设置日志级别过滤。
+
+{{分布式链路追踪}}
+分布式链路追踪(Distributed Tracing)将前端发起的请求通过trace ID与后端各服务的处理过程关联，形成完整的调用链路。前端通过tracePropagationTargets配置将trace context注入HTTP请求头(traceparent/tracestate)，后端服务接力传播。可追踪从前端操作到数据库查询的全链路耗时。
+
+{{前端性能监控指标体系}}
+前端性能监控指标体系分为三层：核心指标(Core Web Vitals：LCP/INP/CLS)、导航指标(TTFB/FCP/DOMContentLoaded/Load)、自定义业务指标(首屏时间、接口耗时、组件渲染时间)。建议优先关注Core Web Vitals，再按需补充导航和业务指标。
+
+{{前端监控数据上报策略}}
+数据上报策略直接影响监控系统性能和数据质量。常用策略：批量上报(积攒多条数据后一次性发送)、空闲上报(requestIdleCallback或navigator.sendBeacon)、采样上报(按比例采样降低数据量)、离线缓存(网络断开时缓存数据)。navigator.sendBeacon在页面卸载时仍可发送数据。
+
+{{web-vitals库}}
+web-vitals是Google官方提供的轻量级JavaScript库，用于采集Core Web Vitals指标。支持onLCP、onINP、onCLS、onFCP、onTTFB等回调函数。每个指标回调提供指标值和详细归因信息(attribution)，帮助定位性能瓶颈。2025年版本与最新Web Vitals定义保持同步。
+
+{{前端监控告警机制}}
+前端监控告警根据预设规则在指标异常时通知团队。常见告警规则：错误率突增(同比/环比)、P95耗时超过阈值、Core Web Vitals劣化、特定页面/接口异常。告警应分级(P0-P3)，避免告警疲劳。结合release标记可快速定位是哪个版本引入的问题。
+
+{{前端监控与CI/CD集成}}
+将前端监控与CI/CD集成可在部署阶段拦截性能回归。Lighthouse CI在构建时运行性能审计，检查LCP/FCP/CLS等指标是否达标。Bundle分析工具监控包体积变化。部署后通过Sentry的release tracking对比新旧版本的错误率和性能数据。
+
+{{OpenTelemetry前端SDK}}
+OpenTelemetry(OTel)是CNCF可观测性标准，其JS SDK支持前端追踪和指标采集。OTel提供vendor-neutral的标准化数据格式，可将数据发送到任意后端(Jaeger、Grafana Tempo、Sentry等)。2025年OTel前端SDK成熟度持续提升，适合需要多后端支持的团队。
+
+{{Privacy Sandbox对前端监控的影响}}
+2025年Google Privacy Sandbox和第三方Cookie弃用对前端监控产生影响。传统依赖Cookie的用户标识方案需迁移到Privacy-preserving的替代方案。Attribution Reporting API替代传统转化追踪。前端监控需在数据采集和用户隐私之间取得平衡。
+
+{{前端监控数据存储与分析}}
+前端监控数据通常存储在时序数据库(InfluxDB、Prometheus)、日志平台(Elasticsearch、Loki)或专用APM后端。数据分析维度包括：时间趋势、页面/路由分布、设备/浏览器分布、地理位置分布、用户分群。Grafana是最流行的可视化工具，支持多数据源聚合。
+
+{{弱网与低端设备监控}}
+弱网和低端设备用户的性能体验往往显著劣于平均水平。前端监控需按网络状况(4G/3G/2G/WiFi)和设备能力分层分析性能数据。使用navigator.connection API获取网络信息(NetworkInformation)，结合performance.memory获取JS堆内存使用情况。
+
+{{前端监控最佳实践}}
+2025年前端监控最佳实践：1)优先监控Core Web Vitals并设置性能预算；2)集成Sentry等成熟平台捕获错误和性能数据；3)使用分布式追踪关联前后端；4)结合RUM和合成监控；5)在CI/CD中加入性能检查；6)合理采样避免监控本身影响性能；7)注意用户隐私合规。

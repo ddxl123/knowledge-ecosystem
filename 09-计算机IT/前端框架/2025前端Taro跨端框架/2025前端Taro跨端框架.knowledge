@@ -1,0 +1,83 @@
+# 2025前端Taro跨端框架
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{Taro 是什么：Taro 是由京东·凹凸实验室打造的开放式跨端跨框架解决方案，支持使用 React、Vue 等前端框架语法编写代码，编译后可发布到微信/支付宝/百度/抖音/QQ/京东小程序、H5、React Native 以及鸿蒙等多个平台。Taro 以微信小程序组件库为标准，结合 JSX 语法规范，定制了一套统一的组件库规范。}}
+
+{{知识点2}}{{Taro 的设计初衷与核心价值：Taro 的设计初衷是统一跨平台的开发方式，让开发者只需编写一套代码即可运行在多个平台。它通过运行时框架、组件、API 去抹平多端差异，同时提供环境变量和多端文件机制来处理平台间的不可消除差异，显著降低了多端开发的维护成本。}}
+
+{{知识点3}}{{Taro 支持的编译目标平台：Taro 可编译为微信小程序（weapp）、百度小程序（swan）、支付宝小程序（alipay）、抖音小程序（tt）、QQ小程序（qq）、京东小程序（jd）、H5网页端、React Native（Taro v3.2+支持）、鸿蒙HarmonyOS hybrid端（v3.6.24+支持）、ASCF元服务等。此外通过插件还可支持企业微信小程序、钉钉小程序、飞书小程序、快手小程序、支付宝IOT小程序等。}}
+
+{{知识点4}}{{Taro CLI 工具安装与项目初始化：Taro 项目基于 Node.js（>=16.20.0），首先全局安装 @tarojs/cli：npm install -g @tarojs/cli。创建项目使用 taro init myApp 命令，也可用 npx @tarojs/cli init myApp 不安装直接创建。Taro CLI 提供 init、build、update、info、doctor 等子命令。安装依赖工具按 yarn > cnpm > npm 顺序检测。}}
+
+{{知识点5}}{{Taro 项目目录结构：一个最小化的 Taro 项目包含：babel.config.js（Babel配置）、.eslintrc.js（ESLint配置）、config/目录（编译配置，含 index.js/dev.js/prod.js）、package.json、dist/（打包目录）、src/源码目录（含 app.config.js 全局配置、app.css 全局样式、app.js 入口组件、index.html H5入口、pages/ 页面目录）。每个页面组件含 index.config.js 页面配置、index.css 页面样式、index.jsx/.vue 页面组件。}}
+
+{{知识点6}}{{Taro 入口组件（App）：每个 Taro 项目有一个入口组件（如 app.js），必须导出一个 React/Vue 组件。入口组件中 this.props.children 是将要渲染的页面。入口组件伴随一个全局配置文件 app.config.js，用于设置页面组件路径、全局窗口、路由等信息。配置文件在 Node.js 环境中执行，export default 导出的对象会被序列化为 JSON。}}
+
+{{知识点7}}{{Taro 页面组件：页面组件是每条路由渲染的页面，默认放在 src/pages 中，每个项目至少一个。页面组件支持 React/Vue 标准生命周期，同时支持小程序规范的页面生命周期如 onLoad、onReady、componentDidShow、componentDidHide、onPullDownRefresh、onReachBottom、onPageScroll 等。每个页面组件可有对应的页面配置文件设置导航栏标题、背景色等。}}
+
+{{知识点8}}{{Taro 跨平台组件库：Taro 以微信小程序组件库为标准，提供跨平台组件。开发时从 @tarojs/components 引入组件（如 View、Text、Image、ScrollView、RichText、Navigator、Map 等），替代 HTML 的 div/span 等元素。组件命名采用首字母大写与驼峰式命名，事件传递以 on 开头（替代小程序的 bind 开头）。小程序端可使用所有原生组件。}}
+
+{{知识点9}}{{Taro 路由系统：Taro 的路由规范基于微信小程序标准，通过 Taro.navigateTo({url}) 进行页面跳转，Taro.redirectTo 进行重定向，Taro.switchTab 切换 TabBar 页面，Taro.navigateBack 返回上一页。页面路径在 app.config.js 的 pages 数组中声明。TabBar 通过 tabBar 配置项设置，包含 list（页面列表+图标+文字）、color、selectedColor、backgroundColor、borderStyle 等。}}
+
+{{知识点10}}{{Taro 编译配置系统：编译配置存放于项目根目录 config/ 目录，核心文件 config/index.js（或 .ts）导出配置对象或函数。主要配置项包括：projectName（项目名称）、designWidth（设计稿尺寸，默认750）、deviceRatio（尺寸换算规则）、sourceRoot（源码目录，默认src）、outputRoot（产出目录，默认dist）、framework（框架类型：react/nerv/vue/vue3）、plugins（插件）、mini（小程序端配置）、h5（H5端配置）等。}}
+
+{{知识点11}}{{Taro defineConfig 辅助函数：Taro v3.6.9+ 支持 defineConfig 函数（v4.0.0+ 支持泛型），从 @tarojs/cli 导入，包裹配置对象以获得类型提示和自动补全。支持基础配置、异步配置（导出异步函数）、情景配置（根据 command/mode 决定选项）。config/index.ts 支持直接导出对象并使用 satisfies 语法。}}
+
+{{知识点12}}{{Taro 环境变量 process.env.TARO_ENV：这是 Taro 最重要的内置环境变量，用于判断当前编译平台类型。取值包括 weapp/swan/alipay/tt/qq/jd/h5/rn/ascf。在编译阶段会进行死代码消除，移除不属于当前编译类型的代码。注意不要解构 process.env，必须以完整书写方式使用。可用于条件引用不同资源、决定加载不同组件、设置不同路由规则等。}}
+
+{{知识点13}}{{Taro 多端文件机制（统一接口的多端文件）：为解决代码中充斥 if/else 判断的问题，Taro 提供多端文件方案。通过将文件命名为 原文件名.端类型.扩展名（如 test.weapp.js、test.h5.js）的形式，编译时自动根据平台加载对应文件。使用时仍 import 不带端类型的文件名。适用于多端组件、多端脚本逻辑、多端页面路由三种场景。需保持对外接口统一。}}
+
+{{知识点14}}{{Taro Hooks API 体系：Taro 提供完整的 Hooks API，分为 Taro 专有 Hooks（从 @tarojs/taro 引入）和框架 Hooks（从 react/vue 引入）。Taro 专有 Hooks 包括：useLaunch（App onLaunch）、useError（App onError）、usePageNotFound、useRouter、useLoad（页面 onLoad）、useReady、useDidShow、useDidHide、useUnload、usePullDownRefresh、useReachBottom、usePageScroll、useResize、useShareAppMessage、useShareTimeline、useTabItemTap、useAddToFavorites、useSaveExitState 等。}}
+
+{{知识点15}}{{Taro 页面生命周期详解：页面组件支持的完整生命周期包括：onLoad（页面加载，可获取路由参数）、onReady（首次渲染完毕，可访问DOM节点）、onUnload（页面卸载）、componentDidShow（页面显示/切入前台）、componentDidHide（页面隐藏/切入后台）、onPullDownRefresh（下拉刷新）、onReachBottom（上拉触底）、onPageScroll（页面滚动，返回scrollTop）、onResize（屏幕旋转）、onTabItemTap（点击Tab）等。}}
+
+{{知识点16}}{{Taro 分享与社交功能：Taro 支持多种分享能力：useShareAppMessage/onShareAppMessage 监听转发行为并自定义转发内容（title/path/imageUrl），需配置 enableShareAppMessage:true；useShareTimeline/onShareTimeline 分享到朋友圈（仅微信小程序，需配置 enableShareTimeline:true）；useAddToFavorites/onAddToFavorites 自定义收藏内容（仅微信，Beta）。这些功能在不同小程序平台支持程度不同。}}
+
+{{知识点17}}{{Taro 状态管理集成：Taro 支持 React 生态的 Redux/React-Redux、MobX 等状态管理库，以及 Vue 生态的 Vuex/Pinia。使用方式与纯 Web 开发一致：在入口组件中通过 Provider 注入 store，在组件中通过 connect/Hooks 使用。Taro 还内置了简单的 eventCenter 发布/订阅机制用于轻量级组件通信。对于复杂业务推荐使用 Redux 或 Vuex。}}
+
+{{知识点18}}{{Taro 插件系统：Taro 引入插件化机制，允许开发者通过编写插件拓展功能。插件通过编译配置中的 plugins 数组引入，支持 npm 包名、本地绝对路径，并可传入参数。presets 用于引入一组插件集合完成特定功能。官方插件包括 @tarojs/plugin-mini-ci（小程序CI）和 @tarojs/plugin-mock（数据Mock）。社区有编译提速、骨架屏、tailwindcss、动态加载等优质插件。}}
+
+{{知识点19}}{{Taro 小程序端专用配置（mini）：在编译配置的 mini 字段中可设置小程序端专属选项，包括 postcss 配置（autoprefixer 自动前缀、cssModules 模块化样式），以及通过 webpackChain 自定义 Webpack 配置。CSS Modules 支持 global 和 module 两种转换模式，生成 scoped name 格式为 [name]__[local]___[hash:base64:5]。}}
+
+{{知识点20}}{{Taro H5 端专用配置：h5 配置项包括 publicPath（资源路径前缀，默认/）、staticDirectory（静态资源目录，默认static）、postcss 配置、devServer（开发服务器配置）、webpackChain（自定义Webpack配置）等。H5 端使用 @tarojs/components 作为标准组件库实现。编译命令为 taro build --type h5。}}
+
+{{知识点21}}{{Taro 编译命令与开发模式：Taro 编译分为 dev 模式（--watch，监听文件修改）和 build 模式（不监听，压缩打包）。编译命令格式为 taro build --type <平台类型>，各平台有对应的 npm script 如 dev:weapp/build:weapp、dev:h5/build:h5 等。dev 模式生成的文件较大，设置 NODE_ENV=production 可开启压缩但编译速度会下降。}}
+
+{{知识点22}}{{Taro 小程序开发者工具配置注意事项：使用 Taro 编译后的小程序代码需要在对应开发者工具中预览，需注意三个关键设置：1）关闭 ES6 转 ES5 功能，开启可能报错；2）关闭上传代码时样式自动补全，开启可能报错；3）关闭代码压缩上传，开启可能报错。这些设置适用于微信、百度、支付宝、抖音等所有小程序开发者工具。}}
+
+{{知识点23}}{{Taro 跨平台 API 封装：Taro 的 API 基于微信小程序 API 规范，对各平台端能力进行统一封装，挂载在 Taro 命名空间下。例如支付宝的 my.alert 统一为 Taro.showModal。Taro 默认对小程序异步 API 进行 promisify 化，支持 Promise 调用。对于未适配的平台特有 API，可尝试 Taro.+API 名称，不行则使用原生命名空间（my/swan/tt等）。}}
+
+{{知识点24}}{{Taro React Native 端支持：Taro v3.2+ 开始支持编译为 React Native 应用。RN 端没有使用 Webpack，而是单独的编译流程。RN 端的多端文件解析通过 config/index.js 中的 rn.resolve.include 配置。Taro Playground 项目提供了 RN、微信小程序、Web 的完整示例，支持 Android/iOS/Web/小程序四端运行，并集成了 GitHub Workflows 实现自动化发布。}}
+
+{{知识点25}}{{Taro 鸿蒙 HarmonyOS 端支持：Taro v3.6.24+ 支持 harmony-hybrid 端编译。编译产物需复制到鸿蒙应用的 src/main/resources/rawfile 目录下。需要 DevEco Studio NEXT 开发工具，配置 @hybrid/web-container 模块依赖和 INTERNET 权限。编译命令为 taro build --type harmony-hybrid。2025年鸿蒙生态持续扩展，Taro 跟进支持。}}
+
+{{知识点26}}{{Taro ASCF 元服务支持：ASCF 是鸿蒙元服务的编译目标。需在编译命令中指定 --type ascf，编译产物输出到 ascf-project/ascf/ascf_src 目录。支持从模板创建新项目（taro init 选择 ascf 模板）。需注意 app.json 中不支持 theme 变量，需适配为具体值。编译支持 dev:ascf（开发模式）和 build:ascf（生产模式）。}}
+
+{{知识点27}}{{Taro 跨平台子组件生命周期监听：子组件无法直接触发 onReady、onShow、onHide 等页面生命周期。解决方法是使用 Taro 内置的消息机制（eventCenter），在子组件中通过 getCurrentInstance().router.onReady 等事件 ID 监听页面生命周期。对于按需加载的子组件，由于可能错过页面 onReady，可使用 Taro.nextTick 模拟节点渲染完成。}}
+
+{{知识点28}}{{Taro 转发按钮与 openType：在 Taro 中使用 Button 组件的 openType='share' 属性可创建转发按钮，用户点击后触发 onShareAppMessage 事件。onShareAppMessage 的参数中 from 字段区分转发来源（button 或 menu），target 是触发转发的 button 元素（当 from 为 button 时）。自定义转发内容需返回包含 title、path、imageUrl 的对象。}}
+
+{{知识点29}}{{Taro 下拉刷新与上拉触底：启用下拉刷新需在全局配置的 window 选项或页面配置中设置 enablePullDownRefresh:true。可通过 Taro.startPullDownRefresh() API 触发下拉刷新动画，处理完数据后调用 Taro.stopPullDownRefresh() 停止。上拉触底通过 onReachBottom 生命周期或 useReachBottom Hook 监听，可设置 onReachBottomDistance 配置触发距离。}}
+
+{{知识点30}}{{Taro 的框架选择：Taro 支持多种前端框架，在 config/index.js 的 framework 字段中配置。可选值包括 'react'、'nerv'（类React轻量框架）、'vue'（Vue 2）、'vue3'（Vue 3）。React 和 Vue 在 Taro 中的使用方式基本一致，区别主要在组件引入方式：React 需从 @tarojs/components 手动引入组件，Vue 则无需引入。}}
+
+{{知识点31}}{{Taro 与原生小程序的关系：Taro 不是原生小程序的替代品，而是在其上的抽象层。在小程序端，Taro 可使用所有小程序原生组件。Taro 的 API 规范、生命周期规范均基于微信小程序标准制定并统一全平台。对于微信小程序特有的功能（如退出状态保存 useSaveExitState），Taro 也提供了对应的支持。}}
+
+{{知识点32}}{{Taro 条件编译与平台适配策略：除了 process.env.TARO_ENV 环境变量和多端文件外，Taro 还支持在 Vue 文件的 template 中使用条件编译语法：/* #ifdef %PLATFORM% */ 代码 /* #endif */ 保留指定平台代码，/* #ifndef %PLATFORM% */ 代码 /* #endif */ 剔除指定平台代码。多平台可用空格隔开。这是在模板层面处理跨端差异的便捷方式。}}
+
+{{知识点33}}{{Taro 企业级小程序平台扩展：通过 Taro 插件机制可扩展更多小程序平台。企业微信小程序使用 @tarojs/plugin-platform-weapp-qy 插件（v3.1+）；钉钉小程序使用 @tarojs/plugin-platform-alipay-dd 插件（v3.1+）；飞书小程序使用 @tarojs/plugin-platform-lark 插件（v3.1+）；快手小程序使用 @tarojs/plugin-platform-kwai 插件。各插件的编译目标类型不同（如 qywx/dd/lark/kwai）。}}
+
+{{知识点34}}{{Taro 的 ESLint 与代码规范：Taro 项目默认配置 .eslintrc.js 进行代码检查，使用 eslint-plugin-react-hooks 的 exhaustive-deps 规则确保 Hooks 依赖正确。推荐使用 VSCode 配合 ESLint 插件开发，如使用 TypeScript 需配置 eslint.probe 参数。Vue 项目推荐安装 Vetur 插件。WebStorm 基本不需要额外配置即可获得自动补全和实时检查。}}
+
+{{知识点35}}{{Taro 设计稿尺寸与样式适配：Taro 编译配置中 designWidth 默认为 750（对应750px宽的设计稿），deviceRatio 定义不同设计稿宽度到实际像素的换算规则：640对应2.34/2、750对应1、828对应1.81/2。开发者根据设计稿宽度选择合适的 designWidth，Taro 在编译时自动进行尺寸换算，实现不同屏幕的适配。}}
+
+{{知识点36}}{{Taro 全局配置（app.config.js）详解：全局配置文件导出对象，主要字段包括：pages（页面路径数组，第一项为首页）、window（全局窗口配置：navigationBarBackgroundColor 导航栏背景色、navigationBarTitleText 导航栏标题、navigationBarTextStyle 导航栏文字颜色、backgroundTextStyle 下拉loading样式、backgroundColor 窗口背景色）、tabBar（底部Tab栏配置）等。可在运行时动态设置不同平台的页面路由。}}
+
+{{知识点37}}{{Taro Taro.nextTick 与 setData 机制：Taro 的渲染机制基于小程序的 setData。在需要确保 setData 已完成、节点已渲染的场景下，使用 Taro.nextTick() 回调来执行后续操作（如获取渲染层DOM节点）。这在按需加载组件中尤其重要，因为页面 onReady 可能早已触发，子组件需要通过 nextTick 模拟渲染完成。}}
+
+{{知识点38}}{{Taro getCurrentInstance() API：用于获取当前页面/组件实例信息，等同于 Class Component 的 this.$scope。通过 getCurrentInstance().router 可获取路由信息（path 和 params），等同于 Hooks 中的 useRouter()。在子组件中还可通过 router.onReady、router.onShow、router.onHide 等属性获取页面生命周期的事件 ID，用于监听页面生命周期。}}
+
+{{知识点39}}{{Taro 的 Webpack 与构建优化：Taro 使用 Webpack 进行代码编译打包（也支持 Vite），通过 mini.webpackChain 和 h5.webpackChain 配置可自定义 Webpack 链。编译时进行 dead code elimination（根据 TARO_ENV 消除无关代码）。社区提供编译提速插件。从 Taro 3.x 起底层使用 enhanced-resolve 进行模块解析，MultiPlatformPlugin 处理多端文件但默认不解析 node_modules 以提高效率。}}
+
+{{知识点40}}{{Taro 生态与社区资源：Taro 由京东凹凸实验室（NervJS）打造，GitHub 仓库为 NervJS/taro。社区资源包括：Taro Playground 示例应用、Taro 社区论坛（taro-club.jd.com）、GitHub Issues 问题追踪。Deco 设计稿一键生成多端代码工具。推荐编辑器为 VSCode 或 WebStorm。Windows 用户推荐使用 WSL 以获得更好的兼容性。}}

@@ -1,0 +1,129 @@
+# 2025前端前端缓存策略
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}
+前端缓存是指浏览器或中间代理对网络请求的响应进行存储，以便后续请求时直接复用，减少网络传输、提升页面加载速度。缓存机制是前端性能优化的核心手段之一，涉及浏览器缓存、HTTP缓存、Service Worker缓存、CDN缓存等多个层次。
+
+{{知识点2}}
+HTTP缓存分为两大类：私有缓存（Private Cache）和共享缓存（Shared Cache）。私有缓存是绑定到特定客户端的浏览器缓存，可存储个性化内容；共享缓存位于客户端和服务器之间（如代理缓存、CDN），可被多个用户共享，不应存储个性化内容。
+
+{{知识点3}}
+Cache-Control 是HTTP缓存的核心响应头，支持多种指令：max-age（缓存有效期秒数）、no-cache（允许缓存但每次使用前需验证）、no-store（禁止任何缓存存储）、private（仅允许私有缓存）、public（允许共享缓存存储）、must-revalidate（过期后必须重新验证）。
+
+{{知识点4}}
+强缓存是指浏览器直接从本地缓存读取资源，不发送HTTP请求到服务器。通过 Cache-Control: max-age=N 或 Expires 头实现。当缓存资源未过期（处于fresh状态）时，浏览器直接使用缓存，HTTP状态码显示200（from disk cache或from memory cache）。
+
+{{知识点5}}
+协商缓存（弱缓存）是指缓存过期后，浏览器向服务器发送条件请求验证资源是否更新。通过 If-Modified-Since / Last-Modified（时间戳对比）或 If-None-Match / ETag（内容标识对比）实现。若资源未变，服务器返回304 Not Modified，浏览器继续使用缓存。
+
+{{知识点6}}
+ETag 是服务器为资源生成的任意标识值（通常是内容哈希或版本号），用于协商缓存。浏览器在缓存过期后将 ETag 值放入 If-None-Match 请求头发送给服务器，服务器对比后决定返回304还是新资源。RFC9110建议服务器在200响应中同时发送 ETag 和 Last-Modified。
+
+{{知识点7}}
+Last-Modified 响应头记录资源的最后修改时间，配合 If-Modified-Since 请求头实现协商缓存。其局限性包括：时间格式复杂难解析、分布式服务器难以同步文件修改时间、精度只到秒级。因此 ETag 被标准化为更可靠的替代方案。
+
+{{知识点8}}
+Expires 是HTTP/1.0时代的缓存过期头，使用绝对时间指定缓存有效期。由于时间格式解析困难、实现bug多、可被系统时钟偏移影响，HTTP/1.1 引入了 Cache-Control: max-age（相对时间）。当两者同时存在时，max-age 优先。
+
+{{知识点9}}
+max-age=N 指定的是自服务器生成响应起N秒内为新鲜（fresh）状态。注意不是从浏览器收到响应开始计算。如果共享缓存已存储了100秒（通过 Age 响应头标识），浏览器缓存的有效期会相应减少100秒。
+
+{{知识点10}}
+no-cache 指令的含义是"允许缓存但每次使用前必须向服务器验证"，而不是"不缓存"。如果要完全禁止缓存存储，应使用 no-store。这两个指令经常被混淆，正确理解对配置缓存策略至关重要。
+
+{{知识点11}}
+no-store 指令要求所有类型的缓存（私有和共享）都不存储响应。适用于包含敏感信息的内容，如银行页面、个人信息等。但频繁使用会导致所有资源每次都从服务器获取，影响性能。
+
+{{知识点12}}
+private 指令表示响应只能存储在私有缓存（浏览器缓存）中，不能被共享缓存存储。适用于用户个性化内容，特别是登录后的响应和通过Cookie管理的会话。忘记添加 private 可能导致个人信息泄露。
+
+{{知识点13}}
+s-maxage 指令专门控制共享缓存（如CDN）的缓存时间，会覆盖 max-age 和 Expires 对共享缓存的效果，但被私有缓存忽略。可用于为CDN设置与浏览器不同的缓存策略。
+
+{{知识点14}}
+must-revalidate 指令表示缓存过期后必须向服务器重新验证，不允许在离线时使用过期缓存。通常与 max-age 配合使用：Cache-Control: max-age=604800, must-revalidate。如果不验证，应返回504 Gateway Timeout。
+
+{{知识点15}}
+immutable 指令用于标记永远不会改变的资源（如带哈希的静态文件）。当浏览器重新验证时（如用户点击刷新），如果资源标记为 immutable，浏览器不会发送条件请求，直接使用缓存。适用于构建工具生成的带内容哈希的JS/CSS文件。
+
+{{知识点16}}
+stale-while-revalidate 指令允许在缓存过期后的指定时间内，先返回过期缓存，同时在后台异步重新验证。例如 Cache-Control: max-age=60, stale-while-revalidate=300 表示60秒内直接使用缓存，之后的300秒内返回旧缓存同时后台更新。兼顾速度和新鲜度。
+
+{{知识点17}}
+stale-if-error 指令允许在服务器出错时，在指定时间内继续使用过期缓存，提升容错能力。例如 Cache-Control: max-age=604800, stale-if-error=86400 表示缓存过期后如果服务器返回5xx错误，仍可在24小时内使用过期缓存。
+
+{{知识点18}}
+Vary 响应头用于基于请求头值区分缓存。例如 Vary: Accept-Language 会使相同URL的不同语言版本被分别缓存。缓存键由URL和Vary指定的请求头组合而成。注意不要将 User-Agent 加入 Vary，因其变化极大，会严重降低缓存命中率。
+
+{{知识点19}}
+启发式缓存（Heuristic Caching）是HTTP的兜底机制。即使响应没有 Cache-Control 头，如果满足一定条件（如 Last-Modified 远早于当前时间），浏览器也会自动缓存。规范建议缓存时间为资源上次修改后到现在的10%。所有响应应显式指定 Cache-Control 头以避免不可预测的行为。
+
+{{知识点20}}
+CDN缓存是分布式部署在全球边缘节点的共享缓存。资源从源站拉取后缓存在离用户最近的节点，大幅降低延迟。CDN通常支持自定义缓存规则、缓存清除（Purge）、预热（Prefetch）等高级功能。部分CDN提供专有头如 Surrogate-Control，标准化工作正在进行中（CDN-Cache-Control, RFC9213）。
+
+{{知识点21}}
+Service Worker 是运行在浏览器后台的脚本，可拦截网络请求并自定义缓存策略。它像一个可编程的代理服务器，允许开发者实现离线优先（Offline First）等高级缓存模式。Service Worker 必须在HTTPS环境下运行（localhost除外）。
+
+{{知识点22}}
+Service Worker 生命周期包括：注册（register）→ 安装（install）→ 激活（activate）→ 控制（fetch事件拦截）。在 install 事件中通常预缓存关键资源，在 activate 事件中清理旧版本缓存，在 fetch 事件中实现缓存策略。
+
+{{知识点23}}
+Cache API 是浏览器提供的持久化存储机制，用于存储 Request/Response 对。它独立于HTTP缓存，不受HTTP缓存头影响。通过 caches.open() 打开命名缓存，使用 match()、put()、add()、addAll()、delete()、keys() 等方法操作。需要定期清理，浏览器有存储配额限制。
+
+{{知识点24}}
+Cache-First（缓存优先）策略：先从缓存读取，缓存命中则直接返回，未命中则从网络获取并缓存。适用于不常变化的静态资源（字体、图片、CSS、JS）。这是性能最好的策略，但可能返回过期内容。
+
+{{知识点25}}
+Network-First（网络优先）策略：先尝试从网络获取，成功则更新缓存并返回，失败则回退到缓存。适用于需要最新内容但也要保证离线可用的场景，如新闻页面、API数据。结合超时可设置等待时间，超时后使用缓存。
+
+{{知识点26}}
+Stale-While-Revalidate（缓存优先+后台更新）策略：立即返回缓存内容，同时在后台发起网络请求更新缓存。兼顾加载速度和内容新鲜度。适用于更新频率中等的资源，用户感知加载极快，下次访问即可获取新内容。
+
+{{知识点27}}
+Network-Only（仅网络）策略：始终从网络获取，不使用缓存。适用于对实时性要求极高的场景，如在线支付、实时竞价等。需要确保网络可用，否则请求失败。
+
+{{知识点28}}
+Cache-Only（仅缓存）策略：只从缓存读取，不发送网络请求。适用于预缓存的静态资源或离线场景。资源必须在之前已被缓存，否则会失败。
+
+{{知识点29}}
+Workbox 是Google推出的Service Worker工具库，封装了常用的缓存策略（CacheFirst、NetworkFirst、StaleWhileRevalidate等），提供了构建工具集成（webpack/vite插件）、预缓存清单生成、运行时缓存路由等能力，大幅简化Service Worker开发。
+
+{{知识点30}}
+浏览器缓存位置（优先级从高到低）：1) Service Worker Cache（Service Worker控制的缓存）；2) Memory Cache（内存缓存，速度快但生命周期短，关闭标签页即失效）；3) Disk Cache（磁盘缓存，持久化存储）；4) Push Cache（HTTP/2推送缓存，仅在会话期间存在）。
+
+{{知识点31}}
+前端资源缓存最佳实践：HTML文件使用 no-cache 或短时间 max-age（确保及时更新）；带内容哈希的JS/CSS/图片使用长时间 max-age + immutable（如 Cache-Control: max-age=31536000, immutable）；API响应根据数据更新频率设置合理的 max-age 或 no-cache。
+
+{{知识点32}}
+内容哈希（Content Hash）是前端缓存更新的关键技术。构建工具（Webpack、Vite等）为静态资源文件名添加基于文件内容的哈希值（如 app.a1b2c3d4.js），内容变化时哈希变化，URL随之变化，自然绕过缓存。配合长时间 max-age 可实现最优缓存策略。
+
+{{知识点33}}
+LocalStorage/SessionStorage 是浏览器端的数据存储方案，可用于缓存应用数据。LocalStorage 持久化存储（除非手动清除），SessionStorage 在标签页关闭后清除。存储容量约5-10MB，仅支持字符串，适合存储用户偏好、表单草稿等小量数据。需注意同源策略限制。
+
+{{知识点34}}
+IndexedDB 是浏览器内置的NoSQL数据库，支持大量结构化数据存储（可达数百MB）。适用于缓存大量API响应、离线数据、用户生成内容等。支持索引、事务、游标等数据库特性。通常配合Service Worker实现完整的离线应用方案。
+
+{{知识点35}}
+HTTP/2 Server Push 曾被用于主动推送资源到浏览器缓存，但由于缓存命中率低、难以精确控制推送时机等问题，已被主流浏览器弃用。取而代之的是 103 Early Hints，允许服务器在最终响应前发送预加载提示，让浏览器提前开始获取关键资源。
+
+{{知识点36}}
+103 Early Hints 是HTTP的新特性，服务器在处理请求的同时先返回103状态码和 Link 头（包含 preload/preconnect 指令），浏览器收到后可立即开始预加载资源。最终响应（200等）仍然正常返回。比Server Push更精确、更可控，是2025年前端预加载的推荐方案。
+
+{{知识点37}}
+缓存分层策略：将缓存分为多层——浏览器本地缓存 → CDN边缘缓存 → CDN源站缓存 → 应用服务器缓存（如Redis）。每层设置不同的过期时间和更新策略，形成"漏斗"结构，大部分请求在最外层被拦截，减少源站压力。
+
+{{知识点38}}
+缓存失效（Cache Invalidation）是缓存策略中最难的问题之一。常用方法包括：基于时间的TTL过期、基于版本号/哈希的URL变更、主动Purge/刷新CDN缓存、使用stale-while-revalidate实现渐进式更新。Andrew Tanenbaum名言："计算机科学中只有两个难题：缓存失效和命名。"
+
+{{知识点39}}
+前端缓存调试方法：Chrome DevTools的Network面板可查看资源是从缓存还是网络加载（from disk cache/from memory cache）；Application面板可查看和管理Cache Storage、LocalStorage、IndexedDB等；勾选"Disable cache"可禁用缓存模拟首次加载。lighthouse可审计缓存配置。
+
+{{知识点40}}
+缓存安全注意事项：使用 Cache-Control: private 防止敏感数据被共享缓存存储；避免通过Vary: Cookie缓存个性化内容（应使用private）；HTTPS环境可防止中间人篡改缓存内容；Service Worker的scope限制可控制其作用范围，防止越权缓存。
+
+{{知识点41}}
+GraphQL场景下的缓存策略与REST不同。GraphQL响应通常使用 POST 请求，默认不被HTTP缓存。常用方案包括：使用 persisted queries 将查询转为GET请求、在客户端使用归一化缓存（如Apollo Client的InMemoryCache）、配合CDN的query-string缓存规则。
+
+{{知识点42}}
+Next.js/Remix等现代框架的缓存策略：利用 React Server Components (RSC) 实现服务端缓存和客户端缓存的分层；通过 revalidate 选项控制ISR（增量静态再生）的缓存更新周期；利用框架内置的 data fetching 缓存机制（如fetch的cache选项和revalidate参数）自动管理HTTP缓存头。

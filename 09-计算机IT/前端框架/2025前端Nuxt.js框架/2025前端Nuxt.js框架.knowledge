@@ -1,0 +1,123 @@
+# 2025前端Nuxt.js框架
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}
+Nuxt.js 是一个基于 Vue.js 的免费开源全栈框架，旨在提供直观、高性能的 Web 应用开发体验。它通过约定式目录结构和自动化机制减少重复配置，让开发者专注于功能实现。Nuxt 基于 Vue 3 构建，支持 TypeScript 零配置开箱即用，是 Vue 生态中最主流的服务端渲染框架之一。
+
+{{知识点2}}
+Nuxt 的核心架构由多个包组成：核心引擎 nuxt、构建器 @nuxt/vite-builder 和 @nuxt/webpack-builder、命令行工具 @nuxt/cli、服务器引擎 Nitro、开发工具包 @nuxt/kit。这种模块化架构使各组件可独立演进，同时保持整体协调。
+
+{{知识点3}}
+文件路由（File-based Routing）是 Nuxt 的核心特性。在 app/pages/ 目录下创建 .vue 文件会自动生成对应的路由，无需手动配置 vue-router。例如 app/pages/about.vue 会自动映射到 /about 路由，支持嵌套路由和动态路由参数。
+
+{{知识点4}}
+Nuxt 默认启用服务端渲染（SSR），即 Universal Rendering。服务器执行 Vue 代码生成完整 HTML 发送给浏览器，用户可立即看到内容。随后浏览器下载 JS 代码进行 Hydration（水合），使页面获得交互能力。这种方式兼顾了首屏加载速度和 SEO 优化。
+
+{{知识点5}}
+Hydration（水合）是 SSR 的关键过程。服务器渲染的 HTML 被浏览器接收后，Vue.js 在客户端接管 DOM 并绑定事件监听器。同一份代码在服务端运行一次生成 HTML，在客户端再次运行以启用交互。理解 hydration 过程有助于避免 SSR/CSR 环境差异导致的错误。
+
+{{知识点6}}
+Nuxt 支持多种渲染模式：Universal Rendering（SSR+CSR，默认）、Client-Side Rendering（CSR，设置 ssr: false）、Hybrid Rendering（通过 routeRules 为不同路由配置不同渲染策略）、Edge-Side Rendering（在 CDN 边缘服务器上渲染）。开发者可根据场景灵活选择。
+
+{{知识点7}}
+混合渲染（Hybrid Rendering）通过 routeRules 配置项实现。可在 nuxt.config.ts 中为不同路由设置不同渲染策略，如静态生成、服务端渲染、客户端渲染、预渲染等。例如 '/about': { prerender: true } 可将 about 页面预渲染为静态 HTML。
+
+{{知识点8}}
+自动导入（Auto-imports）是 Nuxt 的重要特性。app/components/ 下的组件、app/composables/ 下的组合式函数、app/utils/ 下的工具函数都会被自动导入，无需显式 import 语句。Vue 的 ref、computed 等 API 也会自动导入。与全局声明不同，自动导入保留类型信息且支持 tree-shaking。
+
+{{知识点9}}
+$fetch 是 Nuxt 内置的 HTTP 请求工具，基于 ofetch 库自动全局导入。支持自动 JSON 解析、请求体和参数自动处理、正确的 Content-Type 头设置。在浏览器端发起 HTTP 请求，在服务端则直接调用对应函数，避免网络开销。
+
+{{知识点10}}
+useFetch 是 Nuxt 提供的数据获取组合式函数，封装了 $fetch 并确保 SSR 安全。在服务端获取的数据会通过 payload 转发到客户端，避免水合时重复请求。返回 data、error、status、refresh 等响应式状态，是最常用的数据获取方式。
+
+{{知识点11}}
+useAsyncData 提供更细粒度的数据获取控制。第一个参数是用于缓存的唯一 key，第二个参数是异步查询函数。适合需要组合多个请求或使用第三方数据层（如 CMS 查询）的场景。支持缓存和手动刷新，key 可在组件间共享数据。
+
+{{知识点12}}
+Nuxt 使用 Vue 的 Suspense 组件确保异步数据可用后再导航。数据获取组合式函数（useFetch、useAsyncData）天然配合 Suspense 工作。可配合 NuxtLoadingIndicator 组件在页面切换时显示进度条，提升用户体验。
+
+{{知识点13}}
+状态管理方面，Nuxt 提供 useState 组合式函数，它是 SSR 友好的 ref 替代品。通过唯一 key 共享状态，服务端渲染的值会序列化到 payload 中传递给客户端。注意 useState 中的数据必须可序列化（不能包含函数、类、Symbol）。
+
+{{知识点14}}
+使用 useState 的最佳实践：永远不要在 <script setup> 或 setup() 函数外定义 ref 作为全局状态（如 export const state = ref({})），这会导致服务端跨请求状态污染和内存泄漏。正确做法是使用 composable 包装：const useX = () => useState('x')。
+
+{{知识点15}}
+路由中间件（Route Middleware）是 Nuxt 的导航守卫机制，分三种类型：匿名（内联在页面中）、命名（放在 app/middleware/ 目录）、全局（文件名以 .global 后缀）。中间件接收 to 和 from 路由参数，可返回 navigateTo() 进行重定向或 abortNavigation() 中止导航。
+
+{{知识点16}}
+插件系统（Plugins）通过 app/plugins/ 目录自动注册。支持 .server 和 .client 后缀限定运行环境。插件接收 nuxtApp 作为参数，可用于注册 Vue 插件、自定义指令、提供全局辅助函数。支持对象语法定义 enforce（执行顺序）、dependsOn（依赖关系）、parallel（并行加载）。
+
+{{知识点17}}
+布局系统（Layouts）通过 app/layouts/ 目录管理页面布局模板。在页面中使用 definePageMeta({ layout: 'custom' }) 指定布局。布局组件通过 <slot /> 渲染页面内容。默认布局为 default.vue，布局必须有单一根元素以支持过渡动画。
+
+{{知识点18}}
+Nuxt 服务器引擎 Nitro 提供全栈能力。server/api/ 目录下的文件自动注册为 API 路由，server/middleware/ 注册服务器中间件。Nitro 支持跨平台部署（Node.js、Serverless、Workers、Edge），生成独立的 .output 目录不依赖 node_modules。
+
+{{知识点19}}
+Nitro 内部使用 h3 作为 HTTP 框架。处理器可直接返回对象/数组自动生成 JSON 响应，支持 Promise 返回（自动 await）。提供 body 解析、cookie 处理、重定向、头部操作等辅助函数。API 路由会自动生成 TypeScript 类型。
+
+{{知识点20}}
+$fetch 的智能调用机制：在浏览器端发起 HTTP 请求到 API 路由，在服务端直接调用对应函数（跳过网络层），大幅减少延迟。这种同构调用是 Nuxt 全栈能力的核心优势。
+
+{{知识点21}}
+运行时配置（Runtime Config）通过 nuxt.config.ts 的 runtimeConfig 选项定义。public 下的配置同时暴露给客户端，私有配置仅服务端可用。环境变量通过 NUXT_ 前缀自动映射（如 NUXT_API_SECRET 覆盖 apiSecret）。使用 useRuntimeConfig() 读取。
+
+{{知识点22}}
+Nuxt 模块系统（Modules）允许扩展框架功能和集成第三方服务。模块可在 nuxt.config.ts 的 modules 数组中配置。Nuxt 拥有丰富的官方和社区模块生态，如 @nuxt/content、@nuxt/image、@pinia/nuxt 等。可通过 npm 包或本地路径引入。
+
+{{知识点23}}
+Nuxt Layers 是强大的代码复用机制，允许创建可共享的部分 Nuxt 应用。Layer 结构与标准 Nuxt 应用一致，包含 components、composables、layouts、pages 等目录。通过 extends 配置或自动扫描 ~/layers/ 目录引入。支持从 npm 包或 Git 仓库扩展。
+
+{{知识点24}}
+Layer 优先级机制：项目文件优先级最高，其次是 ~/layers/ 目录下按字母排序的层（Z 高于 A），最后是 extends 配置中的层（先声明优先级更高）。同名文件/组件会被高优先级层覆盖，这实现了灵活的定制能力。
+
+{{知识点25}}
+目录结构方面，Nuxt 4 将应用代码集中在 app/ 目录下：app/assets/（构建处理的资源）、app/components/（组件）、app/composables/（组合式函数）、app/layouts/（布局）、app/middleware/（中间件）、app/pages/（页面路由）、app/plugins/（插件）、app/utils/（工具函数）。
+
+{{知识点26}}
+共享目录（shared/）包含可在 Vue 应用和 Nitro 服务器中共用的代码。这是 Nuxt 4 新增的目录，解决了前后端共享类型定义和工具函数的需求。共享代码在两端都可自动导入使用。
+
+{{知识点27}}
+Nuxt 支持多种构建工具：默认使用 Vite（开发时 HMR 快速、生产构建优化），也支持 Rspack 和 Webpack。构建工具的选择可在 nuxt.config.ts 中配置。Vite 提供最快的开发体验，是官方推荐选项。
+
+{{知识点28}}
+Nuxt DevTools 是强大的开发调试工具，提供组件树检查、路由查看、Payload 数据查看、性能分析等功能。可在浏览器中直接查看服务端传输的数据、检查自动导入状态、分析渲染性能，显著提升开发效率。
+
+{{知识点29}}
+部署方面，Nuxt 支持多种方式：Node.js/Deno 服务器部署、静态站点生成（nuxt generate）、Serverless 部署（AWS Lambda、Vercel、Netlify 等）、边缘部署（Cloudflare Workers 等）。Nitro 生成的 .output 目录是独立的，可在任何支持 JavaScript 的环境运行。
+
+{{知识点30}}
+Nuxt Content 模块提供基于文件的 CMS 能力。在 content/ 目录下使用 Markdown 文件创建内容，支持语法高亮、MDC（Markdown Components）、自动导航生成等功能。适合构建文档站、博客等内容驱动型网站。
+
+{{知识点31}}
+Nuxt 的页面元数据通过 definePageMeta 定义，可在页面组件中设置布局、中间件、页面过渡动画、标题等。这些元数据会被构建时分析，用于生成路由配置和优化。支持类型推断，编辑器中可获得自动补全。
+
+{{知识点32}}
+Nuxt 支持 Vue 的过渡动画系统。通过 pageTransition 和 layoutTransition 配置全局过渡效果，或在 definePageMeta 中为单个页面指定过渡。布局切换和页面导航都支持动画过渡，提升用户体验。
+
+{{知识点33}}
+Nuxt 的错误处理机制包括 app/error.vue 全局错误页面和 useError() 组合式函数。当页面渲染出错时，会自动显示错误页面。可在中间件和页面中使用 createError() 抛出 HTTP 错误，配合 showError() 显示友好错误信息。
+
+{{知识点34}}
+Server Routes（服务器路由）除 API 路由外，还支持在 server/routes/ 目录下定义非 API 的服务器路由，如动态生成 sitemap.xml。server/middleware/ 中的中间件在所有服务器路由之前执行，适合做日志、认证等通用处理。
+
+{{知识点35}}
+app.config.ts 提供运行时响应式配置，与 nuxt.config.ts 不同，它在应用运行时可被修改且不需要重新构建。适合存放主题配置、特性开关等需要动态变化的配置项。通过 useAppConfig() 访问。
+
+{{知识点36}}
+Nuxt 4 的变化包括：目录结构调整为 app/ 子目录集中管理、引入 shared/ 共享目录、改进 TypeScript 类型生成、优化构建性能、增强模块系统。从 Nuxt 3 迁移到 4 有官方迁移指南，大部分改动是目录路径变更。
+
+{{知识点37}}
+Nuxt 的 SEO 优化能力包括：默认 SSR 确保搜索引擎可索引、内置 useHead() 和 useSeoMeta() 组合式函数管理 <head> 标签、自动生成 sitemap、支持 Open Graph 和 Twitter Cards 等社交分享元数据。这些对内容型网站至关重要。
+
+{{知识点38}}
+Nuxt 生态中的常用模块包括：@nuxt/image（图片优化和自动尺寸）、@nuxt/fonts（字体管理）、@nuxt/ui（UI 组件库）、@nuxtjs/tailwindcss（Tailwind CSS 集成）、@pinia/nuxt（状态管理）、@nuxtjs/i18n（国际化）、vueuse（实用组合式函数集合）。
+
+{{知识点39}}
+Nuxt 的 .nuxtrc 文件提供另一种配置语法，适合全局配置。.nuxtignore 文件用于在构建阶段忽略特定文件。这些配置文件与 nuxt.config.ts 配合使用，提供灵活的项目配置能力。
+
+{{知识点40}}
+Nuxt 的组件自动导入支持懒加载（异步导入），组件放在 app/components/ 下即自动注册。可通过组件名前缀控制导入行为，如 LazyComponent 前缀表示懒加载。嵌套目录的组件名会自动生成带前缀的名称以避免冲突。

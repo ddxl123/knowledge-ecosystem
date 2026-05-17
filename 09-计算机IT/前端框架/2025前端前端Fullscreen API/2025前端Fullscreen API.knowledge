@@ -1,0 +1,163 @@
+# 2025前端Fullscreen API
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}
+{{Fullscreen API 概述}}
+Fullscreen API 是一组允许网页将特定元素（及其子元素）以全屏模式显示的 Web API。它没有自己的独立接口，而是通过扩展 Document、Element、ShadowRoot 等已有接口来提供全屏功能。规范由 WHATWG 维护（fullscreen.spec.whatwg.org）。全屏模式下，浏览器的 UI 元素和其他应用程序都会被移除，元素占据整个屏幕。
+
+{{知识点2}}
+{{Element.requestFullscreen() 方法}}
+Element.requestFullscreen() 方法请求将指定元素（及其后代）置入全屏模式。它是一个异步方法，返回一个 Promise。当全屏模式成功激活时，Promise 解析为 undefined；当权限被拒绝或发生错误时，Promise 会以异常拒绝。语法：element.requestFullscreen() 或 element.requestFullscreen(options)。
+
+{{知识点3}}
+{{requestFullscreen() 的 options 参数}}
+requestFullscreen() 接受一个可选的 options 对象，包含三个属性：keyboardLock（键盘锁定模式，可选 "none"、"browser"）、navigationUI（导航 UI 控制，可选 "auto"、"hide"、"show"）、screen（指定全屏显示的目标屏幕，接受 ScreenDetailed 对象）。keyboardLock 默认为 "none"，navigationUI 默认为 "auto"。
+
+{{知识点4}}
+{{keyboardLock 键盘锁定模式}}
+keyboardLock 允许全屏应用拦截和处理通常由浏览器或操作系统独占处理的按键和组合键。设为 "browser" 时，浏览器会将更多键盘事件转发给应用。这对游戏特别有用（如将 Esc 用作菜单键而非退出全屏）。应用应调用 preventDefault() 来取消默认操作。某些系统级组合键（如 Ctrl+Alt+Delete）无法被拦截。
+
+{{知识点5}}
+{{navigationUI 控制选项}}
+navigationUI 选项控制全屏时是否显示浏览器导航界面。"hide" 表示隐藏导航 UI，整个屏幕分配给元素显示；"show" 表示显示页面导航控件，元素尺寸会被限制以留出空间；"auto"（默认）让浏览器自行决定。
+
+{{知识点6}}
+{{requestFullscreen() 返回的 Promise}}
+requestFullscreen() 返回一个 Promise。全屏模式成功激活时 Promise resolve，权限被拒绝时 reject 并抛出异常。可以通过 .then()/.catch() 或 async/await 来处理。reject 时可能抛出 TypeError（文档不活跃、元素不被允许使用全屏等）或 NotSupportedError（keyboardLock 参数不被支持）。
+
+{{知识点7}}
+{{requestFullscreen() 的 TypeError 异常}}
+以下情况会导致 requestFullscreen() 返回的 Promise 以 TypeError 拒绝：文档不是当前活跃文档（非 fully active）；元素不属于任何文档；元素因 Permissions Policy 配置而不被允许使用全屏；元素与其所属文档是同一个节点；元素是一个已通过 showPopover() 显示的 popover。
+
+{{知识点8}}
+{{Document.exitFullscreen() 方法}}
+Document.exitFullscreen() 请求将当前处于全屏模式的元素退出全屏，恢复屏幕之前的状态。返回一个 Promise，在完全退出全屏后 resolve。如果退出过程中发生错误，catch 处理器会被调用。注意：如果存在多个全屏元素，exitFullscreen() 只退出最顶层的元素。按 Esc 或 F11 会退出所有全屏元素。
+
+{{知识点9}}
+{{Document.fullscreenElement 属性}}
+Document.fullscreenElement 是一个只读属性，返回当前在文档中以全屏模式显示的 Element 对象。如果没有元素处于全屏模式，返回 null。如果存在多个全屏元素，返回最顶层（最近请求的）元素。该属性虽然只读，但修改不会抛出错误（setter 是空操作）。
+
+{{知识点10}}
+{{ShadowRoot.fullscreenElement 属性}}
+ShadowRoot.fullscreenElement 是 ShadowRoot 接口上的只读属性，用于在 Shadow DOM 中检测全屏元素。当全屏元素位于 Shadow DOM 内部时，宿主文档的 document.fullscreenElement 可能无法直接访问到该元素，此时需要通过 ShadowRoot.fullscreenElement 来判断。
+
+{{知识点11}}
+{{Document.fullscreenEnabled 属性}}
+Document.fullscreenEnabled 是只读布尔属性，指示当前文档是否可以进入全屏模式。如果页面包含窗口化插件（windowed plug-ins），或者包含文档的 iframe 没有设置 allowfullscreen 属性，该值为 false。修改该属性不会抛出错误（setter 是空操作）。在请求全屏前应先检查此属性。
+
+{{知识点12}}
+{{fullscreenchange 事件}}
+fullscreenchange 事件在元素进入或退出全屏模式后立即触发。该事件发送到正在切换全屏状态的元素上，同时也会冒泡到 Document。事件不可取消。要判断是进入还是退出全屏，检查 document.fullscreenElement：如果非 null 则正在进入全屏，如果为 null 则正在退出。
+
+{{知识点13}}
+{{fullscreenerror 事件}}
+fullscreenerror 事件在浏览器无法切换到全屏模式时触发。与 fullscreenchange 类似，会触发两个事件：第一个发送到请求全屏的元素，第二个发送到拥有该元素的 Document。事件不可取消。常见原因包括 Permissions Policy 限制、iframe 未设置 allowfullscreen 等。
+
+{{知识点14}}
+{{事件监听方式}}
+可以通过两种方式监听 fullscreenchange 和 fullscreenerror 事件：1）addEventListener() 方法，如 element.addEventListener("fullscreenchange", handler)；2）事件处理器属性，如 element.onfullscreenchange = handler。推荐使用 addEventListener 以支持多个监听器。
+
+{{知识点15}}
+{{CSS :fullscreen 伪类}}
+:fullscreen CSS 伪类匹配当前处于全屏模式的所有元素。如果有多个元素同时处于全屏状态，:fullscreen 会匹配所有这些元素。可用于在全屏时自动调整样式，如改变背景色、布局等。规范定义在 Selectors Level 4 和 Fullscreen API 规范中。
+
+{{知识点16}}
+{{:fullscreen 伪类使用示例}}
+可以为元素设置默认样式和全屏样式：.element { background-color: lightyellow; } 和 .element:fullscreen { background-color: lightpink; }。当元素进入全屏模式时，:fullscreen 样式自动生效，退出时自动恢复。这比手动切换 class 更简洁。
+
+{{知识点17}}
+{{CSS ::backdrop 伪元素}}
+::backdrop 是一个 CSS 伪元素，出现在全屏元素的正下方，覆盖屏幕上该元素之外的其余部分。它位于 top layer 中，用于遮挡、样式化或隐藏全屏元素下方的内容。对于全屏元素，默认 ::backdrop 通常是黑色背景。可以通过 CSS 自定义其样式，如 background-color。
+
+{{知识点18}}
+{{::backdrop 的适用场景}}
+::backdrop 伪元素出现在三种场景：1）通过 Fullscreen API 的 requestFullscreen() 进入全屏的元素；2）通过 showModal() 显示的 dialog 元素；3）通过 showPopover() 显示的 popover 元素。每个 top layer 元素都有自己的 ::backdrop 伪元素。
+
+{{知识点19}}
+{{Top Layer 机制}}
+全屏元素会被放置在浏览器的 Top Layer 中。Top Layer 是一个特殊的渲染层，位于所有其他内容之上（包括 z-index 最高的元素）。如果多个元素同时进入全屏，它们都匹配 :fullscreen 且都在 Top Layer 中，按后进先出（LIFO）的顺序堆叠，最近请求的元素在最顶层。
+
+{{知识点20}}
+{{兼容元素要求}}
+并非所有元素都可以进入全屏模式。兼容的元素必须满足：必须是标准 HTML 元素或 svg 或 math 元素；不能是 dialog 元素；必须位于顶层文档中，或位于设置了 allowfullscreen 属性的 iframe 中。此外，Permissions Policy 必须允许使用全屏功能。
+
+{{知识点21}}
+{{用户激活要求（Transient User Activation）}}
+requestFullscreen() 需要瞬时用户激活（Transient User Activation）。用户必须与页面或 UI 元素进行交互后，全屏请求才会被允许。这意味着不能在页面加载时自动进入全屏，必须由用户操作（如点击按钮）触发。如果在非事件处理器中调用，请求会被拒绝。
+
+{{知识点22}}
+{{Permissions Policy 全屏控制}}
+全屏功能受 Permissions Policy（权限策略）控制，特性标识为 "fullscreen"。默认允许列表值为 "self"，即允许顶层文档上下文以及与顶层文档同源的嵌套浏览上下文使用全屏。第三方内容默认不被允许，需要服务器设置 Permissions-Policy 头部并在 iframe 上添加 allow="fullscreen" 属性。
+
+{{知识点23}}
+{{iframe 中的全屏权限配置}}
+要允许 iframe 中的内容使用全屏，需要两步：1）服务器设置 HTTP 头 Permissions-Policy: fullscreen=(self b.example.com)；2）在 iframe 标签上添加 allow="fullscreen" 属性，如 <iframe src="https://b.example.com" allow="fullscreen"></iframe>。旧的 allowfullscreen 属性（布尔值）仍然有效但已不推荐。
+
+{{知识点24}}
+{{allowfullscreen 属性}}
+allowfullscreen 是 iframe 元素的属性，用于允许嵌入的内容请求全屏模式。设置后，iframe 内的文档才能调用 requestFullscreen()。这是旧的属性方式，现代推荐使用 allow="fullscreen" 配合 Permissions Policy 来实现更细粒度的控制。
+
+{{知识点25}}
+{{用户退出全屏的途径}}
+用户可以通过多种方式退出全屏：1）按 Esc 键；2）按 F11 键；3）导航到另一个页面；4）切换浏览器标签页；5）使用 Alt+Tab 等应用切换器切换到其他应用。开发者应在 UI 中提示用户可以按 Esc 退出全屏。
+
+{{知识点26}}
+{{全屏切换的完整示例}}
+典型用法：检查 document.fullscreenElement 是否为 null，若为 null 则调用 element.requestFullscreen() 进入全屏，否则调用 document.exitFullscreen() 退出全屏。示例：function toggleFullScreen(elem) { if (!document.fullscreenElement) { elem.requestFullscreen(); } else { document.exitFullscreen(); } }
+
+{{知识点27}}
+{{全屏状态检测}}
+判断全屏状态的方式：1）检查 document.fullscreenElement 是否为 null（推荐）；2）监听 fullscreenchange 事件并在回调中检查 fullscreenElement。已废弃的方式：document.fullscreen 属性（布尔值，已不推荐使用）。判断特定元素是否全屏：document.fullscreenElement === myElement。
+
+{{知识点28}}
+{{全屏模式下的视频播放}}
+Fullscreen API 最常见的应用场景之一是视频全屏播放。HTML5 video 元素原生支持全屏：const video = document.getElementById("video"); video.requestFullscreen(); 结合键盘事件监听（如 Enter 键），可以实现按键切换视频全屏的功能。
+
+{{知识点29}}
+{{全屏模式下的移动端视口行为}}
+某些移动浏览器在全屏模式下会忽略 viewport meta 标签设置并阻止用户缩放。例如"捏合缩放"手势在全屏页面上可能不起作用，即使非全屏时可以缩放。开发者在设计全屏移动应用时需要注意这一行为差异。
+
+{{知识点30}}
+{{全屏与 Screen Wake Lock 配合}}
+Fullscreen API 常与 Screen Wake Lock API 配合使用。在全屏展示内容（如演示文稿、视频播放）时，同时请求屏幕唤醒锁可以防止设备自动息屏。典型用法：先进入全屏，然后调用 navigator.wakeLock.request("screen")。
+
+{{知识点31}}
+{{全屏事件的冒泡与委托}}
+fullscreenchange 和 fullscreenerror 事件会从触发元素冒泡到 Document。这意味着可以在 Document 级别监听这些事件，实现事件委托。例如：document.addEventListener("fullscreenchange", callback)，这样无论哪个元素进出全屏都能捕获到。
+
+{{知识点32}}
+{{多个元素同时全屏}}
+Fullscreen API 支持多个元素同时处于全屏状态。它们都匹配 :fullscreen 伪类，都在 Top Layer 中按 LIFO 顺序堆叠。document.fullscreenElement 返回最顶层（最近请求的）元素。exitFullscreen() 只退出最顶层元素，按 Esc 退出所有。
+
+{{知识点33}}
+{{全屏与 Dialog 元素的限制}}
+dialog 元素不能通过 requestFullscreen() 进入全屏模式。这是规范中的明确限制。如果需要对话框的全屏效果，应使用 dialog 的 showModal() 方法配合 CSS 样式来模拟，或者使用其他 HTML 元素来包裹内容。
+
+{{知识点34}}
+{{全屏 API 的权限查询}}
+可以通过 Permissions API 查询全屏权限状态。navigator.permissions.query({ name: "fullscreen" }) 返回一个 PermissionStatus 对象，其 state 属性值为 "granted"（已授权）、"denied"（已拒绝）或 "prompt"（需要用户确认提示）。
+
+{{知识点35}}
+{{全屏与 Popup 元素的冲突}}
+已通过 showPopover() 显示的 popover 元素不能同时进入全屏模式。调用 requestFullscreen() 会以 TypeError 拒绝。如果需要对 popover 元素全屏，应先调用 hidePopover() 关闭它，然后再请求全屏。
+
+{{知识点36}}
+{{Fullscreen API 的规范状态}}
+Fullscreen API 规范由 WHATWG 维护，地址为 https://fullscreen.spec.whatwg.org/。它是一个 Living Standard（动态标准），持续更新。主要定义了 requestFullscreen()、exitFullscreen()、fullscreenElement、fullscreenEnabled 以及 fullscreenchange/fullscreenerror 事件。所有主流现代浏览器均已实现。
+
+{{知识点37}}
+{{全屏 API 的浏览器兼容性}}
+Fullscreen API 在所有主流浏览器中都有良好支持。需要注意的是，早期浏览器使用了带前缀的实现（如 webkitRequestFullScreen、mozRequestFullScreen），现代浏览器已统一为无前缀的标准 API。在使用时可做特性检测：if (element.requestFullscreen) { ... }。
+
+{{知识点38}}
+{{全屏 API 的安全考虑}}
+出于安全原因，Fullscreen API 有以下限制：1）必须由用户手势触发（Transient User Activation）；2）受 Permissions Policy 控制；3）第三方 iframe 需要显式授权；4）键盘锁定模式下某些系统级按键无法拦截；5）浏览器应提供退出全屏的替代机制（如长按 Esc 退出键盘锁定模式）。
+
+{{知识点39}}
+{{全屏与画中画的区别}}
+Fullscreen API 和 Picture-in-Picture API 是两个不同的 API。全屏让元素占据整个屏幕，隐藏浏览器 UI；画中画将视频置于一个小的浮动窗口中，可以拖动并始终在最顶层。两者可以独立使用，但通常不会同时激活。全屏适用于沉浸式体验，画中画适用于多任务场景。
+
+{{知识点40}}
+{{全屏 API 在游戏和演示中的应用}}
+Fullscreen API 广泛应用于：1）网页游戏——提供沉浸式游戏体验，配合 keyboardLock 可拦截更多按键；2）在线演示文稿——如 Reveal.js 等支持全屏演示；3）图片画廊——全屏查看图片；4）视频播放器——自定义全屏控制；5）远程桌面应用——配合键盘锁定实现完整的键盘转发。

@@ -1,0 +1,144 @@
+# 2025前端前端Web Bluetooth API
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{Web Bluetooth API 是什么}}
+Web Bluetooth API 是一组允许网页通过蓝牙低功耗（Bluetooth Low Energy, BLE）与蓝牙设备进行通信的 JavaScript API。它由 Web Bluetooth Community Group 制定规范，使 Web 应用能够发现、连接并与 BLE 外设交互，无需安装原生应用。该 API 基于 GATT（Generic Attribute Profile）协议工作，目前仍属于实验性技术（Experimental）。
+
+{{知识点2}}{{Web Bluetooth API 的安全上下文要求}}
+Web Bluetooth API 只能在安全上下文（Secure Contexts）中使用，即必须通过 HTTPS 提供服务。这是为了防止中间人攻击，保护蓝牙设备通信的安全性。在非 HTTPS 页面中调用 `navigator.bluetooth` 将抛出 SecurityError 异常。本地开发时 localhost 也被视为安全上下文。
+
+{{知识点3}}{{Web Bluetooth API 的浏览器兼容性}}
+Web Bluetooth API 的浏览器支持有限。截至 2025 年，Chrome（桌面和 Android）、Edge、Opera 等 Chromium 内核浏览器已支持。Firefox 和 Safari 尚未默认启用该功能。在生产环境中使用前需仔细检查浏览器兼容性表。可通过 `navigator.bluetooth.getAvailability()` 检测当前浏览器是否支持。
+
+{{知识点4}}{{Bluetooth 接口}}
+`Bluetooth` 接口是 Web Bluetooth API 的入口点，通过 `navigator.bluetooth` 属性获取。它提供三个核心方法：`getAvailability()` 检测蓝牙是否可用、`getDevices()` 获取已授权的设备列表、`requestDevice()` 请求用户选择一个蓝牙设备。该接口继承自 `EventTarget`。
+
+{{知识点5}}{{navigator.bluetooth 入口属性}}
+`navigator.bluetooth` 返回一个 `Bluetooth` 对象，是访问 Web Bluetooth API 功能的入口。它由 Navigator 接口扩展而来，只在安全上下文中可用。使用前应先检查 `navigator.bluetooth` 是否存在以判断浏览器支持情况。
+
+{{知识点6}}{{Bluetooth.requestDevice() 方法}}
+`requestDevice()` 是 Web Bluetooth API 的核心方法，返回一个 Promise，解析为匹配指定选项的 `BluetoothDevice` 对象。调用时会弹出设备选择对话框让用户确认。该方法需要用户手势（transient activation）触发，即必须在用户交互事件（如点击）的处理函数中调用。参数 options 包含 filters、optionalServices、acceptAllDevices 等配置。
+
+{{知识点7}}{{requestDevice 的 filters 参数}}
+`filters` 是一个过滤器数组，用于指定要发现的蓝牙设备的属性。每个过滤器对象可包含：`services`（GATT 服务 UUID 数组）、`name`（精确设备名称）、`namePrefix`（名称前缀）、`manufacturerData`（制造商数据匹配）、`serviceData`（服务数据匹配）。设备必须匹配过滤器中所有指定的属性才会出现在选择列表中。
+
+{{知识点8}}{{requestDevice 的 optionalServices 参数}}
+`optionalServices` 是一个可选的服务 UUID 数组，用于声明应用可能需要访问但不用于过滤的服务。设备连接后只能访问 filters 中声明的服务和 optionalServices 中声明的服务。即使只用 name 过滤，也必须在 optionalServices 中列出需要的服务，否则连接后无法访问。
+
+{{知识点9}}{{requestDevice 的 acceptAllDevices 参数}}
+`acceptAllDevices` 是一个布尔值，设为 true 时显示所有可用的蓝牙设备而不进行过滤。使用此选项时应省略 filters，且必须设置 optionalServices 以确保能使用返回的设备。适用于设备未广播足够信息用于过滤的场景。
+
+{{知识点10}}{{requestDevice 的 exclusionFilters 参数}}
+`exclusionFilters` 是一个过滤器数组，用于从匹配结果中排除特定设备。其属性与 filters 相同，可用来排除已知不需要的设备。与 filters 配合使用可以精确控制设备选择范围。
+
+{{知识点11}}{{requestDevice 的 manufacturerData 过滤}}
+`manufacturerData` 允许按 BLE 广播包中的制造商数据进行过滤。每个对象包含必填的 `companyIdentifier`（公司标识符，来自蓝牙规范的分配编号）、可选的 `dataPrefix`（数据前缀）和 `mask`（掩码）。例如 companyIdentifier 为 12（0x000C）匹配 Digianswer A/S 制造的设备。
+
+{{知识点12}}{{requestDevice 的 serviceData 过滤}}
+`serviceData` 允许按 BLE 广播包中的服务数据进行过滤。每个对象包含 `service`（GATT 服务名或 UUID）、可选的 `dataPrefix` 和 `mask`。用于匹配携带特定服务数据的设备。
+
+{{知识点13}}{{BluetoothDevice 接口}}
+`BluetoothDevice` 接口表示一个蓝牙设备，提供三个只读属性：`id`（唯一标识字符串）、`name`（人类可读的设备名称）、`gatt`（对设备 GATT 服务器的引用）。还提供 `watchAdvertisements()` 监听广播、`forget()` 撤销设备访问权限等方法。
+
+{{知识点14}}{{BluetoothDevice.forget() 方法}}
+`forget()` 方法允许网页主动撤销用户授予的设备访问权限。调用后该站点将不再能访问该设备。这是一个用户友好的隐私保护机制，让用户可以通过应用界面管理已授权的蓝牙设备。
+
+{{知识点15}}{{gattserverdisconnected 事件}}
+当与蓝牙设备的 GATT 连接断开时，`BluetoothDevice` 会触发 `gattserverdisconnected` 事件。开发者应监听此事件以处理连接意外断开的情况，例如重新连接或通知用户。设备超出蓝牙范围、电量耗尽或被其他应用占用时可能触发此事件。
+
+{{知识点16}}{{BluetoothRemoteGATTServer 接口}}
+`BluetoothRemoteGATTServer` 接口表示远程蓝牙设备上的 GATT 服务器。关键属性包括 `connected`（布尔值，指示脚本是否已连接）和 `device`（对应的 BluetoothDevice）。提供 `connect()`、`disconnect()`、`getPrimaryService()`、`getPrimaryServices()` 等方法。注意 `connected` 为 false 时用户代理可能仍物理连接着设备。
+
+{{知识点17}}{{GATT 连接与断开}}
+通过 `BluetoothRemoteGATTServer.connect()` 建立 GATT 连接，`disconnect()` 断开连接。连接是异步操作，返回 Promise。一个设备同时只能维持有限的 GATT 连接数。连接后才能访问设备的服务和特征值。建议在不需要时主动断开以节省设备电量。
+
+{{知识点18}}{{getPrimaryService() 和 getPrimaryServices()}}
+`getPrimaryService(uuid)` 返回一个 Promise，解析为指定 UUID 的主要 GATT 服务。`getPrimaryServices(uuid)` 返回所有匹配的主要服务列表。服务 UUID 可以是完整 128 位 UUID、16 位或 32 位短别名、或标准服务名称（如 'heart_rate'）。只能访问 requestDevice 中声明的服务。
+
+{{知识点19}}{{BluetoothRemoteGATTService 接口}}
+`BluetoothRemoteGATTService` 接口表示 GATT 服务器提供的一个服务。只读属性包括 `device`（所属 BluetoothDevice）、`isPrimary`（是否为主要服务）、`uuid`（服务 UUID）。方法有 `getCharacteristic(uuid)` 获取单个特征值和 `getCharacteristics(uuid)` 获取特征值列表。
+
+{{知识点20}}{{BluetoothRemoteGATTCharacteristic 接口}}
+`BluetoothRemoteGATTCharacteristic` 接口表示 GATT 特征值，是 BLE 数据交互的核心单元。只读属性包括 `service`（所属服务）、`uuid`（特征值 UUID）、`properties`（特征值属性对象）、`value`（当前缓存值）。提供读写、通知等操作方法。
+
+{{知识点21}}{{特征值的读取操作}}
+通过 `BluetoothRemoteGATTCharacteristic.readValue()` 读取特征值，返回 Promise 解析为 DataView。读取的数据需要根据特征值的格式进行解码。`value` 属性缓存最近一次读取或通知的值，但直接读取 value 不会触发新的蓝牙读取操作。
+
+{{知识点22}}{{特征值的写入操作}}
+Web Bluetooth API 提供三种写入方法：`writeValue(buffer)` 自动选择写入方式、`writeValueWithResponse(buffer)` 要求设备确认写入、`writeValueWithoutResponse(buffer)` 不要求确认。参数为 ArrayBuffer 类型。写入前应检查 `properties.write` 或 `properties.writeWithoutResponse` 确认特征值是否支持写入。
+
+{{知识点23}}{{特征值通知（Notifications）}}
+`startNotifications()` 订阅特征值变化通知，`stopNotifications()` 取消订阅。订阅后通过监听 `characteristicvaluechanged` 事件接收数据更新。通知是 BLE 中高效的数据接收方式，比轮询更省电。使用前应检查 `properties.notify` 或 `properties.indicate` 是否支持。
+
+{{知识点24}}{{characteristicvaluechanged 事件}}
+当已订阅通知的特征值发生变化时，`BluetoothRemoteGATTCharacteristic` 触发 `characteristicvaluechanged` 事件。事件的 `target.value` 包含更新后的 DataView 数据。这是实现实时数据监控（如心率监测）的核心事件机制。
+
+{{知识点25}}{{BluetoothCharacteristicProperties 接口}}
+`BluetoothCharacteristicProperties` 接口描述特征值支持的操作能力。包含 9 个布尔只读属性：`read`、`write`、`writeWithoutResponse`、`notify`、`indicate`、`broadcast`、`authenticatedSignedWrites`、`reliableWrite`、`writableAuxiliaries`。操作前应检查对应属性以避免运行时错误。
+
+{{知识点26}}{{notify 与 indicate 的区别}}
+`notify` 允许设备向客户端发送特征值变化通知但不要求确认，效率更高但不保证送达。`indicate` 同样发送通知但要求客户端确认收到，更可靠但速度较慢。两者不能同时启用。通过 `properties.notify` 和 `properties.indicate` 检查支持情况。
+
+{{知识点27}}{{BluetoothRemoteGATTDescriptor 接口}}
+`BluetoothRemoteGATTDescriptor` 接口表示 GATT 描述符，提供关于特征值的额外信息。只读属性包括 `characteristic`（所属特征值）、`uuid`（描述符 UUID）、`value`（缓存值）。方法有 `readValue()` 读取和 `writeValue()` 写入。常见的描述符如 Client Characteristic Configuration（UUID: 00002902-0000-1000-8000-00805f9b34fb）。
+
+{{知识点28}}{{BluetoothUUID 工具接口}}
+`BluetoothUUID` 接口提供 UUID 查找工具方法，通过蓝牙 SIG 维护的注册表将名称转换为 128 位 UUID。静态方法包括：`getService(name)`、`getCharacteristic(name)`、`getDescriptor(name)` 和 `canonicalUUID(alias)`。支持传入标准名称（如 'heart_rate'）或 16/32 位短别名。
+
+{{知识点29}}{{UUID 格式与规范}}
+蓝牙 UUID 是 128 位标识符，格式为 xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx。标准服务、特征值和描述符使用 16 位或 32 位短别名，基于蓝牙基础 UUID 00000000-0000-1000-8000-00805f9b34fb。例如 16 位 0x180F 对应完整 UUID 0000180f-0000-1000-8000-00805f9b34fb（Battery Service）。自定义服务使用随机生成的 128 位 UUID。
+
+{{知识点30}}{{GATT 层级结构}}
+GATT 协议定义了严格的层级结构：Server → Service → Characteristic → Descriptor。一个 GATT 服务器（BluetoothRemoteGATTServer）包含多个服务（BluetoothRemoteGATTService），每个服务包含多个特征值（BluetoothRemoteGATTCharacteristic），每个特征值可有多个描述符（BluetoothRemoteGATTDescriptor）。Web Bluetooth API 按此层级依次访问。
+
+{{知识点31}}{{Permissions Policy 控制}}
+Web Bluetooth API 受 Permissions Policy 指令 `bluetooth` 控制。默认允许列表为 `self`，允许同源嵌套框架使用，但默认阻止第三方内容。跨域访问需要在 HTTP 响应头 `Permissions-Policy: bluetooth` 和 iframe 属性中同时指定允许的源。
+
+{{知识点32}}{{权限模型与用户授权}}
+使用 Web Bluetooth API 需要用户显式授权。调用 `requestDevice()` 时会弹出权限提示，用户选择设备后才授予权限。可通过 `navigator.permissions.query({ name: "bluetooth" })` 查询权限状态（granted/denied/prompt）。已授权的设备可通过 `getDevices()` 获取而无需再次提示。
+
+{{知识点33}}{{Bluetooth.getDevices() 方法}}
+`getDevices()` 返回一个 Promise，解析为已授权设备的 BluetoothDevice 数组。这些设备是之前通过 `requestDevice()` 用户选择后获得授权的。使用此方法可以在页面重新加载后恢复对之前授权设备的访问，而无需再次弹出选择对话框。
+
+{{知识点34}}{{Bluetooth.getAvailability() 方法}}
+`getAvailability()` 返回一个 Promise，解析为布尔值，指示当前用户代理是否支持蓝牙。某些用户代理允许用户配置此返回值。这是检测设备蓝牙能力的推荐方式，应在调用 `requestDevice()` 前检查。
+
+{{知识点35}}{{典型连接流程}}
+Web Bluetooth API 的典型使用流程为：1) 调用 `requestDevice()` 发现并选择设备；2) 通过 `device.gatt.connect()` 建立 GATT 连接；3) 调用 `getPrimaryService()` 获取目标服务；4) 调用 `getCharacteristic()` 获取特征值；5) 使用 `readValue()`/`writeValue()`/`startNotifications()` 进行数据交互。每步都是异步操作需使用 async/await。
+
+{{知识点36}}{{心率监测示例}}
+以下是一个典型的心率监测代码流程：请求心率设备 → 连接 GATT → 获取 heart_rate 服务 → 获取 heart_rate_measurement 特征值 → 检查 notify 属性 → 启动通知 → 监听 characteristicvaluechanged 事件 → 从 DataView 中解码心率数据。这是 Web Bluetooth API 最经典的示例之一。
+
+{{知识点37}}{{错误处理}}
+Web Bluetooth API 常见错误类型：`TypeError`（选项参数不合法，如同时设置 filters 和 acceptAllDevices）、`NotFoundError`（未找到匹配设备）、`SecurityError`（不安全上下文或无权限）。用户取消选择对话框也会抛出错误。建议使用 try-catch 包裹所有蓝牙操作并区分处理不同错误。
+
+{{知识点38}}{{数据编码与解码}}
+蓝牙特征值以 DataView/ArrayBuffer 格式传输二进制数据。读取后需要根据特征值规范解码，例如心率测量值的第一个字节指示心率值格式（UINT8 或 UINT16）。写入时需要将数据编码为 ArrayBuffer。可使用 TextEncoder/TextDecoder 处理字符串数据。
+
+{{知识点39}}{{广播监听（watchAdvertisements）}}
+`BluetoothDevice.watchAdvertisements()` 方法允许监听设备的 BLE 广播数据。返回 Promise，解析后设备的 `advertisementreceived` 事件会被触发。此功能可用于获取设备广播的原始数据，包括信号强度（RSSI）、设备名称、服务 UUID 等信息。
+
+{{知识点40}}{{Web Bluetooth API 的应用场景}}
+Web Bluetooth API 适用于多种物联网场景：健康设备（心率带、血压计、体温计）、智能家居（灯泡、插座、传感器）、运动设备（自行车码表、跑步机）、可穿戴设备（手环、手表）、工业传感器、教育机器人等。任何支持 BLE 的设备理论上都可以通过 Web 页面控制。
+
+{{知识点41}}{{与 WebUSB 和 Web Serial 的比较}}
+Web Bluetooth API、WebUSB API 和 Web Serial API 分别处理不同类型的设备通信。Web Bluetooth 专用于 BLE 设备，WebUSB 用于 USB 设备，Web Serial 用于串口设备。Web Bluetooth 的优势在于无线连接和 BLE 设备的广泛支持，但数据传输速率较低。选择哪个 API 取决于目标设备支持的通信方式。
+
+{{知识点42}}{{DataView 在蓝牙数据处理中的角色}}
+Web Bluetooth API 使用 DataView（而非直接使用 ArrayBuffer）来表示特征值数据，因为它提供了灵活的字节序控制和多种数据类型读取方法（getUint8、getUint16、getInt32 等）。蓝牙协议使用小端序（Little Endian），DataView 的 `littleEndian` 参数默认为 true，正好匹配。
+
+{{知识点43}}{{连接稳定性与重连策略}}
+BLE 连接可能因设备超出范围、干扰或设备端超时而断开。建议实现自动重连机制：监听 `gattserverdisconnected` 事件，在断开时延迟重试连接。同时设置最大重试次数和退避策略，避免频繁重连消耗电量。`BluetoothRemoteGATTServer.connected` 属性可用于检查当前连接状态。
+
+{{知识点44}}{{Web Bluetooth API 与 Permissions API}}
+可通过 Permissions API 的 `navigator.permissions.query({ name: "bluetooth" })` 方法查询蓝牙权限状态。返回的 PermissionStatus 对象的 state 属性值为 granted（已授权）、denied（已拒绝）或 prompt（需用户确认）。这对于在不弹出对话框的情况下检查权限状态非常有用。
+
+{{知识点45}}{{Web Bluetooth API 的局限性}}
+Web Bluetooth API 的主要局限：1) 仅支持 BLE，不支持经典蓝牙（Classic Bluetooth）；2) 浏览器支持有限，Safari 和 Firefox 尚未默认启用；3) 需要 HTTPS 和用户手势触发；4) 数据传输速率受限于 BLE 协议；5) 不能在 Service Worker 中使用；6) 移动端浏览器在后台时连接可能不稳定。
+
+{{知识点46}}{{Web Bluetooth Community Group}}
+Web Bluetooth API 规范由 W3C 的 Web Bluetooth Community Group（WebBluetoothCG）维护和开发。规范文档托管在 GitHub（webbluetoothcg.github.io/web-bluetooth）。该工作组由 Google、Intel、Microsoft 等公司参与推动。规范状态为非标准（非 W3C 正式推荐标准），但已获得部分浏览器的实验性支持。
+
+{{知识点47}}{{iframe 中使用 Web Bluetooth API}}
+在 iframe 中使用 Web Bluetooth API 需要满足特定条件：父页面必须在 Permissions-Policy 响应头中允许蓝牙访问，且 iframe 必须声明 `allow="bluetooth"` 属性。默认情况下只允许同源嵌套框架使用，跨域需要显式配置。这确保了第三方嵌入内容不能随意访问用户的蓝牙设备。

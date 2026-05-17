@@ -1,0 +1,93 @@
+# 2025前端Drag and Drop API
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{Drag and Drop API概述：HTML5 Drag and Drop API提供了一种标准化的拖放机制，允许用户在网页元素之间、网页与浏览器之间、以及网页与外部应用程序之间拖放数据。该API基于DOM事件模型，继承自鼠标事件(MouseEvent)，自2015年7月起在所有主流浏览器中广泛可用。}}
+
+{{知识点2}}{{三种拖放用例：Drag and Drop API支持三种不同的使用场景：1) 在页面内拖拽元素（如看板拖拽）；2) 将数据从页面拖出（如拖拽到外部应用）；3) 将数据拖入页面（如文件拖放上传）。每种场景有略微不同的需求和实现方式。}}
+
+{{知识点3}}{{拖放操作的三个核心要素：每个拖放操作涉及三个关键部分：1) 被拖拽的元素(draggable item)；2) 被传输的底层数据(drag data store)；3) 放置目标(drop target)。在不同场景中，这三者不一定都在开发者控制范围内。}}
+
+{{知识点4}}{{七个拖放事件类型：拖放API定义了7个事件：dragstart（拖拽开始）、drag（拖拽中，每隔几百毫秒触发）、dragenter（元素进入目标区域）、dragleave（元素离开目标区域）、dragover（元素在目标上方悬停）、drop（元素被放置）、dragend（拖拽结束）。}}
+
+{{知识点5}}{{dragstart事件：当可拖拽元素开始被拖拽时触发。此事件在被拖拽的元素上触发，开发者应在此事件处理器中设置拖拽数据（通过setData方法）。对于外部拖入的文件，此事件不会触发。}}
+
+{{知识点6}}{{drag事件：在拖拽过程中每隔几百毫秒触发一次。此事件触发在被拖拽元素上，可用于实时跟踪拖拽位置或状态更新。}}
+
+{{知识点7}}{{dragenter事件：当拖拽元素进入一个潜在的放置目标时触发。通常在此事件中添加视觉反馈，如高亮放置区域，提示用户可以在此处放置。}}
+
+{{知识点8}}{{dragleave事件：当拖拽元素离开一个潜在的放置目标时触发。通常在此事件中移除之前添加的视觉反馈（如取消高亮）。}}
+
+{{知识点9}}{{dragover事件：当拖拽元素悬停在潜在放置目标上方时触发，每隔几百毫秒触发一次。关键点：必须在dragover事件处理器中调用preventDefault()，否则drop事件不会触发。默认情况下大多数元素不是放置目标。}}
+
+{{知识点10}}{{drop事件：当可拖拽元素被放置在有效的放置目标上时触发。这是唯一可以读取拖拽数据存储（除了dragstart之外）的时机。必须调用preventDefault()来阻止浏览器的默认处理行为。}}
+
+{{知识点11}}{{dragend事件：当拖拽操作结束时触发（无论是否成功放置）。此事件在被拖拽元素上触发。如果拖拽取消（如按Escape键），此事件仍然会触发，可通过检查dropEffect属性判断是否成功放置。}}
+
+{{知识点12}}{{draggable属性：HTML全局属性，设置为"true"时使元素可拖拽。图片(img)、链接(a)和文本选区默认可拖拽。注意：使元素可拖拽后，其内部文本不能通过鼠标拖拽直接选中，需按住Alt键或使用键盘选择。}}
+
+{{知识点13}}{{DragEvent接口：拖放事件的事件对象，继承自MouseEvent。核心属性是dataTransfer，类型为DataTransfer，包含所有在拖放操作中传输的数据。}}
+
+{{知识点14}}{{DataTransfer对象概述：DataTransfer是拖放API的核心数据载体，用于保存在拖放操作中传输的数据。可包含一个或多个数据项(DataTransferItem)，每项有一个或多个数据类型。该对象也被Clipboard API和InputEvent使用。}}
+
+{{知识点15}}{{DataTransfer.setData()方法：用于设置指定类型的拖拽数据。如果该类型的数据不存在则添加到末尾；如果已存在则替换。只能在dragstart事件处理器中调用。常用类型：text/plain、text/html、text/uri-list。}}
+
+{{知识点16}}{{DataTransfer.getData()方法：用于检索指定类型的拖拽数据，返回对应类型的字符串数据。如果数据不存在或数据存储为空则返回空字符串。只能在drop事件处理器中读取数据。}}
+
+{{知识点17}}{{DataTransfer.clearData()方法：移除指定类型的数据。参数可选，如果省参则移除所有类型的数据。如果指定类型的数据不存在或数据存储为空，此方法不产生效果。}}
+
+{{知识点18}}{{DataTransfer.dropEffect属性：获取或设置当前选中的拖放操作类型。可选值为：none（不允许放置）、copy（复制）、link（链接）、move（移动）。此属性在dragover事件中设置影响光标样式。}}
+
+{{知识点19}}{{DataTransfer.effectAllowed属性：提供所有可能的操作类型。可选值为：none、copy、copyLink、copyMove、link、linkMove、move、all、uninitialized。应在dragstart事件中设置，定义允许的操作类型集合。}}
+
+{{知识点20}}{{DataTransfer.files属性（只读）：包含数据传输中所有本地文件的列表(FileList)。如果拖放操作不涉及文件拖拽，此属性为空列表。用于实现文件拖放上传功能。}}
+
+{{知识点21}}{{DataTransfer.items属性（只读）：返回DataTransferItemList对象，是所有拖拽数据项的列表。提供更细粒度的数据访问，每个条目是一个DataTransferItem对象。}}
+
+{{知识点22}}{{DataTransfer.types属性（只读）：返回一个字符串数组，包含在dragstart事件中设置的所有数据格式（MIME类型）。可用于判断拖拽数据中包含哪些类型的数据。}}
+
+{{知识点23}}{{DataTransfer.setDragImage()方法：设置拖拽时显示的自定义图像。接受三个参数：图像元素、X偏移量和Y偏移量。可用于替代浏览器默认的拖拽预览图像，提供更好的用户体验。}}
+
+{{知识点24}}{{DataTransfer.addElement()方法：为指定元素设置拖拽源。设置后，drag和dragend事件将在此元素上触发，而非默认的被拖拽节点。此方法为Firefox特有实现。}}
+
+{{知识点25}}{{DataTransferItem对象：表示拖拽数据存储中的单个数据项，可以是文本项(text)或文件项(file)。通过kind属性区分类型，通过type属性获取MIME类型，通过getAsFile()获取File对象，通过getAsString()获取字符串数据。}}
+
+{{知识点26}}{{DataTransferItemList对象：表示DataTransferItem对象的列表。提供add()、remove()、clear()方法操作列表。通过length属性获取项目数量，支持索引访问。可在dragstart事件中添加数据项。}}
+
+{{知识点27}}{{放置目标(Drop Target)的实现：默认情况下大多数元素不是放置目标。要使元素成为放置目标，必须在dragover事件处理器中调用event.preventDefault()取消默认行为。只有在此之后，drop事件才会在该元素上触发。}}
+
+{{知识点28}}{{数据存储的访问时机限制：拖拽数据存储有严格的访问规则：只能在dragstart事件中写入数据(setData)；只能在drop事件中读取数据(getData)；在drag、dragenter、dragleave、dragover、dragend等事件中，数据存储不可修改也不可读取。}}
+
+{{知识点29}}{{默认可拖拽元素：HTML中三种元素默认可拖拽——图片(img)、链接(a标签)和文本选区(text selection)。对于图片和链接，可通过设置draggable="false"来禁用拖拽。文本选区的拖拽源节点是拖拽起始处的文本节点。}}
+
+{{知识点30}}{{拖拽取消与回弹动画：当用户释放拖拽但没有有效的放置目标时（或按Escape键），浏览器会显示"回弹动画"(fly-back animation)，将元素视觉上弹回原位，表示拖放操作失败。}}
+
+{{知识点31}}{{MIME类型与数据格式：拖拽数据必须序列化为字符串或File对象。常用MIME类型包括：text/plain（纯文本）、text/html（HTML内容）、text/uri-list（URL列表）、application/json（JSON数据）。自定义MIME类型也可使用。}}
+
+{{知识点32}}{{拖拽数据传输安全限制：出于安全考虑，不能直接传输JavaScript对象到任意网页或外部应用程序。数据必须序列化为字符串格式。跨域拖放也有相应的安全限制。}}
+
+{{知识点33}}{{文件拖放上传实现：利用DataTransfer.files属性可以实现文件拖放上传。监听目标区域的dragover（取消默认行为）和drop事件，在drop事件中通过dataTransfer.files获取拖入的文件列表，然后使用FileReader或FormData进行处理和上传。}}
+
+{{知识点34}}{{拖拽光标样式控制：通过dropEffect属性控制拖拽时光标样式。copy显示复制光标、move显示移动光标、link显示链接光标、none显示禁止光标。在dragover事件中设置dropEffect来向用户反馈操作类型。}}
+
+{{知识点35}}{{effectAllowed与dropEffect的交互关系：effectAllowed定义拖拽源允许的操作类型（在dragstart中设置），dropEffect定义目标接受的操作类型（在dragover中设置）。浏览器取两者的交集来决定最终的操作效果和光标样式。}}
+
+{{知识点36}}{{看板拖拽实现模式(Kanban Board)：页面内元素拖拽的典型应用。实现步骤：1) 设置draggable="true"；2) 在dragstart中存储拖拽源信息；3) 在目标容器的dragover中preventDefault；4) 在drop中移动DOM元素。通过DataTransfer或直接DOM操作实现。}}
+
+{{知识点37}}{{拖拽视觉反馈最佳实践：在dragenter中添加高亮/边框样式提示可放置区域；在dragleave中移除样式（注意处理子元素冒泡问题）；在drop中恢复样式；在dragend中做最终清理。使用CSS类切换比直接操作style更高效。}}
+
+{{知识点38}}{{dragleave事件的子元素冒泡问题：当拖拽经过目标区域内的子元素时，会先触发父元素的dragleave再触发dragenter，导致视觉反馈闪烁。解决方案：使用计数器跟踪进入/离开次数，或使用event.relatedTarget判断是否真正离开目标区域。}}
+
+{{知识点39}}{{触摸设备上的拖放兼容性：HTML5 Drag and Drop API基于鼠标事件，在触摸设备（手机/平板）上原生支持有限。移动端推荐使用Touch Events或Pointer Events实现自定义拖拽，或使用第三方库如interact.js、SortableJS。}}
+
+{{知识点40}}{{React中的拖放实现：React生态有多种拖放方案：1) 原生HTML5 DnD API配合React事件系统；2) react-dnd（基于HTML5 DnD和Touch Backend）；3) @dnd-kit/core（现代化、轻量级、无障碍支持好）。@dnd-kit是2024-2025年的主流推荐。}}
+
+{{知识点41}}{{Vue中的拖放实现：Vue生态可使用：1) 原生HTML5 DnD API配合Vue事件绑定(v-on)；2) vuedraggable（基于SortableJS，支持Vue 2/3）；3) vue-draggable-plus（Vue 3专用，更现代）。vuedraggable是社区最广泛使用的方案。}}
+
+{{知识点42}}{{无障碍访问(Accessibility)注意事项：拖放操作对键盘用户和屏幕阅读器用户不友好。应提供替代操作方式（如按钮上下移动）、使用ARIA属性描述拖放状态、确保键盘可操作（使用Arrow keys配合Space/Enter）、提供清晰的操作反馈。}}
+
+{{知识点43}}{{Pointer Events替代方案：对于需要更精细控制的场景，可使用Pointer Events API（pointerdown/pointermove/pointerup）替代原生拖放。优势：支持触摸和鼠标统一处理、更好的位置控制、跨浏览器一致的行为。适合自定义拖拽排序、画布交互等场景。}}
+
+{{知识点44}}{{第三方拖放库推荐(2024-2025)：SortableJS（轻量级排序拖拽）、@dnd-kit（React专用，功能全面）、react-beautiful-dnd（Atlassian出品，React列表拖拽）、interact.js（通用拖放缩放库）、Pragmatic Drag and Drop（Atlassian 2024新推出，框架无关）。}}
+
+{{知识点45}}{{Pragmatic Drag and Drop：Atlassian于2024年推出的轻量级拖放库，框架无关，包体积仅约4.7KB。特点：支持虚拟化列表、高性能、无障碍优先、支持原生HTML5 DnD API。是react-beautiful-dnd的精神继承者。}}

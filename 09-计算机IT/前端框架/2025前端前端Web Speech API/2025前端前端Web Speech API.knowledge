@@ -1,0 +1,153 @@
+# 2025前端前端Web Speech API
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{Web Speech API 概述}}
+Web Speech API 是浏览器原生提供的语音处理接口，使Web应用能够处理语音数据。该API包含两个核心组件：语音识别（Speech Recognition）和语音合成（Speech Synthesis）。语音识别通过 SpeechRecognition 接口访问，可从麦克风或音频轨道识别语音内容；语音合成通过 SpeechSynthesis 接口访问，是一个文本转语音（TTS）组件，允许程序朗读文本内容。
+
+{{知识点2}}{{SpeechRecognition 构造函数}}
+通过 new SpeechRecognition() 创建语音识别实例。该构造函数无需参数，返回一个全新的 SpeechRecognition 对象。部分浏览器仍使用带前缀的版本（webkitSpeechRecognition），实际开发中需要做兼容处理：const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition。
+
+{{知识点3}}{{SpeechRecognition.lang 属性}}
+lang 属性用于获取或设置语音识别的语言。如果未指定，默认使用HTML的 lang 属性值，若也未设置则使用用户代理的语言设置。推荐最佳实践是显式设置此属性，如 recognition.lang = "zh-CN" 表示中文识别，"en-US" 表示英文识别。
+
+{{知识点4}}{{SpeechRecognition.continuous 属性}}
+continuous 属性控制识别结果的返回模式。设为 false（默认）时，每次识别只返回单个结果后自动停止；设为 true 时，识别服务会持续监听并连续返回结果，适用于需要长时间语音输入的场景如听写应用。
+
+{{知识点5}}{{SpeechRecognition.interimResults 属性}}
+interimResults 属性控制是否返回临时结果。默认值为 false，只返回最终确认的结果。设为 true 时，识别引擎会在用户说话过程中持续返回中间结果（SpeechRecognitionResult.isFinal 为 false），可用于实现实时字幕显示等场景。
+
+{{知识点6}}{{SpeechRecognition.maxAlternatives 属性}}
+maxAlternatives 属性设置每个识别结果返回的最大候选替代数量，默认值为1。当识别结果不确定时，增大此值可以获取多个可能的匹配结果，让应用或用户从中选择最准确的一个。
+
+{{知识点7}}{{SpeechRecognition.start() 方法}}
+start() 方法启动语音识别服务，开始监听来自麦克风或音频轨道的音频输入。调用后会触发 start 事件。注意：连续调用 start() 会抛出 InvalidStateError 异常，需要先停止当前识别再重新启动。
+
+{{知识点8}}{{SpeechRecognition.stop() 方法}}
+stop() 方法停止语音识别服务的音频监听，并尝试根据已捕获的音频返回最终的识别结果。调用后会触发 end 事件。这是正常结束识别流程的推荐方式。
+
+{{知识点9}}{{SpeechRecognition.abort() 方法}}
+abort() 方法停止语音识别服务，但不会尝试返回任何识别结果，所有待处理的结果都会被丢弃。适用于需要立即终止识别且不需要结果的场景。
+
+{{知识点10}}{{SpeechRecognition 事件 - result}}
+result 事件在语音识别服务成功识别出词语或短语时触发。通过 event.results 可获取 SpeechRecognitionResultList 对象，包含所有识别结果。event.results[0][0].transcript 获取最可能的识别文本，event.results[0][0].confidence 获取置信度。
+
+{{知识点11}}{{SpeechRecognition 事件 - error}}
+error 事件在语音识别发生错误时触发。通过 event.error 获取错误类型，event.message 获取错误详细描述。常见错误类型包括 no-speech（未检测到语音）、audio-capture（音频捕获失败）、not-allowed（权限被拒绝）等。
+
+{{知识点12}}{{SpeechRecognition 事件 - nomatch}}
+nomatch 事件在识别服务返回最终结果但没有显著匹配时触发。这通常发生在识别置信度未达到阈值的情况下。实际使用中，识别引擎通常会返回某个结果，即使可能不准确。
+
+{{知识点13}}{{SpeechRecognition 事件 - speechstart/speechend}}
+speechstart 事件在检测到被识别为语音的声音时触发；speechend 事件在语音停止被检测到时触发。这两个事件可用于追踪用户的说话状态，常在 speechend 中调用 recognition.stop() 来结束识别。
+
+{{知识点14}}{{SpeechRecognition 事件 - soundstart/soundend}}
+soundstart 事件在检测到任何声音（不一定是可识别的语音）时触发；soundend 事件在声音停止被检测到时触发。与 speechstart/speechend 不同，这两个事件对任何类型的声音都会响应。
+
+{{知识点15}}{{SpeechRecognition 事件 - audiostart/audioend}}
+audiostart 事件在用户代理开始捕获音频时触发；audioend 事件在音频捕获完成时触发。与 sound 事件不同，这组事件关注的是音频采集层面的状态变化。
+
+{{知识点16}}{{SpeechRecognition 事件 - start/end}}
+start 事件在语音识别服务开始监听可识别的音频时触发；end 事件在语音识别服务断开连接时触发。start 事件常用于更新UI状态（如显示"正在聆听"），end 事件可用于清理资源或自动重启识别。
+
+{{知识点17}}{{SpeechRecognitionEvent.results 属性}}
+SpeechRecognitionEvent 的 results 属性返回一个 SpeechRecognitionResultList 对象，包含当前会话的所有语音识别结果。每个 SpeechRecognitionResult 包含一个或多个 SpeechRecognitionAlternative 对象，代表不同的识别候选。
+
+{{知识点18}}{{SpeechRecognitionEvent.resultIndex 属性}}
+SpeechRecognitionEvent 的 resultIndex 属性返回一个只读数值，表示 SpeechRecognitionResultList 中实际发生变化的最低索引值。在连续识别模式（continuous=true）中，此属性用于确定哪些结果是新产生的。
+
+{{知识点19}}{{SpeechRecognitionResult 对象}}
+SpeechRecognitionResult 表示单次识别匹配，可能包含多个 SpeechRecognitionAlternative 对象。其 isFinal 属性为布尔值，指示该结果是否为最终确认结果（true）还是临时结果（false）。通过索引访问可获取不同置信度的候选结果。
+
+{{知识点20}}{{SpeechRecognitionAlternative 对象}}
+SpeechRecognitionAlternative 表示语音识别服务识别出的单个词语。其 transcript 属性返回识别出的文本字符串，confidence 属性返回0.0到1.0之间的数值表示识别置信度，1.0表示完全确信。
+
+{{知识点21}}{{上下文偏置（Contextual Biasing）}}
+Web Speech API 支持通过 SpeechRecognitionPhrase 对象为识别引擎提供上下文偏置提示。设置 SpeechRecognition.phrases 属性为一个 SpeechRecognitionPhrase 数组，每个对象包含 phrase（要提升的词语）和 boost（0.0到10.0的提升权重）。可动态通过 recognition.phrases.push() 添加新短语。
+
+{{知识点22}}{{SpeechRecognitionPhrase 构造函数}}
+通过 new SpeechRecognitionPhrase(phrase, boost) 创建上下文偏置对象。phrase 参数为字符串，表示需要提升识别概率的词语或短语；boost 参数为0.0到10.0之间的浮点数，数值越高该词语越容易被正确识别。
+
+{{知识点23}}{{本地设备语音识别（On-device Speech Recognition）}}
+默认情况下，语音识别通过远程服务器处理音频数据，存在隐私和性能问题。Web Speech API 支持本地设备识别，通过设置 recognition.processLocally = true 启用。需要预先下载语言包，下载完成后可离线工作，音频和转录文本不会发送到第三方服务。
+
+{{知识点24}}{{SpeechRecognition.available() 静态方法}}
+SpeechRecognition.available() 静态方法用于检查指定语言的语音识别是否可用。接受一个选项对象，包含 langs 数组和 processLocally 布尔值。返回 Promise，解析值为 "available"（已就绪）、"downloadable"（可下载）、"downloading"（下载中）或 "unavailable"（不可用）。
+
+{{知识点25}}{{SpeechRecognition.install() 静态方法}}
+SpeechRecognition.install() 静态方法用于下载并安装指定语言的语音识别语言包。接受一个包含 langs 数组的选项对象，返回 Promise<boolean>，解析为 true 表示语言包下载安装成功，false 表示失败。安装完成后即可使用本地设备语音识别。
+
+{{知识点26}}{{on-device-speech-recognition 权限策略}}
+本地设备语音识别功能受 Permissions-Policy 中 on-device-speech-recognition 指令控制。默认允许列表值为 self，即同源页面可正常使用。如果策略阻止了使用，调用 available() 和 install() 方法将会失败。跨域嵌入文档需要额外配置此策略。
+
+{{知识点27}}{{SpeechSynthesis 控制器接口}}
+SpeechSynthesis 是语音合成的主控制器接口，通过 window.speechSynthesis 访问。提供三个只读状态属性：paused（是否暂停）、pending（队列中是否有未朗读的 utterance）、speaking（是否正在朗读）。核心方法包括 speak()、cancel()、pause()、resume()、getVoices()。
+
+{{知识点28}}{{SpeechSynthesis.speak() 方法}}
+speak() 方法将一个 SpeechSynthesisUtterance 对象添加到朗读队列中。如果当前没有其他 utterance 在朗读，则立即开始朗读；否则排在队列末尾等待。基本用法：const utterance = new SpeechSynthesisUtterance("Hello"); speechSynthesis.speak(utterance)。
+
+{{知识点29}}{{SpeechSynthesis.getVoices() 方法}}
+getVoices() 方法返回当前设备上所有可用的 SpeechSynthesisVoice 对象组成的数组。需要注意的是，在某些浏览器（如Chrome）中，语音列表在页面加载时可能尚未就绪，需要通过 voiceschanged 事件来获取完整列表。
+
+{{知识点30}}{{SpeechSynthesis.cancel() 方法}}
+cancel() 方法从朗读队列中移除所有待朗读的 utterance。如果当前有正在朗读的 utterance，会立即停止播放。这是清空朗读队列和停止当前播放的最直接方式。
+
+{{知识点31}}{{SpeechSynthesis.pause() 和 resume() 方法}}
+pause() 方法将 SpeechSynthesis 置于暂停状态，当前朗读的 utterance 会暂停播放；resume() 方法恢复朗读。这两个方法配合使用可实现朗读的暂停和继续功能。
+
+{{知识点32}}{{voiceschanged 事件}}
+voiceschanged 事件在可用语音列表发生变化时触发，通常在语音列表异步加载完成时发生。推荐使用此事件而非直接调用 getVoices()，以确保获取到完整的语音列表：speechSynthesis.onvoiceschanged = populateVoiceList。
+
+{{知识点33}}{{SpeechSynthesisUtterance 接口}}
+SpeechSynthesisUtterance 表示一个语音合成请求。通过构造函数 new SpeechSynthesisUtterance(text) 创建。包含六个可配置属性：text（要朗读的文本）、lang（语言）、voice（使用的语音）、pitch（音调，0到2）、rate（语速，0.1到10）、volume（音量，0到1）。
+
+{{知识点34}}{{SpeechSynthesisUtterance 事件}}
+SpeechSynthesisUtterance 支持七种事件：start（开始朗读）、end（朗读完成）、pause（暂停）、resume（恢复）、boundary（到达词语或句子边界）、mark（到达SSML标记）、error（发生错误）。这些事件可用于精确追踪朗读进度。
+
+{{知识点35}}{{SpeechSynthesisVoice 接口}}
+SpeechSynthesisVoice 表示系统支持的一个语音。包含五个只读属性：default（是否为当前语言的默认语音）、lang（BCP 47语言标签）、localService（是否由本地合成器提供）、name（人类可读的语音名称）、voiceURI（语音合成服务的URI）。
+
+{{知识点36}}{{SpeechSynthesisVoice 选择和使用}}
+使用 getVoices() 获取可用语音列表后，可通过设置 SpeechSynthesisUtterance.voice 属性选择特定语音。通常将语音列表填充到下拉菜单中供用户选择，匹配时可按 voice.name 进行比较。不同设备和操作系统提供的语音种类不同。
+
+{{知识点37}}{{SpeechSynthesisErrorEvent 错误处理}}
+SpeechSynthesisErrorEvent 包含语音合成处理过程中发生的错误信息。在 SpeechSynthesisUtterance 上监听 error 事件来捕获错误。常见错误类型包括语言不支持、语音不可用、文本过长等，可通过 event.error 属性获取具体错误类型。
+
+{{知识点38}}{{语音合成完整使用模式}}
+完整的语音合成使用流程：1) 获取 speechSynthesis 引用；2) 监听 voiceschanged 事件获取语音列表；3) 创建 SpeechSynthesisUtterance 实例并设置文本；4) 配置 voice、pitch、rate 等属性；5) 调用 speechSynthesis.speak(utterance) 开始朗读。Chrome中需要在用户交互后才能调用speak()。
+
+{{知识点39}}{{SpeechGrammar 和 SpeechGrammarList（已弃用）}}
+SpeechGrammar 和 SpeechGrammarList 接口已被弃用。它们原本用于定义识别语法，限制识别引擎只识别特定的词语或模式。虽然规范中仍保留且浏览器为向后兼容仍支持，但已不对语音识别服务产生任何实际效果。建议使用 phrases 属性替代。
+
+{{知识点40}}{{Web Speech API 浏览器兼容性}}
+语音合成（SpeechSynthesis）自2018年9月起已广泛可用，所有主流浏览器均支持。语音识别（SpeechRecognition）的兼容性相对有限：Chrome 和 Edge 完整支持，Safari 部分支持，Firefox 支持有限。本地设备识别功能需要最新版本浏览器支持。
+
+{{知识点41}}{{Web Speech API 安全和隐私考虑}}
+语音识别需要麦克风权限，浏览器会在首次使用时弹出权限请求对话框。使用在线识别服务时，音频数据会发送到服务器处理，存在隐私风险。本地设备识别（processLocally=true）可避免数据外传。Web Speech API 在安全上下文（HTTPS）下才能使用。
+
+{{知识点42}}{{Web Speech API 实时字幕应用场景}}
+通过设置 continuous=true 和 interimResults=true，可实现实时字幕功能。在 result 事件中持续读取 event.results，通过 result.isFinal 判断是临时结果还是最终结果，分别以不同样式显示。结合 boundary 事件可实现更精确的文字-语音同步高亮。
+
+{{知识点43}}{{Web Speech API 语音助手应用场景}}
+结合语音识别和语音合成可构建简单的语音助手：使用 SpeechRecognition 接收用户语音指令，解析意图后执行相应操作，再通过 SpeechSynthesis 将结果以语音形式反馈给用户。需注意处理识别错误和不支持的命令场景。
+
+{{知识点44}}{{Web Speech API 多语言支持}}
+SpeechRecognition.lang 和 SpeechSynthesisUtterance.lang 属性均支持 BCP 47 语言标签，如 "zh-CN"（简体中文）、"en-US"（美式英语）、"ja-JP"（日语）等。语音识别的语言包可能需要单独下载，语音合成则取决于设备已安装的语音资源。
+
+{{知识点45}}{{Web Speech API 前缀兼容性处理}}
+部分浏览器对 Web Speech API 使用带厂商前缀的实现。开发中需要做前缀兼容处理：const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition; const SpeechRecognitionEvent = window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent。本地设备识别相关的新API已不需要前缀。
+
+{{知识点46}}{{语音合成中的 Chrome 特殊行为}}
+Chrome 浏览器中存在一些特殊行为：1) voiceschanged 事件在页面加载后异步触发，需要监听此事件获取完整语音列表；2) speak() 必须在用户手势（如点击）的事件处理函数中调用，否则可能被浏览器策略阻止；3) 空文本的 utterance 不会触发任何事件。
+
+{{知识点47}}{{Web Speech API 与 Web Audio API 的协同}}
+Web Speech API 可与 Web Audio API 协同工作。语音识别可接收来自 MediaStreamAudioSourceNode 的音频轨道，实现对Web Audio处理后的音频进行识别。语音合成的输出也可通过 MediaElementAudioSourceNode 进行音频处理后再播放。
+
+{{知识点48}}{{SpeechRecognitionErrorEvent 常见错误类型}}
+语音识别常见错误类型包括：no-speech（未检测到语音输入）、aborted（识别被中止）、audio-capture（无法捕获音频）、network（网络通信错误）、not-allowed（用户拒绝麦克风权限或被权限策略阻止）、service-not-allowed（服务不允许）、language-not-supported（语言不支持）、language-unavailable（语言暂时不可用）。
+
+{{知识点49}}{{Web Speech API 的 W3C 规范状态}}
+Web Speech API 的规范由 W3C Web Audio Working Group 维护。语音合成部分已相对成熟稳定，语音识别部分仍在持续演进中。规范地址为 https://webaudio.github.io/web-speech-api/，分为 speechreco-section（语音识别）和 tts-section（语音合成）两个主要部分。
+
+{{知识点50}}{{Web Speech API 性能优化建议}}
+使用 Web Speech API 的性能优化建议：1) 对于非实时场景优先使用本地识别减少网络延迟；2) 合理设置 maxAlternatives 避免不必要的计算；3) 语音合成中避免频繁创建新的 utterance，可复用对象；4) 连续识别模式下注意内存管理，及时处理结果；5) 在不使用时及时调用 stop() 或 cancel() 释放资源。

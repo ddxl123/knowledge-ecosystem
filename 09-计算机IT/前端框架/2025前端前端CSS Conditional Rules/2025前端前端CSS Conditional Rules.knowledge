@@ -1,0 +1,87 @@
+# 2025前端前端CSS Conditional Rules
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{CSS Conditional Rules 模块定义了 CSS 条件处理规则，包括媒体查询（media queries）和支持查询（supports queries），允许根据设备、用户代理和视口能力来有条件地应用样式。规范分为 Level 3、Level 4 和 Level 5 三个版本。}}
+
+{{知识点2}}{{@media 是最基本的条件规则 at-rule，用于根据媒体类型（如 screen、print）和媒体特性（如宽度、分辨率）有条件地应用 CSS 样式。最早出现在 CSS 2.1 中，后经大幅扩展。}}
+
+{{知识点3}}{{@supports 是特性查询（Feature Query）at-rule，用于检测浏览器是否支持特定的 CSS 属性-值对。语法为 @supports (property: value) { /* styles */ }，浏览器会解析该声明并返回 true 或 false。}}
+
+{{知识点4}}{{@supports 支持三种逻辑运算符：and（与）、or（或）、not（非）。and 要求所有条件都为真，or 要求至少一个条件为真，not 对条件取反。可使用括号定义运算优先级。}}
+
+{{知识点5}}{{@supports 的 and 运算符示例：@supports (display: table-cell) and (display: list-item) { }。只有当浏览器同时支持这两个属性-值对时，内部样式才会应用。多个 and 可以并列书写无需额外括号。}}
+
+{{知识点6}}{{@supports 的 or 运算符常用于处理带浏览器前缀的属性。示例：@supports (transform-style: preserve) or (-moz-transform-style: preserve) { }，用于检测标准属性或厂商前缀属性的支持情况。}}
+
+{{知识点7}}{{@supports 的 not 运算符用于检测浏览器不支持某特性的情况。示例：@supports not (transform-origin: 10em 10em 10em) { }。在顶层使用时无需额外括号，但与 and/or 组合时需要括号。}}
+
+{{知识点8}}{{当同时使用 and 和 or 运算符时，必须使用括号明确运算顺序，否则整个条件规则无效且会被忽略。例如 (A) and ((B) or (C)) 是合法的，而 (A) and (B) or (C) 不合法。}}
+
+{{知识点9}}{{@supports 支持声明语法（Declaration Syntax），检查浏览器是否支持指定的属性-值对。声明必须用括号包围。示例：@supports (transform-origin: 5% 5%) { }，返回浏览器是否将该声明视为有效。}}
+
+{{知识点10}}{{@supports 支持 selector() 函数语法，用于检测浏览器是否支持特定的 CSS 选择器语法。这是 CSS Conditional Rules Level 4 引入的扩展。示例：@supports selector(h2 > p) { } 检测子组合器支持。}}
+
+{{知识点11}}{{@supports 支持 font-tech() 函数，用于检测浏览器是否支持指定的字体技术。可查询的颜色字体技术包括 color-colrv0、color-colrv1、color-svg、color-sbix、color-cbdt。}}
+
+{{知识点12}}{{font-tech() 可查询的字体特性技术包括 features-opentype（OpenType GSUB/GPOS 表）、features-aat（TrueType morx/kerx 表）、features-graphite（Graphite 特性）。其他技术包括 incremental-patch、variations、palettes 等。}}
+
+{{知识点13}}{{@supports 支持 font-format() 函数，用于检测浏览器是否支持指定的字体格式。支持的格式包括 opentype（.ttf/.otf）、woff（.woff）、woff2（.woff2）、truetype（.ttf）、collection（.otc/.ttc）等。}}
+
+{{知识点14}}{{@supports 可通过 supports() 函数与 @import 结合使用，有条件地导入样式表。示例：@import "/css/styles.css" supports(color: red)，仅当浏览器支持 color: red 时才导入该样式表。}}
+
+{{知识点15}}{{supports() 函数也可用于 @import 中的 selector() 查询。示例：@import "/css/webkitShadowStyles.css" supports(selector(::-webkit-inner-spin-button))，仅当支持该伪元素时导入。}}
+
+{{知识点16}}{{特性查询的一个重要限制是：@supports 只能检测浏览器是否能解析属性-值对，无法检测该特性的实现是否存在 bug 或违反规范。也不能测试部分实现（partial implementations）。}}
+
+{{知识点17}}{{CSS Conditional Rules 的核心思想是渐进增强（Progressive Enhancement）：为所有浏览器提供基本方案，为支持新特性的浏览器提供增强方案。浏览器会自动忽略不识别的 CSS，但 @supports 提供了更精细的控制。}}
+
+{{知识点18}}{{@supports 与 @media 的区别：@media 测试的是页面运行环境（如视口大小、设备类型），@supports 测试的是浏览器对 CSS 特性的支持能力。两者可以嵌套使用。}}
+
+{{知识点19}}{{CSS Conditional Rules Level 4 在 Level 3 基础上新增了 selector() 函数，允许查询选择器支持。Level 4 规范定义了 <supports-selector-fn> = selector(<complex-selector>) 语法。}}
+
+{{知识点20}}{{CSS Conditional Rules Level 5（编辑草案）计划引入 @when 和 @else 通用条件规则 at-rule。@when 允许编写通用条件表达式，@else 用于链式条件分支。截至 2025 年，主流浏览器均不支持这两个特性。}}
+
+{{知识点21}}{{Level 5 还计划引入 media() CSS 函数，但目前也没有浏览器支持。这将进一步扩展条件规则的表达能力。}}
+
+{{知识点22}}{{CSS Conditional Rules 模块定义了多个 Web API 接口：CSSConditionRule（条件规则基类）、CSSMediaRule（媒体规则）、CSSSupportsRule（支持查询规则），以及 CSS.supports() 静态方法。}}
+
+{{知识点23}}{{CSS.supports() 是 JavaScript 中的静态方法，与 CSS @supports at-rule 功能等价。用法：CSS.supports('display', 'flex') 或 CSS.supports('(display: flex)')，返回布尔值。}}
+
+{{知识点24}}{{@container 是 CSS 容器查询 at-rule，属于 CSS Conditional Rules 体系的一部分。与 @media 基于视口不同，@container 基于元素的父容器尺寸来有条件地应用样式，实现组件级响应式设计。}}
+
+{{知识点25}}{{@container 支持多种描述符：inline-size、block-size、width、height、aspect-ratio、orientation，以及较新的 scrollable、stuck、snapped 等滚动状态查询。}}
+
+{{知识点26}}{{container-style() 函数用于容器样式查询，允许基于容器的 CSS 自定义属性值来有条件地应用样式。这是比尺寸查询更细粒度的条件控制方式。}}
+
+{{知识点27}}{{scroll-state() 函数是容器查询的新扩展，用于查询容器的滚动状态，如是否可滚动（scrollable）、是否粘滞（stuck）、是否吸附（snapped）等。}}
+
+{{知识点28}}{{@supports 中的命名特性函数（named feature function）如 supports-env() 允许查询环境变量支持，扩展了条件查询的能力范围。}}
+
+{{知识点29}}{{@supports 中的 at-rule 函数（supports-at-rule-fn）允许检测浏览器是否支持特定的 at-rule 语法，提供了比属性-值检测更高层次的特性查询能力。}}
+
+{{知识点30}}{{使用特性查询时的最佳实践：先写回退样式（fallback），再用 @supports 包裹增强样式。这样不支持的浏览器获得基本体验，支持的浏览器获得增强效果。}}
+
+{{知识点31}}{{@supports 可用于检测新的 CSS 颜色函数支持，如相对颜色语法。示例：@supports (color: AccentColor) { } 检测系统颜色值支持，@supports (color: light-dark(red,red)) { } 检测 light-dark() 函数支持。}}
+
+{{知识点32}}{{特性查询中的隐私考虑：selector() 函数可能泄露用户软件信息（如浏览器版本、非默认设置），这些信息可用于浏览器指纹识别（fingerprinting）。W3C 规范中明确记录了这一隐私风险。}}
+
+{{知识点33}}{{@supports 在命名空间方面的要求：在条件规则中使用的命名空间前缀必须事先声明，否则无效。包括 selector() 函数中使用的命名空间前缀也需要提前 @namespace 声明。}}
+
+{{知识点34}}{{CSS Conditional Rules 的规范状态：Level 3 是 W3C 推荐标准（Recommendation），Level 4 是候选推荐草案（Candidate Recommendation），Level 5 是编辑草案（Editor's Draft）。}}
+
+{{知识点35}}{{媒体查询（Media Queries）属于 CSS Conditional Rules 体系，支持逻辑运算符 not、and、or。Level 4+ 的媒体查询支持嵌套 at-rule，扩展了条件规则的组合能力。}}
+
+{{知识点36}}{{@import 语句支持条件导入：可以使用 media 查询和 supports() 函数作为导入条件。示例：@import url("print.css") print; 或 @import url("modern.css") supports(display: grid);。}}
+
+{{知识点37}}{{CSS 条件规则的错误处理遵循 CSS 标准：如果条件表达式语法错误，整个 @supports 规则会被忽略。如果条件为 false，规则体内的样式不会应用。浏览器对未知条件函数使用 general-enclosed 语法容错。}}
+
+{{知识点38}}{{general-enclosed 是 @supports 语法中的容错机制，允许未知的函数语法被解析但不被求值。当浏览器遇到未知的 supports 函数时，条件结果为 unknown，不会导致整个规则失效。}}
+
+{{知识点39}}{{容器查询的容器属性：container-name 用于命名容器，container-type 用于指定容器类型（size、inline-size、normal）。container 简写属性可同时设置两者。}}
+
+{{知识点40}}{{容器查询长度单位：cqw、cqh、cqi、cqb、cqmin、cqmax 分别对应容器的宽度、高度、行内尺寸、块尺寸、最小值和最大值的 1%，提供了基于容器的相对单位。}}
+
+{{知识点41}}{{CSS.supports() 静态方法有两种调用形式：CSS.supports('property', 'value') 分离参数形式和 CSS.supports('(property: value)') 字符串形式。两种形式功能等价。}}
+
+{{知识点42}}{{@supports 与 JavaScript 特性检测的比较：CSS @supports 在 CSS 层面进行检测，无需 JavaScript，性能更好且不阻塞渲染。JavaScript 的 CSS.supports() 提供了在 JS 中进行同等检测的能力。}}

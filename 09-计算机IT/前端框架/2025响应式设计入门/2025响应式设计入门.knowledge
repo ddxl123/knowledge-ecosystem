@@ -1,0 +1,143 @@
+# 2025响应式设计入门
+# 领域: 计算机IT
+# 学科: 前端框架
+# 来源: 2025响应式设计入门
+# 描述: 响应式设计核心知识点，涵盖媒体查询、断点设计、流式布局、响应式图片、移动优先等核心概念
+
+{{响应式Web设计的定义}}
+响应式Web设计（Responsive Web Design，简称RWD）是一种设计方法，使网站能够自动适应不同的设备和屏幕尺寸。它不是一个单独的技术，而是一套最佳实践的集合。该术语由Ethan Marcotte于2010年提出，最初描述使用流式网格、流式图片和媒体查询来创建响应式内容。现代CSS布局方法天然具有响应式特性，Web平台已内置大量功能来简化响应式设计。
+
+{{HTML的天然响应性}}
+HTML本质上是响应式的（流式的）。如果创建一个只包含HTML、没有CSS的网页并调整窗口大小，浏览器会自动重新排列文本以适应视口。但纯HTML的默认响应行为在宽屏上会导致文本行过长难以阅读，而在窄屏上则可能因列太窄而影响可读性，因此需要CSS来控制布局。
+
+{{媒体查询基础}}
+媒体查询（Media Queries）允许运行一系列测试（例如用户屏幕是否大于某个宽度或分辨率），并有选择性地应用CSS来为用户需求适配样式。一个媒体查询由可选的媒体类型和任意数量的媒体特性表达式组成，可以使用逻辑运算符组合。媒体查询是响应式设计的核心工具之一。
+
+{{媒体查询语法}}
+媒体查询语法由三部分组成：媒体类型（media type）、媒体特性表达式（media feature expression）和逻辑运算符（logical operators）。媒体类型定义设备的大类（all、print、screen），类型是可选的（默认为all），除非使用only逻辑运算符。每个媒体特性表达式必须用括号包围。示例：@media screen and (width >= 80rem) { .container { margin: 1em 2em; } }
+
+{{媒体类型}}
+媒体类型描述给定设备的常规类别。常用类型包括：all（所有设备）、screen（屏幕设备）、print（打印设备）。最初定义的大部分媒体类型已被废弃，仅保留screen、print和all。要针对更具体的属性，应使用媒体特性而非媒体类型。
+
+{{媒体特性：宽度和高度}}
+width和height是最常用的媒体特性。可以使用min-和max-前缀来表达"最小条件"和"最大条件"约束。例如：@media (max-width: 1250px) 表示视口宽度等于或窄于1250px时应用样式。也可以使用范围语法：@media (30em <= width <= 50em) 来设定区间。
+
+{{媒体查询范围语法}}
+现代CSS支持更简洁的范围语法运算符（<、>、<=、>=）。例如，以下两种写法等价：@media (min-width: 30em) and (max-width: 50em) 与 @media (30em <= width <= 50em)。范围比较默认是包含的，要排除比较值可以使用严格不等号。
+
+{{媒体查询逻辑运算符}}
+可以使用逻辑运算符组合复杂的媒体查询：not（取反）、and（同时满足）、only（仅在支持媒体查询的浏览器中应用）。也可以用逗号分隔多个媒体查询来组合，逗号相当于逻辑或（or）。例如：@media screen, print { ... } 同时针对屏幕和打印设备。
+
+{{常用媒体特性}}
+2025年常用媒体特性包括：hover（设备是否支持悬停）、pointer（指点设备精度）、orientation（方向：portrait/landscape）、prefers-color-scheme（用户偏好色彩方案）、prefers-reduced-motion（减少动画偏好）、color-gamut（色域范围）、display-mode（显示模式：fullscreen/browser）、device-posture（设备姿态：连续/折叠）、resolution（分辨率）等。
+
+{{断点设计原则}}
+断点（Breakpoint）是媒体查询引入和布局发生变化的点。最佳实践鼓励使用相对单位（如rem、em）而非绝对像素值来定义断点断点。不要针对特定设备设置断点，而应根据内容本身来决定何时需要调整布局。常见的断点范围：手机（< 600px）、平板（600-900px）、桌面（900-1200px）、大桌面（> 1200px）。
+
+{{移动优先设计}}
+移动优先设计（Mobile First）是一种先为窄屏设备创建简单单列布局，然后检查更宽屏幕并实现多列布局的策略。使用媒体查询时，基础样式针对小屏幕编写，然后通过min-width媒体查询逐步增强。这种方式确保移动设备只加载必要的样式，有助于性能优化。
+
+{{流式布局概念}}
+流式布局（Fluid Layout）是响应式设计的基础。通过使用百分比、vw、vh等相对单位代替固定像素值，布局会根据视口大小自动缩放。流式网格意味着不需要针对每种可能的设备尺寸创建像素级完美布局，只需使用灵活网格就能在功能或断点变化时调整设计。
+
+{{Flexbox布局基础}}
+Flexbox（弹性盒子布局）模块提供了一种高效的方式来布局、对齐和分配容器中项目之间的空间，即使项目大小未知或动态变化。Flex容器可以扩展项目以填充可用空间或收缩项目以防止溢出。使用display: flex或display: inline-grid创建弹性容器。
+
+{{Flexbox核心属性}}
+容器属性：flex-direction（主轴方向：row/column/row-reverse/column-reverse）、flex-wrap（换行：nowrap/wrap/wrap-reverse）、justify-content（主轴对齐）、align-items（交叉轴对齐）。项目属性：flex-grow（放大比例）、flex-shrink（缩小比例）、flex-basis（初始大小）、order（排列顺序）。
+
+{{Flexbox换行}}
+默认情况下，flex项目会全部放在一行上。使用flex-wrap: wrap可以让项目根据需要换行。flex-wrap: wrap-reverse则从底部向上换行。flex-flow是flex-direction和flex-wrap的简写属性，默认值为row nowrap。
+
+{{justify-content详解}}
+justify-content定义主轴上的对齐方式。常用值：flex-start（默认，向起始方向排列）、flex-end（向结束方向）、center（居中）、space-between（两端对齐，项目间等距）、space-around（项目周围等距）、space-evenly（所有间距完全相等）。可配合safe和unsafe关键字使用，safe确保内容不会被推到屏幕外导致数据丢失。
+
+{{CSS Grid布局基础}}
+CSS Grid布局是基于网格的二维布局系统，能够同时处理行和列。通过display: grid或display: inline-grid创建网格容器，所有直接子元素自动成为网格项目。网格由水平线和垂直线的交叉点定义，元素可以精确放置在网格区域内。
+
+{{Grid轨道与fr单位}}
+网格轨道通过grid-template-columns和grid-template-rows属性定义。fr单位是Grid特有的弹性长度单位，表示网格容器中可用空间的一个比例。例如grid-template-columns: 1fr 1fr 1fr创建三个等宽列。可以混合使用固定值和fr单位：grid-template-columns: 500px 1fr 2fr。
+
+{{repeat()函数}}
+repeat()函数可以简化重复的轨道定义。例如grid-template-columns: repeat(3, 1fr)等同于1fr 1fr 1fr。repeat()还可以用于轨道列表的一部分，如grid-template-columns: 20px repeat(6, 1fr) 20px。支持auto-fill和auto-fit关键字实现自动填充。
+
+{{auto-fill与auto-fit}}
+auto-fill和auto-fit配合repeat()和minmax()可以创建自适应的列数。例如：grid-template-columns: repeat(auto-fill, minmax(250px, 1fr))会让每列至少250px宽，自动填充尽可能多的列。auto-fit与auto-fill的区别在于：auto-fit会折叠空轨道，而auto-fill会保留它们。
+
+{{响应式图片：srcset}}
+srcset属性允许为<img>标签提供多个图片源，浏览器根据设备条件自动选择最合适的图片。可以使用x描述符（如1x、2x）针对不同像素密度，或使用w描述符（如480w、800w）针对不同宽度。配合sizes属性使用，sizes告诉浏览器图片在不同视口宽度下的显示尺寸。
+
+{{picture元素}}
+<picture>元素允许根据媒体条件提供完全不同的图片源。可以配合<source>元素使用media属性（如媒体查询）或type属性（如image/avif、image/webp）来指定不同条件下的图片。浏览器会选择第一个匹配的<source>，最后的<img>作为后备方案。适用于艺术指导（Art Direction）场景。
+
+{{流式图片}}
+流式图片是响应式设计最初的核心技术之一。通过设置max-width: 100%使图片不会超出其容器宽度。图片在容器变窄时会自动缩小，但不会在容器变宽时超出原始尺寸而变得模糊。基本CSS：img { max-width: 100%; height: auto; }。
+
+{{容器查询（Container Queries）}}
+容器查询是CSS Containment模块的重要功能，类似于媒体查询但基于特定容器元素的尺寸而非视口尺寸。使用@container规则查询容器的大小、属性和属性值来有条件地应用样式。需要先通过container-type属性将元素定义为查询容器。这是2025年响应式设计的重大进步。
+
+{{容器查询语法}}
+使用container-type属性定义查询容器（值包括size、inline-size、normal），使用container-name命名容器。查询语法：@container (width > 400px) { ... }。支持命名容器的查询：@container sidebar (width > 400px) { ... }。还可以嵌套容器查询。
+
+{{容器查询长度单位}}
+容器查询长度单位相对于查询容器的尺寸。包括：cqw（容器宽度的1%）、cqh（容器高度的1%）、cqi（容器内联尺寸的1%）、cqb（容器块尺寸的1%）、cqmin（cqi和cqb中较小的）、cqmax（cqi和cqb中较大的）。这些单位使容器内的组件真正自适应。
+
+{{CSS Containment}}
+CSS containment（CSS包含）通过contain属性允许隔离页面子树与DOM其余部分。浏览器可以通过优化这些独立部分的渲染来提高性能。contain属性值包括：layout（布局包含）、style（样式包含）、paint（绘制包含）、size（尺寸包含）、content-visibility（内容可见性）。
+
+{{content-visibility属性}}
+content-visibility属性控制元素是否渲染其内容，以及在不需要时是否跳过渲染。值auto可以延迟渲染屏幕外的内容，显著提高初始加载性能和交互响应时间。与contain-intrinsic-size配合使用来估算跳过渲染时的尺寸。
+
+{{视口单位}}
+视口单位相对于浏览器视口的尺寸。vw（视口宽度的1%）、vh（视口高度的1%）、vmin（vw和vh中较小的）、vmax（vw和vh中较大的）。2025年新增了svw/svh（小视口）、lvw/lvh（大视口）、dvw/dvh（动态视口）来更好地处理移动端浏览器地址栏的显示/隐藏。
+
+{{clamp()函数}}
+clamp()函数接受三个参数：最小值、首选值、最大值。例如font-size: clamp(1rem, 2.5vw, 2rem)使字体在1rem到2rem之间随视口缩放。这是实现响应式排版的强大工具，无需媒体查询就能让元素平滑缩放。浏览器会使用首选值，但不会超出最小/最大范围。
+
+{{min()和max()函数}}
+min()返回参数中的较小值，max()返回较大值。例如width: min(90%, 1200px)使容器宽度不超过视口的90%也不超过1200px。可以配合clamp()使用，也可以嵌套使用min(max())。这些函数在响应式设计中非常实用。
+
+{{相对单位：rem和em}}
+em相对于当前元素的字体大小，rem相对于根元素（html）的字体大小。在响应式设计中，rem更常用因为它是全局一致的。根元素默认16px，所以1rem = 16px。使用rem定义断点、间距和字体大小可以确保整体缩放的一致性。
+
+{{prefers-color-scheme}}
+prefers-color-scheme媒体特性检测用户是否偏好浅色或深色配色方案。值：light（浅色）、no-preference（无偏好）。示例：@media (prefers-color-scheme: dark) { body { background: #1a1a1a; color: #fff; } }。2025年深色模式已成为标准功能，应同时支持两种配色方案。
+
+{{prefers-reduced-motion}}
+prefers-reduced-motion检测用户是否请求系统最小化动画和过渡。示例：@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }。这是可访问性的重要考虑，对前庭障碍用户尤为重要。
+
+{{pointer和hover媒体特性}}
+pointer检测指点设备的精度：fine（精确，如鼠标）、coarse（粗糙，如触摸屏）、none（无指点设备）。hover检测主指点设备是否支持悬停：hover（支持）、none（不支持）。这些特性帮助为不同输入方式优化交互，如触摸设备需要更大的点击目标。
+
+{{响应式排版}}
+响应式排版使用clamp()、媒体查询或容器查询来调整字体大小。最佳实践：使用相对单位（rem/em），通过clamp()实现流体排版，确保行高和字间距适应屏幕大小。基础正文建议至少16px，行高1.5-1.8。标题可以使用更大的clamp范围。
+
+{{aspect-ratio属性}}
+aspect-ratio属性直接设置元素的宽高比，无需使用padding-hack。例如aspect-ratio: 16/9设置16:9比例。这对于响应式视频嵌入、图片容器和卡片布局非常有用。值auto保持固有比例，也可以配合object-fit使用。
+
+{{object-fit属性}}
+object-fit控制替换元素（如<img>、<video>）如何适应其容器。值：fill（拉伸填充）、contain（保持比例包含）、cover（保持比例覆盖）、none（原始尺寸）、scale-down（none和contain中较小的）。配合object-position可以精确控制裁剪位置。是响应式图片处理的关键属性。
+
+{{CSS Grid与Flexbox的选择}}
+Grid适合二维布局（同时处理行和列）的大规模页面布局；Flexbox适合一维布局的组件级排列。实际开发中两者经常配合使用：Grid用于页面整体布局，Flexbox用于组件内部排列。两者都是天然响应式的布局方式。
+
+{{响应式设计性能优化}}
+性能优化要点：使用srcset提供适配图片，避免加载过大的图片；使用content-visibility: lazy延迟屏幕外内容渲染；使用loading="lazy"延迟图片加载；使用font-display: swap避免字体阻塞渲染；使用CSS containment隔离组件减少重排范围。
+
+{{@supports特性查询}}
+@supports规则允许检测浏览器是否支持某个CSS特性，实现渐进增强。例如：@supports (display: grid) { ... }仅在支持Grid的浏览器中应用。可以与and、or、not组合使用。这是确保响应式设计跨浏览器兼容性的重要工具。
+
+{{CSS嵌套}}
+CSS嵌套允许在选择器内部直接嵌套子选择器，无需预处理器。例如：.nav { & ul { ... } & li { ... } }。这使响应式样式的组织更加清晰，媒体查询可以嵌套在组件样式内部。2025年所有主流浏览器都已支持原生CSS嵌套。
+
+{{响应式设计模式}}
+常见响应式设计模式：Column Drop（列堆叠，窄屏时列垂直堆叠）、Mostly Fluid（主要是流式，通过max-width限制）、Layout Shifter（布局切换，不同断点使用不同布局）、Off Canvas（画布外，将导航等移至屏幕外）。选择模式取决于内容和用户需求。
+
+{{视口meta标签}}
+viewport meta标签对移动设备至关重要：<meta name="viewport" content="width=device-width, initial-scale=1">。width=device-width使页面宽度匹配设备屏幕宽度，initial-scale=1设置初始缩放级别为1。没有这个标签，移动浏览器会假设页面是为桌面设计的并缩小显示。
+
+{{流体间距系统}}
+响应式间距使用clamp()或容器查询实现间距随视口缩放。例如gap: clamp(1rem, 3vw, 2rem)使间距在不同屏幕尺寸间平滑过渡。可以结合CSS自定义属性创建系统化的间距方案：--spacing-sm: clamp(0.5rem, 1.5vw, 1rem); --spacing-md: clamp(1rem, 3vw, 2rem);。
+
+{{响应式设计测试方法}}
+测试响应式设计：使用浏览器开发者工具的设备模拟模式，使用真实设备测试（模拟器不能完全代表真实体验），测试不同网络条件下的加载性能，测试键盘和屏幕阅读器的可访问性，使用Lighthouse等工具评估性能和可访问性得分。

@@ -1,0 +1,144 @@
+# 2025前端Framer Motion
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}
+Motion（原名 Framer Motion）是 React 生态中最流行的动画库，支持 HTML 和 SVG 元素的动画。它提供了声明式的 API，通过 `<motion />` 组件为每个 HTML/SVG 元素（如 `motion.div`、`motion.circle`）扩展动画能力，运行速度可达 120fps，且不会触发 React 的重渲染。最新版本为 v12.37.0，官网已迁移到 motion.dev。
+
+{{知识点2}}
+安装 Motion：通过 `npm install motion` 安装，然后从 `motion/react` 导入。React 客户端组件使用 `import { motion } from "motion/react"`；React Server Components（如 Next.js）使用 `import * as motion from "motion/react-client"`。
+
+{{知识点3}}
+`<motion />` 组件是 Motion 的核心。每个 HTML 和 SVG 元素都有对应的 motion 组件（如 `motion.div`、`motion.a`、`motion.circle`），它们与标准 HTML/SVG 组件行为完全一致，但额外支持 `animate`、`whileHover`、`exit` 等动画属性。
+
+{{知识点4}}
+`animate` 属性是最常用的动画属性。当传入 `animate` 的值发生变化时，元素会自动动画过渡到新值。例如 `<motion.div animate={{ opacity: 1 }} />` 会将透明度动画到 1。
+
+{{知识点5}}
+`initial` 属性设置元素的初始视觉状态。结合 `initial` 和 `animate` 可以实现进入动画，如 `<motion.article initial={{ opacity: 0 }} animate={{ opacity: 1 }} />` 会让元素淡入显示。设置 `initial={false}` 可以禁用进入动画，直接以 `animate` 的值渲染。
+
+{{知识点6}}
+Motion 可以动画化任何 CSS 值，包括 `opacity`、`filter`、`background-image`、`mask-image` 等。甚至可以动画化浏览器原生不支持动画的属性。例如可以动画化模糊效果：`initial={{ filter: "blur(10px)" }} animate={{ filter: "none" }}`。
+
+{{知识点7}}
+Transform 独立轴动画是 Motion 的独特优势。与 CSS 不同，Motion 可以独立动画化每个 transform 轴。支持的特殊值包括：平移（`x`、`y`、`z`）、缩放（`scale`、`scaleX`、`scaleY`）、旋转（`rotate`、`rotateX`、`rotateY`、`rotateZ`）、倾斜（`skewX`、`skewY`）、透视（`transformPerspective`）。
+
+{{知识点8}}
+支持的值类型包括：数字（`0`、`100`）、包含数字的字符串（`"0vh"`、`"10px"`）、颜色（hex、`rgba`、`hsla`、`oklch`、`oklab`、`color-mix` 等）、包含多个数字/颜色的复杂字符串（如 `box-shadow`）、`display: "none"/"block"` 和 `visibility: "hidden"/"visible"`。
+
+{{知识点9}}
+值类型转换：通常值只能在相同类型之间动画化（如 `"0px"` 到 `"100px"`）。但颜色可以在 hex、RGBA、HSLA 之间自由转换。`x`、`y`、`width`、`height`、`top`、`left`、`right`、`bottom` 可以在不同值类型之间动画化，甚至 `width` 和 `height` 可以动画到/从 `"auto"`。
+
+{{知识点10}}
+`transform-origin` 有三个快捷值可独立设置和动画化：`originX`、`originY`、`originZ`。当作为数字设置时，`originX` 和 `originY` 默认为 0-1 之间的进度值，`originZ` 默认为像素。
+
+{{知识点11}}
+Motion 支持动画化 CSS 变量。可以通过 `initial` 和 `animate` 动画化 CSS 变量来影响多个子元素。也可以将 CSS 变量定义作为动画目标，如 `animate={{ backgroundColor: "var(--action-bg)" }}`。
+
+{{知识点12}}
+`transition` 属性定义动画行为。默认情况下，物理属性（如 `x`、`scale`）使用弹簧物理动画，而 `opacity`、`color` 等使用基于时间的缓动曲线。可以在任何动画属性上设置 `transition`，也可以通过 `MotionConfig` 为一组组件设置默认过渡。
+
+{{知识点13}}
+Tween（补间）动画类型通过 `duration`（持续时间，默认 0.3 秒）和 `ease`（缓动函数）配置。支持的缓动函数名包括：`"linear"`、`"easeIn"`、`"easeOut"`、`"easeInOut"`、`"circIn"`、`"circOut"`、`"circInOut"`、`"backIn"`、`"backOut"`、`"backInOut"`、`"anticipate"`。也可以传入四元素数组定义贝塞尔曲线。
+
+{{知识点14}}
+Spring（弹簧）动画类型有两种模式：物理弹簧（通过 `stiffness`、`damping`、`mass` 配置，会结合手势/动画的速度）和持续时间弹簧（通过 `duration` 和 `bounce` 配置，更易理解但不结合速度）。`bounce` 值范围 0-1，默认 0.25。`visualDuration` 可以设置动画视觉上到达目标的时间。
+
+{{知识点15}}
+`times` 属性用于关键帧动画中调整每个关键帧的位置，每个值在 0-1 之间。`ease` 也可以设置为缓动函数数组，在关键帧之间使用不同的缓动。值特定过渡（value-specific transitions）允许为每个动画值指定不同的过渡参数。
+
+{{知识点16}}
+`transition` 的 `inherit: true` 属性让高优先级过渡继承低优先级过渡的值。默认情况下，高优先级过渡会替换默认过渡。通过 `MotionConfig` 设置的过渡和组件级过渡之间的继承关系可通过此属性控制。
+
+{{知识点17}}
+`AnimatePresence` 是实现退出动画的关键组件。通过包裹 `motion` 组件，可以使用 `exit` 动画属性。当直接子组件从 React 树中移除时，会先播放退出动画再从 DOM 中删除。子组件必须有唯一的 `key` 属性。退出动画可以是动画目标对象或变体标签。
+
+{{知识点18}}
+`AnimatePresence` 的 `mode` 属性控制进入和退出子元素的处理方式：`"sync"`（默认，同时进出）、`"wait"`（等待退出完成后再进入）、`"popLayout"`（使用 pop 位置处理布局冲突）。`initial={false}` 禁用首次渲染时的进入动画。
+
+{{知识点19}}
+`AnimatePresence` 的 `custom` 属性允许向退出中的组件传递动态数据（因为组件已从 React 树移除，无法更新 props）。通过 `usePresenceData` 钩子在子组件中访问这些数据。`propagate` 属性设置为 `true` 时，嵌套的 AnimatePresence 会传播退出动画。
+
+{{知识点20}}
+`useIsPresent` 钩子可以检测组件是否正在退出。`usePresence` 钩子返回 `isPresent` 状态和 `safeToRemove` 回调，允许手动控制组件从 DOM 中移除的时机。
+
+{{知识点21}}
+Variants（变体）是预定义的动画状态对象。通过 `variants` 属性传入，用 `animate`、`whileHover` 等属性按名称引用。变体会自动向下传播到子组件，实现编排动画。支持动态变体（函数形式，接收 `custom` 参数）。
+
+{{知识点22}}
+手势动画属性包括：`whileHover`（悬停）、`whileTap`（点击/触摸）、`whileFocus`（聚焦）、`whileDrag`（拖拽）、`whileInView`（视口内）。这些属性定义手势激活时临时动画到的状态，手势结束后回到 `animate` 状态。也支持变体名称引用。
+
+{{知识点23}}
+Hover（悬停）手势通过 `whileHover` 和 `onHoverStart`/`onHoverEnd` 事件监听。Tap（点击）手势检测主指针在组件上按下并释放，支持键盘无障碍（Enter 触发），`onTap`/`onTapStart`/`onTapCancel` 事件。Pan（平移）手势检测指针按下并移动超过 3 像素。
+
+{{知识点24}}
+Drag（拖拽）手势通过 `drag` 属性启用，支持轴锁定（`drag="x"` 或 `drag="y"`）。`whileDrag` 提供拖拽中的视觉反馈。默认有动量效果（释放后基于指针速度惯性动画），可通过 `dragMomentum={false}` 禁用。`dragConstraints` 支持像素约束和 ref 约束，`dragElastic` 控制弹性（0-1）。
+
+{{知识点25}}
+`dragDirectionLock` 属性锁定拖拽到首个移动轴。`dragTransition` 自定义惯性物理效果（如 `bounceStiffness`、`bounceDamping`）。拖拽事件包括 `onDragStart`、`onDrag`、`onDragEnd`，回调接收 `info` 对象包含 `point`、`delta`、`offset`、`velocity` 信息。
+
+{{知识点26}}
+`useDragControls` 钩子实现手动拖拽控制，允许从其他元素（如拖拽手柄）启动拖拽。通过 `controls.start(event, { snapToCursor: true })` 启动手势，配合 `dragListener={false}` 禁用默认拖拽处理器。
+
+{{知识点27}}
+Layout 动画通过 `layout` 属性自动动画化元素尺寸和位置变化。所有布局动画使用 CSS `transform` 实现高性能。可以动画化以前不可动画的 CSS 值，如 `justify-content` 在 `flex-start` 和 `flex-end` 之间切换。
+
+{{知识点28}}
+`layoutId` 实现共享元素过渡（Shared Element Transition），连接两个不同组件。当一个带 `layoutId` 的新组件添加时，会自动从匹配 `layoutId` 的旧组件位置动画过来。结合 `AnimatePresence` 可实现模态框等页面过渡效果。`layoutRoot` 用于固定容器中的布局动画。
+
+{{知识点29}}
+`LayoutGroup` 组件同步多个不同时重渲染的组件之间的布局变化。`layoutScroll` 属性用于可滚动容器中的布局动画（让 Motion 考虑滚动偏移）。`layoutAnchor` 控制子元素相对父元素的锚点（0-1 进度值）。布局动画过渡可通过 `transition` 中的 `layout` 字段单独配置。
+
+{{知识点30}}
+滚动触发动画（Scroll-triggered）使用 `whileInView` 属性，当元素进入/离开视口时触发动画。`viewport={{ once: true }}` 让动画只播放一次。可通过 `viewport={{ root: scrollRef }}` 设置自定义滚动容器。`useInView` 钩子可用于非 motion 元素的视口检测。
+
+{{知识点31}}
+滚动链接动画（Scroll-linked）通过 `useScroll` 钩子实现。返回四个 Motion Value：`scrollX`/`scrollY`（滚动位置像素）和 `scrollXProgress`/`scrollYProgress`（0-1 进度）。结合 `useTransform` 可将滚动进度映射到任意 CSS 值。`target` 选项跟踪特定元素的滚动位置，`offset` 配置触发偏移。
+
+{{知识点32}}
+Motion 唯一使用浏览器原生 `ScrollTimeline` 运行滚动链接动画的库，实现完全硬件加速。滚动触发动画使用池化的 `IntersectionObserver` 以最小开销实现。结合 `useSpring` 可平滑滚动值，实现视差滚动效果。
+
+{{知识点33}}
+Motion Values 是可组合的信号式值，跟踪动画值的状态和速度。通过 `useMotionValue` 创建，传入初始值（字符串或数字）。可以传给多个 `motion` 组件同步运动，通过 `useTransform` 链式组合，更新时不触发 React 重渲染。
+
+{{知识点34}}
+Motion Value API：`get()` 获取当前值，`set()` 设置新值，`getVelocity()` 获取速度（每秒计算），`jump()` 跳转到新值（重置速度、结束活跃动画），`isAnimating()` 检查是否在动画中，`stop()` 停止活跃动画，`on()` 订阅事件（`change`、`animationStart`、`animationComplete`、`animationCancel`），`destroy()` 销毁并清理。
+
+{{知识点35}}
+`useTransform` 钩子将一个或多个 Motion Value 的输出转换为新 Motion Value。支持简单的映射函数（如 `useTransform(() => x.get() * 2)`）和输入/输出范围映射（如 `useTransform(scrollYProgress, [0, 1], ["blur(0px)", "blur(10px)"])`）。`useSpring` 创建弹簧驱动的 Motion Value，可附加到其他 Motion Value。
+
+{{知识点36}}
+SVG 动画：`motion.svg` 可动画化 `viewBox` 属性实现平移和缩放。路径绘制动画通过 `pathLength`（0-1 进度值）实现"手绘"效果，支持 `pathSpacing` 和 `pathOffset`。路径变形通过动画化 `d` 属性实现（要求路径结构相似）。SVG transform 默认以元素中心为原点（与原生 SVG 不同）。
+
+{{知识点37}}
+SVG 属性动画使用 `attrX`、`attrY`、`attrScale` 分别对应 `x`、`y`、`scale` 属性。SVG 滤镜组件（如 `feTurbulence`、`feGaussianBlur`）也可以通过 motion 组件动画化。SVG 元素拖拽需注意 viewBox 与渲染尺寸不一致时使用 `MotionConfig` 的 `transformPagePoint` 缩放指针移动。
+
+{{知识点38}}
+`motion.create()` 为任意 React 组件添加 motion 能力，返回的组件接受所有标准 motion 属性。组件必须通过 ref 将引用传递给要动画化的元素。React 19 直接通过 props 传递 ref，React 18 需使用 `forwardRef`。注意不要在渲染函数内调用 `motion.create()`。也支持传入字符串创建自定义 DOM 元素。
+
+{{知识点39}}
+Motion 组件完全兼容服务端渲染（SSR），组件初始状态会反映在服务端输出中。通过 `style` 传入 Motion Value 可避免 React 重渲染。动画值通过浏览器原生动画管线每帧更新，即使复杂动画也不会导致样式/布局抖动。
+
+{{知识点40}}
+`MotionConfig` 组件用于全局配置 Motion 行为。可设置默认 `transition`（影响所有子 motion 组件）和 `transformPagePoint`（用于 SVG viewBox 缩放等场景）。继承机制允许组件级过渡覆盖全局默认值。
+
+{{知识点41}}
+事件回调属性：`onUpdate`（每帧值更新时触发）、`onAnimationStart`（动画开始时触发）、`onAnimationComplete`（动画完成时触发）。`useMotionValueEvent` 钩子订阅 Motion Value 事件，比 `on()` 方法更适合在 React 组件中使用。
+
+{{知识点42}}
+动画编排技巧：通过 `transition` 中的 `delay` 设置延迟、`staggerChildren` 实现子元素错开动画、`when: "beforeChildren"`/`"afterChildren"` 控制父子动画时序。关键帧通过数组值定义（如 `animate={{ x: [0, 100, 0] }}`），`times` 控制关键帧时间分布。
+
+{{知识点43}}
+Inertia（惯性）动画类型基于初始速度减速，通常用于实现惯性滚动。结合拖拽手势的 `dragTransition` 可自定义弹性和惯性物理效果。`dragMomentum` 控制释放后是否有动量，`dragElastic` 控制超出约束时的弹性程度。
+
+{{知识点44}}
+`useVelocity` 钩子创建输出另一个 Motion Value 速度的新 Motion Value。结合 `useSpring` 和 `useTransform` 可以构建复杂的响应式动画链。例如将拖拽速度转换为旋转角度，或将滚动速度转换为模糊效果。
+
+{{知识点45}}
+Motion+ 是 Motion 的付费扩展（一次性付费，终身更新），提供 Cursor 组件（自定义光标和跟随效果）、330+ 预构建示例、VS Code 动画编辑工具、Motion Studio AI 上下文（为 LLM 提供最新文档和示例源码访问），以及私有 Discord 和 GitHub 访问。MotionScore 工具可审计网站动画性能。
+
+{{知识点46}}
+性能最佳实践：优先使用 Motion Value 而非 React state 更新样式以避免重渲染；布局动画使用 CSS transform 确保高性能；滚动链接动画利用原生 ScrollTimeline 实现硬件加速；动画化 CSS 变量始终触发绘制，考虑使用 Motion Value 替代。
+
+{{知识点47}}
+手势事件传播：React 组件可通过 `-Capture` 属性（如 `onPointerDownCapture`）并调用 `e.stopPropagation()` 阻止事件冒泡。motion 组件间使用 `propagate` 属性阻止特定手势传播（如 `propagate={{ tap: false }}`）。SVG 滤镜元素不接收手势事件，需在父元素上使用 `while-` 属性配合变体。

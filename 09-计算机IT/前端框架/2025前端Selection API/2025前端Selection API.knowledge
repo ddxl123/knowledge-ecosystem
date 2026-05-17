@@ -1,0 +1,103 @@
+# 2025前端Selection API
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{Selection API概述：Selection API 是 W3C 标准的一部分，允许开发者通过 JavaScript 操作用户在页面中选中的文本范围。它由 Selection 接口、Range 接口以及相关事件组成，最早由 Netscape 创建，现代浏览器广泛支持。核心对象通过 window.getSelection() 或 document.getSelection() 获取。}}
+
+{{知识点2}}{{window.getSelection()方法：返回当前文档的 Selection 对象，代表用户选中的文本范围或光标当前位置。调用语法为 window.getSelection()，返回 Selection 对象或 null（如 iframe 未挂载时）。document.getSelection() 与其完全等价。}}
+
+{{知识点3}}{{Selection.anchorNode属性：只读属性，返回选区开始位置所在的 Node 节点。如果文档中从未存在过选区（如从未点击的 iframe），返回 null。anchor 是用户按下鼠标时的位置，选区变化时 anchor 不移动。}}
+
+{{知识点4}}{{Selection.anchorOffset属性：只读属性，返回选区锚点在 anchorNode 中的偏移量。如果 anchorNode 是文本节点，返回锚点之前的字符数；如果是元素节点，返回锚点之前的子节点数。}}
+
+{{知识点5}}{{Selection.focusNode属性：只读属性，返回选区结束位置所在的 Node 节点。与 anchorNode 不同，focus 是用户释放鼠标的位置，随选区变化而移动。注意这与 document.activeElement 不同。}}
+
+{{知识点6}}{{Selection.focusOffset属性：只读属性，返回选区焦点在 focusNode 中的偏移量。对文本节点返回焦点前的字符数，对元素节点返回焦点前的子节点数。}}
+
+{{知识点7}}{{Selection.isCollapsed属性：只读布尔值，指示选区的起始和结束位置是否在同一位置（即是否为折叠状态/光标状态）。当没有选中文本只有光标时返回 true。}}
+
+{{知识点8}}{{Selection.rangeCount属性：只读数字，返回选区中包含的 Range 对象数量。通常为 0 或 1。规范要求选区始终只有一个 range，但 Gecko 引擎曾支持多 range（如表格列选）。}}
+
+{{知识点9}}{{Selection.type属性：只读字符串，描述当前选区类型。可能的值包括 "None"（无选区）、"Caret"（折叠选区/光标）、"Range"（范围选区）。}}
+
+{{知识点10}}{{Selection.getRangeAt(index)方法：返回选区中指定索引的 Range 对象。通常使用 getRangeAt(0) 获取唯一的选区范围。如果 index 超出范围会抛出 IndexSizeError 异常。}}
+
+{{知识点11}}{{Selection.collapse(node, offset)方法：将当前选区折叠到指定节点的指定偏移位置。参数 node 为折叠目标节点，offset 为偏移量。常用于将光标定位到特定位置。不选择任何文本。}}
+
+{{知识点12}}{{Selection.collapseToStart()和collapseToEnd()方法：collapseToStart() 将选区折叠到第一个 range 的起始位置；collapseToEnd() 折叠到最后一个 range 的结束位置。两者都用于将选区变为光标状态。}}
+
+{{知识点13}}{{Selection.extend(node, offset)方法：将选区的焦点（focus）移动到指定节点的指定偏移位置，从而扩展或改变选区范围。anchor 保持不变，仅移动 focus 端。}}
+
+{{知识点14}}{{Selection.setBaseAndExtent(anchorNode, anchorOffset, focusNode, focusOffset)方法：设置选区为包含两个指定 DOM 节点之间所有或部分内容的范围。是创建选区最直观的方法，直接指定锚点和焦点。}}
+
+{{知识点15}}{{Selection.selectAllChildren(node)方法：将指定节点的所有子节点添加到选区中。等效于选中该元素内的全部内容，常用于全选某个容器中的文本。}}
+
+{{知识点16}}{{Selection.addRange(range)和removeRange(range)方法：addRange() 将一个 Range 对象添加到选区中（规范要求只能有一个 range）；removeRange() 从选区中移除指定的 Range 对象。removeAllRanges() 移除所有 range。}}
+
+{{知识点17}}{{Selection.empty()方法：移除选区中的所有范围，使 anchorNode 和 focusNode 属性变为 null，即取消所有选中状态。是 removeAllRanges() 的别名。}}
+
+{{知识点18}}{{Selection.toString()方法：返回选区中当前选中的文本字符串。当 Selection 对象被传入期望字符串的函数（如 alert）时会自动调用。获取选中文本的标准方式。}}
+
+{{知识点19}}{{Selection.containsNode(node, partialContainment)方法：判断指定节点是否是选区的一部分。partialContainment 参数为 true 时表示节点部分包含在选区内即返回 true；为 false 时需要完全包含才返回 true。}}
+
+{{知识点20}}{{Selection.deleteFromDocument()方法：从文档中删除选区中的内容。相当于执行删除操作，会修改 DOM 结构。}}
+
+{{知识点21}}{{Selection.modify(alter, direction, granularity)方法：以编程方式修改当前选区。alter 参数为 "move"（移动光标）或 "extend"（扩展选区）；direction 为 "forward"/"backward"/"left"/"right"；granularity 为 "character"/"word"/"sentence"/"line"/"paragraph"/"lineboundary" 等粒度。注意 Firefox 不支持 "sentence"、"paragraph" 等粒度。}}
+
+{{知识点22}}{{Selection.setPosition(node, offset)方法：将选区折叠到指定位置，是 collapse() 方法的别名。将光标设置在指定节点的指定偏移处。}}
+
+{{知识点23}}{{Selection.getComposedRanges()方法：2025年新可用的 API，返回 StaticRange 数组，能够跨越 Shadow DOM 边界获取选区范围。接受 shadowRoots 参数指定需要访问的 ShadowRoot。当选择跨越 shadow 边界但未提供对应 ShadowRoot 时，返回的 range 会调整为包含宿主元素。应替代 getRangeAt() 用于需要跨 shadow 边界的场景。}}
+
+{{知识点24}}{{Range接口概述：Range 接口表示文档中的一个片段，可以包含节点和文本节点的一部分。通过 Document.createRange() 创建，或从 Selection.getRangeAt() 获取，也可以通过 new Range() 构造函数创建。自 2015 年起被所有主流浏览器支持。}}
+
+{{知识点25}}{{Range.commonAncestorContainer属性：只读属性，返回包含 startContainer 和 endContainer 的最深公共祖先节点。用于确定选区范围所在的最小公共父容器。}}
+
+{{知识点26}}{{Range.setStart()和Range.setEnd()方法：setStart(node, offset) 设置 Range 的起始位置；setEnd(node, offset) 设置 Range 的结束位置。配合使用可以精确控制选区范围。还有 setStartBefore()、setStartAfter()、setEndBefore()、setEndAfter() 等相对于节点的变体。}}
+
+{{知识点27}}{{Range.selectNode()和Range.selectNodeContents()方法：selectNode(node) 设置 Range 包含该节点及其内容；selectNodeContents(node) 设置 Range 仅包含该节点的内容（不包含节点本身）。}}
+
+{{知识点28}}{{Range.cloneContents()和Range.extractContents()方法：cloneContents() 返回 Range 内容的 DocumentFragment 副本（不修改原 DOM）；extractContents() 将 Range 内容从文档树移动到 DocumentFragment 中（会修改原 DOM）。}}
+
+{{知识点29}}{{Range.deleteContents()和Range.insertNode()方法：deleteContents() 从文档中删除 Range 的内容；insertNode(node) 在 Range 的起始位置插入一个新节点。两者配合可实现富文本编辑操作。}}
+
+{{知识点30}}{{Range.surroundContents(node)方法：将 Range 的内容移动到一个新的指定节点中，实现包裹操作。常用于为选中文本添加格式标签（如加粗、链接等）。如果 Range 包含部分非文本节点会抛出 InvalidStateError。}}
+
+{{知识点31}}{{Range.getBoundingClientRect()和getClientRects()方法：getBoundingClientRect() 返回包围 Range 全部内容的 DOMRect 矩形；getClientRects() 返回 Range 中每个元素的 DOMRect 列表。用于获取选区的屏幕坐标位置，实现自定义工具栏定位等功能。}}
+
+{{知识点32}}{{Range.compareBoundaryPoints()和comparePoint()方法：compareBoundaryPoints(how, sourceRange) 比较两个 Range 的边界点关系；comparePoint(node, offset) 返回 -1/0/1 表示指定点在 Range 之前、之内还是之后。isPointInRange() 判断点是否在 Range 内。}}
+
+{{知识点33}}{{selectionchange事件：在文档的当前 Selection 发生变化时触发。不可取消、不冒泡。通过 document.addEventListener("selectionchange", handler) 或 document.onselectionchange 监听。注意这与 input/textarea 元素的 selectionchange 事件不同。自 2017 年起广泛支持。}}
+
+{{知识点34}}{{selectstart事件：当用户开始新的选区操作时触发。可以被取消（event.preventDefault()），取消后选区不会改变。通过 document.addEventListener("selectstart", handler) 监听。常用于阻止用户选中特定区域的文本。}}
+
+{{知识点35}}{{Selection与焦点的复杂关系：Selection 和 input focus（document.activeElement）之间的关系因浏览器而异。Safari/Chrome 在通过代码修改选区时会聚焦包含选区的元素，Firefox 则不会。跨浏览器代码应分别处理选区和焦点。}}
+
+{{知识点36}}{{编辑宿主焦点行为：当 Selection API 方法（如 collapse、extend、selectAllChildren、addRange、setBaseAndExtent）将选区设置在编辑宿主（contenteditable 元素或 designMode 文档）内部时，焦点会自动移动到该编辑宿主。此行为仅影响编辑宿主，不影响普通可聚焦元素。}}
+
+{{知识点37}}{{input/textarea元素的选区操作：HTMLInputElement.setSelectionRange(start, end, direction) 设置输入框中的文本选区。仅适用于 password/search/tel/text/url 类型。同时更新 selectionStart、selectionEnd 和 selectionDirection 属性。还有 select() 方法选中全部文本。}}
+
+{{知识点38}}{{多Range选区的历史与现状：Selection API 最初由 Netscape 创建时支持多个 Range（如用 Ctrl 键选择表格列）。但除 Gecko 外其他浏览器未实现多 range，规范也要求选区始终只有一个 range。实际上大多数场景只需处理 getRangeAt(0)。}}
+
+{{知识点39}}{{Selection API与富文本编辑器：Selection API 是实现富文本编辑器的核心基础。通过 Selection 获取用户选区，结合 Range 的 deleteContents()、insertNode()、surroundContents() 等方法，可以实现加粗、斜体、链接插入等编辑功能。document.execCommand() 也依赖 Selection 工作。}}
+
+{{知识点40}}{{Shadow DOM中的选区挑战：在 Shadow DOM 环境中，标准的 getRangeAt() 无法感知 shadow root 边界，返回的 range 不确定且因浏览器而异。2025 年新增的 getComposedRanges() 方法专门解决此问题，支持跨越 shadow 边界获取正确的选区范围。}}
+
+{{知识点41}}{{Selection API浏览器兼容性：Selection 接口和 Range 接口自 2015 年起被所有主流浏览器广泛支持。selectionchange 事件自 2017 年起广泛支持。getComposedRanges() 是 2025 年 8 月新增的功能。input 元素的 selectionchange 事件支持度较晚。}}
+
+{{知识点42}}{{获取选中文本的完整流程：获取选中文本的标准流程为：1) 调用 window.getSelection() 获取 Selection 对象；2) 检查 selection.isCollapsed 判断是否有选中文本；3) 调用 selection.toString() 获取纯文本；4) 或调用 selection.getRangeAt(0).cloneContents() 获取包含 HTML 结构的 DocumentFragment。}}
+
+{{知识点43}}{{程序化创建选区：要程序化创建选区，可以：1) 使用 new Range() 创建 Range 对象；2) 调用 range.setStart() 和 range.setEnd() 设置范围；3) 调用 window.getSelection().removeAllRanges() 清除现有选区；4) 调用 selection.addRange(range) 应用新选区。或直接使用 setBaseAndExtent() 一步完成。}}
+
+{{知识点44}}{{跨浏览器选区处理注意事项：Firefox 中 getSelection() 对 input/textarea 内容不生效，需使用 setSelectionRange() 替代。Safari/Chrome 修改选区时会自动聚焦元素而 Firefox 不会。各浏览器对 modify() 的 granularity 支持不一致。选区 API 的行为差异要求充分的跨浏览器测试。}}
+
+{{知识点45}}{{StaticRange与Range的区别：StaticRange 是 Range 的轻量级版本，创建后不会随 DOM 变化而自动更新（静态快照）。getComposedRanges() 返回 StaticRange 而非 Range，因为跨 shadow 边界的 range 在 DOM 变更后可能失效。需配合 MutationObserver 监听变化并更新选区。}}
+
+{{知识点46}}{{Selection API在移动端的使用：移动端浏览器对 Selection API 的支持良好，但触摸选区的行为与桌面端不同（如长按弹出选择菜单）。需要注意 touchstart/touchend 事件与 selectstart/selectionchange 的交互，以及移动端虚拟键盘弹出时选区状态的变化。}}
+
+{{知识点47}}{{选区位置计算与工具栏定位：利用 Range.getBoundingClientRect() 获取选区的屏幕坐标，可以实现类似文字处理软件的浮动工具栏。计算选区矩形位置后，将工具栏元素定位到选区上方或下方。需考虑滚动偏移和视口边界。}}
+
+{{知识点48}}{{Selection API的安全考虑：选区操作本身是安全的，不会泄露跨域内容。但在实现复制功能时需注意，selection.toString() 只能获取当前文档的选中文本。使用 Clipboard API 的 navigator.clipboard.write() 需要用户授权。避免在不可信内容中自动选区可能导致的钓鱼风险。}}
+
+{{知识点49}}{{contenteditable中的选区管理：在 contenteditable 元素中，Selection API 的行为更复杂。需要处理嵌套元素、格式化标签、空节点等边界情况。选区可能跨越多个 DOM 节点，使用 Range.commonAncestorContainer 找到公共父节点来确定操作范围。}}
+
+{{知识点50}}{{document.execCommand与选区：document.execCommand() 命令（如 bold、italic、createLink 等）操作的是当前选区内容。虽然 execCommand 已被标记为非标准，但在实际开发中仍广泛使用。现代替代方案包括 InputEvent 和自定义编辑逻辑配合 Selection/Range API。}}

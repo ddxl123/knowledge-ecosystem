@@ -1,0 +1,20 @@
+title: "2025前端前端CSS Starting Style"
+field: "计算机IT"
+subject: "前端框架"
+description: "CSS @starting-style核心知识点，涵盖语法、浏览器支持、与transition-behavior/overlay的配合、Popover/Dialog动画等"
+card_count: 40
+difficulty: "中级"
+tags:
+  - CSS
+  - @starting-style
+  - transition
+  - transition-behavior
+  - overlay
+  - Popover API
+  - Dialog
+  - 进入动画
+  - 退出动画
+  - 顶层
+  - allow-discrete
+  - CSS Transitions Level 2
+last_updated: "2025-05-17"

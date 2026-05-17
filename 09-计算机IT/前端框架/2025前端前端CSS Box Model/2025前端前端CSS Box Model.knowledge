@@ -1,0 +1,93 @@
+# 2025前端前端CSS Box Model
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{CSS Box Model（盒模型）概述：CSS盒模型是CSS布局的基础概念，页面上的每一个可见元素都被表示为一个矩形盒子。盒模型定义了元素如何生成、排列、以及它们的尺寸如何计算。每个盒子由内容区域（content）、内边距（padding）、边框（border）和外边距（margin）四个区域组成，从内到外依次排列。}}
+
+{{知识点2}}{{盒模型的四层结构：从内到外依次为——①Content Box（内容盒）：显示文本、图像等实际内容的区域；②Padding Box（内边距盒）：内容周围的空白区域；③Border Box（边框盒）：包裹内容和内边距的边框区域；④Margin Box（外边距盒）：最外层，是盒子与其他元素之间的空白区域。margin不计入元素的实际尺寸，只影响元素在页面上占据的总空间。}}
+
+{{知识点3}}{{Content Box（内容盒）：内容区域是盒子的核心部分，用于显示元素的实际内容（文本、图片等）。通过width和height属性来设置其尺寸。在标准盒模型下，width和height仅定义内容区域的大小；在替代盒模型下，width和height包含padding和border。}}
+
+{{知识点4}}{{Padding Box（内边距盒）：内边距是内容区域与边框之间的空白区域。通过padding属性及其子属性（padding-top、padding-right、padding-bottom、padding-left）来控制。内边距会继承元素的背景色，是可见的空白。内边距不接受负值，最小值为0。}}
+
+{{知识点5}}{{Border Box（边框盒）：边框是包裹内容和内边距的可见边界。通过border属性及其相关属性（border-width、border-style、border-color等）来设置。边框有自己的宽度、样式和颜色，是盒模型中唯一具有视觉边界的区域。border-width也不接受负值。}}
+
+{{知识点6}}{{Margin Box（外边距盒）：外边距是最外层的空白区域，用于控制元素与其他元素之间的距离。通过margin属性及其子属性来设置。margin可以接受负值——负margin会使元素向指定方向移动，甚至可以与其他元素重叠。margin在两种盒模型下的行为一致，总是在尺寸计算完成后额外添加。}}
+
+{{知识点7}}{{标准盒模型（content-box）：这是CSS的默认盒模型。当设置width和height时，这些值仅定义内容区域的尺寸。元素的实际渲染宽度 = width + padding-left + padding-right + border-left + border-right。例如width:350px, padding:25px, border:5px的盒子实际宽度为350+25+25+5+5=410px。}}
+
+{{知识点8}}{{替代盒模型（border-box）：在替代盒模型中，width和height定义的是包含content、padding和border的总尺寸。内容区域的实际宽度 = width - padding - border。例如同样width:350px, padding:25px, border:5px的盒子，实际渲染宽度就是350px，内容区域宽度为350-25-25-5-5=290px。这种模型更直观易用。}}
+
+{{知识点9}}{{box-sizing属性：用于控制元素使用哪种盒模型。语法：box-sizing: content-box | border-box。content-box是默认值，使用标准盒模型；border-box使用替代盒模型。该属性适用于所有接受width或height的元素，默认不可继承。}}
+
+{{知识点10}}{{全局border-box最佳实践：推荐在所有项目中全局设置border-box，这样更直观地控制元素尺寸。最佳写法：html { box-sizing: border-box; } *, *::before, *::after { box-sizing: inherit; }。使用inherit而非直接设置border-box的好处是：当第三方组件需要content-box时，只需覆盖其顶层元素的box-sizing即可。}}
+
+{{知识点11}}{{border-box对表单元素的影响：浏览器默认对table、select、button等元素以及type为radio、checkbox、reset、button、submit、color、search的input元素使用border-box。这意味着这些表单元素的尺寸计算方式天然与其他元素不同，需要特别注意。}}
+
+{{知识点12}}{{块级盒子（Block Box）：display值为block的元素生成块级盒子。特性包括：①在新行开始显示；②width和height属性有效；③padding、margin和border会推开周围元素；④未设置width时，默认填满容器的全部可用宽度。典型的块级元素有div、p、h1-h6、section等。}}
+
+{{知识点13}}{{行内盒子（Inline Box）：display值为inline的元素生成行内盒子。特性包括：①不会在新行开始；②width、height以及上下margin无效；③上下padding和border会改变盒子大小但不影响周围内容位置，可能导致重叠；④左右padding、margin和border会影响周围行内内容的位置。典型的行内元素有a、span、em、strong等。}}
+
+{{知识点14}}{{外部显示类型与内部显示类型：每个盒子都有两种显示类型。外部显示类型（outer display type）决定盒子如何与外部元素相处（block或inline）；内部显示类型（inner display type）决定子元素如何布局（如flow、flex、grid等）。例如display: flex的元素外部显示为block，内部显示为flex。}}
+
+{{知识点15}}{{display属性与盒模型的关系：display属性决定盒子的类型，直接影响盒模型的计算方式。block元素的盒模型属性全部生效；inline元素的width/height及上下margin无效；inline-block元素结合两者特性——对外表现为inline，对内表现为block，所有盒模型属性均有效。}}
+
+{{知识点16}}{{margin属性详解：margin用于设置元素的外边距，是不可见的空间，用于推开相邻元素。支持正值和负值。margin不计入元素的实际尺寸（即box area），只影响元素在页面上占据的总空间。margin的百分比值是相对于包含块的宽度计算的（即使margin-top和margin-bottom也是如此）。}}
+
+{{知识点17}}{{margin简写规则：margin可以接受1-4个值。一个值：四边相同；两个值：第一个为上下，第二个为左右；三个值：第一个为上，第二个为左右，第三个为下；四个值：按上、右、下、左的顺序（顺时针方向）。对应的子属性为margin-top、margin-right、margin-bottom、margin-left。}}
+
+{{知识点18}}{{margin塌陷（Margin Collapsing）：CSS中，相邻块级元素的垂直margin会合并（塌陷）为单个margin，其大小等于两个margin中的较大值。这是CSS的正常行为，不是bug。margin塌陷仅在垂直方向上发生，水平方向的margin不会塌陷。}}
+
+{{知识点19}}{{margin塌陷的三种情况：①相邻兄弟元素：相邻块级兄弟元素的垂直margin会合并；②父与第一个/最后一个子元素：当父元素没有border、padding、inline内容或height/min-height时，父子的margin-top或margin-bottom会合并；③空块元素：没有border、padding、inline内容、height或min-height的空元素，其自身的margin-top和margin-bottom会合并。}}
+
+{{知识点20}}{{防止margin塌陷的方法：①给父元素添加padding或border（哪怕为0也可以加border: 0 solid transparent）；②给父元素设置overflow: hidden或其他非visible值（创建BFC）；③给父元素设置display: flow-root（创建BFC的现代方法）；④使用Flexbox或Grid布局——在flex和grid容器中margin不会塌陷；⑤使用padding替代margin。}}
+
+{{知识点21}}{{负margin的使用：margin可以设为负值，效果取决于方向和大小。负margin-top/left：元素自身向上/左移动；负margin-right/bottom：元素自身不动，但右侧/下方的相邻元素会向该元素靠近。当正负margin合并时，结果为最大正margin减去最大负margin的绝对值。}}
+
+{{知识点22}}{{padding属性详解：padding设置元素的内边距，即内容与边框之间的空间。padding不接受负值，最小值为0。padding的百分比值同样是相对于包含块的宽度计算的（上下左右都一样），这一特性常用于实现响应式的固定宽高比。padding区域会继承元素的背景色和背景图。}}
+
+{{知识点23}}{{padding简写规则：与margin类似，padding支持1-4个值的简写。一个值：四边相同；两个值：上下/左右；三个值：上/左右/下；四个值：上/右/下/左（顺时针）。子属性为padding-top、padding-right、padding-bottom、padding-left。}}
+
+{{知识点24}}{{border属性详解：border是盒模型中内容区和内边距周围的可见边框。border是三个子属性的简写：border-width（宽度）、border-style（样式，如solid、dashed、dotted等）、border-color（颜色）。border-width不接受负值。默认情况下，border-color取元素的color值。}}
+
+{{知识点25}}{{border简写与子属性：简写语法 border: 1px solid black;。可以单独设置每一边：border-top、border-right、border-bottom、border-left。更细粒度的控制：border-top-width、border-top-style、border-top-color等。border-radius不属于盒模型的核心属性，但它影响边框的视觉形状。}}
+
+{{知识点26}}{{width和height属性：width和height设置元素的尺寸。在content-box下仅设置内容区尺寸，在border-box下设置包含padding和border的总尺寸。值可以是长度值（px、em、rem等）、百分比（相对于包含块）、auto（默认值，浏览器自动计算）、或关键字（max-content、min-content、fit-content）。}}
+
+{{知识点27}}{{min-width/min-height与max-width/max-height：这些属性为元素尺寸设置约束。min-width/min-height确保元素不会小于指定值；max-width/max-height确保元素不会超过指定值。在border-box模型下，这些约束同样包含padding和border。它们在响应式设计中非常重要，常与百分比或auto值配合使用。}}
+
+{{知识点28}}{{内在尺寸与外在尺寸：外在尺寸（extrinsic size）是由外部因素（如width/height属性、父容器）决定的尺寸；内在尺寸（intrinsic size）由内容本身决定，如min-content（最小可接受宽度）、max-content（内容自然宽度）、fit-content（在约束内尽可能适应内容）。CSS Box Sizing模块引入了这些关键字值。}}
+
+{{知识点29}}{{outline与box model的区别：outline（轮廓）绘制在border之外，不占据空间，不影响布局。与border不同，outline不能单独设置每一边（除了outline-offset），且outline不一定是矩形的。outline常用于:focus状态的可访问性指示。由于不占空间，outline不会影响盒模型的计算。}}
+
+{{知识点30}}{{overflow属性与盒模型：overflow控制内容溢出盒子时的行为。visible（默认）：溢出内容可见；hidden：裁剪溢出内容；scroll：始终显示滚动条；auto：仅在需要时显示滚动条。overflow: hidden/auto会创建新的块格式化上下文（BFC），这会阻止margin塌陷，间接影响盒模型行为。}}
+
+{{知识点31}}{{visibility与盒模型的区别：visibility: hidden隐藏元素但仍占据原有空间（保留盒模型尺寸）；display: none则完全移除元素，不占据任何空间。这意味着visibility: hidden的元素仍然参与盒模型计算和布局，只是视觉上不可见。}}
+
+{{知识点32}}{{使用DevTools查看盒模型：浏览器开发者工具可以直观展示元素的盒模型。在Chrome DevTools中，选中元素后在Styles面板底部会显示一个盒模型图示，分别用不同颜色标注margin（橙色）、border（黄色）、padding（绿色）、content（蓝色），并显示具体数值。这是调试布局问题的重要工具。}}
+
+{{知识点33}}{{百分比值在盒模型中的计算：width的百分比相对于包含块的宽度；height的百分比相对于包含块的高度（需要包含块有明确高度）；margin和padding的百分比（包括top和bottom）都相对于包含块的宽度——这是一个容易被忽略的要点，也是padding-top百分比技巧实现宽高比的原理。}}
+
+{{知识点34}}{{使用margin: auto实现水平居中：对块级元素设置固定宽度并添加margin-left: auto和margin-right: auto（或简写margin: 0 auto），可以实现水平居中。auto margin会平分剩余空间。注意：垂直方向的margin: auto在普通流中不会居中，但在绝对定位或Flex/Grid布局中可以实现垂直居中。}}
+
+{{知识点35}}{{逻辑属性与盒模型：CSS逻辑属性（如margin-block-start、padding-inline-end等）使用逻辑方向而非物理方向，自动适应不同的书写模式（如LTR/RTL）。margin-block等价于margin-top+margin-bottom的简写；margin-inline等价于margin-left+margin-right。这在国际化和多语言布局中非常重要。}}
+
+{{知识点36}}{{替换元素的盒模型：替换元素（如img、video、input）的盒模型有特殊行为。默认情况下，img等替换元素有内在尺寸（intrinsic size），即使未设置width/height也会按原始尺寸显示。设置width: 100%时需注意盒模型计算，建议同时设置height: auto保持宽高比，或使用aspect-ratio属性。}}
+
+{{知识点37}}{{行内元素的盒模型特性：行内元素（display: inline）在盒模型方面有重要限制：①width和height设置无效；②上下margin不影响布局（不推开其他元素）；③上下padding和border虽然渲染可见但不改变行高，可能导致与相邻行重叠。如需对行内元素使用完整盒模型，应改为inline-block或block。}}
+
+{{知识点38}}{{盒模型与Flex/Grid布局的关系：在Flex和Grid布局容器中，子元素的盒模型行为有变化：①margin不会塌陷；②Flex项目的min-width默认为auto（可能导致溢出问题），需要设置min-width: 0；③Grid布局中gap属性提供间距，可以替代margin。理解盒模型在不同布局模式下的差异对正确布局至关重要。}}
+
+{{知识点39}}{{margin-trim属性（新特性）：CSS盒模型模块新增的margin-trim属性允许容器修剪其子元素的margin。例如margin-trim: block可以移除flex/grid容器中第一个子元素的block-start margin和最后一个子元素的block-end margin。这解决了长期以来需要通过:first-child/:last-child覆盖margin的痛点。}}
+
+{{知识点40}}{{盒模型的计算顺序：浏览器计算盒子尺寸的顺序为：①确定包含块尺寸；②计算width/height（考虑box-sizing）；③添加padding；④添加border；⑤添加margin。在标准模型中，width仅控制内容区；在border-box模型中，width = content + padding + border。理解计算顺序有助于调试布局问题。}}
+
+{{知识点41}}{{content-box下width: 100%的陷阱：在标准盒模型下，设置width: 100%并添加padding或border会导致元素溢出父容器，因为100%只针对内容区，padding和border是额外添加的。这是推荐全局使用border-box的主要原因——border-box下width: 100%会自动减去padding和border，确保元素不溢出。}}
+
+{{知识点42}}{{display: flow-root创建BFC：display: flow-root是专门为创建块格式化上下文（BFC）而引入的值。与overflow: hidden不同，它不会裁剪溢出内容。使用flow-root可以：①包含浮动子元素；②阻止margin塌陷；③清除浮动。它是替代clearfix和overflow: hidden的现代方案。}}
+
+{{知识点43}}{{盒模型与背景的关系：元素的背景（background-color和background-image）默认延伸到border的外边缘（border-box区域）。可以通过background-clip属性控制：border-box（默认，延伸到border外边缘）、padding-box（只到padding外边缘）、content-box（仅内容区域）。background-origin控制背景定位的参考区域。}}
+
+{{知识点44}}{{盒模型调试技巧：①使用* { outline: 1px solid red; }快速可视化所有元素边界（outline不影响布局）；②DevTools中hover元素会高亮其margin和padding区域；③computed面板显示每个盒模型属性的最终计算值；④使用getComputedStyle()在JS中获取元素的实际盒模型尺寸；⑤element.getBoundingClientRect()获取包含margin的总尺寸。}}
+
+{{知识点45}}{{box-decoration-break属性：当行内元素跨行显示时，box-decoration-break控制盒模型的渲染方式。clone模式下每行都独立渲染完整的padding、border和background；slice模式（默认）下盒子被视为一个整体被切分。这个属性影响跨行行内元素的盒模型视觉表现。}}

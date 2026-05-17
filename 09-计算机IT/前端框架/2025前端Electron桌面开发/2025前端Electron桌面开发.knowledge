@@ -1,0 +1,83 @@
+# 2025前端Electron桌面开发
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{Electron是一个使用JavaScript、HTML和CSS构建跨平台桌面应用程序的框架。它将Chromium和Node.js嵌入到二进制文件中，允许开发者维护一个JavaScript代码库，创建可在Windows、macOS和Linux上运行的跨平台应用，无需原生开发经验。}}
+
+{{知识点2}}{{Electron的多进程架构继承自Chromium，包含主进程（Main Process）和渲染进程（Renderer Process）两种类型。每个应用只有一个主进程，而每个BrowserWindow实例对应一个独立的渲染进程，类似于Chrome的浏览器进程和渲染进程模型。}}
+
+{{知识点3}}{{主进程运行在Node.js环境中，拥有完整的Node.js API访问权限。其主要职责包括：创建和管理应用窗口（通过BrowserWindow模块）、控制应用生命周期（通过app模块）、以及与操作系统原生API交互（如菜单、对话框、托盘图标等）。}}
+
+{{知识点4}}{{渲染进程负责渲染Web内容，代码行为遵循Web标准。渲染进程默认没有Node.js的require等API访问权限，需使用webpack或parcel等打包工具来引入NPM模块。每个BrowserWindow实例被销毁时，其对应的渲染进程也会终止。}}
+
+{{知识点5}}{{预加载脚本（Preload Script）在渲染进程的Web内容加载之前执行，运行在渲染进程上下文中但拥有Node.js API访问权限。通过BrowserWindow构造函数的webPreferences选项中的preload字段指定。预加载脚本是连接渲染进程与Node.js/原生功能的桥梁。}}
+
+{{知识点6}}{{上下文隔离（Context Isolation）是Electron 12起默认启用的安全特性，确保预加载脚本和Electron内部逻辑在与加载的网站不同的上下文中运行。预加载脚本中设置的window属性对网站不可见，需通过contextBridge模块安全地暴露API。}}
+
+{{知识点7}}{{contextBridge.exposeInMainWorld()方法用于安全地将预加载脚本中的API暴露到渲染进程的网站上下文中。这是上下文隔离启用时的标准做法，替代了旧的直接挂载window属性的方式。注意不能通过bridge传递自定义原型或Symbol。}}
+
+{{知识点8}}{{进程间通信（IPC）是Electron中执行常见任务的唯一方式，如从UI调用原生API或从原生菜单触发Web内容变更。IPC通过开发者定义的"通道"（channel）使用ipcMain和ipcRenderer模块传递消息，通道是任意命名且双向的。}}
+
+{{知识点9}}{{IPC模式一：渲染进程到主进程单向通信。使用ipcRenderer.send()发送消息，主进程通过ipcMain.on()监听。适用于从Web内容调用主进程API的场景，如从UI触发窗口标题变更。}}
+
+{{知识点10}}{{IPC模式二：渲染进程到主进程双向通信。使用ipcRenderer.invoke()发送请求并等待结果，主进程通过ipcMain.handle()处理并返回。适用于需要从渲染进程调用主进程模块并获取返回值的场景，如打开原生文件对话框。}}
+
+{{知识点11}}{{IPC模式三：主进程到渲染进程通信。主进程通过win.webContents.send()向特定窗口发送消息，渲染进程通过ipcRenderer.on()监听。适用于从主进程向渲染进程推送事件的场景。}}
+
+{{知识点12}}{{Electron安全最佳实践包括：仅加载安全内容（HTTPS）、不为远程内容启用Node.js集成、在所有渲染器中启用上下文隔离、启用进程沙箱、使用ses.setPermissionRequestHandler()处理权限请求、不禁用webSecurity、定义CSP内容安全策略。}}
+
+{{知识点13}}{{Content-Security-Policy（CSP）是Electron应用的重要安全措施。应在HTML中定义限制性规则如script-src 'self'，防止XSS等攻击。在Electron中XSS的影响比普通Web应用更严重，因为攻击者可能获得原生代码执行能力。}}
+
+{{知识点14}}{{Electron Forge是一体化的Electron应用打包和分发工具。它将多个单一用途的包（如@electron/packager、@electron/osx-sign、electron-winstaller等）组合成一个完整的构建管道，支持代码签名、安装程序生成和制品发布。}}
+
+{{知识点15}}{{Electron Forge支持四种官方模板：webpack、webpack-typescript、vite、vite-typescript。使用npx create-electron-app@latest my-app --template=[模板名]创建项目。这些模板内置了打包插件和开发服务器，推荐使用以利用现代前端工具链。}}
+
+{{知识点16}}{{应用打包流程：electron-forge package将应用代码与Electron二进制文件捆绑到一个文件夹；electron-forge make在此基础上为每个配置的Maker生成平台特定的分发包（如macOS的.app和.zip、Windows的MSI、Linux的.deb等）。}}
+
+{{知识点17}}{{代码签名是分发桌面应用的重要环节，macOS在应用打包层级签名，Windows在安装程序层级签名。macOS还需进行公证（Notarization），使用notarytool工具通过Apple ID和Team ID完成。未签名的应用在现代操作系统上会受到严格限制。}}
+
+{{知识点18}}{{Electron应用的性能优化关键策略：谨慎选择Node.js模块（注意依赖链大小）、延迟加载和运行代码、避免阻塞主进程和渲染进程、减少不必要的polyfill、避免不必要的阻塞网络请求、打包代码以减少磁盘读取。}}
+
+{{知识点19}}{{性能分析是提升Electron应用性能的最可靠策略。使用Chrome DevTools进行运行时性能分析，使用Chrome Tracing工具进行多进程分析。反复测量、发现瓶颈、优化，这是VS Code和Slack等大型Electron应用采用的方法论。}}
+
+{{知识点20}}{{BrowserWindow是Electron中创建应用窗口的核心类。每个实例在独立渲染进程中加载Web页面，支持丰富的配置选项如宽度、高度、webPreferences等。BrowserWindow继承自EventEmitter，可监听最小化、最大化等用户事件。}}
+
+{{知识点21}}{{自动更新是桌面应用的重要功能。Electron官方推荐使用electron-updater（来自electron-builder生态）或Electron Forge的发布器配合更新服务器实现。更新流程通常包括：检查更新→下载→安装→重启应用。macOS和Windows的更新机制有差异。}}
+
+{{知识点22}}{{系统托盘（Tray）功能允许Electron应用在系统托盘区域显示图标并提供上下文菜单。通过Tray模块实现，支持图标设置、工具提示、上下文菜单绑定、点击事件处理等。适用于需要后台运行或快速访问的应用场景。}}
+
+{{知识点23}}{{原生菜单（Menu）模块支持创建应用菜单和上下文菜单。macOS的应用菜单遵循平台规范（应用名、文件、编辑等），Windows和Linux使用窗口内菜单。菜单项支持加速键（accelerator）、分隔符、子菜单、复选框和单选按钮等。}}
+
+{{知识点24}}{{对话框（dialog）模块提供原生系统对话框，包括文件打开/保存对话框、消息框、错误框等。支持模态和非模态模式，可指定文件类型过滤器、默认路径等。通常从主进程调用，也可通过IPC从渲染进程触发。}}
+
+{{知识点25}}{{Electron支持使用原生Node.js模块（Native Node Modules），即用C/C++编写的Node.js插件。需要使用electron-rebuild或@electron/rebuild工具针对Electron的Node.js版本重新编译。常见场景包括系统级操作、性能敏感计算等。}}
+
+{{知识点26}}{{Electron Fiddle是官方提供的沙盒学习工具，用于实验Electron API和原型开发。它能直接打开文档中的示例代码，支持一键运行和调试，是学习Electron的推荐工具。集成了main.js、preload.js和index.html的编辑环境。}}
+
+{{知识点27}}{{webContents是BrowserWindow中控制Web页面的核心对象，可通过win.webContents访问。提供方法如send()发送IPC消息、executeJavaScript()执行JS代码、openDevTools()打开开发者工具、capturePage()截图等。}}
+
+{{知识点28}}{{Electron支持自定义协议（Custom Protocol），通过protocol模块注册自定义scheme（如app://），替代file://协议加载本地资源。这是推荐的安全做法，可结合CSP更精确地控制资源加载，避免file://协议的潜在安全风险。}}
+
+{{知识点29}}{{进程沙箱（Process Sandboxing）是Electron的重要安全机制，限制渲染进程的权限。启用沙箱后，预加载脚本只能使用Electron的子集API和少数Node.js模块。沙箱化渲染进程的行为更接近普通浏览器中的Web页面。}}
+
+{{知识点30}}{{Electron Fuse是一种在构建后修改Electron二进制文件行为的机制。例如可以禁用运行时Node.js脚本执行（EnableNodeOptionsEnvironmentVariable）、启用ASAR完整性验证等。通过@electron/fuses工具在打包后设置这些开关。}}
+
+{{知识点31}}{{Electron的app模块控制应用生命周期，提供whenReady()、quit()、relaunch()等方法和ready、window-all-closed、activate等事件。macOS上应用在所有窗口关闭后不退出（符合平台惯例），需在activate事件中重新创建窗口。}}
+
+{{知识点32}}{{Electron应用结构最佳实践：将主进程代码（main.js）、预加载脚本（preload.js）和渲染进程代码（HTML/CSS/JS）分离。使用TypeScript增强类型安全，通过声明文件为contextBridge暴露的API添加类型定义。}}
+
+{{知识点33}}{{Electron的全局快捷键（globalShortcut）模块允许注册系统级快捷键，即使应用不在前台也能响应。适用于媒体控制、快速唤起等场景。注意快捷键可能与其他应用冲突，应用退出时需注销所有快捷键。}}
+
+{{知识点34}}{{Electron支持多窗口应用开发。每个BrowserWindow独立运行在各自的渲染进程中，主进程通过管理多个BrowserWindow实例实现多窗口。窗口间通信需通过主进程中转IPC消息，或使用共享存储方案。}}
+
+{{知识点35}}{{Electron的clipboard模块提供系统剪贴板读写功能，支持文本、HTML、RTF、图片等多种格式。nativeImage模块处理平台原生图片格式，常用于截图、图标处理等场景。两者结合可实现丰富的剪贴板交互功能。}}
+
+{{知识点36}}{{Electron的shell模块提供与桌面环境集成的能力，如用默认应用打开文件（openPath）、打开URL（openExternal）、在文件管理器中显示文件（showItemInFolder）。使用openExternal时需验证URL安全性，防止打开恶意链接。}}
+
+{{知识点37}}{{Electron的powerMonitor模块允许监听系统电源状态变化事件，如suspend（休眠）、resume（恢复）、on-ac（接通电源）、on-battery（使用电池）。适用于需要在电源状态变化时调整行为的应用，如暂停同步任务。}}
+
+{{知识点38}}{{Electron应用的测试策略：使用Playwright或Spectron进行端到端测试，使用Electron内置的打包测试功能验证分发包。测试应覆盖主进程逻辑、渲染进程UI和IPC通信。Chrome DevTools可用于调试渲染进程代码。}}
+
+{{知识点39}}{{Electron Forge的发布器（Publisher）支持将分发包发布到多个目标，如GitHub Releases、S3、Snapcraft等。安装对应的发布器包并在forge.config.js中配置后，运行npm run publish即可自动上传制品。}}
+
+{{知识点40}}{{Electron支持深链接（Deep Links）和自定义协议处理，允许其他应用或网页通过特定URL scheme（如myapp://）打开Electron应用并传递参数。需要在操作系统层面注册协议处理器，各平台实现方式不同。}}

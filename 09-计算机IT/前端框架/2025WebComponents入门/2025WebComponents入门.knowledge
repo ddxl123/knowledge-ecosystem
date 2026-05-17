@@ -1,0 +1,89 @@
+# 2025WebComponents入门
+# 领域: 计算机IT
+# 学科: 前端框架
+# 来源: 2025WebComponents入门
+# 描述: Web Components核心知识点，涵盖Custom Elements、Shadow DOM、HTML Templates、Slots、CSS隔离、框架集成等
+
+{{Web Components概述}}{{Web Components是一套浏览器原生的组件化技术标准，由Custom Elements、Shadow DOM和HTML Templates三大核心规范组成。它允许开发者创建可复用的自定义HTML元素，无需依赖任何前端框架。2025年，所有现代浏览器均已完整支持Web Components，成为构建跨框架、可复用UI组件的事实标准之一。}}
+
+{{Custom Elements定义}}{{Custom Elements是Web Components的核心API之一，允许开发者使用`customElements.define()`方法将自定义的JavaScript类注册为新的HTML元素。自定义元素名称必须包含连字符（如`my-component`），以避免与原生HTML元素冲突。注册后的元素可以在HTML中直接使用，如同原生标签一样。}}
+
+{{Custom Elements注册方式}}{{Custom Elements有两种注册方式：`customElements.define(name, constructor)` 用于注册新元素，`customElements.get(name)` 用于获取已注册元素的构造函数。注册时还可通过第三个参数指定`extends`选项来创建自定义内置元素（Customized Built-in Elements）。}}
+
+{{自主式自定义元素}}{{自主式自定义元素（Autonomous Custom Elements）是完全独立的自定义HTML元素，不继承任何原生HTML元素。它们通过`class MyElement extends HTMLElement`定义，拥有自己的Shadow DOM和完整的生命周期。这是最常用的自定义元素类型。}}
+
+{{自定义内置元素}}{{自定义内置元素（Customized Built-in Elements）通过继承原生HTML元素来扩展其功能。例如`class MyButton extends HTMLButtonElement`，注册时需指定`extends: 'button'`。使用时通过`is`属性声明：`<button is="my-button">`。注意Safari浏览器目前仍不支持此特性。}}
+
+{{生命周期回调connectedCallback}}{{`connectedCallback()`是Custom Elements最重要的生命周期回调，当自定义元素首次被插入文档DOM时调用。适合在此进行DOM初始化、事件监听绑定、属性读取等操作。注意该回调可能被多次调用（元素在DOM中反复插入移除时）。}}
+
+{{生命周期回调disconnectedCallback}}{{`disconnectedCallback()`在自定义元素从文档DOM中移除时调用。适合在此清理资源，如移除事件监听器、取消定时器、断开WebSocket连接等，避免内存泄漏。}}
+
+{{生命周期回调adoptedCallback}}{{`adoptedCallback()`在自定义元素被移动到新文档时调用（如通过`document.adoptNode()`）。此回调使用场景较少，主要用于需要感知元素文档归属变化的情况。}}
+
+{{生命周期回调attributeChangedCallback}}{{`attributeChangedCallback(name, oldValue, newValue)`在元素的被观察属性（observed attributes）发生变化时调用。需要配合静态属性`observedAttributes`一起使用，返回一个属性名数组。这是实现属性驱动更新的核心机制。}}
+
+{{observedAttributes静态属性}}{{静态属性`observedAttributes`返回一个字符串数组，指定需要监听变化的属性名。只有在此数组中列出的属性发生变化时，才会触发`attributeChangedCallback`。这是一个getter，通常在类中以`static get observedAttributes()`形式定义。}}
+
+{{Shadow DOM概念}}{{Shadow DOM是Web Components的核心技术之一，它允许将一个隐藏的、独立的DOM树附加到一个元素上。Shadow DOM提供了真正的封装：内部的样式、结构和行为与外部文档完全隔离，不会影响外部也不会被外部影响。这是Web Components实现样式封装的关键。}}
+
+{{Shadow DOM创建}}{{通过`element.attachShadow({ mode: 'open' })`或`attachShadow({ mode: 'closed' })`创建Shadow Root。`open`模式允许外部JavaScript通过`element.shadowRoot`访问，`closed`模式则使`shadowRoot`返回`null`。推荐使用`open`模式以便于调试和测试。}}
+
+{{Shadow DOM样式隔离}}{{Shadow DOM内部的样式完全隔离：外部样式不会渗透进Shadow DOM，内部样式也不会泄漏到外部。可以在Shadow Root中使用`<style>`标签或`<link>`标签定义样式。这种隔离确保了组件样式的独立性和可预测性。}}
+
+{{::part伪元素}}{{CSS `::part()`伪元素允许从Shadow DOM外部选择性地暴露内部元素的样式。在Shadow DOM内部使用`part`属性标记元素，外部就可以通过`my-element::part(button)`来为指定部分添加样式，实现可控的样式暴露。}}
+
+{{:host伪类}}{{`:host`伪类用于在Shadow DOM内部选择宿主元素（即挂载Shadow DOM的那个自定义元素）。例如`:host { display: block; }`可以设置宿主元素的样式。`:host(.active)`可以匹配带有特定类的宿主元素。注意`:host`的优先级低于外部样式。}}
+
+{{:host-context伪类}}{{`:host-context()`伪类用于匹配特定祖先上下文中的宿主元素。例如`:host-context(.dark-theme) { color: white; }`表示当自定义元素的祖先包含`.dark-theme`类时应用样式。这在主题适配场景中非常有用。}}
+
+{{CSS Custom Properties穿透Shadow DOM}}{{CSS自定义属性（CSS Variables）可以穿透Shadow DOM边界。外部定义的`--my-color`变量在Shadow DOM内部可以直接使用。这是Shadow DOM中实现主题定制和样式可配置的主要方式，广泛应用于设计系统中。}}
+
+{{HTML Templates}}{{`<template>`元素用于声明HTML片段模板，其内容在页面加载时不会被渲染，也不会执行其中的脚本或加载资源。通过`template.content.cloneNode(true)`可以克隆模板内容并插入DOM。Templates是Web Components中定义组件结构的基础。}}
+
+{{Slots插槽机制}}{{Slots（插槽）是Shadow DOM中用于内容分发的机制。通过`<slot>`元素定义占位符，允许外部内容插入到Shadow DOM的指定位置。默认插槽接收未指定slot属性的子内容，具名插槽通过`<slot name="header">`与`<slot="header">`匹配。}}
+
+{{具名Slots}}{{具名Slots通过`name`属性定义：`<slot name="title">`。使用时在Light DOM中通过`slot="title"`属性将内容分发到对应的具名插槽。一个组件可以有多个具名插槽，实现灵活的内容组合布局。}}
+
+{{Slot的回退内容}}{{Slot可以包含回退（fallback）内容：`<slot>默认内容</slot>`。当没有提供对应的分发内容时，回退内容会被显示。这为组件提供了合理的默认显示，提升用户体验。}}
+
+{{slotchange事件}}{{`slotchange`事件在slot的分发节点（assigned nodes）发生变化时触发。通过`slot.addEventListener('slotchange', callback)`监听，可用于响应内容变化并执行相应逻辑。注意只有直接子节点变化时才会触发，嵌套变化不会触发。}}
+
+{{ElementInternals接口}}{{`ElementInternals`接口通过`this.attachInternals()`获取，为自定义元素提供与原生表单元素一致的能力。包括表单关联（form association）、可访问性（ARIA）属性设置、自定义验证等功能，是构建表单组件的关键API。}}
+
+{{表单关联Form Association}}{{通过`static get formAssociated`返回`true`使自定义元素成为表单关联元素。配合`ElementInternals`可以使用`setFormValue()`设置表单值、`setValidity()`设置验证状态，使自定义元素能像原生`<input>`一样参与表单提交和验证。}}
+
+{{可访问性Accessibility}}{{Web Components应遵循WAI-ARIA规范确保可访问性。通过`ElementInternals`的`role`属性和`ariaLabel`等属性设置无障碍信息。在Shadow DOM中使用语义化HTML元素，并确保键盘导航和屏幕阅读器兼容。}}
+
+{{Shadow DOM与表单提交}}{{使用`ElementInternals`的`setFormValue()`方法可以让自定义元素的值随表单一起提交。即使值存储在Shadow DOM内部，也能正确地传递给所属表单。这是构建自定义表单控件（如日期选择器、颜色选择器）的基础。}}
+
+{{Custom Elements与ES Modules}}{{Custom Elements通常与ES Modules配合使用，每个组件定义为一个模块，通过`export`导出类。这种方式支持Tree Shaking优化，便于按需加载。组件注册可以在模块内部自动执行，也可以延迟到需要时再注册。}}
+
+{{延迟注册与自定义元素升级}}{{当自定义元素的JavaScript定义在元素创建之后才加载时，浏览器会将这些元素标记为"未定义"（undefined）。定义加载后，浏览器自动"升级"这些元素，触发`connectedCallback`。可以通过`customElements.whenDefined(name)`返回的Promise等待元素定义完成。}}
+
+{{Web Components与React集成}}{{React 19+完整支持Web Components。在React中可以直接使用自定义元素标签，属性通过HTML attribute传递，复杂数据可通过ref获取DOM元素后直接设置property。需要注意React的合成事件系统与自定义元素的事件需要额外处理。}}
+
+{{Web Components与Vue集成}}{{Vue对Web Components提供了良好的支持。在Vue项目中使用时，需要在`vue.config.js`中配置`compilerOptions.isCustomElement`来告诉编译器跳过自定义元素的解析。Vue 3的响应式系统可以通过watch监听自定义元素的属性变化。}}
+
+{{Web Components与Angular集成}}{{Angular通过`CUSTOM_ELEMENTS_SCHEMA`支持在模板中使用自定义元素。需要在模块的`schemas`数组中添加此Schema。Angular的数据绑定和事件绑定可以直接作用于自定义元素，但需要注意属性（property）和特性（attribute）的区别。}}
+
+{{Web Components与Svelte集成}}{{Svelte天然支持Web Components，既可以使用现有的Web Components，也可以将Svelte组件编译为Web Components输出。通过`<svelte:options tag="my-component" />`指令可以将Svelte组件编译为标准的自定义元素。}}
+
+{{Lit框架}}{{Lit是Google维护的Web Components库（前身是LitElement/Polymer），是2025年构建Web Components最流行的工具。它提供声明式模板、响应式属性管理、高效的DOM更新（基于lit-html模板引擎），大大简化了Web Components的开发体验。基本用法：继承`LitElement`，使用`@property`装饰器和`html`模板标签。}}
+
+{{Stencil框架}}{{Stencil是Ionic团队开发的Web Components编译器，使用类似JSX的语法和TypeScript装饰器来定义组件。它在构建时将组件编译为标准Web Components，支持虚拟DOM、异步渲染、自动生成文档等特性。适合构建大规模组件库。}}
+
+{{Web Components性能优化}}{{Web Components性能优化包括：1. 使用`requestAnimationFrame`批量更新DOM；2. 避免在`attributeChangedCallback`中进行重操作；3. 合理使用CSS containment（`contain: content`）优化渲染；4. 延迟加载非关键组件；5. 避免不必要的Shadow DOM创建（简单组件可不使用）。}}
+
+{{Web Components测试}}{{Web Components测试方法包括：1. 使用Web Test Runner + @open-wc/testing进行单元测试；2. 通过`fixture()`函数渲染组件并断言DOM结构；3. 使用`sendKeys()`模拟用户交互；4. 使用Storybook进行视觉测试；5. 利用`shadowRoot`查询内部DOM进行断言。}}
+
+{{Web Components发布与分发}}{{Web Components适合发布为独立的npm包，支持CDN分发。推荐使用ES Module格式配合UMD/IIFE作为后备方案。发布时通常包含：组件源码、类型定义（.d.ts）、使用文档、示例代码。可以通过unpkg或jsDelivr CDN提供零配置的浏览器端使用。}}
+
+{{Web Components 2025新特性与趋势}}{{2025年Web Components生态持续成熟：1. Declarative Shadow DOM获得更广泛支持，允许服务端渲染Shadow DOM；2. CSS `@scope`规则提供更精细的样式作用域控制；3. `popovertarget`和锚点定位等原生UI能力减少对自定义组件的需求；4. Web Components在微前端架构中的应用越来越广泛。}}
+
+{{Declarative Shadow DOM}}{{Declarative Shadow DOM（DSD）允许在HTML中直接声明Shadow DOM结构，无需JavaScript。使用`<template shadowrootmode="open">`语法，在服务端渲染场景中特别有用。2025年所有主流浏览器均已支持DSD，是Web Components支持SSR的关键技术。}}
+
+{{Web Components设计原则}}{{设计高质量Web Components应遵循：1. 单一职责原则，每个组件做好一件事；2. 合理的API设计，属性、方法、事件命名清晰；3. 渐进增强，确保无JS时有合理的降级显示；4. 无障碍优先，内置键盘导航和ARIA支持；5. 响应式设计，适配不同屏幕尺寸。}}
+
+{{Web Components与Design System}}{{Web Components是构建跨框架Design System的理想选择。组件的封装性确保样式一致性，Custom Properties实现主题定制，Slots提供灵活的内容组合。Google Material Web、Shoelace（现更名为Web Awesome）、Lion等知名设计系统均基于Web Components构建。}}
+
+{{Web Components调试技巧}}{{调试Web Components技巧：1. Chrome DevTools的Elements面板可展开Shadow DOM树；2. 使用`open`模式的Shadow Root便于JavaScript调试；3. 在`connectedCallback`中添加`console.log`追踪生命周期；4. 使用`customElements.getName(element)`反向查询元素注册名；5. Performance面板可分析Shadow DOM渲染性能。}}

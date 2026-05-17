@@ -1,0 +1,81 @@
+# 2025自动化测试入门
+# 领域: 计算机IT
+# 学科: 自动化测试
+# 来源: 2025自动化测试入门
+# 描述: 自动化测试核心知识点
+
+{{自动化测试定义}}自动化测试是利用测试工具或脚本自动执行测试用例、验证结果并生成报告的软件测试方法，目的是提高测试效率、减少人工重复劳动、提升软件质量。与手动测试相比，自动化测试具有可重复性高、执行速度快、覆盖范围广的优势，适用于回归测试、性能测试等场景。
+
+{{自动化测试适用场景}}自动化测试最适合以下场景：回归测试（频繁执行的稳定功能）、数据驱动测试（大量输入组合）、性能测试（并发和负载）、冒烟测试（构建后快速验证）。不适合探索性测试、需求频繁变更的测试、以及一次性执行的测试。判断标准是：测试用例执行频率高且需求稳定时值得自动化。
+
+{{测试金字塔}}测试金字塔是自动化测试的分层策略：底层是单元测试（数量最多、执行最快、成本最低），中间层是集成测试/API测试（数量适中），顶层是UI测试/E2E测试（数量最少、执行最慢、维护成本最高）。遵循金字塔原则可以平衡测试覆盖率与维护成本，避免倒金字塔导致的测试脆弱问题。
+
+{{Selenium概述}}Selenium是最经典的Web UI自动化测试框架，支持多种浏览器和操作系统。2025年Selenium 4已成为主流版本，引入了W3C WebDriver协议、相对定位器、Chrome DevTools Protocol支持等新特性。Selenium Grid支持分布式执行，Selenium Manager自动管理浏览器驱动，大幅降低了环境配置门槛。
+
+{{Selenium WebDriver基础}}Selenium WebDriver通过浏览器原生驱动直接控制浏览器操作。核心API包括：driver.get()打开页面、find_element()定位元素、click()点击、send_keys()输入文本、get_screenshot_as_png()截图。元素定位方式有ID、Name、Class Name、Tag Name、CSS Selector、XPath等，优先使用ID和CSS Selector以提高稳定性。
+
+{{Selenium等待机制}}Selenium有三种等待方式：隐式等待（implicit_wait）全局设置元素查找超时；显式等待（WebDriverWait+expected_conditions）针对特定条件等待；强制等待（time.sleep）不推荐使用。最佳实践是使用显式等待配合expected_conditions，如visibility_of_element_located、element_to_be_clickable等条件，避免因页面加载延迟导致的测试不稳定。
+
+{{Selenium Page Object模式}}Page Object Model（POM）是Selenium测试的设计模式，将页面元素定位和操作封装到独立的Page类中。优点：提高代码复用性、增强可维护性、测试逻辑与页面细节分离。实现方式是每个页面创建一个Page类，包含元素定位器和页面操作方法，测试脚本只调用Page类的方法而不直接操作元素。
+
+{{Playwright概述}}Playwright是微软开发的现代Web自动化测试框架，2025年已成为Selenium的主要竞争者。支持Chromium、Firefox、WebKit三大浏览器引擎，原生支持自动等待、网络拦截、多标签页操作。相比Selenium，Playwright执行速度更快、API更现代、内置测试运行器和代码生成器，特别适合现代SPA应用测试。
+
+{{Playwright核心特性}}Playwright的核心特性包括：自动等待机制（元素可操作时自动执行，无需手动等待）、网络路由拦截（mock API请求）、浏览器上下文隔离（模拟多用户场景）、代码生成器（codegen录制操作生成代码）、追踪查看器（Trace Viewer调试失败测试）。还支持移动端模拟、地理位置模拟、时区设置等高级功能。
+
+{{Playwright vs Selenium对比}}2025年两者对比：Playwright在执行速度、自动等待、API设计上更优；Selenium在浏览器兼容性、社区成熟度、第三方生态上更强。Playwright原生支持并行执行和截图/视频录制；Selenium需要额外工具。新项目推荐Playwright；已有Selenium项目可继续维护。两者都支持Python、Java、JavaScript、C#等语言。
+
+{{API测试基础}}API测试验证应用程序接口的功能、可靠性、性能和安全性。与UI测试相比，API测试执行更快、更稳定、更早发现问题。REST API测试关注HTTP方法（GET/POST/PUT/DELETE）、请求头、请求体、响应状态码、响应体结构。GraphQL测试需关注查询语法和字段解析。API测试是自动化测试中性价比最高的层次。
+
+{{Postman自动化测试}}Postman是流行的API测试工具，支持手动测试和自动化测试。Collection Runner可批量执行请求集合，Newman命令行工具支持CI/CD集成。Postman支持环境变量、前置脚本（Pre-request Script）、测试脚本（Tests）、数据驱动测试。2025年Postman已支持gRPC、WebSocket、GraphQL协议测试，并集成了AI辅助生成测试用例功能。
+
+{{REST Assured框架}}REST Assured是Java生态中最流行的API测试库，提供DSL风格的BDD语法编写API测试。核心方法：given()设置请求参数、when()发送请求、then()验证响应。支持JSON Schema验证、XML验证、文件上传下载、OAuth认证。与JUnit/TestNG集成后可纳入自动化测试套件，配合Allure生成美观的测试报告。
+
+{{API测试最佳实践}}API自动化测试最佳实践：1）验证状态码、响应时间、响应体结构和关键字段；2）使用数据驱动测试覆盖不同输入场景；3）测试正常流程和异常流程（401、403、404、500等）；4）使用Schema验证确保接口契约一致性；5）隔离测试环境，使用Mock服务避免外部依赖；6）将API测试集成到CI/CD流水线中。
+
+{{移动端自动化测试概述}}移动端自动化测试分为原生应用、Web应用和混合应用测试。2025年主流工具包括Appium（跨平台）、Espresso（Android原生）、XCUITest（iOS原生）。移动端测试需考虑设备碎片化、网络环境变化、手势操作、权限管理等特殊因素。云测试平台（如BrowserStack、Sauce Labs）提供大量真机和模拟器资源。
+
+{{Appium框架}}Appium是开源的跨平台移动端自动化测试框架，基于WebDriver协议，支持Android和iOS平台。核心理念：测试不需要修改应用源码、支持多种编程语言、API跨平台复用。Appium 2.0采用插件化架构，通过driver和plugin扩展功能。UiAutomator2用于Android、XCUITest用于iOS作为底层驱动。
+
+{{Appium元素定位}}移动端元素定位方式：ID（resource-id/accessibility-id）、XPath、Class Name、Accessibility ID（推荐）、CSS Selector（仅WebView）。Android还可使用UiAutomator选择器（如textContains、className）。推荐优先使用accessibility-id，其次是resource-id，避免使用XPath（性能差且脆弱）。Appium Inspector是官方提供的元素检查工具。
+
+{{移动端手势测试}}移动端特有的手势操作测试：滑动（swipe）、长按（long press）、捏合缩放（pinch/zoom）、拖拽（drag）、多点触控。Appium通过TouchAction/MultiTouchAction API实现手势操作，W3C Actions API是更现代的方式。测试需覆盖横竖屏切换、通知栏交互、系统弹窗处理（权限请求、系统更新提示等）。
+
+{{测试框架选型}}2025年测试框架选型指南：Web UI测试选Playwright（新项目）或Selenium（已有项目）；API测试选Postman（手动+自动化）或REST Assured（纯代码）；移动端测试选Appium（跨平台）或Espresso/XCUITest（原生）；单元测试各语言有成熟框架（JUnit、pytest、Jest等）；BDD框架选Cucumber或Behave。选型需考虑团队技术栈和学习成本。
+
+{{pytest框架}}Python生态中最流行的测试框架pytest，支持简单的assert语句、fixture机制、参数化测试、插件扩展。核心特性：fixture实现测试前置/后置操作、conftest.py共享配置、parametrize实现数据驱动、markers标记测试分组。常用插件：pytest-html（报告）、pytest-xdist（并行执行）、pytest-ordering（执行顺序）、pytest-rerunfailures（失败重试）。
+
+{{TestNG框架}}TestNG是Java生态的测试框架，功能比JUnit更强大。支持注解配置（@Test、@BeforeMethod、@AfterSuite等）、测试套件组织、数据驱动（@DataProvider）、并行执行、依赖测试、分组测试。与Selenium集成广泛，配合Allure报告框架使用。TestNG的XML配置文件可灵活组织测试套件和执行策略。
+
+{{数据驱动测试}}数据驱动测试将测试数据与测试逻辑分离，同一测试脚本用不同数据集执行。实现方式：pytest的@parametrize装饰器、TestNG的@DataProvider、CSV/Excel/JSON/YAML数据文件、数据库数据源。优点是减少重复代码、提高覆盖率、数据易于维护。结合外部数据文件时注意数据格式解析和异常数据处理。
+
+{{关键字驱动测试}}关键字驱动测试将测试操作抽象为关键字（如"打开浏览器"、"输入文本"、"点击按钮"），非技术人员也能编写测试用例。实现方式：定义关键字库、测试用例表格（Excel/CSV）、解析引擎执行。Robot Framework是典型的关键字驱动框架。优点是降低自动化门槛；缺点是关键字库维护成本高，复杂场景表达能力有限。
+
+{{CI/CD集成}}自动化测试与CI/CD集成是2025年测试工程化的核心。Jenkins、GitHub Actions、GitLab CI、Azure DevOps是主流CI/CD工具。集成方式：代码提交触发冒烟测试、PR合并前执行回归测试、每日定时执行完整测试套件。关键实践：测试结果可视化、失败即时通知、测试覆盖率报告、并行执行加速反馈。
+
+{{GitHub Actions测试集成}}GitHub Actions是2025年最流行的CI/CD平台之一。自动化测试集成示例：在workflow YAML中定义触发条件（push/pull_request/schedule），配置测试环境（setup-node/setup-python），安装依赖，运行测试命令，上传测试报告和截图。支持matrix策略跨多浏览器/多操作系统并行测试。Artifact存储测试报告和失败截图。
+
+{{Jenkins持续集成}}Jenkins是老牌CI/CD工具，通过Pipeline as Code（Jenkinsfile）定义自动化测试流水线。关键插件：Allure Report（测试报告）、HTML Publisher（报告展示）、JUnit Plugin（结果解析）、Pipeline（流水线定义）。Jenkins支持分布式构建（master-agent架构），适合大规模测试执行。Blue Ocean插件提供现代化的流水线可视化。
+
+{{测试报告}}测试报告是自动化测试的重要产出。Allure是最流行的测试报告框架，支持JUnit、TestNG、pytest、Playwright等，提供美观的Web界面展示测试结果、步骤详情、附件（截图/日志）、历史趋势。其他工具：ExtentReports（Java/Python）、pytest-html（Python）、ReportPortal（支持AI分析失败原因）。好的报告应包含失败原因分析和环境信息。
+
+{{测试环境管理}}自动化测试需要稳定的测试环境。实践包括：Docker容器化测试环境（一致性保障）、测试数据库独立管理（数据隔离）、Mock/Stub外部服务（减少依赖）、环境变量管理（敏感信息保护）。2025年趋势是使用Kubernetes编排测试环境，实现按需创建和销毁。TestContainers库可在测试中自动管理Docker容器。
+
+{{测试数据管理}}测试数据管理是自动化测试的难点之一。策略：工厂模式（Factory）创建测试数据、Fixture setup/teardown管理数据生命周期、独立测试数据库避免数据污染、API创建/清理测试数据。注意：测试间数据隔离、避免硬编码数据、敏感数据脱敏。Faker库可生成逼真的测试数据（姓名、地址、邮箱等）。
+
+{{测试稳定性}}Flaky Test（不稳定测试）是自动化测试的主要痛点。常见原因：时序问题（元素未加载就操作）、环境不稳定（网络波动）、测试数据污染、异步操作未正确等待。解决方案：使用显式等待替代sleep、增加重试机制、隔离测试数据、Mock外部服务、设置合理的超时时间。Flaky test应被标记和跟踪，逐步修复或删除。
+
+{{BDD行为驱动开发}}BDD（Behavior Driven Development）用自然语言描述测试场景，连接开发、测试和业务人员。Gherkin语法（Given-When-Then）编写Feature文件，Cucumber/Behave等框架将步骤映射到代码实现。优点：需求即测试、文档即测试、非技术人员可参与。缺点：步骤定义维护成本、不适合所有测试场景。推荐在验收测试层使用BDD。
+
+{{性能测试入门}}性能测试验证系统在不同负载下的响应时间、吞吐量和稳定性。JMeter是开源性能测试工具，支持HTTP、JDBC、SOAP等多种协议。Locust是Python编写的性能测试框架，用代码定义用户行为。k6是现代化的性能测试工具，用JavaScript编写脚本。Grafana+k6组合是2025年流行的性能测试监控方案。
+
+{{安全测试基础}}自动化安全测试在2025年越来越重要。OWASP ZAP是开源的安全扫描工具，可集成到CI/CD中自动扫描Web应用漏洞（XSS、SQL注入、CSRF等）。SAST（静态应用安全测试）工具如SonarQube在代码层面发现安全问题。依赖扫描工具（如Dependabot、Snyk）检测第三方库漏洞。安全测试应左移到开发阶段。
+
+{{AI辅助测试}}2025年AI在测试领域的应用包括：AI生成测试用例（基于需求文档自动生成）、自愈测试（元素定位变化时自动修复）、智能测试选择（根据代码变更智能选择需要执行的测试）、视觉AI测试（基于图像对比的UI测试）、测试覆盖率分析。工具如Testim、Mabl、Katalon已集成AI功能，提升测试效率和稳定性。
+
+{{测试代码规范}}自动化测试代码应遵循与开发代码相同的质量标准：遵循DRY原则（避免重复代码）、使用Page Object模式组织代码、合理使用注释和命名规范、代码审查（Code Review）、版本控制（Git）。测试代码也需要重构和维护，不要因为是"测试代码"而降低标准。良好的测试代码结构是自动化测试长期成功的基础。
+
+{{测试策略制定}}制定自动化测试策略需考虑：1）自动化范围和优先级（核心业务流程优先）；2）测试金字塔各层的比例分配；3）工具和框架选型（团队技术栈匹配）；4）执行策略（触发时机、并行度、环境）；5）维护计划（定期清理过时用例、修复Flaky test）；6）ROI评估（投入产出比量化）。策略应随项目演进定期调整。
+
+{{跨浏览器测试}}跨浏览器测试确保Web应用在不同浏览器和版本上表现一致。2025年主要测试矩阵：Chrome、Firefox、Safari、Edge。Playwright原生支持三大引擎。BrowserStack、Sauce Labs提供云端跨浏览器测试能力。测试重点：CSS渲染差异、JavaScript API兼容性、浏览器特有行为。Responsive设计测试还需覆盖不同分辨率和设备类型。
+
+{{测试监控与告警}}自动化测试运行后需要监控和告警机制。实践包括：测试结果趋势分析（识别质量下降趋势）、失败率监控（Flaky test识别）、执行时间监控（性能退化检测）、集成通知渠道（Slack/Teams/邮件）。Allure和ReportPortal提供历史趋势分析。KPI指标：测试通过率、测试覆盖率、缺陷逃逸率、平均修复时间。

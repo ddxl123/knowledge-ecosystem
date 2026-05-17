@@ -1,0 +1,83 @@
+# 2025前端前端构建优化
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{Vite构建优化原理：Vite在开发模式下利用浏览器原生ESM实现按需编译，无需打包整个应用，极大加速冷启动。生产构建从Rollup迁移到Rolldown（Rust实现），构建速度提升10-30倍。Vite 6+通过Rolldown实现统一的开发与生产构建引擎。}}
+
+{{知识点2}}{{Webpack构建性能优化核心策略：使用最新webpack版本获取性能改进；Loader通过include/exclude限制处理范围，仅对src目录应用babel-loader；减少Loader和Plugin数量以降低启动开销；使用持久化缓存（cache选项）加速增量构建。来源：webpack.js.org/guides/build-performance}}
+
+{{知识点3}}{{Tree Shaking原理与实践：Tree Shaking依赖ES Module静态结构，在打包时移除未被引用的export代码。Webpack通过标记未使用导出（usedExports）配合Terser删除死代码。Rolldown/Vite内置更激进的Tree Shaking。关键要求：package.json中设置"sideEffects": false，避免使用CommonJS模块格式。}}
+
+{{知识点4}}{{代码分割（Code Splitting）策略：通过动态import()实现路由级懒加载；使用SplitChunksPlugin将公共依赖提取为独立chunk；按功能模块拆分，设置合理的maxSize阈值；预加载/预获取关键chunk（<link rel="modulepreload">）提升页面切换体验。}}
+
+{{知识点5}}{{Rspack——基于Rust的高性能构建工具：由字节跳动开源，API兼容webpack，构建速度比webpack快5-10倍。支持webpack的Loader和Plugin生态，可零成本迁移。2025年Rspack 1.x稳定版已广泛用于大型项目，成为webpack的重要替代方案。}}
+
+{{知识点6}}{{esbuild——极速JavaScript/TypeScript编译器：用Go语言编写，编译速度比Babel快100倍以上。Vite内部使用esbuild进行依赖预打包（pre-bundling）和JS/TS转译。可独立用于简单项目的构建，但插件生态不如Rollup/Rolldown丰富。}}
+
+{{知识点7}}{{SWC编译器优化：Rust编写的超快编译器，可替代Babel和Terser。Next.js默认使用SWC进行编译和压缩，编译速度比Babel快约20倍。支持自定义WASM插件扩展功能。Turbopack底层也使用SWC作为编译核心。}}
+
+{{知识点8}}{{持久化缓存策略：Webpack 5内置文件系统缓存（cache.type: 'filesystem'），将编译结果持久化到磁盘，二次构建速度提升80%以上。Vite开发模式对预打包依赖进行硬缓存。清理缓存时机：依赖更新后在postinstall脚本中清除cache目录。}}
+
+{{知识点9}}{{Loader优化实践：限制Loader处理范围，使用include只处理必要文件；thread-loader将耗时Loader（如babel-loader）分发到Worker线程池并行处理；使用cache-loader（Webpack 4）或cache选项（Webpack 5）缓存Loader结果；避免在单个Loader中做过多转换。}}
+
+{{知识点10}}{{Terser压缩优化：Webpack默认使用Terser进行代码压缩。可通过parallel选项开启多进程并行压缩；设置terserOptions.compress.drop_console删除console.log；生产环境移除debugger语句。替代方案：esbuild minify速度比Terser快50倍但压缩率略低。}}
+
+{{知识点11}}{{图片资源优化：使用image-minimizer-webpack-plugin自动压缩图片；通过sharp或squoosh进行无损/有损压缩；将小图片转为Base64内联（url-loader limit选项）；现代格式如WebP/AVIF比PNG/JPEG小30-80%，使用<picture>标签提供降级方案。}}
+
+{{知识点12}}{{CSS构建优化：使用MiniCssExtractPlugin将CSS提取为独立文件；css-minimizer-webpack-plugin使用cssnano进行CSS压缩；PostCSS自动添加浏览器前缀（autoprefixer）；使用CSS Modules或Tailwind CSS减少CSS体积；启用CSS Tree Shaking移除未使用的样式。}}
+
+{{知识点13}}{{资源压缩传输（Brotli/Gzip）：构建时使用compression-webpack-plugin预生成.gz和.br文件；Brotli比Gzip压缩率高15-25%，已成为现代浏览器标配；Nginx配置gzip on和brotli on；Vite使用vite-plugin-compression实现构建时压缩。}}
+
+{{知识点14}}{{开发服务器热更新优化：Webpack DevServer使用HMR（Hot Module Replacement）实现模块级热替换；Vite的HMR基于ESM实现毫秒级热更新；React Fast Refresh实现组件状态保留的热更新；Vue的SFC热更新天然支持状态保持。}}
+
+{{知识点15}}{{Module Federation（模块联邦）：Webpack 5引入，实现运行时模块共享，多个独立应用共享依赖而不需重新构建。微前端架构核心技术之一。Rspack和Vite社区也有对应的Module Federation实现（@module-federation/vite）。}}
+
+{{知识点16}}{{构建分析与可视化：webpack-bundle-analyzer生成交互式包体积分析图；Vite使用rollup-plugin-visualizer分析构建产物；source-map-explorer分析Source Map确定各模块体积占比；Chrome DevTools Coverage面板检测代码覆盖率，指导代码分割。}}
+
+{{知识点17}}{{依赖预打包（Pre-bundling）：Vite开发模式下对node_modules中的依赖进行预打包，将大量小模块合并为少数大模块，减少浏览器请求数。使用esbuild实现，速度极快。可通过optimizeDeps配置预打包行为，include/exclude控制预打包范围。}}
+
+{{知识点18}}{{Resolve优化：减少resolve.modules、resolve.extensions、resolve.mainFiles中的条目数，降低文件系统调用次数；不使用符号链接时设置resolve.symlinks: false；Vite建议使用显式导入路径（如import './Component.jsx'）避免扩展名猜测的多次文件系统检查。}}
+
+{{知识点19}}{{Polyfill按需加载策略：使用@babel/preset-env的useBuiltIns: 'usage'按需注入Polyfill；core-js 3提供模块化Polyfill；Vite的@vitejs/plugin-legacy为旧浏览器生成降级chunk并自动注入Polyfill；利用Browserslist配置目标浏览器范围。}}
+
+{{知识点20}}{{Monorepo构建优化：使用Turborepo实现增量构建和任务缓存，只重新构建变更的包；Nx提供受影响项目检测（affected）和分布式缓存；pnpm workspace的依赖提升减少重复安装；使用changesets管理版本和发布流程。}}
+
+{{知识点21}}{{CI/CD中的构建优化：利用远程构建缓存（Turborepo Remote Cache、Nx Cloud）在CI间共享构建产物；GitHub Actions/S3缓存node_modules和构建缓存；并行执行Lint、Test、Build任务；使用Docker多阶段构建减小部署镜像体积。}}
+
+{{知识点22}}{{Source Map策略：开发环境使用eval-source-map或cheap-module-source-map提供完整调试体验；生产环境使用hidden-source-map或nosources-source-map避免Source Map暴露源码；source-map-loader将Source Map从第三方库传递给后续Loader进行调试。}}
+
+{{知识点23}}{{环境变量与构建条件编译：Webpack的DefinePlugin、Vite的import.meta.env实现编译时环境变量注入；通过process.env.NODE_ENV区分开发/生产环境启用不同优化；使用dead code elimination在构建时移除开发专用代码路径。}}
+
+{{知识点24}}{{字体优化策略：使用font-display: swap避免FOIT（不可见文本闪烁）；Font subsetting仅包含页面使用的字符子集，中文字体可使用字蛛（font-spider）或cn-font-split进行按需分包；使用woff2格式比woff小30%；通过<font-display>和preload优化字体加载时序。}}
+
+{{知识点25}}{{Service Worker与离线缓存：使用Workbox库在构建时生成Service Worker；预缓存（precache）关键资源实现离线可用；运行时缓存策略（Cache First/Network First/Stale While Revalidate）优化不同资源类型的加载体验。}}
+
+{{知识点26}}{{Turbopack——Next.js的新一代构建工具：由Vercel用Rust开发，Webpack作者Tobias Koppers参与设计。声称比Vite快10倍、比Webpack快700倍（大型应用）。Next.js 15+默认集成Turbopack用于开发服务器，生产构建支持持续迭代中。}}
+
+{{知识点27}}{{构建产物体积监控：设置包体积预算（budget），Webpack的performance配置可设置maxAssetSize和maxEntrypointSize告警；bundlewatch工具在PR中自动报告包体积变化；size-limit工具精确测量npm包发布体积；使用webpack-stats-plugin生成统计JSON用于长期追踪。}}
+
+{{知识点28}}{{HTTP/2与HTTP/3对构建策略的影响：HTTP/2多路复用减少了合并请求数的必要性；HTTP/3基于QUIC协议进一步降低延迟；构建策略从"合并大文件"转向"合理细粒度分割+长缓存"；利用HTTP/2 Server Push（已被Priority Hints取代）预推送关键资源。}}
+
+{{知识点29}}{{SSR/SSG构建优化：服务端渲染（SSR）需同时构建客户端和服务端bundle；Streaming SSR（React 18+）实现渐进式HTML输出，提升TTFB；Next.js的增量静态再生（ISR）结合静态生成与动态更新；使用React Server Components减少客户端JavaScript体积。}}
+
+{{知识点30}}{{WebAssembly在构建工具中的应用：Vite/Rolldown/Rspack/SWC等现代构建工具的核心模块使用Rust/Go编写编译为原生代码，实现数十倍于JS工具的性能；WASM插件允许在非JS运行时中扩展构建工具功能（如SWC自定义转换）；Rust-based工具链成为2025年前端构建的主流趋势。}}
+
+{{知识点31}}{{静态资源CDN部署策略：将构建产物中的静态资源（JS/CSS/图片）部署到CDN；通过contenthash文件名实现长期缓存（Cache-Control: max-age=31536000）；HTML文件设置no-cache确保总能获取最新版本；Vite的build.rollupOptions.output.assetFileNames和chunkFileNames配置哈希命名。}}
+
+{{知识点32}}{{构建安全优化：使用npm audit和snyk扫描依赖漏洞；Lockfile（package-lock.json/pnpm-lock.yaml）确保可复现构建；.npmrc配置strict-ssl和ignore-scripts；构建时使用Docker固定基础镜像版本；使用npm provenance验证包发布来源。}}
+
+{{知识点33}}{{AST级代码优化：使用jscodeshift进行自动化代码重构和API迁移；babel-plugin-transform-remove-console等插件在编译时移除调试代码；SWC和Rolldown内置AST优化pass实现更高效的代码转换；使用magic-string进行高性能Source Map友好的字符串操作。}}
+
+{{知识点34}}{{增量编译与增量构建：Webpack watch模式追踪文件时间戳实现增量编译；Vite开发模式天然增量——只编译浏览器请求的模块；Turborepo/Nx基于文件哈希实现Monorepo级增量构建；Rspack的增量编译在大型项目中比Webpack快一个数量级。}}
+
+{{知识点35}}{{构建工具迁移策略：从Webpack迁移到Vite/Rspack时，可通过兼容层逐步迁移；Rspack对webpack API高度兼容，多数项目可直接替换；Vite的vite-plugin-checker在开发时提供TypeScript类型检查；使用build tool comparison matrix评估项目需求选择最合适的工具。}}
+
+{{知识点36}}{{CSS-in-JS构建性能考量：运行时CSS-in-JS（如styled-components）增加运行时开销；零运行时方案（vanilla-extract、Linaria、Panda CSS）在构建时生成CSS，性能更优；Tailwind CSS通过PurgeCSS在构建时移除未使用的工具类，产出极小CSS文件。}}
+
+{{知识点37}}{{Lazy Compilation（懒编译）：Webpack实验性功能（experiments.lazyCompilation），只为访问的页面启动编译，大型多页面应用开发启动时间可减少90%以上；Rspack也支持类似功能；Vite天然按需编译，无需额外配置懒编译。}}
+
+{{知识点38}}{{并行构建技术：Webpack的thread-loader实现Loader并行执行；Happy Loader（已废弃）的历史意义和教训；Turborepo并行执行独立包的构建任务；esbuild本身高度并行化，可充分利用多核CPU；Node.js的worker_threads在构建插件中实现自定义并行逻辑。}}
+
+{{知识点39}}{{构建产物优化——Shimming与Polyfill策略：ProvidePlugin自动加载模块（如将$自动映射到jQuery）；imports-loader/shimming处理不规范的第三方模块；按需引入Polyfill避免全量注入；使用nomodule策略为新旧浏览器提供不同的代码包。}}
+
+{{知识点40}}{{前端构建监控与度量：构建时间追踪（Webpack profiling、Vite --profile）；使用speedscope分析构建性能瓶颈的CPU Profile；定期统计Bundle体积趋势，设置告警阈值；使用Lighthouse CI在构建流水线中自动检测性能回归；Core Web Vitals指标（LCP/FID/CLS/INP）作为构建优化效果的最终衡量标准。}}

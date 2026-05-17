@@ -1,0 +1,83 @@
+# 2025前端React Native
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{React Native新架构(New Architecture)：自2018年开始重新设计React Native核心内部结构，2024年成为默认架构。新架构包含Fabric渲染器和TurboModules两大核心组件，解决了旧架构的根本性限制。React Native 0.82(2025年10月发布)是第一个完全运行在新架构上的版本，标志着"新纪元"的开始。}}
+
+{{知识点2}}{{Fabric渲染器：React Native的新渲染系统，是对旧渲染系统的概念性进化。核心原则是将更多渲染逻辑统一到C++中，改善与宿主平台的互操作性，解锁新能力。支持同步布局和效果，解决了旧架构中布局"跳动"的问题，允许使用useLayoutEffect同步测量和应用布局更新。}}
+
+{{知识点3}}{{TurboModules：新架构的原生模块系统，替代了旧的Native Modules。通过JSI(JavaScript Interfaces)直接访问JavaScript值，大幅减少了JS和原生平台之间的数据序列化。支持懒加载，宿主组件默认延迟初始化，改善了启动速度。}}
+
+{{知识点4}}{{Hermes引擎：专为React Native优化的开源JavaScript引擎。相比JavaScriptCore，提供更快的启动时间、更低的内存占用和更小的应用体积。React Native默认使用Hermes，无需额外配置。编译时将JavaScript转为Hermes字节码(.hbc文件)可进一步提升启动速度。}}
+
+{{知识点5}}{{Hermes V1(实验性)：Hermes的下一代演进版本，在React Native 0.82中提供实验性选项。改进了编译器和VM，在Expensify应用测试中，Android低端设备Bundle加载快3.2%、总TTI快7.6%，iOS Bundle加载快9%、总TTI快2.5%。尚未包含JS到原生编译(Static Hermes)和JIT编译。}}
+
+{{知识点6}}{{React Native版本演进(2025)：0.80(2025年6月)引入React 19.1、JS API变更、冻结旧架构；0.81(2025年8月)支持Android 16、加速iOS构建；0.82(2025年10月)完全转向新架构、实验性Hermes V1、React 19.1.1、DOM Node API；0.83(2025年12月)引入React 19.2、新DevTools功能。}}
+
+{{知识点7}}{{同步布局和效果：新架构的核心优势之一。旧架构中onLayout回调中的状态更新可能在前一次渲染后才应用，导致用户看到中间状态或视觉跳动。新架构通过同步访问布局信息和正确调度的更新，确保用户看不到任何中间状态。}}
+
+{{知识点8}}{{并发渲染器支持：新架构支持React 18+的并发渲染和特性，包括Suspense数据获取、Transitions等新React API。并发渲染器还带来开箱即用的自动批处理(Automatic Batching)，减少React中的重新渲染次数。}}
+
+{{知识点9}}{{JSI(JavaScript Interfaces)：新架构的数据传输机制，替代了旧架构中JSON序列化的方式。JSI允许直接访问JavaScript值，大幅减少了JS和原生平台之间的数据序列化开销，提升了整体性能。}}
+
+{{知识点10}}{{C++共享核心：新架构的渲染器使用C++实现，核心在各平台间共享。这提高了跨平台一致性，使得在新平台上采用React Native更加容易，所有平台都能从性能改进中受益。}}
+
+{{知识点11}}{{View Flattening：视图扁平化技术，最初是Android的性能优化方案，现在默认在Android和iOS上都提供。通过减少视图层级来优化渲染性能。}}
+
+{{知识点12}}{{React Navigation：React Native社区的导航解决方案，支持栈导航(Stack)、标签导航(Tab)、抽屉导航(Drawer)等模式。通过createNativeStackNavigator创建原生栈导航器，提供原生的导航体验。安装需要@react-navigation/native和相应的导航器包。}}
+
+{{知识点13}}{{React Navigation静态API：新版React Navigation提供createStaticNavigation静态导航配置方式，通过定义screens对象配置页面，代码更简洁。支持TypeScript类型推导，提供更好的开发体验。}}
+
+{{知识点14}}{{FlatList组件：高性能的平面列表渲染组件，支持跨平台、水平模式、可配置的可见性回调、头部/尾部/分隔符支持、下拉刷新、滚动加载、scrollToIndex、多列显示。基于VirtualizedList实现，内部状态在内容滚出渲染窗口时不保留。}}
+
+{{知识点15}}{{Animated动画库：声明式的动画系统，专注于输入和输出之间的声明式关系。核心工作流：创建Animated.Value，绑定到组件样式属性，通过Animated.timing()驱动更新。支持三种动画类型：decay(衰减)、spring(弹簧)、timing(定时)。}}
+
+{{知识点16}}{{Reanimated库：高性能React Native动画库，在UI线程上运行动画，避免JS线程阻塞导致的掉帧。支持手势驱动的动画、布局动画、进入/退出动画。是React Native动画的推荐方案之一。}}
+
+{{知识点17}}{{react-native-screens：React Navigation的核心依赖，提供原生的屏幕容器组件，优化内存使用和导航性能。将屏幕管理从JS层转移到原生层，实现更好的性能和内存管理。}}
+
+{{知识点18}}{{React Native跨平台扩展：从最初的Android和iOS，已扩展支持Apple TV、Windows、macOS、Web(通过react-strict-dom)。2025年React Conf宣布官方支持Meta Quest VR设备，实践"多平台愿景"。}}
+
+{{知识点19}}{{Expo框架：React Native的开发工具链和框架，提供托管工作流(Managed Workflow)和裸工作流(Bare Workflow)。Expo SDK与React Native版本紧密配合，Expo SDK 54对应React Native 0.81。提供expo install自动处理依赖兼容性。}}
+
+{{知识点20}}{{Metro打包器：React Native默认的JavaScript打包工具，负责将JS代码打包成bundle。支持热重载(Hot Reload)、快速刷新(Fast Refresh)。在新架构中配合Hermes，编译时生成字节码以优化启动性能。}}
+
+{{知识点21}}{{JS API稳定性：React Native 0.80开始推进JavaScript API的稳定化。目标是提供稳定的JS API，使第三方库开发者不需要随每个版本更新代码，降低生态碎片化。}}
+
+{{知识点22}}{{DOM Node API：React Native 0.82引入的新功能，提供类似Web DOM的节点操作API。进一步模糊了React Native和Web开发之间的界限，使跨平台代码共享更加容易。}}
+
+{{知识点23}}{{React 19在React Native中的应用：React Native 0.82升级到React 19.1.1，0.83升级到React 19.2。带来了Server Components支持、新的use() hook、改进的Suspense、Actions等React 19特性在移动端的可用性。}}
+
+{{知识点24}}{{React Native样式系统：基于CSS子集的样式方案，使用JavaScript对象定义样式。支持StyleSheet.create优化、Flexbox布局(默认flexDirection为column)、平台特定样式。不支持CSS继承，每个组件需要独立设置样式。}}
+
+{{知识点25}}{{原生模块(Native Modules)编写：允许用Java/Kotlin(Android)或Objective-C/Swift(iOS)编写原生代码，通过桥接层暴露给JavaScript。新架构中使用TurboModules和Codegen实现类型安全的原生模块，通过C++结构体确保JS和原生组件的props类型匹配。}}
+
+{{知识点26}}{{React Native调试工具：包括React DevTools(组件检查和性能分析)、Flipper(原生调试平台)、Hermes调试器、Chrome DevTools。React Native 0.83引入了新的DevTools功能，改善调试体验。}}
+
+{{知识点27}}{{React Native性能优化策略：使用React.memo避免不必要的重渲染、useMemo和useCallback缓存计算和回调、FlatList的getItemLayout优化滚动性能、InteractionManager延迟执行动画后的任务、新架构的自动批处理减少渲染次数。}}
+
+{{知识点28}}{{Codegen代码生成：新架构的类型安全保障机制。以JavaScript组件声明为源头，生成C++结构体来持有props。JS和宿主组件props之间的不匹配会触发构建错误，在编译时而非运行时发现类型问题。}}
+
+{{知识点29}}{{Interop Layers(互操作层)：新架构中为兼容旧架构第三方库而保留的过渡层。允许使用旧NativeModules API的库在新架构上继续工作。React Native 0.82+中互操作层将继续保留，不会短期内移除。}}
+
+{{知识点30}}{{react-native-safe-area-context：处理安全区域(Safe Area)的库，适配刘海屏、圆角屏等异形屏设备。提供SafeAreaView和SafeAreaInsets hooks，是React Navigation的必需依赖。}}
+
+{{知识点31}}{{React Native 0.82迁移指南：建议先迁移到0.81或Expo SDK 54(最后支持旧架构的版本)，在0.81上启用新架构并验证应用正常工作，然后安全升级到0.82。对于不兼容的第三方库，建议联系库维护者。}}
+
+{{知识点32}}{{React Native手势处理：react-native-gesture-handler库提供声明式的跨平台手势识别，支持拖拽、缩放、旋转等手势。配合Reanimated可实现高性能的手势驱动动画，在UI线程上运行避免卡顿。}}
+
+{{知识点33}}{{React Native状态管理：支持Redux、Zustand、Jotai、MobX等主流状态管理方案。React 19的use() hook和Server Components为状态管理带来新模式。新架构的并发特性也影响了状态更新的批处理方式。}}
+
+{{知识点34}}{{React Native网络请求：使用fetch API或axios进行HTTP请求。新架构中Suspense与数据获取的集成更加紧密，支持声明式数据获取模式。React Query/TanStack Query等库提供缓存、后台刷新等高级功能。}}
+
+{{知识点35}}{{React Native本地存储方案：AsyncStorage(简单键值对存储)、SQLite(关系型数据库)、MMKV(高性能键值存储，由微信开发)、Realm(面向对象数据库)。MMKV以极高的读写性能成为推荐方案。}}
+
+{{知识点36}}{{React Native推送通知：通过react-native-firebase或expo-notifications实现。支持FCM(Android)和APNs(iOS)。新架构中通知处理模块可以使用TurboModules获得更好的性能。}}
+
+{{知识点37}}{{React Native应用发布：Android通过Google Play Store发布(AAB格式)，iOS通过App Store发布。可使用Fastlane自动化发布流程，EAS Build(Expo Application Services)提供云端构建服务。}}
+
+{{知识点38}}{{Many Platform Vision(多平台愿景)：2021年提出的React Native发展路线图，目标是让React Native能够适应新设备和形态因素，而不导致生态系统碎片化。2025年通过Meta Quest VR支持等进一步实现这一愿景。}}
+
+{{知识点39}}{{React Native与原生代码混合开发：支持在现有原生应用中集成React Native，也支持在React Native应用中嵌入原生视图。新架构改善了宿主视图与React视图的互操作性，使混合开发更加顺畅。}}
+
+{{知识点40}}{{React Native社区生态：拥有庞大的第三方库生态系统，涵盖UI组件库(如React Native Paper、NativeBase)、图表库(如Victory Native、react-native-chart-kit)、地图(react-native-maps)、相机等。新架构的Codegen和类型安全有助于提升库的质量。}}

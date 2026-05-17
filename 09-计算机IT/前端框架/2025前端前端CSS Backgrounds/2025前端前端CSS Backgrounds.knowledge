@@ -1,0 +1,123 @@
+# 2025前端前端CSS Backgrounds
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{background 简写属性}}
+background 是 CSS 背景的简写属性，可以在一条声明中设置所有背景子属性：background-image、background-position、background-size、background-repeat、background-origin、background-clip、background-attachment 和 background-color。语法顺序推荐：<bg-image> <bg-position> / <bg-size> <repeat-style> <attachment> <bg-clip> <bg-origin> <'background-color'>。未设置的子属性会被重置为默认值（而非继承）。
+
+{{知识点2}}{{background-color 背景颜色}}
+background-color 设置元素的统一背景色，渲染在 background-image 之下。支持所有 CSS 颜色值格式：关键字（red）、十六进制（#74992e、#bf0）、RGB（rgb(255 255 128)）、HSL（hsl(50 33% 25%)）、currentColor、transparent。初始值为 transparent，不可继承，适用于所有元素及 ::first-letter 和 ::first-line。
+
+{{知识点3}}{{background-image 背景图片}}
+background-image 设置元素的一个或多个背景图像，值为 none 或 <image> 类型。支持 url()、linear-gradient()、radial-gradient()、conic-gradient()、image-set()、cross-fade()、element() 等。多个背景用逗号分隔，第一个在最顶层绘制。初始值为 none，不可继承。
+
+{{知识点4}}{{background-position 背景定位}}
+background-position 设置背景图像在定位区域中的初始位置。支持关键字（top、bottom、left、right、center）、百分比、长度值。单值语法：center 或一个 X 坐标（Y 默认 50%）。双值语法：第一个为 X，第二个为 Y。还支持三值和四值语法（关键字+偏移量），如 bottom 10px right 20px。百分比定位公式：(容器尺寸 - 图片尺寸) × 百分比 = 偏移量。
+
+{{知识点5}}{{background-size 背景尺寸}}
+background-size 设置背景图像的大小。关键字值：contain（等比缩放至容器内完全显示，不裁剪）、cover（等比缩放至完全覆盖容器，可能裁剪）。可指定一个或两个值（宽 高），支持长度和百分比。单值时高度默认 auto。百分比相对于 background-origin 定位区域计算。
+
+{{知识点6}}{{background-repeat 背景重复}}
+background-repeat 控制背景图像的平铺方式。单值等效：repeat（双向重复）、repeat-x（仅水平）、repeat-y（仅垂直）、no-repeat（不重复）、space（均匀分布不裁剪）、round（拉伸填充无间隙）。双值语法：第一个值水平方向，第二个值垂直方向，如 repeat space。初始值为 repeat。
+
+{{知识点7}}{{background-attachment 背景附着}}
+background-attachment 决定背景图像相对于视口还是元素滚动。三个值：scroll（默认，背景随元素本身滚动但不随内容滚动）、fixed（背景固定相对于视口，忽略 background-origin）、local（背景随元素内容一起滚动）。
+
+{{知识点8}}{{background-origin 背景原点}}
+background-origin 设置背景图像的定位参考区域。三个值：border-box（相对于边框盒）、padding-box（默认，相对于内边距盒）、content-box（相对于内容盒）。影响 background-position 的计算基准。
+
+{{知识点9}}{{background-clip 背景裁剪}}
+background-clip 控制背景（颜色和图像）的绘制区域。值：border-box（默认，延伸至边框外边缘）、padding-box（不绘制在边框下方）、content-box（仅内容盒内）、text（裁剪到前景文字，需 color: transparent 配合）、border-area（裁剪到边框绘制区域）。background-clip: text 可实现文字填充图片效果。
+
+{{知识点10}}{{多个背景层叠}}
+CSS 支持在单个元素上设置多个背景，用逗号分隔。第一个背景在最顶层绘制，最后一个在最底层。background-color 只能出现在最后一个背景层中。各子属性的值也用逗号分隔对应各层；如果值的数量少于背景层数，浏览器会循环重复这些值。
+
+{{知识点11}}{{background 简写中的 visual-box 值}}
+在 background 简写中，可以指定零个、一个或两个 <visual-box> 值。单个值同时设置 background-origin 和 background-clip。两个值中第一个设置 origin，第二个设置 clip。无值时 origin 默认 padding-box，clip 默认 border-box。
+
+{{知识点12}}{{background-position 百分比计算机制}}
+background-position 的百分比不是简单地相对于容器尺寸。公式为：偏移量 = (容器尺寸 - 图片尺寸) × 百分比。因此 0% 将图片左/上边缘对齐容器左/上边缘，100% 将图片右/下边缘对齐容器右/下边缘，50% 居中。
+
+{{知识点13}}{{background-size contain 与 cover 的区别}}
+contain 确保图片完全在容器内显示（可能留白），cover 确保图片完全覆盖容器（可能裁剪）。两者都保持图片原始宽高比。如果容器与图片比例不同，contain 会在一个方向留白，cover 会在一个方向裁剪。
+
+{{知识点14}}{{background-size 自动尺寸计算}}
+当 background-size 为 auto 时：有固有尺寸的位图使用原始尺寸；无固有尺寸且无比例的图像使用定位区域尺寸；无固有尺寸但有比例的图像等同于 contain；只有一个固有尺寸且有比例的图像按比例计算另一个维度。
+
+{{知识点15}}{{background-repeat space 与 round 的区别}}
+space 模式下图片被尽可能多地重复而不裁剪，首尾图片贴边，空白均匀分布。round 模式下图片被拉伸以完全填充可用空间直到能再放下一张，可能改变图片宽高比导致变形。space 保持原始比例，round 可能变形。
+
+{{知识点16}}{{background-attachment fixed 视差效果}}
+background-attachment: fixed 使背景图片固定在视口位置，内容滚动时背景不动，可创建视差滚动效果。注意：fixed 会忽略 background-origin 属性。移动端浏览器对 fixed 支持可能有差异。
+
+{{知识点17}}{{background-attachment local 滚动跟随}}
+local 值使背景随元素内容一起滚动，适合在有 overflow: scroll 的容器内使用。与 scroll 不同（scroll 背景固定在元素边框上，不随内容滚动），local 背景附着在内容上。
+
+{{知识点18}}{{background-clip: text 文字填充效果}}
+background-clip: text 将背景裁剪到文字形状内，配合 color: transparent 可实现文字内显示背景图或渐变的效果。需注意无障碍性——文字对比度可能不足，建议用 @supports 提供降级方案。
+
+{{知识点19}}{{线性渐变 linear-gradient}}
+linear-gradient() 创建线性渐变作为背景图像。默认从上到下。可指定方向：to right、to bottom left、70deg。支持多个色标（color stops），默认均匀分布。色标可指定位置百分比或长度。相邻色标同位置可创建硬边条纹效果。
+
+{{知识点20}}{{径向渐变 radial-gradient}}
+radial-gradient() 从中心向外辐射渐变。默认椭圆形匹配容器比例。可指定中心位置（at 0% 30%）、形状（circle/ellipse）、大小（closest-side、farthest-corner 等）。色标用法与线性渐变相同。
+
+{{知识点21}}{{锥形渐变 conic-gradient}}
+conic-gradient() 创建围绕中心旋转的渐变，色标沿圆周分布。语法：conic-gradient(from 角度 at 位置, 色标列表)。适合创建饼图、色轮、仪表盘等效果。配合 repeating-conic-gradient() 可创建重复锥形图案。
+
+{{知识点22}}{{渐变色标定位与多位置色标}}
+渐变色标可指定两个位置值（如 red 30% 45%），等价于两个连续同色色标。这创建纯色带区域。CSS Images Level 4 简化了此语法。色标之间可插入颜色提示（如 blue, 10%, pink）控制过渡中点。
+
+{{知识点23}}{{repeating-linear-gradient 重复线性渐变}}
+repeating-linear-gradient() 创建重复的线性渐变图案。与 linear-gradient 类似，但渐变模式会自动重复。适合创建条纹、栅格等规则图案。需确保渐变有明确的结束点以定义重复单元。
+
+{{知识点24}}{{repeating-radial-gradient 重复径向渐变}}
+repeating-radial-gradient() 创建重复的径向渐变图案。从中心向外重复渐变模式，适合创建同心圆、靶心等效果。同 repeating-linear-gradient，需要明确的色标位置定义重复单元。
+
+{{知识点25}}{{渐变叠加与透明度}}
+渐变支持透明度，可叠加多个半透明渐变实现复杂效果。多个渐变用逗号分隔，先定义的在上层。可结合 background-blend-mode（如 screen、overlay、difference）混合多个背景层。
+
+{{知识点26}}{{background-blend-mode 混合模式}}
+background-blend-mode 定义多个背景层之间的混合方式。支持 CSS 混合模式值：normal、multiply、screen、overlay、darken、lighten、color-dodge、color-burn、difference、exclusion、hue、saturation、color、luminosity。可用于渐变与图片、渐变与渐变之间的混合。
+
+{{知识点27}}{{image-set() 响应式背景图}}
+image-set() 函数为 background-image 提供基于分辨率的图片选择，类似 HTML 的 srcset。语法：image-set(url("img.webp") type("image/webp"), url("img.jpg") type("image/jpeg"))。浏览器选择最合适的图片。也可用 resolution 单位指定：image-set(url("small.png") 1x, url("large.png") 2x)。
+
+{{知识点28}}{{cross-fade() 图片混合}}
+cross-fade() 函数用于在两张图片之间创建指定比例的混合。语法：cross-fade(url(a.png), url(b.png), 50%)。50% 表示第一张图片的不透明度为 50%，第二张为 50%。可用于创建图片过渡或叠加效果。
+
+{{知识点29}}{{element() 函数背景}}
+element() 函数（实验性）将另一个 DOM 元素的渲染结果作为背景图像。语法：element(#id)。被引用元素的实时渲染会作为背景显示。目前浏览器支持有限。
+
+{{知识点30}}{{CSS 渐变作为边框图像}}
+CSS 渐变可与 border-image-source 结合使用，创建渐变边框效果。例如：border-image: linear-gradient(to right, red, blue) 1;。无需额外图片文件即可实现彩色边框。
+
+{{知识点31}}{{背景性能优化}}
+背景图性能注意事项：使用 background-size: cover/contain 避免过大的图片加载；使用 image-set() 提供不同分辨率；考虑使用 CSS 渐变替代小图案图片以减少 HTTP 请求；使用 will-change: background-position 对视差效果进行性能优化；注意 fixed attachment 在移动端可能触发合成层。
+
+{{知识点32}}{{背景的可访问性考量}}
+背景图对辅助技术不可见，屏幕阅读器不会播报。关键信息不应仅放在背景图中。background-color 应始终作为背景图的后备（网络不佳时显示）。文字与背景的对比度需满足 WCAG 标准：正文 4.5:1，大文本（18.66px 加粗或 24px 以上）3:1。
+
+{{知识点33}}{{body 背景传播机制}}
+如果 <html> 根元素的 background-image 为 none 且 background-color 为 transparent，浏览器会将 <body> 元素的背景样式传播到 <html> 元素，<body> 则重置为初始值。建议在 <body> 上设置文档背景。注意：在 <html> 或 <body> 上设置 contain 属性会禁用此传播行为。
+
+{{知识点34}}{{background-position-x 和 background-position-y}}
+background-position-x 和 background-position-y 分别控制背景图像的水平和垂直位置。它们是 background-position 的拆分属性（longhand）。CSS Backgrounds Level 4 还引入了 background-position-block 和 background-position-inline 逻辑属性（目前浏览器支持有限）。
+
+{{知识点35}}{{background-repeat-x 和 background-repeat-y}}
+background-repeat-x 和 background-repeat-y 分别控制水平和垂直方向的重复行为。它们是 background-repeat 的拆分属性。在简写中，repeat-x 等价于 repeat no-repeat，repeat-y 等价于 no-repeat repeat。
+
+{{知识点36}}{{background-color 的动画性}}
+background-color 是可动画属性，插值在 alpha-premultiplied sRGBA 颜色空间中进行，以避免过渡时出现意外的灰色。这使得颜色之间的过渡更加自然平滑。background-image 的动画类型为 discrete（离散切换，不可平滑过渡）。
+
+{{知识点37}}{{background 简写的初始值与重置}}
+使用 background 简写时，未显式设置的子属性会被重置为其初始值（不是继承值）。例如只写 background: red 会将 background-image 设为 none、background-repeat 设为 repeat 等。这意味着使用简写可能会覆盖之前单独设置的子属性值。
+
+{{知识点38}}{{CSS Backgrounds Level 4 新特性}}
+CSS Backgrounds Module Level 4 引入了新特性：background-position-block/inline 逻辑属性、background-repeat-block/inline 逻辑属性、background-clip: border-area 值。目前浏览器支持正在逐步完善中。
+
+{{知识点39}}{{渐变中的 color interpolation}}
+CSS 渐变默认在 sRGB 颜色空间插值。可使用 in 关键字指定颜色空间：linear-gradient(in oklch, red, blue)。支持的颜色空间包括 sRGB、display-p3、oklch、oklab、lab、lch 等。不同颜色空间会产生不同的过渡效果。
+
+{{知识点40}}{{background 与 box-shadow 配合}}
+背景与 box-shadow 常配合使用。box-shadow 位于边框外围（外阴影）或内边距区域内（内阴影，inset）。背景在边框下方渲染，box-shadow 在背景之上。两者结合可实现卡片悬浮、发光、凹凸等视觉效果。

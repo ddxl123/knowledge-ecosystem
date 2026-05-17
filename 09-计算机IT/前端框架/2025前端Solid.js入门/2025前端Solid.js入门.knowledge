@@ -1,0 +1,86 @@
+# 2025前端Solid.js入门
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{Solid.js是什么：Solid.js是一个声明式的JavaScript库，用于创建用户界面。与React等框架不同，它不使用虚拟DOM（Virtual DOM），而是将模板编译为真实的DOM节点，并通过细粒度的反应式更新（fine-grained reactions）来更新视图。Solid.js的核心理念是"声明状态，随处使用"——当状态变化时，只有依赖该状态的代码会重新运行。它由Ryan Carniato创建，经过五年以上的研究和优化，在JS Framework Benchmark中性能接近原生JavaScript。}}
+
+{{知识点2}}{{Solid.js的核心特性概览：Solid.js具备以下核心特性：(1)细粒度的真实DOM更新；(2)声明式数据模型，使用响应式原语（reactive primitives）；(3)组件只渲染一次（render-once）的心智模型；(4)自动依赖追踪；(5)体积小且完全支持tree-shaking；(6)学习曲线平缓，只需掌握几个强大概念；(7)提供JSX、Fragments、Context、Portals、Suspense、流式SSR、渐进式水合、错误边界和并发渲染等现代框架特性；(8)天然可调试，div就是真实的div；(9)支持Web Components；(10)同构渲染，支持客户端和服务端；(11)通用性，可编写自定义渲染器。}}
+
+{{知识点3}}{{Solid.js与React的核心区别：Solid.js与React最大的区别在于渲染机制。React使用虚拟DOM进行diff比较，而Solid.js直接操作真实DOM，通过编译时优化实现细粒度更新。在Solid中，组件函数只执行一次（render-once），不像React在每次状态更新时重新执行整个组件函数。Solid的响应式系统是基于Proxy的信号（Signals），而React依赖useState触发整个组件重渲染。Solid不需要useEffect等生命周期钩子，而是使用createEffect等响应式原语自动追踪依赖。}}
+
+{{知识点4}}{{Solid.js项目快速开始：可以使用以下命令快速创建Solid.js项目：
+- JavaScript版本：npx degit solidjs/templates/js my-app
+- TypeScript版本：npx degit solidjs/templates/ts my-app
+然后进入项目目录执行npm i安装依赖，npm run dev启动开发服务器。这会创建一个基于Vite的最小客户端渲染应用。也可以手动安装：npm i -D babel-preset-solid和npm i solid-js，然后在babel配置中添加presets: ["solid"]。TypeScript需要在tsconfig中设置jsx: "preserve"和jsxImportSource: "solid-js"。}}
+
+{{知识点5}}{{createSignal响应式信号基础：createSignal是Solid.js最核心的响应式原语，用于创建响应式状态。它返回一个元组[getter, setter]，其中getter是一个函数（不是值），setter用于更新状态。用法：const [count, setCount] = createSignal(0)。读取状态时必须调用count()（带括号），这是Solid自动依赖追踪的关键——调用getter函数时，Solid会记录当前正在运行的effect，从而在状态变化时自动触发更新。setCount可以接受新值或一个函数（如setCount(c => c + 1)）。}}
+
+{{知识点6}}{{组件的render-once特性：Solid.js组件是普通JavaScript函数，只执行一次来设置视图。这意味着函数体内的console.log只会在初始化时打印一次，而不会在状态更新时重复执行。这与React完全不同——React组件函数在每次状态更新时都会重新执行。Solid的组件通过闭包捕获初始值，然后通过响应式系统在需要时更新DOM中特定的部分。这种机制使得Solid具有极高的性能，因为不需要重新执行整个组件函数。}}
+
+{{知识点7}}{{派生状态（Derived State）：在Solid.js中创建派生状态非常简单，只需将响应式表达式包装在一个函数中。例如：const doubleCount = () => count() * 2。这个函数在每次调用时都会基于当前的count值计算结果。由于内部调用了count()，它会自动建立依赖关系。当count变化时，任何使用doubleCount的地方都会自动更新。这比React的useMemo更直观——不需要显式声明依赖数组。}}
+
+{{知识点8}}{{JSX模板编译机制：Solid.js使用JSX编写模板，但编译方式与React完全不同。Solid的编译器会将静态HTML提取为模板字符串（使用_$template），只对动态部分创建细粒度的更新逻辑。例如，编译器会将<button>Increment: </button>这样的静态部分预编译为模板，然后通过_$insert函数只更新动态变化的部分。这使得Solid在运行时几乎不需要进行diff操作，性能接近手写的原生JavaScript DOM操作。}}
+
+{{知识点9}}{{事件处理：Solid.js中的事件处理使用与React类似的onClick等属性语法，但实现方式不同。Solid支持两种事件绑定方式：(1)属性方式：onClick={() => setCount(c => c + 1)}；(2)事件委托：Solid会自动使用事件委托（delegateEvents），将事件处理器绑定到根元素上以提高性能。事件处理器可以是内联函数或引用函数。Solid还支持原生事件监听器的on:前缀语法，以及捕获阶段的onCapture:前缀。}}
+
+{{知识点10}}{{Fragments（片段）：Solid.js支持Fragments，允许组件返回多个根元素而无需额外的包装DOM节点。语法与React相同，使用<> </>或<Fragment>标签。Fragments在编译时会被优化处理，不会产生多余的DOM节点。这对于需要返回多个并列元素的组件非常有用，避免了不必要的div包裹。}}
+
+{{知识点11}}{{createEffect副作用函数：createEffect用于创建响应式副作用，当其依赖的响应式状态变化时自动重新执行。用法：createEffect(() => { console.log(count()) })。effect函数会在初始时执行一次，并自动追踪内部访问的所有响应式状态。当任何被追踪的状态变化时，effect会重新运行。Solid还提供了on和onCleanup等工具函数来更精细地控制effect的行为和清理逻辑。}}
+
+{{知识点12}}{{createMemo记忆化计算：createMemo用于创建记忆化的计算值，类似于派生状态但会缓存结果。只有当依赖变化时才会重新计算。用法：const doubleCount = createMemo(() => count() * 2)。与简单的派生函数不同，createMemo会在内部缓存计算结果，当依赖没有变化时直接返回缓存值。这对于计算代价较高的派生状态特别有用。createMemo返回的是一个信号getter，需要通过doubleCount()来访问值。}}
+
+{{知识点13}}{{createStore响应式Store：createStore用于创建深度响应式的状态对象，适合管理复杂嵌套数据结构。用法：const [store, setStore] = createStore({ name: "John", age: 30 })。与createSignal不同，createStore可以实现对对象属性的细粒度追踪——只有被访问的属性变化时，相关的effect才会重新运行。setStore支持路径式更新语法：setStore("age", 31)或setStore("address", "city", "New York")。}}
+
+{{知识点14}}{{Store的路径式更新语法：createStore的setter支持多种更新方式：(1)直接设置：setStore("name", "Jane")；(2)函数更新：setStore("age", a => a + 1)；(3)多路径更新：setStore("address", "city", "NYC")；(4)批量更新：setStore({ name: "Jane", age: 25 })；(5)条件更新和数组操作。这种路径式语法使得对深层嵌套对象的更新变得简洁直观，不需要像React的setState那样手动展开整个对象。}}
+
+{{知识点15}}{{Context（上下文）：Solid.js提供Context API用于跨组件共享状态，避免props逐层传递（prop drilling）。创建方式：const MyContext = createContext(defaultValue)。使用Provider包裹组件树：<MyContext.Provider value={someValue}>。在子组件中通过useContext(MyContext)获取上下文值。Solid的Context是响应式的，当Provider的value变化时，所有消费该Context的组件都会自动更新。}}
+
+{{知识点16}}{{Props属性处理：Solid.js中的Props是响应式的，但与React不同，组件函数只执行一次，所以不能像React那样在函数体中解构Props。Solid提供了特殊工具来处理Props：(1)直接访问props.name（属性访问会自动追踪）；(2)使用mergeProps合并默认Props；(3)使用splitProps将Props分为本地使用和透传两部分。在JSX中使用展开语法...props可以透传所有Props。}}
+
+{{知识点17}}{{条件渲染：Solid.js的条件渲染通过JavaScript原生条件表达式实现，因为组件只执行一次，需要使用函数式写法。常用方式：(1)三元表达式：{condition() ? <A /> : <B />}；(2)使用Show组件：<Show when={condition()} fallback={<Loading />}><Content /></Show>；(3)使用Switch/Match进行多条件分支。Show组件是Solid推荐的条件渲染方式，它内部会优化DOM的挂载和卸载。}}
+
+{{知识点18}}{{列表渲染与For组件：Solid.js使用<For>组件来渲染列表，它为列表中的每一项调用回调函数。用法：<For each={items()}>{(item, index) => <li>{item.name}</li>}</For>。与React的.map不同，For组件利用Solid的响应式系统，当列表变化时只更新变化的部分。回调的第二个参数index是一个信号函数（getter），可以读取当前索引。对于简单列表也可以使用.map，但For组件在性能上更优。}}
+
+{{知识点19}}{{Suspense异步加载：Solid.js内置Suspense组件用于处理异步加载状态，与React的Suspense概念类似但实现不同。用法：<Suspense fallback={<Loading />}><AsyncComponent /></Suspense>。当子组件中有异步操作（如Resource）时，Suspense会在加载期间显示fallback内容，加载完成后切换到实际内容。Solid的Suspense支持流式SSR和渐进式水合，可以在服务端开始渲染并在客户端逐步激活交互能力。}}
+
+{{知识点20}}{{createResource异步数据加载：createResource用于管理异步数据源，是Solid中处理API调用的主要方式。用法：const [data, { mutate, refetch }] = createResource(sourceSignal, fetcher)。sourceSignal是可选的数据源信号，当它变化时会自动触发fetcher重新获取数据。返回的data是一个响应式信号，在加载期间自动与Suspense集成。mutate用于乐观更新，refetch用于手动重新获取数据。}}
+
+{{知识点21}}{{Error Boundary错误边界：Solid.js支持Error Boundary组件用于捕获和处理子组件中的错误。用法：<ErrorBoundary fallback={<ErrorMessage />}><Component /></ErrorBoundary>。当子组件抛出错误时，Error Boundary会捕获错误并显示fallback内容，而不是让整个应用崩溃。Solid的Error Boundary可以嵌套使用，支持多层级的错误处理。也可以使用onError回调函数来处理错误而不渲染fallback。}}
+
+{{知识点22}}{{Portal（传送门）：Solid.js的Portal组件用于将子元素渲染到DOM树的其他位置，常用于模态框、弹出菜单、通知等需要脱离父组件DOM层级的场景。用法：<Portal><div class="modal">内容</div></Portal>。Portal默认将内容渲染到document.body，可以通过mount属性指定目标容器。Portal内的组件仍然可以访问Solid的响应式系统和Context。}}
+
+{{知识点23}}{{生命周期管理与onCleanup：Solid.js没有传统意义上的生命周期钩子（如componentDidMount），而是通过响应式原语来管理。onCleanup用于在effect或组件卸载时执行清理操作，类似于React的useEffect返回的清理函数。用法：onCleanup(() => { clearInterval(timer) })。在createEffect内部也可以使用on函数来精确控制依赖：createEffect(on(count, (value, prev) => { ... }, { defer: true }))。}}
+
+{{知识点24}}{{on与onCleanup的高级用法：on函数用于精确控制createEffect的依赖追踪，避免不必要的重新执行。用法：createEffect(on(dep1, (val, prevVal) => { ... }))。options包括：defer: true（首次不执行）、defer: "init"（首次不执行但后续变化执行）。可以传入多个依赖：on([dep1, dep2], ([v1, v2], [p1, p2]) => { ... })。onCleanup返回的清理函数会在effect下次执行前或组件卸载时调用，用于清理定时器、事件监听器等副作用。}}
+
+{{知识点25}}{{批量更新与batch：Solid.js提供batch函数用于将多个状态更新合并为一次更新，避免中间状态导致的多次DOM操作。用法：batch(() => { setA(1); setB(2); })。在batch内部的所有状态更新会在batch结束时统一触发相关的effect更新。这对于需要同时更新多个相关状态的场景非常有用，可以显著提高性能并避免不必要的中间渲染。}}
+
+{{知识点26}}{{untrack取消追踪：untrack函数用于在响应式上下文中读取响应式状态而不建立依赖关系。用法：const value = untrack(() => count())。这在某些场景下很有用，比如你只想在effect中读取某个状态的当前值，但不想在该状态变化时触发effect重新执行。untrack会执行传入的函数并返回结果，但不会记录该函数中访问的任何响应式状态。}}
+
+{{知识点27}}{{custom directives自定义指令：Solid.js支持自定义指令（Custom Directives），允许你扩展JSX元素的行为。通过use:前缀使用：<div use:myDirective={options}>。注册方式是将指令函数作为属性传递，或者通过在组件中使用$XXX函数。指令函数接收(element, accessor)参数，element是DOM元素，accessor是属性值的访问器。这对于封装常见的DOM操作模式（如clickOutside、tooltip等）非常有用。}}
+
+{{知识点28}}{{Solid.js的编译器（babel-preset-solid）：Solid.js的核心优势之一是其编译时优化。babel-preset-solid是一个Babel预设，负责将Solid的JSX编译为高效的DOM操作代码。它会：(1)将静态HTML提取为模板字符串以减少运行时解析；(2)将响应式表达式包装为细粒度的更新函数；(3)优化事件绑定使用事件委托；(4)内联简单组件以减少函数调用开销。这个编译器是Solid性能优异的关键因素。}}
+
+{{知识点29}}{{Solid.js与TypeScript集成：Solid.js完全支持TypeScript，推荐在项目中使用。配置要点：在tsconfig.json中设置jsx: "preserve"和jsxImportSource: "solid-js"。Solid的类型系统包括：(1)Component<Props>组件类型；(2)JSX.Element返回类型；(3)Signal<T>信号类型；(4)Accessor<T>和Setter<T>类型。使用TypeScript可以获得良好的类型推断和代码提示，特别是对于createSignal等API的返回类型。}}
+
+{{知识点30}}{{SolidStart全栈框架：SolidStart是Solid.js的全栈元框架，类似于React的Next.js。它基于Vite构建，提供：(1)文件系统路由；(2)SSR/SSG支持；(3)API路由；(4)数据预加载（load函数）；(5)流式渲染；(6)渐进式水合；(7)中间件支持。SolidStart让开发者可以使用相同的Solid组件代码同时处理客户端和服务器端渲染，实现真正的同构应用。安装：npm init solid@latest。}}
+
+{{知识点31}}{{Solid.js路由（@solidjs/router）：Solid.js使用@solidjs/router包提供客户端路由功能。核心组件包括：(1)<Router>路由容器；(2)<Routes>路由配置；(3)<Route path="/path" component={Component}>定义路由；(4)<Link href="/path">声明式导航；(5)useParams、useSearchParams、useNavigate等钩子。支持嵌套路由、动态路由参数、通配符路由、懒加载路由等特性。路由与Solid的响应式系统深度集成。}}
+
+{{知识点32}}{{Solid.js的性能优势：Solid.js在JS Framework Benchmark中几乎与原生JavaScript性能相当。其性能优势来源于：(1)编译时优化——静态模板预编译，减少运行时工作；(2)细粒度响应式——只更新变化的DOM节点，不需要VDOM diff；(3)组件只执行一次——避免了React式的函数重执行开销；(4)小体积——solid-js核心包约6-7KB（gzip），完全tree-shakable；(5)无运行时——没有VDOM的内存分配和垃圾回收压力。}}
+
+{{知识点33}}{{Signals响应式系统深入：Solid.js的Signals系统是其响应式核心。Signal由getter和setter组成，getter是函数而非值。在响应式上下文中（如createEffect或JSX中），调用getter函数会自动订阅该Signal。当setter更新值时，所有订阅者会同步更新。Solid使用细粒度的依赖追踪——只有真正读取了某个Signal的代码才会在该Signal变化时重新运行，这比React的组件级重渲染精细得多。}}
+
+{{知识点34}}{{createDeferred延迟更新：createDeferred创建一个延迟更新的信号，用于优化高频变化的场景（如搜索输入框、滚动位置）。用法：const deferred = createDeferred(value, { timeoutMs: 200 })。它会在源值停止变化一段时间后才更新内部值，从而减少不必要的频繁渲染。这对于实时搜索、拖拽等需要防抖的场景非常有用，是Solid提供的内置性能优化工具。}}
+
+{{知识点35}}{{createRoot与Owner概念：createRoot用于创建一个新的响应式作用域（root），所有的effect和清理函数都会绑定到这个root。用法：createRoot(dispose => { createEffect(...); return () => dispose() })。Owner是Solid响应式系统中追踪effect父子关系的机制，确保effect在正确的时机被清理。当root被dispose时，其内部所有effect和子root都会被清理。这对于管理动态创建的响应式上下文非常重要。}}
+
+{{知识点36}}{{createUniqueId唯一ID生成：createUniqueId用于生成组件级别的唯一ID，常用于无障碍访问（a11y）中label与input的关联。用法：const id = createUniqueId()；然后<input id={id} />和<label for={id}>。在SSR环境下，createUniqueId确保客户端和服务端生成的ID一致，避免水合（hydration）不匹配的问题。这是Solid内置的实用工具函数。}}
+
+{{知识点37}}{{lazy懒加载组件：Solid.js提供lazy函数用于动态导入组件，实现代码分割和懒加载。用法：const LazyComponent = lazy(() => import("./HeavyComponent"))。当组件首次被渲染时才会加载对应的代码包。与Suspense配合使用：<Suspense fallback={<Loading />}><LazyComponent /></Suspense>。这对于大型应用的首屏加载性能优化至关重要，可以显著减少初始bundle大小。}}
+
+{{知识点38}}{{renderToString服务端渲染：Solid.js支持服务端渲染（SSR），提供renderToString函数将组件渲染为HTML字符串。用法：import { renderToString } from "solid-js/web"；const html = renderToString(() => <App />)。Solid的SSR支持流式渲染（renderToStream），可以在HTML生成过程中逐步发送给客户端，配合渐进式水合实现快速的首屏加载和交互就绪。}}
+
+{{知识点39}}{{Solid.js社区与生态系统：Solid.js拥有活跃且不断增长的社区生态。核心工具包括：(1)solid-js核心库；(2)@solidjs/router路由库；(3)SolidStart全栈框架；(4)solid-element Web Components支持；(5)社区UI库如SolidUI、Hope UI等；(6)状态管理库如@solid-primitives/state等；(7)开发工具浏览器扩展Solid DevTools。官方Discord社区、Reddit的r/solidjs板块都非常活跃。}}
+
+{{知识点40}}{{Solid.js学习路径建议：入门Solid.js的推荐路径：(1)先理解响应式编程概念（Signals、Effects、Memos）；(2)学习Solid特有的JSX编译方式（不同于React）；(3)掌握createSignal、createStore、createEffect、createMemo四大核心API；(4)练习条件渲染（Show/Switch）和列表渲染（For/Index）；(5)学习Context和Props传递；(6)探索异步处理（createResource/Suspense）；(7)实践SolidStart全栈开发。推荐资源：官方Tutorial（solidjs.com/tutorial）、Playground在线练习、官方文档（docs.solidjs.com）。}}

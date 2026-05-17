@@ -1,0 +1,75 @@
+# 2025前端Tabs与Accordion
+# 领域: 计算机IT
+# 学科: 前端框架
+# 来源: 2025前端Tabs与Accordion
+# 描述: 前端Tabs与Accordion核心知识点
+
+{{ARIA tablist角色}}{{tablist是WAI-ARIA中用于承载一组tab元素的容器角色。其子元素必须是tab角色的元素。tablist隐式的aria-orientation默认值为horizontal。如果tablist有可见标签，应使用aria-labelledby指向标签元素的id；否则使用aria-label提供标签。tablist支持aria-multiselectable="true"以允许多选。来源: MDN ARIA tablist_role}}
+
+{{ARIA tab角色}}{{tab角色控制关联tabpanel的可见性。tab元素必须是tablist的子元素，或通过aria-owns关联。每个tab应包含aria-controls属性指向对应的tabpanel。被选中的tab设置aria-selected="true"，未选中的设置aria-selected="false"。tab的所有后代元素自动被浏览器赋予presentation角色，即tab内不能包含语义化子元素。来源: MDN ARIA tab_role}}
+
+{{ARIA tabpanel角色}}{{tabpanel是tab内容的承载区域。当tabpanel获得焦点或其子元素获得焦点时，表示关联的tab是活跃的。非活跃的tabpanel应设置hidden属性隐藏。tabpanel应设置tabindex="0"使其可聚焦（除非面板内第一个元素本身可聚焦），并设置aria-labelledby指向关联tab的id。来源: MDN ARIA tab_role}}
+
+{{Tabs键盘交互-水平模式}}{{水平tablist中：Tab键将焦点移入活动tab或从tab移出到tabpanel；左右箭头键在tab之间移动焦点并可选激活；Home键跳到第一个tab；End键跳到最后一个tab；Space/Enter激活当前聚焦的tab（手动激活模式下）。来源: MDN ARIA tablist_role, WAI-ARIA APG}}
+
+{{Tabs键盘交互-垂直模式}}{{垂直tablist中（aria-orientation="vertical"）：上下箭头键替代左右箭头键在tab之间移动焦点；其他键行为不变。Headless UI通过vertical prop、Radix UI通过orientation="vertical"属性自动切换方向。来源: Headless UI Tabs, Radix UI Tabs}}
+
+{{Tabs自动vs手动激活}}{{自动激活（automatic）：箭头键移动焦点时立即激活对应tab，适合tab数量少且内容加载快的场景。手动激活（manual）：箭头键仅移动焦点，需按Space/Enter才激活，适合tab内容需异步加载的场景。Radix UI通过activationMode属性控制，Headless UI默认自动激活。来源: Radix UI Tabs API}}
+
+{{Radix UI Tabs组件架构}}{{Radix UI Tabs由Root、List、Trigger、Content四个组件构成。Root包含所有tab部分，支持defaultValue/value/onValueChange受控模式；List包含触发器并支持loop循环导航；Trigger是激活内容的按钮，支持disabled；Content包含每个触发器的关联内容，支持forceMount强制挂载。来源: radix-ui.com/primitives/docs/components/tabs}}
+
+{{Radix UI Tabs数据属性}}{{Radix Tabs组件暴露data-orientation（horizontal/vertical）、data-state（active/inactive）、data-disabled等数据属性。这些属性可用于CSS选择器实现样式化，配合Tailwind CSS的data属性修饰符可简洁地实现状态样式。来源: Radix UI Tabs文档}}
+
+{{Headless UI TabGroup组件}}{{Headless UI Tabs由TabGroup、TabList、Tab、TabPanels、TabPanel五个组件构成。默认选中第一个tab，支持键盘导航和焦点管理。Tab组件暴露data-selected和data-hover属性用于样式化。通过render props可获取selected和hover状态进行条件渲染。来源: headlessui.com/react/tabs}}
+
+{{Headless UI Tabs样式化方式}}{{Headless UI提供两种样式化方式：1）data属性选择器，如data-selected:bg-blue-500配合Tailwind CSS；2）render props模式，通过{({selected, hover}) => ...}获取状态。两种方式功能等价，data属性更简洁，render props更灵活。来源: Headless UI Tabs文档}}
+
+{{Headless UI Tabs禁用Tab}}{{通过disabled prop可禁用Tab，禁用的tab不可被选中且不会获得焦点。Headless UI自动处理ARIA属性和键盘导航，确保禁用tab被跳过。样式上可通过disabled:opacity-50等实现视觉反馈。来源: Headless UI Tabs示例}}
+
+{{ARIA Disclosure模式}}{{Disclosure（展开/折叠）是WAI-ARIA APG的基础模式，用于显示和隐藏内容。按钮使用aria-expanded="true/false"控制关联面板的可见性，并通过aria-controls指向面板id。这是Accordion组件的底层ARIA模式。来源: WAI-ARIA APG Disclosure Pattern}}
+
+{{Headless UI Disclosure组件}}{{Headless UI的Disclosure由Disclosure、DisclosureButton、DisclosurePanel构成。按钮自动设置aria-expanded和aria-controls属性。通过data-open属性或render props中{({open}) => ...}的open状态控制样式。支持CloseButton和close render prop实现手动关闭。来源: headlessui.com/react/disclosure}}
+
+{{Disclosure动画-Transition内置}}{{Headless UI DisclosurePanel支持transition prop实现内置过渡动画。通过data-closed属性配合CSS实现：data-closed:opacity-0和data-closed:-translate-y-6可实现淡入和滑入效果。transition属性内部使用Transition组件实现，支持自定义duration和easing。来源: Headless UI Disclosure文档}}
+
+{{Disclosure动画-Framer Motion集成}}{{Headless UI与Framer Motion完美集成。在DisclosurePanel上添加static prop，然后根据open render prop条件渲染motion.div，使用AnimatePresence管理进出动画。初始状态initial={{ opacity: 0, y: -24 }}，动画状态animate={{ opacity: 1, y: 0 }}。来源: Headless UI Disclosure示例}}
+
+{{Radix UI Collapsible组件}}{{Radix Collapsible是构建Accordion的基础组件，由Root、Trigger、Content构成。支持受控/非受控模式、完整键盘导航。通过data-state="open/closed"属性控制样式。提供--radix-collapsible-content-width和--radix-collapsible-content-height CSS变量用于动画。来源: radix-ui.com/primitives/docs/components/collapsible}}
+
+{{Collapsible展开动画-CSS实现}}{{Radix Collapsible使用CSS @keyframes实现展开/折叠动画：slideDown从height:0到var(--radix-collapsible-content-height)，slideUp反向。Content需设置overflow:hidden。动画时长通常300ms，easing使用ease-out。这种方式避免了JavaScript动画的性能开销。来源: Radix Collapsible文档}}
+
+{{HTML details/summary原生Accordion}}{{HTML5的<details>和<summary>元素提供了原生的Accordion功能，无需JavaScript。<summary>作为可点击的标题，<details>包裹可折叠内容。open属性控制展开状态。2025年浏览器支持通过CSS对details进行样式化，包括::details-content伪元素控制内容区域。}}
+
+{{CSS Grid实现Accordion动画}}{{使用CSS Grid的grid-template-rows从0fr到1fr过渡可实现平滑的Accordion展开动画。容器设置display:grid，内容用grid-template-rows:0fr过渡到1fr，内部元素设置min-height:0和overflow:hidden。这是2025年纯CSS实现Accordion动画的推荐方案。}}
+
+{{Accordion多面板展开}}{{Accordion组件可支持单面板或多面板同时展开。单面板模式下，打开一个面板自动关闭其他面板（互斥模式）。多面板模式下各面板独立控制。实现时需管理全局状态或使用Radio（单选）vs Checkbox（多选）模式。Headless UI Disclosure默认独立，Radix需手动管理。}}
+
+{{Accordion键盘交互-Aria模式}}{{WAI-ARIA中Accordion使用heading+button模式：每个标题用heading角色，内含button设置aria-expanded。面板使用region角色并设置aria-labelledby。键盘交互：Enter/Space切换展开，Tab在可聚焦元素间移动。可选支持Up/Down箭头在标题间导航。来源: WAI-ARIA APG Disclosure Pattern}}
+
+{{Tabs与Accordion的响应式切换}}{{2025年前端常用模式是在桌面端显示为Tabs，移动端切换为Accordion。实现方式：1）CSS媒体查询配合display切换；2）共享状态组件根据屏幕宽度渲染不同布局；3）使用容器查询(@container)实现更灵活的断点控制。这种模式提升了移动设备上的用户体验。}}
+
+{{Tabs懒加载与性能优化}}{{Tabs内容面板可通过懒加载优化首屏性能。策略包括：1）仅挂载已访问的tab内容（Radix默认行为）；2）使用forceMount配合CSS visibility:hidden预渲染；3）IntersectionObserver按需加载；4）React.lazy+Suspense代码分割。对于大量tab的场景，虚拟滚动可进一步优化。}}
+
+{{Tabs URL状态同步}}{{Tabs的活跃状态可与URL hash同步，实现深层链接和浏览器前进后退导航。实现方式：1）使用useSearchParams（React Router）；2）监听hashchange事件；3）Next.js中使用pathname和replaceState。这使得用户可以直接分享特定tab的URL。}}
+
+{{Tabs动画-内容切换过渡}}{{Tab内容切换可通过CSS transition或动画库实现平滑过渡。方案包括：1）opacity淡入淡出配合data-state属性；2）CSS View Transitions API实现跨面板过渡动画（2025年浏览器支持渐广）；3）Framer Motion AnimatePresence实现复杂的进场退场动画。}}
+
+{{无障碍Tabs最佳实践}}{{2025年Tabs无障碍最佳实践：1）确保每个tab有aria-controls和aria-selected；2）tabpanel设置aria-labelledby；3）支持键盘完整导航；4）非活跃面板使用hidden或aria-hidden；5）提供足够的焦点指示器样式；6）确保颜色对比度符合WCAG 2.1 AA标准；7）测试屏幕阅读器兼容性。}}
+
+{{Accordion动画高度auto问题}}{{Accordion展开动画的最大挑战是从height:0到height:auto的过渡。CSS transition不支持auto值。2025年解决方案：1）CSS Grid grid-template-rows: 0fr到1fr；2）Radix CSS变量--radix-collapsible-content-height；3）JavaScript计算scrollHeight；4）max-height hack（不精确但简单）。方案1是当前最佳实践。}}
+
+{{shadcn/ui Tabs与Accordion}}{{shadcn/ui基于Radix UI Primitives构建，提供预样式化的Tabs和Accordion组件。Tabs支持default/underline/pills等变体。Accordion支持single/multiple模式和自定义动画。组件代码直接复制到项目中，完全可控可定制，是2025年最流行的组件方案之一。}}
+
+{{Material UI Tabs}}{{MUI（Material UI）提供Tabs组件实现Material Design 3风格。支持标准tab、可滚动tab、垂直tab、图标tab等变体。通过TabPanel组件提供内容区域。与MUI主题系统深度集成，支持自定义颜色、形状和动画。2025年版本支持pigment-css零运行时CSS方案。}}
+
+{{Headless组件vs带样式组件}}{{Headless组件（Radix、Headless UI、React Aria）提供逻辑和无障碍但无样式，适合自定义设计系统。带样式组件（MUI、Ant Design、Chakra）提供开箱即用的完整样式。2025年趋势是Headless组件+Tailwind CSS组合，兼顾灵活性和开发效率。}}
+
+{{Vue与Svelte的Tabs/Accordion方案}}{{Vue生态：Headless UI有Vue版本；Radix Vue是Radix的Vue移植；Naive UI提供内置Tabs。Svelte生态：bits-ui是Radix风格的Svelte组件库；Melt UI提供headless原语。框架无关方案如Ark UI支持React/Vue/Svelte。2025年各框架均有成熟的无障碍Tabs方案。}}
+
+{{React Aria Tabs}}{{Adobe的React Aria（@react-aria/tabs）提供底层hook API实现Tabs。使用useTabList、useTab、useTabPanel等hook。相比Radix和Headless UI，React Aria提供更细粒度的控制，适合构建完全自定义的组件库。支持自动焦点管理和完整的ARIA属性。}}
+
+{{Tabs嵌套与复杂布局}}{{Tabs可以嵌套使用（tabs within tabs），但需谨慎设计避免用户混淆。最佳实践：1）视觉上明确区分层级；2）外层tab使用不同样式（如下划线vs填充）；3）确保键盘导航在嵌套场景下正确工作；4）考虑使用Accordion替代深层嵌套Tabs以提升移动端体验。}}
+
+{{Accordion FAQ实现模式}}{{Accordion最常见应用场景是FAQ页面。实现模式：1）每个问题作为Disclosure触发器；2）答案作为面板内容；3）支持单个或多个同时展开；4）添加展开/折叠图标动画（如箭头旋转180度）；5）使用Schema.org FAQPage结构化数据标记提升SEO。}}
+
+{{Tabs/Accordion性能考量}}{{2025年性能优化要点：1）避免渲染隐藏的tab面板内容（使用条件渲染或CSS visibility）；2）Accordion展开时使用CSS动画而非JS动画（利用GPU加速）；3）大量面板使用虚拟滚动；4）避免在面板切换时触发不必要的重渲染（React.memo、useMemo）；5）Web Vitals关注CLS（布局偏移），确保展开动画不触发reflow。}}

@@ -1,0 +1,168 @@
+# 2025前端前端Web Animations API
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{Web Animations API 概述
+Web Animations API 是一个浏览器原生API，允许开发者通过JavaScript控制DOM元素的动画。它结合了定时模型（Timing Model）和动画模型（Animation Model），为浏览器和开发者提供了一种统一的语言来描述动画。该API是CSS Animations和CSS Transitions的底层实现基础，允许开发者将动画从样式表迁移到JavaScript中，实现表现与行为的分离。它是Web上最高效的动画方式之一，能让浏览器进行内部优化，无需依赖requestAnimationFrame等hack手段。}}
+
+{{知识点2}}{{Element.animate() 方法
+Element.animate() 是创建和播放动画的快捷方法，可在任何DOM元素上调用。语法为 element.animate(keyframes, options)，其中keyframes可以是关键帧对象数组或属性-值对象，options可以是毫秒数（整数）或包含timing属性的对象。该方法立即创建并播放动画，返回一个Animation对象实例。例如：element.animate([{transform: 'rotate(0)'}, {transform: 'rotate(360deg)'}], 2000)。options中可设置id属性为动画命名，还可设置timeline、rangeStart、rangeEnd等高级选项。}}
+
+{{知识点3}}{{Animation 接口
+Animation接口提供播放控制和时间线功能。构造函数 new Animation(effect, timeline) 创建新动画实例，其中effect通常为KeyframeEffect对象。核心属性包括：currentTime（当前时间，毫秒）、effect（关联的AnimationEffect）、playState（播放状态枚举）、playbackRate（播放速率）、startTime（开始时间）、timeline（关联时间线）、id（标识字符串）、finished（完成Promise）、ready（就绪Promise）、pending（是否等待异步操作）、replaceState（替换状态）、overallProgress（整体进度0-1）。}}
+
+{{知识点4}}{{Animation 播放控制方法
+Animation提供完整的播放控制：play() 启动或恢复播放；pause() 暂停播放；reverse() 反转播放方向；finish() 跳转到动画结束；cancel() 清除所有效果并中止播放；updatePlaybackRate() 同步后设置播放速率；persist() 显式持久化防止被自动移除；commitStyles() 将当前动画样式提交到元素的style属性。这些方法使得JavaScript可以精确控制CSS动画的每一个细节。}}
+
+{{知识点5}}{{Animation 播放状态（playState）
+playState为只读枚举属性，值包括：idle（未播放/已取消）、running（正在播放）、paused（已暂停）、finished（已完成）。通过animation.playState获取当前状态。该状态反映了动画的实时播放情况，可用于条件判断和UI更新。}}
+
+{{知识点6}}{{Animation 事件
+Animation接口支持三个事件：cancel事件（调用cancel()或从非idle状态进入idle时触发）、finish事件（动画完成播放时触发）、remove事件（动画被浏览器自动移除时触发）。可通过oncancel/onfinish/onremove属性或addEventListener监听。事件对象为AnimationEvent，包含animationName和elapsedTime属性。}}
+
+{{知识点7}}{{Animation.finished Promise
+finished属性返回一个Promise，在动画完成播放时解析。可配合async/await使用：await animation.finished。这是串联多个动画的理想方式，避免了回调地狱。例如依次播放多个动画：await el.animate(kf1, 500).finished; await el.animate(kf2, 500).finished。}}
+
+{{知识点8}}{{Animation.ready Promise
+ready属性返回一个Promise，在待定的播放或暂停操作完成时解析。当动画从pending状态过渡到实际播放或暂停时，ready解析。适用于需要确保动画已实际开始后再执行后续逻辑的场景。}}
+
+{{知识点9}}{{KeyframeEffect 接口
+KeyframeEffect描述动画的关键帧集合和时序选项。构造函数 new KeyframeEffect(target, keyframes, options) 创建实例。属性包括：target（动画目标元素）、pseudoElement（伪元素选择器，如'::before'）、composite（合成操作）、iterationComposite（迭代合成操作）。方法包括：getKeyframes()（获取计算后的关键帧）、setKeyframes()（替换关键帧集合）、getComputedTiming()（获取计算后的时序值）、getTiming()（获取时序对象）、updateTiming()（更新时序属性）。}}
+
+{{知识点10}}{{关键帧数组格式
+关键帧可用对象数组表示：[{opacity: 0, color: 'white'}, {opacity: 1, color: 'black'}]。每个对象代表一个关键帧。默认情况下关键帧均匀分布。可通过offset属性（0.0-1.0）显式指定偏移量。offset必须按升序排列。不需要为每个关键帧指定offset，未指定的会均匀间隔。可在关键帧上设置easing值控制从当前帧到下一帧的缓动。}}
+
+{{知识点11}}{{关键帧对象格式
+关键帧也可用属性-值对对象表示，值为数组：{opacity: [0, 1], color: ['white', 'black']}。各属性数组长度不必相等，值会独立分布。可同时指定offset、easing和composite数组。例如：{opacity: [0, 0.9, 1], offset: [0, 0.8], easing: ['ease-in', 'ease-out']}。若值不足会重复使用。}}
+
+{{知识点12}}{{隐式起止关键帧（Implicit to/from keyframes）
+浏览器可从元素当前状态推断动画起止状态。仅提供一个关键帧时默认视为结束状态，起始从计算样式推断。通过offset可改变：offset: 0 表示放在起始位置（从该状态到当前状态）；offset: 0.5 表示从当前到该状态再回到当前。例如：logo.animate({transform: 'translateX(300px)'}, 1000) 从当前位置移动到300px。}}
+
+{{知识点13}}{{定时属性 - duration 和 delay
+duration表示动画持续时间，单位毫秒（CSS用秒，注意区别），默认0。delay表示动画开始前的延迟时间，单位毫秒，默认0。负delay值会使动画从中间开始播放（如delay: -500会让500ms动画跳过前500ms直接显示结束状态）。endDelay表示动画结束后的延迟。}}
+
+{{知识点14}}{{定时属性 - iterations 和 direction
+iterations表示动画迭代次数，默认1，可设为Infinity无限循环。direction控制播放方向：normal（正向，默认）、reverse（反向）、alternate（奇数次正向偶数次反向）、alternate-reverse（奇数次反向偶数次正向）。alternate配合iterations: Infinity可实现来回往复效果。}}
+
+{{知识点15}}{{定时属性 - easing（缓动函数）
+easing控制动画速度曲线，对应CSS的animation-timing-function。支持的值包括：linear（线性，默认）、ease（慢起慢停）、ease-in（慢起）、ease-out（慢停）、ease-in-out（慢起慢停）、cubic-bezier(x1,y1,x2,y2)（自定义贝塞尔曲线）、steps(n, jumpTerm)（阶梯函数）。注意：CSS动画默认easing为ease，而Web Animations API默认为linear。}}
+
+{{知识点16}}{{定时属性 - fill（填充模式）
+fill控制动画播放前后效果的保留方式：none（不填充，默认）、forwards（播放结束后保留最后一帧效果）、backwards（延迟期间显示第一帧效果）、both（同时应用forwards和backwards）、auto（默认行为通常等同none）。fill:'forwards'常用于动画结束后保持最终状态的场景。}}
+
+{{知识点17}}{{AnimationTimeline 接口
+AnimationTimeline表示动画的时间线，是DocumentTimeline和ScrollTimeline/ViewTimeline的父接口。属性包括：currentTime（只读，当前时间值毫秒，时间线非活动时为null）、duration（只读，时间线最大值或null）。该接口定义了时间线的基本特性，自2020年7月起广泛可用。}}
+
+{{知识点18}}{{DocumentTimeline 文档时间线
+DocumentTimeline是最常用的时间线，表示基于文档的动画时间线。通过document.timeline获取默认文档时间线。所有不指定时间线的动画默认使用document.timeline。开发者通常不直接操作此对象，而是通过document.timeline引用它。}}
+
+{{知识点19}}{{ScrollTimeline 滚动时间线
+ScrollTimeline让动画进度由滚动位置驱动，而非时间。构造函数 new ScrollTimeline({source, axis})，source为滚动容器元素，axis为'block'/'inline'/'x'/'y'。属性包括：source（只读，滚动容器）、axis（只读，滚动轴）。例如：element.animate(keyframes, {timeline: new ScrollTimeline({source: document.documentElement, axis: 'block'})})。这使得动画可以随页面滚动而播放，无需JavaScript监听scroll事件，性能更优。}}
+
+{{知识点20}}{{ViewTimeline 视图时间线
+ViewTimeline继承自ScrollTimeline，让动画进度由元素在滚动容器中的可见性驱动。构造函数 new ViewTimeline({subject, axis, inset})，subject为目标元素。属性包括：subject（只读，目标元素）、startOffset（只读，起始偏移CSSNumericValue）、endOffset（只读，结束偏移CSSNumericValue）。常用于元素进入/离开视口时的动画效果，配合rangeStart和rangeEnd精确控制触发时机。}}
+
+{{知识点21}}{{CSS属性命名转换
+Web Animations API中CSS属性名需转为驼峰命名：background-color→backgroundColor，background-position-x→backgroundPositionX。两个特例：float必须写为cssFloat（float是JS保留字），CSS的offset属性必须写为cssOffset（offset在WAAPI中有特殊含义表示关键帧偏移）。简写属性如margin也可使用。}}
+
+{{知识点22}}{{动画合成操作（Composite）
+composite属性控制动画值如何与底层值合成，值包括：replace（替换，默认）、add（叠加，值累加）、accumulate（累积，逐项累加）。可在KeyframeEffect级别设置，也可在单个关键帧上覆盖。iterationComposite控制迭代间的合成：replace（每次迭代替换）和accumulate（每次迭代累积）。这些对于创建复合动画效果非常重要。}}
+
+{{知识点23}}{{Element.getAnimations() 方法
+Element.getAnimations()返回影响该元素的Animation对象数组。可传入{subtree: true}参数包含子元素的动画。用于查询和批量控制动画，例如暂停元素所有动画：element.getAnimations().forEach(a => a.pause())。返回的数组包含当前生效和计划生效的动画。}}
+
+{{知识点24}}{{document.getAnimations() 方法
+document.getAnimations()返回文档中所有生效动画的Animation数组。用于全局动画管理，如暂停/恢复所有动画、性能优化等场景。配合IntersectionObserver可实现暂停不可见元素动画的优化策略。}}
+
+{{知识点25}}{{Animation.playbackRate 属性
+playbackRate获取或设置播放速率，默认1。设为2为两倍速，0.5为半速，-1为反向。直接设置会立即生效。若需先同步播放位置再改速率，使用updatePlaybackRate()。结合finished Promise可实现加速播放效果。}}
+
+{{知识点26}}{{Animation.currentTime 属性
+currentTime获取或设置动画当前时间（毫秒）。无时间线、不活动或未播放时为null。设置currentTime可实现跳转：animation.currentTime = 1000（跳到1秒处）。可配合getComputedTiming()获取当前迭代次数、迭代进度等计算值。}}
+
+{{知识点27}}{{Animation.startTime 属性
+startTime获取或设置动画播放的计划开始时间。与currentTime的关系：currentTime = timeline.currentTime - startTime（正向播放时）。设置startTime可用于精确同步多个动画的起始时间。在动画排队和编排场景中很有用。}}
+
+{{知识点28}}{{Animation.timeline 属性
+timeline获取或设置动画关联的AnimationTimeline。默认为document.timeline。可替换为ScrollTimeline或ViewTimeline实现滚动驱动动画。修改timeline会改变动画的时间计算方式。这是将普通动画切换为滚动驱动动画的关键属性。}}
+
+{{知识点29}}{{Animation.id 属性
+id为字符串标识属性，用于识别动画。可在animate()的options中设置。配合element.getAnimations()可按id查找特定动画。例如：element.getAnimations().find(a => a.id === 'myAnim')。在管理多个动画时非常有用。}}
+
+{{知识点30}}{{Animation.replaceState 属性
+replaceState为只读枚举属性，指示动画替换状态：active（活动）、removed（已被浏览器自动移除）、persisted（已被persist()持久化）。当fill动画被同一元素的新动画替换时，旧动画可能被自动移除（为节省内存）。调用persist()可阻止自动移除。}}
+
+{{知识点31}}{{Animation.pending 属性
+pending为只读布尔属性，指示动画是否正在等待异步操作。调用play()或pause()后，在实际生效前pending为true。用于理解动画在状态过渡期间的行为，避免在pending状态下重复调用控制方法。}}
+
+{{知识点32}}{{Animation.overallProgress 属性
+overallProgress为只读属性，返回0到1之间的数字表示整体进度。与currentTime不同，它考虑了direction、iterations等因素，提供直观的百分比进度。例如alternate方向的动画在第二次迭代时progress仍从0到1。}}
+
+{{知识点33}}{{Animation.commitStyles() 方法
+commitStyles()将动画当前样式写入元素的style属性。即使动画被移除，提交的样式也保留。适用于需要动画结束后保持最终状态但不想用fill模式的场景。注意：需要动画在进行中才能生效，idle状态调用会抛出InvalidStateError。}}
+
+{{知识点34}}{{Animation.persist() 方法
+persist()显式持久化动画，防止被浏览器自动移除。调用后replaceState变为'persisted'。在使用fill模式且有后续动画覆盖时，旧动画默认会被清理，persist()可保留它们。但需注意内存管理，不再需要的动画应手动cancel()。}}
+
+{{知识点35}}{{Animation.cancel() 与 finish() 区别
+cancel()清除所有关键帧效果并中止播放，动画进入idle状态，currentTime变为null。finish()将动画跳转到结束位置，保留最终效果，动画进入finished状态。cancel()触发cancel事件，finish()触发finish事件。选择取决于是否需要保留动画最终状态。}}
+
+{{知识点36}}{{动画事件详解
+AnimationEvent继承自Event，额外属性包括：animationName（动画名称字符串）、elapsedTime（动画已运行时间秒数）。cancel事件在idle状态转换时触发；finish事件在播放完成时触发；remove事件在自动移除时触发。事件冒泡行为与CSS动画事件一致。}}
+
+{{知识点37}}{{滚动驱动动画实战
+滚动驱动动画通过ScrollTimeline/ViewTimeline实现。ScrollTimeline示例：element.animate({transform: ['translateX(0)', 'translateX(100px)']}, {timeline: new ScrollTimeline({source: document.documentElement, axis: 'block'})})。ViewTimeline示例：配合subject和rangeStart/rangeEnd实现元素进入视口时的淡入效果。这是2024-2025年Web动画最重要的新特性。}}
+
+{{知识点38}}{{rangeStart 和 rangeEnd
+rangeStart/rangeEnd指定动画在时间线上的附加范围，对应CSS animation-range-start/end。值可为：'normal'（默认）、CSS长度百分比、范围关键字（'entry'、'exit'、'cover'、'contain'等）。主要用于ViewTimeline，控制动画在滚动范围内的触发区间。例如rangeStart: 'entry 0%', rangeEnd: 'entry 100%'。}}
+
+{{知识点39}}{{动画队列与编排
+利用finished Promise和async/await可实现动画序列编排。async function sequence() { await el.animate(kf1, 500).finished; await el.animate(kf2, 500).finished; }。也可用Promise.all实现并行动画：await Promise.all([el1.animate(kf1, 500).finished, el2.animate(kf2, 500).finished])。动画组（AnimationGroup）概念虽未正式标准化，但可手动实现。}}
+
+{{知识点40}}{{Web Animations API 与 CSS Animations 对比
+WAAPI优势：完全JavaScript控制、精确播放控制（暂停/反转/跳转）、Promise支持、可与滚动时间线结合、浏览器内部优化更高效。CSS Animations优势：声明式更简洁、无需JS、更好的渐进增强支持、可被开发者工具直接调试。实践中常将CSS用于简单声明式动画，WAAPI用于复杂交互式动画。}}
+
+{{知识点41}}{{Web Animations API 与 requestAnimationFrame 对比
+WAAPI优势：浏览器内部优化性能更好、标签页不可见时仍可运行（rAF可能暂停）、内置时序和缓动、声明式API更易维护。rAF优势：更灵活可做非CSS属性动画（如Canvas）、适合复杂逐帧逻辑、可手动控制帧率。WAAPI是CSS属性动画的首选，rAF适合自定义渲染。}}
+
+{{知识点42}}{{动画性能优化实践
+使用WAAPI优化性能：1）优先动画transform和opacity（触发合成层优化）；2）使用will-change提示浏览器；3）避免同时运行过多动画；4）对不可见元素暂停动画（IntersectionObserver）；5）使用ScrollTimeline替代JS scroll监听；6）fill:'forwards'时注意内存，及时cancel不需要的动画；7）用commitStyles()替代持续运行的动画。}}
+
+{{知识点43}}{{伪元素动画
+通过KeyframeEffect的pseudoElement属性可动画伪元素。例如：new KeyframeEffect(element, keyframes, {pseudoElement: '::before', duration: 1000})。支持::before、::after、::first-line等。这弥补了CSS中伪元素动画控制的不足，允许用JS精确操控。}}
+
+{{知识点44}}{{复合动画与动画合成
+多层动画叠加时通过composite控制值合并方式。replace（默认）替换底层值；add叠加值（如transform会连接）；accumulate逐项累加。iterationComposite控制迭代间合成：replace（每次重置）和accumulate（每次累加，如旋转角度递增）。这些机制使得创建复杂动画组合成为可能。}}
+
+{{知识点45}}{{WAAPI 浏览器兼容性
+Web Animations API自2020年起在主流浏览器中广泛可用（Baseline Widely Available）。Element.animate()、Animation、KeyframeEffect等核心接口兼容Chrome 36+、Firefox 48+、Safari 13.1+、Edge 79+。ScrollTimeline和ViewTimeline是较新特性，Chrome 115+、Firefox 110+支持。需注意旧版浏览器可能需要polyfill（如web-animations-js）。}}
+
+{{知识点46}}{{Animation() 构造函数
+new Animation(effect, timeline) 创建动画实例但不自动播放。effect为AnimationEffect（通常KeyframeEffect），timeline默认document.timeline。需手动调用play()开始播放。与Element.animate()的区别：animate()自动播放且是快捷方式，Animation构造函数更灵活适合需要延迟播放的场景。}}
+
+{{知识点47}}{{KeyframeEffect.setKeyframes() 方法
+setKeyframes()替换动画的关键帧集合，可在运行时动态更新动画效果。接受与构造函数相同的keyframes参数格式。例如可在用户交互后改变动画路径或属性。与重新创建动画相比，setKeyframes()保持动画的播放状态和时序不变。}}
+
+{{知识点48}}{{AnimationEffect.getComputedTiming() 方法
+getComputedTiming()返回计算后的时序属性对象，包括：activeTime（活动时间）、endTime（结束时间）、currentIteration（当前迭代次数）、progress（当前迭代进度0-1）、directedProgress（考虑方向的进度）等。这些是基于实际播放状态计算的值，与getTiming()返回的原始配置值不同。}}
+
+{{知识点49}}{{AnimationEffect.updateTiming() 方法
+updateTiming()动态更新时序属性，可修改duration、delay、endDelay、iterations、direction、easing、fill等。例如：animation.effect.updateTiming({duration: 500})改变动画时长。修改会立即生效，动画会根据新参数重新计算位置。与setKeyframes()配合可实现完全动态的动画控制。}}
+
+{{知识点50}}{{CSS scroll-driven animations CSS对应特性
+CSS层面新增了scroll-driven animations支持：animation-timeline属性可设为scroll()或view()函数，animation-range-start/end控制动画触发范围。与JS API的ScrollTimeline/ViewTimeline对应。CSS写法更简洁：animation: fade linear both; animation-timeline: view(); animation-range: entry 0% entry 100%。两种方式底层共享同一引擎，选择取决于是否需要JS动态控制。}}
+
+{{知识点51}}{{动画填充模式fill与内存管理
+fill:'forwards'会使动画结束后保留效果，但这些动画会持续占用内存和浏览器资源。浏览器会自动移除被替换的fill动画（replaceState变为'removed'）。若需保留可调用persist()。最佳实践：不需要保持状态时用commitStyles()提交样式后cancel动画；需要保持时用fill:'forwards'并注意及时清理。}}
+
+{{知识点52}}{{Keyframes中的offset、easing和composite
+每个关键帧对象可包含三个特殊属性：offset（0-1或null，指定关键帧位置，null则均匀分布）、easing（从当前帧到下一帧的缓动函数）、composite（当前帧的合成操作，覆盖全局设置）。easing在关键帧级别设置可实现不同阶段不同速度曲线的效果。}}
+
+{{知识点53}}{{动画与开发者工具
+现代浏览器DevTools提供强大的动画调试支持。Chrome DevTools的Animations面板可检查和修改WAAPI动画，支持暂停、重放、调整速度、查看关键帧。可通过element.getAnimations()在Console中获取动画对象并实时修改属性。这些工具使得WAAPI动画的调试比CSS动画更加灵活。}}
+
+{{知识点54}}{{无障碍性与prefers-reduced-motion
+闪烁和快速动画可能对ADHD用户造成困扰，某些运动可能触发前庭障碍、癫痫或偏头痛。应提供暂停或禁用动画的机制。使用@media (prefers-reduced-motion: reduce)媒体查询检测用户偏好。也可使用Sec-CH-Prefers-Reduced-Motion客户端提示。WAAPI中可检测该偏好后调用cancel()或修改动画参数。}}
+
+{{知识点55}}{{WAAPI在框架中的应用
+WAAPI被广泛集成到前端框架生态中：Vue的Transition组件底层可使用WAAPI；React的Framer Motion和React Spring库部分基于WAAPI；Angular的动画模块直接使用WAAPI；GSAP等专业动画库也可与WAAPI配合。原生WAAPI的优势是零依赖、体积小、性能优，适合轻量级动画需求。}}

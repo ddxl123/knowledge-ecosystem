@@ -1,0 +1,51 @@
+# 2025前端前端Speculation Rules
+# 领域: 计算机IT
+# 学科: 前端框架
+{{知识点1}}{{Speculation Rules API 概述：Speculation Rules API 是一个浏览器原生的推测性加载机制，通过 JSON 格式的规则定义，让浏览器在用户实际导航之前预取(prefetch)或预渲染(prerender)页面。它是对旧版 <link rel="prefetch"> 和 <link rel="prerender"> 的标准化替代方案，由 Chrome 团队推动并纳入 HTML 规范。}}
+{{知识点2}}{{Speculation Rules 的两种核心动作：该 API 支持两种推测性加载类型——prefetch（预取）仅下载页面响应体，不加载子资源；prerender（预渲染）则完整下载、渲染页面并加载所有子资源和执行 JavaScript，存入不可见标签页，实现近乎即时的导航体验。}}
+{{知识点3}}{{内联 script 定义规则：通过 <script type="speculationrules"> 元素在 HTML 中内联定义推测规则，规则以 JSON 对象形式写在标签内。该 script 元素不得使用 src、async、nomodule、defer、crossorigin、integrity、referrerpolicy 等属性。}}
+{{知识点4}}{{HTTP Header 定义规则：通过 Speculation-Rules 响应头指定一个或多个指向 JSON 规则文件的 URL，文件必须以 application/speculationrules+json MIME 类型提供。此方式适用于无法直接修改 HTML 文档的场景，且可与内联规则同时使用。}}
+{{知识点5}}{{Prefetch 预取机制：预取仅下载目标页面的响应体文档，不下载页面引用的子资源（CSS、JS、图片等）。预取结果存储在每文档的内存缓存中，当用户导航离开当前页面时会被丢弃（除非用户导航到了预取的页面）。资源开销相对较小，适合广泛采用。}}
+{{知识点6}}{{Prerender 预渲染机制：预渲染会将目标页面完整下载、渲染并加载到一个不可见的标签页中，包括加载所有子资源、执行所有 JavaScript、甚至处理 JS 发起的数据请求。用户导航到预渲染页面时将获得近乎即时的加载体验，浏览器激活不可见标签页替换当前页面。}}
+{{知识点7}}{{Prerender 资源开销：预渲染消耗的资源大致等同于渲染一个 iframe。如果预渲染的页面未被用户访问，这些资源将被浪费（虽然结果可能被 HTTP 缓存利用）。因此应谨慎使用预渲染，选择用户高概率会访问的页面。}}
+{{知识点8}}{{source 属性 — document：指定从当前文档中的导航链接（<a> 和 <area> 元素）中匹配 URL，需配合 where 条件使用。当规则中存在 where 键时，source 会被隐式推断为 document，因此是可选的。}}
+{{知识点9}}{{source 属性 — list：指定 URL 来自规则中的 urls 数组列表。当规则中存在 urls 键时，source 会被隐式推断为 list，因此是可选的。urls 和 where 不能在同一规则中同时设置。}}
+{{知识点10}}{{urls 属性：一个字符串数组，列出要应用规则的 URL 列表。可以是绝对或相对 URL，相对 URL 会相对于文档基础 URL（内联时）或外部资源 URL（外部引用时）解析。}}
+{{知识点11}}{{where 条件 — href_matches：使用 URL Pattern API 语法的 URL 匹配模式字符串（或数组），匹配文档中符合条件的链接。支持通配符和路径模式匹配。}}
+{{知识点12}}{{where 条件 — selector_matches：使用 CSS 选择器字符串（或数组）匹配文档中的链接元素。例如 ".product-link" 匹配所有带 product-link 类的链接。}}
+{{知识点13}}{{where 条件组合 — and/or/not/and：where 条件支持布尔逻辑组合。and 数组中所有条件必须匹配；or 数组中任一条件匹配即可；not 排除匹配的链接。条件可以多层嵌套构建复杂的匹配逻辑。}}
+{{知识点14}}{{eagerness 热切度 — immediate：作者认为链接非常可能被访问且/或文档可能需要较长时间获取。预取/预渲染应尽快开始，仅受用户偏好和资源限制约束。list 规则默认为 immediate。}}
+{{知识点15}}{{eagerness 热切度 — eager：作者希望尽可能早地预取/预渲染大量导航。在有任何轻微暗示链接可能被访问时就开始，例如用户鼠标移向链接、悬停/聚焦片刻、或暂停滚动且链接处于显眼位置。}}
+{{知识点16}}{{eagerness 热切度 — moderate：在 eager 和 conservative 之间寻找平衡。当有合理暗示用户将在不久后访问链接时开始，例如用户将链接滚动到视口中并悬停/聚焦一段时间。}}
+{{知识点17}}{{eagerness 热切度 — conservative：作者希望以较小的资源代价获得一些收益。仅在用户开始点击链接时（如 mousedown 或 pointerdown 事件）才开始预取/预渲染。where 规则默认为 conservative。}}
+{{知识点18}}{{referrer_policy 属性：为规则中指定的 URL 请求设置特定的 Referrer-Policy。可用于设置比页面已有策略更严格的策略。跨站预取要求至少为 strict-origin-when-cross-origin 级别的策略。}}
+{{知识点19}}{{requires 属性 — anonymous-client-ip-when-cross-origin：仅适用于 prefetch 规则，要求浏览器在跨域预取时能隐藏客户端 IP 地址。Chrome 通过 Google 代理实现，非 Google 站点需用户启用"增强预加载"设置。}}
+{{知识点20}}{{requires 属性 — tag：用于标识规则或规则集的字符串标签。该值会包含在相关推测请求的 Sec-Speculation-Tags 请求头中，便于服务器端识别和处理。}}
+{{知识点21}}{{target_hint 属性：指示预渲染内容预期在哪里激活。"_self" 表示在当前页面打开（默认值），"_blank" 表示在新页面打开。仅适用于 prerender 规则，不适用于 prefetch。}}
+{{知识点22}}{{relative_to 属性：指定 URL 匹配的相对基准。"document" 表示相对于设置规则的文档；"ruleset" 表示相对于规则文件本身（默认值）。仅在通过 Speculation-Rules HTTP 头引用外部规则文件时有意义。}}
+{{知识点23}}{{expects_no_vary_search 属性：为浏览器提供目标文档的 No-Vary-Search 头值的提示。浏览器可据此判断是等待现有预取/预渲染完成还是启动新的请求，在处理带查询参数的 URL 时特别有用。}}
+{{知识点24}}{{Speculation-Rules HTTP 响应头：作为响应头提供，值为逗号分隔的 URL 列表，指向包含推测规则 JSON 的文件。URL 值必须包含在引号中。例如：Speculation-Rules: "/rules/prefetch.json","/rules/prerender.json"。}}
+{{知识点25}}{{Supports-Loading-Mode 响应头：允许目标页面选择加入更高风险的加载上下文。值 "credentialed-prerender" 表示目标源同意被跨域同站预渲染；"fenced-frame" 表示允许在围栏帧中加载。仅在安全上下文（HTTPS）下可用。}}
+{{知识点26}}{{Sec-Purpose 请求头：预取和预渲染请求会自动携带此头。预取请求发送 Sec-Purpose: prefetch；预渲染请求发送 Sec-Purpose: prefetch;prerender。服务器可据此日志记录、返回不同内容或阻止推测性加载。}}
+{{知识点27}}{{特性检测方法：使用 HTMLScriptElement.supports("speculationrules") 检测浏览器是否支持 Speculation Rules API。可用于在支持的浏览器中插入推测规则，不支持时回退到 <link rel="prefetch"> 等旧方案。}}
+{{知识点28}}{{动态插入规则：可通过 JavaScript 动态创建 <script type="speculationrules"> 元素并插入 JSON 规则。先检测支持性，再创建 script 元素、设置 type 和 JSON 内容，最后 append 到 DOM 中。}}
+{{知识点29}}{{检测预取页面 — JavaScript：通过 performance.getEntriesByType("navigation")[0].deliveryType === "navigational-prefetch" 判断页面是否被预取加载。适用于性能测量或延迟预取期间不应执行的操作。}}
+{{知识点30}}{{检测预渲染页面 — document.prerendering：Document.prerendering 属性返回布尔值，指示页面是否正在预渲染中。可配合 prerenderingchange 事件监听，延迟执行分析、广告等仅需在页面实际可见时运行的逻辑。}}
+{{知识点31}}{{PerformanceNavigationTiming.activationStart：预渲染页面被激活时，此属性被设置为一个 DOMHighResTimeStamp，表示预渲染开始到文档激活之间的时间。值大于 0 表示页面经历了预渲染。}}
+{{知识点32}}{{prerenderingchange 事件：当预渲染文档被用户实际查看而激活时触发此事件。用于启用之前被延迟的活动，如分析、广告加载等。可用 { once: true } 选项确保只执行一次。}}
+{{知识点33}}{{CSP 与 inline-speculation-rules：如果网站使用了 Content-Security-Policy，需要在 script-src 指令中添加 'inline-speculation-rules' 源值（或使用 hash/nonce），否则内联的 <script type="speculationrules"> 会被 CSP 阻止。}}
+{{知识点34}}{{跨站预取限制：出于隐私考虑，跨站预取目前仅在用户没有为目标站点设置 cookie 时才有效，防止网站通过预取追踪用户活动。未来将通过 Supports-Loading-Header 提供选择加入机制。}}
+{{知识点35}}{{跨域同站预渲染：预渲染默认仅限同源文档。跨域同站预渲染需要目标页面通过 Supports-Loading-Mode: credentialed-prerender 头选择加入。跨站预渲染目前不被支持。}}
+{{知识点36}}{{不安全的预取条件：如果 URL 执行服务器端副作用（如登出、语言切换、加入购物车、发送短信验证码、消耗文章配额等），预取这些 URL 会导致副作用提前触发，需要在代码中进行缓解或完全避免预取。}}
+{{知识点37}}{{不安全的预渲染条件：预渲染的页面会在隐藏标签页中完整执行 JavaScript，因此具有副作用的页面（如修改服务端状态、发送分析数据、播放音视频等）可能产生问题。需要检测预渲染状态并延迟相关操作。}}
+{{知识点38}}{{与旧方案对比 — prefetch：相比 <link rel="prefetch">，Speculation Rules prefetch 可用于跨站导航、不受 Cache-Control 头阻止、自动降低优先级、尊重用户省电/省数据设置，且存储在内存缓存中而非 HTTP 缓存。}}
+{{知识点39}}{{与旧方案对比 — prerender：<link rel="prerender"> 是 Chrome 特有且未标准化的方案，Chrome 团队正在淘汰它。Speculation Rules prerender 能加载 JS 拓展的子资源、不受 Cache-Control 阻止，且作为渐进增强的提示性机制。}}
+{{知识点40}}{{每文档内存缓存：预取和预渲染的结果存储在每文档的内存缓存中，不同于 HTTP 缓存。当用户离开当前页面时缓存被丢弃。这意味着预取/预渲染不一定会填充 HTTP 缓存（取决于缓存头设置）。}}
+{{知识点41}}{{规则合并机制：可以在同一 HTML 文件中使用多个 <script type="speculationrules"> 元素，也可以同时使用内联脚本和 Speculation-Rules HTTP 头。所有应用于文档的规则会被解析并添加到文档的推测规则列表中。}}
+{{知识点42}}{{where 条件嵌套示例：可以组合 and/not/or 实现复杂匹配逻辑，例如排除登出链接和购物车操作链接：{ "and": [ { "href_matches": "/*" }, { "not": { "href_matches": "/logout" } }, { "not": { "selector_matches": ".no-prerender" } } ] }。}}
+{{知识点43}}{{浏览器兼容性现状：截至 2025 年，Chrome 109+ 和 Edge 109+ 完整支持 Speculation Rules API。Safari 和 Firefox 尚未实现完整支持（实验性）。使用时应进行特性检测并提供回退方案。}}
+{{知识点44}}{{实际应用场景 — 电商网站：在商品列表页为所有 .product-link 链接设置 eager 级别的 prerender 规则，用户浏览商品时即预渲染详情页，点击后瞬间加载，大幅提升转化率。}}
+{{知识点45}}{{实际应用场景 — 分页内容：在文章列表页使用 list 规则预取下一页 URL（如 "next.html"），使用 moderate 热切度，当用户滚动到底部时下一页已准备好，实现无缝翻页体验。}}
+{{知识点46}}{{Sec-Speculation-Tags 请求头：当规则设置了 tag 属性时，相关推测请求会在 Sec-Speculation-Tags 头中包含该标签值。服务器可据此区分不同规则集触发的请求，进行精细化的日志记录和处理。}}
+{{知识点47}}{{Speculation Rules 作为渐进增强：预渲染应被视为提示和渐进增强，浏览器可能基于用户设置、内存使用情况或其他启发式规则选择不执行提示。开发者不应假设推测性加载一定会发生。}}
+{{知识点48}}{{服务器端处理策略：当检测到 Sec-Purpose: prefetch 或 prefetch;prerender 头时，返回非成功状态码（非 200-299 范围）可阻止推测性加载。204 和 205 状态码仅阻止预渲染但不阻止预取。通常建议允许预取但用 JS 延迟有副作用的操作。}}

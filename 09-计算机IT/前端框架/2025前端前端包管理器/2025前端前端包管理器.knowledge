@@ -1,0 +1,103 @@
+# 2025前端前端包管理器
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{包管理器概述：前端包管理器是用于管理项目依赖（第三方库/工具）的工具，负责安装、更新、删除依赖包，管理依赖版本，解决依赖冲突，生成锁文件确保团队环境一致性。主流包管理器包括npm、yarn、pnpm和bun。}}
+
+{{知识点2}}{{npm简介：npm（Node Package Manager）是Node.js默认的包管理器，也是最早也是使用最广泛的JavaScript包管理器。npm随Node.js一起安装，使用npmjs.com作为默认注册中心，拥有最大的包生态系统，截至2025年已有超过200万个可用包。}}
+
+{{知识点3}}{{npm install命令：npm install是安装依赖的核心命令。在项目根目录执行npm install会根据package.json安装所有依赖到node_modules目录。支持别名：add、i、in、ins等。常用参数包括--save-dev（开发依赖）、--save-exact（精确版本）、--global（全局安装）。}}
+
+{{知识点4}}{{package.json文件：package.json是Node.js项目的核心配置文件，记录项目名称、版本、描述、入口文件、依赖列表等信息。dependencies记录生产依赖，devDependencies记录开发依赖，scripts定义可执行脚本，engines指定Node.js版本要求。}}
+
+{{知识点5}}{{package-lock.json文件：npm的锁文件，记录依赖树的精确版本和完整性校验值（integrity hash），确保团队成员和CI环境安装完全一致的依赖版本。npm从v5开始自动生成，优先级高于package.json中的版本范围。}}
+
+{{知识点6}}{{npm注册中心（Registry）：npm默认使用https://registry.npmjs.org作为包注册中心。企业可搭建私有注册中心（如Verdaccio、Nexus、GitHub Packages、GitLab Package Registry）来托管内部包。通过npm config set registry可切换注册中心。}}
+
+{{知识点7}}{{npm Workspaces：npm v7+支持工作区（Workspaces），用于管理monorepo。在package.json中配置workspaces字段列出子包目录，执行npm install时会自动将所有工作区的依赖提升（hoist）到根目录的node_modules，避免重复安装。}}
+
+{{知识点8}}{{npm scripts：package.json中的scripts字段可定义自定义命令脚本。常用生命周期脚本包括preinstall、postinstall、prepublish等。通过npm run <script-name>执行。scripts是前端工程化的重要组成部分，可用于构建、测试、部署等流程。}}
+
+{{知识点9}}{{Yarn简介：Yarn是Facebook（Meta）于2016年发布的包管理器，旨在解决npm早期版本在速度、安全性和可靠性方面的问题。Yarn经历了三个大版本：Yarn Classic（v1）、Yarn Berry（v2+/v3+/v4+）。Yarn Classic已进入维护模式，推荐使用Yarn Berry（v4+）。}}
+
+{{知识点10}}{{Yarn Berry（Modern Yarn）：Yarn Berry是Yarn v2+的统称，引入了多项革命性特性：Plug'n'Play（PnP）零安装模式、约束（Constraints）、插件系统、工作区协议等。通过corepack集成到Node.js中，使用.yarnrc.yml进行配置。}}
+
+{{知识点11}}{{Yarn Plug'n'Play（PnP）：PnP是Yarn Berry的核心特性，不再生成node_modules目录。而是创建.pnp.cjs文件记录依赖的解析映射，将依赖存储在全局缓存中的zip压缩包内。优点是安装速度极快、零磁盘IO开销；缺点是部分工具兼容性问题。}}
+
+{{知识点12}}{{Yarn锁文件：Yarn Classic使用yarn.lock记录依赖解析结果。Yarn Berry同样使用yarn.lock但格式有所不同，采用YAML格式。锁文件应提交到版本控制中，确保团队成员安装的依赖版本完全一致。}}
+
+{{知识点13}}{{Yarn Workspaces：Yarn原生支持工作区管理monorepo。在package.json中配置workspaces字段，支持workspace:协议引用本地包。Yarn Berry的工作区功能更强大，支持约束（yarn constraints）对工作区包施加规则。}}
+
+{{知识点14}}{{pnpm简介：pnpm（Performant npm）是专注于性能和磁盘空间效率的包管理器。采用内容寻址存储（content-addressable store）和硬链接机制，相同版本的依赖只在磁盘上存储一次。截至2025年，pnpm因其优秀的性能和严格的依赖管理在前端社区广泛采用。}}
+
+{{知识点15}}{{pnpm存储机制：pnpm使用全局存储（store）保存所有下载过的包。安装时通过硬链接（hard link）从全局存储链接到项目的node_modules，相同版本的依赖不占用额外磁盘空间。如果一个包有100个文件，新版本只改了1个文件，pnpm只存储差异文件。}}
+
+{{知识点16}}{{pnpm的node_modules结构：与npm和Yarn Classic的扁平化（hoisted）node_modules不同，pnpm默认创建非扁平的node_modules结构。项目只能访问直接声明的依赖（通过符号链接），不能隐式访问未声明的传递依赖，这提高了依赖安全性，避免了"幻影依赖"（phantom dependencies）问题。}}
+
+{{知识点17}}{{幻影依赖（Phantom Dependencies）：在npm和Yarn Classic的扁平node_modules中，项目可以访问未在package.json中声明的传递依赖，这称为幻影依赖。幻影依赖可能导致生产环境缺少依赖的运行时错误。pnpm的非扁平结构从根本上解决了这个问题。}}
+
+{{知识点18}}{{依赖提升（Hoisting）：npm和Yarn Classic将依赖提升到node_modules根目录以减少嵌套深度和磁盘占用。这导致了幻影依赖和依赖版本冲突问题。pnpm默认不提升，但可通过.shamefully-hoist=true或public-hoist-pattern配置来兼容某些需要提升的场景。}}
+
+{{知识点19}}{{pnpm Workspaces：pnpm内置monorepo工作区支持。在项目根目录创建pnpm-workspace.yaml文件定义工作区包路径。支持workspace:协议确保本地包引用。结合pnpm的高效存储机制，monorepo中多个子包共享依赖只占用一份磁盘空间。}}
+
+{{知识点20}}{{pnpm安装三阶段：pnpm安装分为三个阶段：1.依赖解析——识别所有依赖并下载到全局存储；2.目录结构计算——根据依赖关系计算node_modules结构；3.链接依赖——从全局存储硬链接到node_modules。这种三阶段方式比传统方式更快。}}
+
+{{知识点21}}{{Bun简介：Bun是由Jarred Sumner创建的一体化JavaScript运行时和工具包，使用Zig语言编写。Bun内置了包管理器（bun install）、测试运行器（bun test）、打包器（bun build）等。其包管理器声称比npm快25倍，是2023-2025年增长最快的JavaScript工具之一。}}
+
+{{知识点22}}{{Bun install性能：bun install声称比npm install快25倍。性能优势来源于：使用Zig语言实现的高效率、并行下载和解压、全局缓存+硬链接机制、优化的依赖解析算法。在大型项目中优势尤为明显。}}
+
+{{知识点23}}{{Bun锁文件：bun使用bun.lock（JSONC格式）作为锁文件，替代bun.lockb（二进制格式）。bun.lock是人类可读的文本格式，便于代码审查和版本控制。它记录了依赖树的精确解析结果。}}
+
+{{知识点24}}{{Bun安全性：Bun默认不执行已安装依赖的生命周期脚本（如postinstall），这与npm不同。这是一种安全措施，防止恶意包通过生命周期脚本执行恶意代码。如需允许特定包的脚本，需在package.json的trustedDependencies中显式声明。}}
+
+{{知识点25}}{{包管理器锁文件对比：npm使用package-lock.json，Yarn使用yarn.lock，pnpm使用pnpm-lock.yaml，Bun使用bun.lock。所有锁文件都应提交到版本控制中。锁文件确保CI/CD和团队成员安装完全一致的依赖版本。}}
+
+{{知识点26}}{{Monorepo工作区对比：npm v7+（workspaces字段）、Yarn（workspaces字段 + workspace:协议）、pnpm（pnpm-workspace.yaml + workspace:协议）均原生支持monorepo。pnpm因存储效率在大型monorepo中表现最佳。Bun也支持workspaces但功能相对较新。}}
+
+{{知识点27}}{{Corepack：Corepack是Node.js官方提供的包管理器版本管理工具，随Node.js v16.9+附带。通过package.json的packageManager字段锁定项目使用的包管理器及版本，确保团队使用一致的包管理器。corepack enable启用后，yarn/pnpm命令会自动使用指定版本。}}
+
+{{知识点28}}{{依赖解析算法：包管理器通过解析package.json中的版本范围（如^1.0.0、~1.0.0、>=2.0.0），结合注册中心的可用版本信息，确定最终安装的版本。SemVer（语义化版本）是版本号标准：主版本.次版本.修订号（MAJOR.MINOR.PATCH）。}}
+
+{{知识点29}}{{版本范围语法：npm/Yarn/pnpm支持的版本范围语法包括：^1.0.0（兼容1.x.x，允许次版本和修订号更新）、~1.0.0（兼容1.0.x，只允许修订号更新）、>=2.0.0（大于等于指定版本）、1.0.0 - 2.0.0（版本区间）、*（任意版本）。精确版本号（无前缀）锁定特定版本。}}
+
+{{知识点30}}{{npm审计（npm audit）：npm内置安全审计功能，扫描项目依赖中的已知安全漏洞。npm audit会检查依赖版本与Snyk/Node.js安全数据库进行比对，输出漏洞详情和修复建议。npm audit fix可自动升级到安全版本。Yarn和pnpm也提供类似的审计功能。}}
+
+{{知识点31}}{{依赖类型分类：前端项目的依赖类型包括：dependencies（生产依赖，随项目一起部署）、devDependencies（开发依赖，仅开发时需要如构建工具、测试框架）、peerDependencies（对等依赖，宿主项目需提供的依赖如插件与框架的关系）、optionalDependencies（可选依赖，安装失败不会中断）。}}
+
+{{知识点32}}{{peerDependencies对等依赖：peerDependencies声明包运行时需要宿主项目提供的依赖版本。例如React组件库声明react为peerDependencies，要求使用它的项目自行安装React。npm v7+默认自动安装peerDependencies，可通过--legacy-peer-deps禁用此行为。}}
+
+{{知识点33}}{{私有注册中心：企业项目通常需要搭建私有npm注册中心。常用方案包括：Verdaccio（开源轻量级）、Nexus Repository（企业级）、GitHub Packages（GitHub集成）、GitLab Package Registry、阿里CNPM等。可通过.npmrc配置不同scope使用不同注册中心。}}
+
+{{知识点34}}{{.npmrc配置文件：.npmrc是npm/pnpm的配置文件，支持项目级、用户级、全局级三个层次。可配置注册中心地址、认证token、代理、作用域映射等。项目级.npmrc应提交到版本控制，便于团队共享配置。常用配置项包括registry、//registry.npmjs.org/:_authToken等。}}
+
+{{知识点35}}{{npx执行工具：npx是npm v5.2+附带的包执行工具，可以临时下载并执行npm包中的命令而无需全局安装。例如npx create-react-app my-app会临时下载create-react-app并执行。npx优先使用项目本地安装的版本，避免全局安装的版本管理问题。}}
+
+{{知识点36}}{{pnpm dlx与bunx：pnpm dlx和bun x（bunx）是类似npx的临时包执行命令。pnpm dlx create-vite my-app会临时下载并执行create-vite。bunx是bun内置的等效工具。这些工具都避免了全局安装的需要，确保使用最新版本。}}
+
+{{知识点37}}{{node_modules地狱（node_modules Hell）：传统npm的node_modules目录存在深层嵌套、磁盘占用巨大、安装缓慢等问题。一个中等项目可能有数万个文件、数百MB的node_modules。pnpm通过硬链接和内容寻址存储大幅缓解了这个问题，Bun通过高效实现加速安装。}}
+
+{{知识点38}}{{依赖安装策略对比：npm使用hoisted（提升）策略，Yarn Classic类似，pnpm使用isolated（隔离）策略通过符号链接，Bun使用全局缓存+硬链接。提升策略兼容性好但有幻影依赖风险；隔离策略严格但某些老旧工具可能不兼容。}}
+
+{{知识点39}}{{锁定依赖版本最佳实践：1.始终提交锁文件到版本控制；2.使用精确版本号或锁文件控制生产环境依赖；3.定期运行npm audit/yarn audit/pnpm audit检查安全漏洞；4.使用renovate或dependabot自动更新依赖；5.在CI中使用--frozen-lockfile或npm ci确保锁文件不被修改。}}
+
+{{知识点40}}{{CI/CD中的包管理：在CI/CD流水线中应使用锁文件安装依赖。npm ci比npm install更快且严格遵循package-lock.json。pnpm install --frozen-lockfile和yarn install --frozen-lockfile也有类似效果。建议在CI中缓存node_modules或全局存储以加速构建。}}
+
+{{知识点41}}{{包管理器迁移：在不同包管理器间迁移通常较简单：1.删除node_modules和旧锁文件；2.使用新包管理器安装（如pnpm import导入npm lockfile）；3.更新CI脚本和文档。pnpm支持从npm/yarn导入锁文件（pnpm import），Yarn支持yarn import从npm导入。}}
+
+{{知识点42}}{{npm镜像源：在中国大陆，由于网络原因通常需要配置npm镜像源。常用镜像包括：淘宝npmmirror.com（原cnpm）、阿里云镜像、华为云镜像等。可通过npm config set registry或.npmrc文件配置。pnpm和yarn也支持类似配置。nrm工具可方便地管理和切换镜像源。}}
+
+{{知识点43}}{{Electron等特殊依赖：某些包如Electron、node-sass等包含平台特定的二进制文件。这些包通常通过postinstall脚本下载对应平台的预编译二进制文件。pnpm和Bun默认不执行依赖的postinstall，需要在supportedArchitectures或trustedDependencies中特殊配置。}}
+
+{{知识点44}}{{全局包管理：npm install -g、yarn global add、pnpm add -g、bun add -g用于全局安装CLI工具。全局包安装在系统目录中，可在任意位置直接使用。但全局包可能导致版本不一致问题，推荐使用npx/pnpm dlx/bunx临时执行，或用corepack管理包管理器自身的版本。}}
+
+{{知识点45}}{{npm发布流程：发布npm包的标准流程：1.在npmjs.com注册账号；2.npm login登录；3.确保package.json中有正确的name和version；4.运行npm publish发布。使用npm version patch/minor/major自动更新版本号并创建git tag。使用--access public发布作用域包。}}
+
+{{知识点46}}{{preinstall/postinstall脚本：package.json的scripts中可定义preinstall和postinstall钩子。preinstall在安装前执行，postinstall在安装后执行。常用于编译本地代码、下载额外资源等。恶意包可能利用这些脚本执行攻击，因此Bun默认不执行依赖的生命周期脚本。}}
+
+{{知识点47}}{{overrides/resolutions覆盖依赖版本：当子依赖有安全漏洞或兼容性问题时，可通过覆盖机制强制使用特定版本。npm使用overrides字段，Yarn使用resolutions字段，pnpm支持pnpm.overrides。这在monorepo中尤其有用，可统一整个项目树的依赖版本。}}
+
+{{知识点48}}{{依赖图可视化：理解项目依赖树有助于排查问题。npm ls、yarn why <package>、pnpm why <package>可分析依赖关系。npm包如madge、dependency-cruiser可生成依赖图。pnpm list --depth=Infinity显示完整依赖树。这些工具帮助识别循环依赖、多余依赖等问题。}}
+
+{{知识点49}}{{pnpm catalog功能：pnpm v9+引入了catalogs功能，允许在pnpm-workspace.yaml中集中定义依赖版本，在工作区的多个子包中统一引用。这避免了monorepo中不同子包使用不同版本的同一依赖，简化了版本管理。}}
+
+{{知识点50}}{{2025年包管理器趋势：2025年前端包管理器格局：pnpm因其严格性和高效性成为新项目首选；Yarn Berry通过PnP和插件系统保持竞争力；Bun以极致性能快速崛起；npm作为Node.js默认管理器保持稳定。趋势是向更严格的依赖管理、更快的安装速度、更好的monorepo支持发展。}}

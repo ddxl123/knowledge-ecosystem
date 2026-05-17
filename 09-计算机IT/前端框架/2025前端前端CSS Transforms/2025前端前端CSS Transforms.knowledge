@@ -1,0 +1,91 @@
+# 2025前端CSS Transforms
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{CSS Transform 概述：CSS Transforms 是 CSS 的一个模块，允许对元素进行旋转、缩放、倾斜或平移等变换操作。变换不会影响文档流中其他元素的布局，元素变换后仍占据原始空间。Transform 可以应用于所有可变换元素（transformable elements），包括块级元素、行内元素等。规范由 CSS Transforms Module Level 1 和 Level 2 定义。}}
+
+{{知识点2}}{{transform 属性基础语法：transform 属性用于对元素应用一个或多个变换函数。语法为 transform: none | <transform-function>+。默认值为 none，表示不应用任何变换。可以链式调用多个变换函数，如 transform: translateX(10px) rotate(10deg) translateY(5px)。transform 不可继承，初始值为 none。}}
+
+{{知识点3}}{{变换函数的执行顺序：多个变换函数从左到右书写，但实际应用顺序是从右到左（从后往前）。例如 transform: scale(0.5) translate(-100%, -100%) 先执行 translate 再执行 scale。这是因为变换本质上是矩阵乘法，矩阵乘法不满足交换律，因此顺序至关重要，不同的排列会产生完全不同的结果。}}
+
+{{知识点4}}{{translate() 平移函数：translate(tx, ty) 函数用于在二维平面上移动元素。接受一个或两个参数，第一个为水平偏移，第二个为垂直偏移（可省略，默认为 0）。支持长度值和百分比值，百分比相对于元素自身的边界框尺寸。例如 transform: translate(120px, 50%) 表示向右移动 120px，向下移动元素高度的 50%。}}
+
+{{知识点5}}{{translateX() 和 translateY() 单轴平移：translateX(tx) 仅在水平方向平移元素，translateY(ty) 仅在垂直方向平移。它们等价于在 translate() 中只指定一个方向的参数。translateX(2em) 等价于 translate(2em, 0)，translateY(3in) 等价于 translate(0, 3in)。这两个函数在需要动画单个轴向时特别有用。}}
+
+{{知识点6}}{{translate3d() 和 translateZ() 三维平移：translate3d(tx, ty, tz) 在三维空间中平移元素，第三个参数 tz 必须是长度值（不支持百分比）。translateZ(tz) 仅在 Z 轴方向平移，正值使元素向观察者靠近（变大），负值使元素远离观察者（变小）。translateZ() 在创建 3D 场景深度效果时非常关键。}}
+
+{{知识点7}}{{translate 独立属性：CSS 提供了独立的 translate 属性（非函数），可以直接设置元素的平移值而不需要通过 transform 属性。语法为 translate: <length-percentage> [<length-percentage> <length>?]。例如 translate: 100px 200px 等价于 transform: translate(100px, 200px)。独立属性更便于单独动画化。}}
+
+{{知识点8}}{{scale() 缩放函数：scale(sx, sy) 函数用于缩放元素。接受一个或两个数值参数。如果只提供一个参数，X 和 Y 轴使用相同的缩放因子。值为 1 表示原始大小，大于 1 放大，小于 1 缩小，负值会产生翻转效果。例如 scale(2, 0.5) 表示水平方向放大 2 倍，垂直方向缩小为一半。}}
+
+{{知识点9}}{{scaleX()、scaleY() 和 scaleZ() 单轴缩放：scaleX(sx) 仅缩放水平方向，scaleY(sy) 仅缩放垂直方向，scaleZ(sz) 仅缩放 Z 轴方向。它们分别等价于在 scale3d() 中只改变对应轴的值。例如 scaleX(2) 等价于 scale3d(2, 1, 1)。scaleZ() 需要配合 3D 上下文才能看到效果。}}
+
+{{知识点10}}{{scale3d() 三维缩放：scale3d(sx, sy, sz) 在三个维度上同时缩放元素。接受三个数值参数，分别对应 X、Y、Z 轴的缩放因子。例如 scale3d(2.5, 1.2, 0.3) 表示 X 轴放大 2.5 倍，Y 轴放大 1.2 倍，Z 轴缩小到 0.3 倍。Z 轴缩放在 2D 场景中不可见，需要配合 perspective 使用。}}
+
+{{知识点11}}{{scale 独立属性：CSS 提供了独立的 scale 属性，语法为 scale: <number> [<number> <number>?]。可以直接设置缩放值而不通过 transform。例如 scale: 1.5 等价于 transform: scale(1.5)。独立属性可以单独进行过渡和动画，比通过 transform 属性更灵活。}}
+
+{{知识点12}}{{rotate() 旋转函数：rotate(angle) 函数用于在二维平面上旋转元素。参数为一个角度值，正值顺时针旋转，负值逆时针旋转。支持 deg（度）、rad（弧度）、grad（梯度）、turn（圈）等角度单位。例如 rotate(0.5turn) 表示旋转半圈（180度），rotate(45deg) 表示顺时针旋转 45 度。}}
+
+{{知识点13}}{{rotateX()、rotateY()、rotateZ() 单轴旋转：rotateX(angle) 绕 X 轴旋转（上下翻转），rotateY(angle) 绕 Y 轴旋转（左右翻转），rotateZ(angle) 绕 Z 轴旋转（与二维 rotate() 相同）。这三个函数用于创建 3D 旋转效果。例如 rotateY(180deg) 可以让元素水平翻转显示背面。}}
+
+{{知识点14}}{{rotate3d() 自定义轴旋转：rotate3d(x, y, z, angle) 函数绕自定义的三维向量 (x, y, z) 旋转指定角度。前三个参数定义旋转轴的方向向量，第四个参数是旋转角度。例如 rotate3d(1, 1, 1, 45deg) 表示绕对角线 (1,1,1) 旋转 45 度。rotateX(45deg) 等价于 rotate3d(1, 0, 0, 45deg)。}}
+
+{{知识点15}}{{rotate 独立属性：CSS 提供了独立的 rotate 属性，语法为 rotate: [<angle> | <number>]。单独使用时默认绕 Z 轴旋转。可以指定轴向，如 rotate: x 45deg 表示绕 X 轴旋转 45 度，rotate: 1 1 1 45deg 表示绕自定义轴旋转。独立属性便于单独动画化旋转效果。}}
+
+{{知识点16}}{{skew() 倾斜函数：skew(ax, ay) 函数用于倾斜元素。第一个参数为水平倾斜角度，第二个为垂直倾斜角度（可省略，默认为 0）。正值使元素向相应方向倾斜。例如 skew(30deg, 20deg) 会使元素在水平方向倾斜 30 度，垂直方向倾斜 20 度。倾斜会改变元素的形状，使其变成平行四边形。}}
+
+{{知识点17}}{{skewX() 和 skewY() 单轴倾斜：skewX(angle) 仅在水平方向倾斜元素，skewY(angle) 仅在垂直方向倾斜。skewX(30deg) 使元素的顶部向右偏移，skewY(1.07rad) 使元素的左侧向下偏移。这两个函数是 skew() 的便捷简写，常用于创建斜体或动态变形效果。}}
+
+{{知识点18}}{{matrix() 矩阵变换：matrix(a, b, c, d, tx, ty) 函数使用 2D 变换矩阵来定义变换。六个参数对应一个 3x2 矩阵：[a c tx; b d ty; 0 0 1]。所有其他 2D 变换函数都可以用 matrix() 表示。例如 translate(12px, 50%) 等价于某个特定的 matrix() 值。matrix() 提供了最灵活但也最复杂的变换控制。}}
+
+{{知识点19}}{{matrix3d() 三维矩阵变换：matrix3d() 函数使用 4x4 矩阵定义三维变换，接受 16 个参数。它是所有 3D 变换的底层表示形式。参数按列主序排列：matrix3d(a1, b1, c1, d1, a2, b2, c2, d2, a3, b3, c3, d3, a4, b4, c4, d4)。matrix3d() 通常由 JavaScript 动画库内部使用，较少直接手写。}}
+
+{{知识点20}}{{perspective() 函数：perspective(length) 函数是 transform 属性中的一个变换函数，为变换列表中的后续函数设置透视距离。与 perspective 属性不同，它只影响当前元素的变换，不影响子元素。例如 transform: perspective(500px) rotateY(30deg) 为该元素的 Y 轴旋转添加透视效果。参数值必须为正长度值。}}
+
+{{知识点21}}{{transform-origin 变换原点：transform-origin 属性定义变换的参考点（原点）。默认值为 50% 50% 0（元素中心）。支持一到三个值：第一个为水平偏移，第二个为垂直偏移，第三个为 Z 轴偏移（仅支持长度值，不支持百分比）。可以使用关键字如 left、right、top、bottom、center，或长度/百分比值。}}
+
+{{知识点22}}{{transform-origin 工作原理：transform-origin 实际上是在变换前后包裹了一对平移操作。首先将原点平移到真正的原点 (0,0)，然后应用变换，最后将原点平移回原位。因此 transform-origin: -100% 50%; transform: rotate(45deg) 等价于 transform: translate(-100%, 50%) rotate(45deg) translate(100%, -50%)。}}
+
+{{知识点23}}{{transform-style 3D 空间：transform-style 属性决定子元素是否位于 3D 空间中。值为 flat（默认）时子元素位于元素自身的平面内；值为 preserve-3d 时子元素在 3D 空间中定位。要创建真正的 3D 效果（如立方体），父元素必须设置 transform-style: preserve-3d。该属性不可继承，需在每个非叶节点设置。}}
+
+{{知识点24}}{{transform-style 与分组属性冲突：某些 CSS 属性会强制 transform-style 的计算值变为 flat，即使指定 preserve-3d 也无效。这些属性包括：overflow 非 visible/clip、opacity 小于 1、filter 非 none、clip/clip-path 非默认值、isolation: isolate、mask-image/mask-border-source 非 none、mix-blend-mode 非 normal、contain: paint 等。}}
+
+{{知识点25}}{{perspective 属性：perspective 属性在父元素上定义 3D 透视距离（观察者到 z=0 平面的距离）。值为长度值，正值产生透视效果，none（默认）表示无透视。值越小透视效果越强烈（如 200px），值越大效果越温和（如 1000px）。z>0 的元素变大，z<0 的元素变小。z 值大于 perspective 值的元素不会被绘制。}}
+
+{{知识点26}}{{perspective 属性与 perspective() 函数的区别：perspective 属性设置在父元素上，影响所有子元素的 3D 变换，是一个共享的透视设置。perspective() 函数写在 transform 属性中，只影响当前元素自身的变换。当需要为不同子元素设置不同透视时，应使用 perspective() 函数；当所有子元素共享同一透视时，应使用 perspective 属性。}}
+
+{{知识点27}}{{perspective-origin 透视原点：perspective-origin 属性定义观察者看向 3D 空间的观察点（灭点位置）。默认值为 50% 50%（元素中心）。可以使用关键字或长度/百分比值。修改 perspective-origin 类似于物理上移动头部来观察 3D 物体的不同部分，灭点位置的变化会产生不同的透视效果。}}
+
+{{知识点28}}{{backface-visibility 背面可见性：backface-visibility 属性控制当元素背面朝向观察者时是否可见。值为 visible（默认）时背面始终可见，值为 hidden 时背面不可见。当元素被旋转到背面朝前时（如 rotateY(180deg)），如果设置 hidden 则元素消失。该属性在创建卡片翻转、3D 立方体等效果时至关重要。}}
+
+{{知识点29}}{{transform-box 变换盒模型：transform-box 属性定义 transform-origin 的参考盒模型。值为 content-box、border-box、fill-box（SVG）、view-box（SVG）或 border-box（默认值为 view-box 对于 SVG 元素，其他元素为 border-box）。它决定了百分比值的计算基准，影响变换原点的定位。}}
+
+{{知识点30}}{{变换与层叠上下文：应用 transform 属性（值不为 none）会创建一个新的层叠上下文（stacking context）。这意味着该元素及其子元素的 z-index 将在新的上下文中计算。同样，perspective 属性（值不为 none）和 transform-style: preserve-3d 也会创建新的层叠上下文。这可能影响元素的层叠顺序和定位行为。}}
+
+{{知识点31}}{{变换与包含块：当元素的 transform 值不为 none 时，该元素会成为其后代中 position: fixed 元素的包含块。这意味着 fixed 定位的元素将相对于变换后的元素定位，而不是相对于视口。这是一个常见陷阱，可能导致 fixed 元素的位置出乎意料。}}
+
+{{知识点32}}{{变换的性能优势：CSS transforms 是硬件加速的属性，使用 GPU 进行计算，性能优于使用 top/left/margin 等属性进行位移。浏览器可以将 transform 操作提升到合成层（compositor layer），避免触发重排（reflow）和重绘（repaint）。在动画中优先使用 transform 和 opacity 可以获得最佳性能。}}
+
+{{知识点33}}{{变换与动画：transform 属性的动画类型为 transform（特殊插值类型），支持在不同变换函数之间平滑过渡。浏览器会将变换分解为矩阵进行插值。可以使用 CSS transitions 和 @keyframes 动画来驱动 transform 变化。例如 transition: transform 0.3s ease 可以让 transform 变化产生平滑过渡效果。}}
+
+{{知识点34}}{{变换的可访问性考虑：缩放/缩放动画可能触发光敏性癫痫。应提供控制选项允许用户关闭动画，并使用 prefers-reduced-motion 媒体查询来检测用户的系统偏好。示例：@media (prefers-reduced-motion: reduce) { .animated { transform: none; transition: none; } } 确保在用户偏好减少动画时禁用变换动画。}}
+
+{{知识点35}}{{独立变换属性（Individual Transform Properties）：CSS 引入了独立的 translate、rotate、scale 属性，可以分别设置而不需要组合到 transform 属性中。这使得单独动画化某个变换维度更加方便。优先级上，独立属性在 transform 属性之前应用。三者应用顺序为：translate → rotate → scale。}}
+
+{{知识点36}}{{变换与百分比：translate() 中的百分比相对于元素自身的边界框尺寸（由 transform-box 决定）。例如 translate(50%, 50%) 将元素向右移动自身宽度的 50%，向下移动自身高度的 50%。scale() 不接受百分比值，只接受数值。rotate() 和 skew() 只接受角度值。transform-origin 中的百分比也相对于元素边界框。}}
+
+{{知识点37}}{{CSS Transforms 与 SVG：CSS Transforms 同样可以应用于 SVG 元素。SVG 元素的 transform-box 默认为 view-box，这意味着百分比值相对于 SVG 视口计算。SVG 还有自己的 transform 属性（作为 SVG 属性而非 CSS 属性），使用不同的语法。CSS transform 优先级高于 SVG transform 属性。}}
+
+{{知识点38}}{{3D 立方体实战：创建 3D 立方体需要：父元素设置 transform-style: preserve-3d 和 perspective，六个面分别用 transform: translateZ() 和 rotateX()/rotateY() 定位。前面向观察者平移半个边长 translateZ(50px)，后面先旋转 180deg 再平移，左右面分别绕 Y 轴旋转 ±90deg 再平移，上下面分别绕 X 轴旋转 ±90deg 再平移。}}
+
+{{知识点39}}{{卡片翻转效果：实现卡片翻转的经典模式：容器设置 perspective 和 transform-style: preserve-3d。卡片正面和背面都设置为绝对定位。背面设置 backface-visibility: hidden 和 transform: rotateY(180deg)。翻转时对卡片应用 transform: rotateY(180deg)，正面消失背面出现，实现翻转效果。配合 transition 添加平滑动画。}}
+
+{{知识点40}}{{will-change 优化提示：对于频繁变换的元素，可以使用 will-change: transform 提示浏览器提前创建合成层。但应谨慎使用，因为每个合成层都会消耗 GPU 内存。不要在过多元素上使用 will-change，也不要用于已经频繁变化的属性。最佳实践是仅在动画开始前添加，动画结束后移除。}}
+
+{{知识点41}}{{变换顺序的最佳实践：在组合多个变换时，常见的推荐顺序是先 translate 再 rotate 再 scale。这是因为旋转会改变坐标轴方向，如果先旋转再平移，平移方向会受旋转影响。先平移可以确保元素移动到正确位置后再旋转。对于 3D 变换，通常顺序为 perspective → translate → rotate → scale。}}
+
+{{知识点42}}{{变换与固定定位的陷阱：transform 不为 none 的元素会改变 fixed 定位子元素的参照系。常见的解决方案：将需要 fixed 定位的元素（如模态框、下拉菜单）放在 DOM 树中不受 transform 影响的位置，或者使用 position: absolute 配合 JavaScript 计算位置来模拟 fixed 效果。这是单页应用和组件库中的常见问题。}}
+
+{{知识点43}}{{变换去锯齿与子像素渲染：某些变换（尤其是旋转和倾斜）可能导致元素边缘出现锯齿或模糊。浏览器通常使用亚像素渲染来平滑边缘，但在某些情况下效果不理想。可以尝试使用 backface-visibility: hidden 或 will-change: transform 来触发 GPU 渲染改善显示效果。确保元素尺寸为偶数像素也有助于减少模糊。}}
+
+{{知识点44}}{{CSS Transform 的规格演进：CSS Transforms Module Level 1 定义了基本的 2D 和 3D 变换功能。Level 2 引入了独立变换属性（translate、rotate、scale）、transform-box 属性以及更精细的 3D 变换控制。最新的规范草案还在探索更多变换函数和交互方式。浏览器对 Level 2 独立属性的支持已经非常广泛。}}

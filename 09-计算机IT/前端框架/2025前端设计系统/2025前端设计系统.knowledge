@@ -1,0 +1,83 @@
+# 2025前端设计系统
+# 领域: 计算机IT
+# 学科: 前端框架
+# 来源: 2025前端设计系统
+# 描述: 前端设计系统核心知识点
+
+{{设计系统定义}}{{设计系统是一套可复用的组件库、设计模式、标准和文档的集合，用于在多个产品和平台间保持一致的用户体验。它包含设计原则、组件库、设计Token、文档站点和治理流程五大核心要素。2025年的设计系统更加强调开发者体验(DX)和跨平台一致性。}}
+
+{{设计Token概念}}{{设计Token(Design Token)是设计决策的最小可复用单元，以平台无关的键值对形式存储视觉属性。例如：颜色（primary: #0d6efd）、间距（spacing-md: 16px）、字号（font-size-lg: 1.25rem）。Token分为三层：全局Token（原始值）、语义Token（用途含义）、组件Token（组件级别）。2025年W3C Design Tokens Community Group正在推动设计Token的标准化格式规范。}}
+
+{{W3C设计Token格式}}{{W3C Design Tokens Community Group(DTCG)正在制定设计Token的JSON标准格式（.tokens.json）。该规范定义了Token的类型系统（color、dimension、fontFamily、duration等）、分组机制、别名引用和主题切换能力。目标是实现设计工具与代码之间的Token互操作性，使Figma、Sketch等设计工具的Token可以直接导出为CSS变量或JavaScript对象。}}
+
+{{CSS自定义属性与Token}}{{CSS自定义属性（CSS Custom Properties / CSS Variables）是实现设计Token在浏览器端运行的核心技术。通过 -- 前缀定义变量，var() 函数引用。2025年CSS自定义属性已被所有主流浏览器完整支持，Bootstrap 5.3+ 使用 --bs- 前缀定义了大量CSS变量实现实时主题定制，无需重新编译Sass。}}
+
+{{Tailwind CSS设计Token集成}}{{Tailwind CSS v4使用 @theme 指令定义设计Token，自动生成对应的工具类。例如定义 --color-mint-500 后可直接使用 bg-mint-500、text-mint-500 等类。Tailwind的Token命名空间包括：--color-*（颜色）、--font-*（字体）、--breakpoint-*（断点）、--spacing-*（间距）、--shadow-*（阴影）等。@theme 替代了旧版的 tailwind.config.js 配置方式。}}
+
+{{组件库架构}}{{2025年主流前端组件库采用分层架构：原子层（Button、Input、Badge等基础元素）→ 分子层（SearchBar、FormField等组合组件）→ 有机体层（Header、DataTable等复杂组件）→ 模板层（页面布局）→ 页面层（完整页面）。遵循Brad Frost的原子设计理论(Atomic Design)，从最小的UI元素逐步构建复杂的界面。}}
+
+{{React组件库生态}}{{2025年React生态主流设计系统组件库包括：Radix UI（无样式可访问组件原语）、shadcn/ui（可复制粘贴的组件集合，基于Radix + Tailwind）、Chakra UI（样式系统组件库）、Ant Design（企业级UI库）、MUI（Material Design实现）。shadcn/ui因其零依赖、完全可控的特点成为2024-2025年最受欢迎的选择之一。}}
+
+{{Vue组件库生态}}{{2025年Vue生态设计系统包括：Vuetify（Material Design实现，支持Vue 3）、Element Plus（饿了么团队出品，企业级UI库）、Naive UI（图森未来出品，TypeScript优先）、PrimeVue（丰富的UI组件集）、Nuxt UI（基于Headless UI的Nuxt专用组件库）。Vue 3的Composition API使组件逻辑复用更加灵活。}}
+
+{{无头组件库模式}}{{无头组件库(Headless UI Library)将组件的交互逻辑/可访问性与视觉样式完全分离。代表库包括：Radix UI、Headless UI、React Aria。这种模式让团队可以100%自定义外观，同时获得经过充分测试的键盘导航、屏幕阅读器支持、焦点管理等无障碍能力。2025年这一模式已成为构建企业级设计系统的首选方案。}}
+
+{{Storybook 10}}{{Storybook 10于2025年发布，采用ESM-only架构，包体积减少29%。核心特性包括：自动模块Mock（automatic module mocking）、MCP协议支持（Storybook MCP for React，允许AI代理利用组件信息生成代码）、与Vitest深度集成的组件测试、内置无障碍测试管线(a11y pipeline)。Storybook已成为前端设计系统文档和测试的事实标准。}}
+
+{{Storybook MCP集成}}{{Storybook 10.3引入MCP(Model Context Protocol)支持，允许AI编码代理（如Claude、Cursor等）通过MCP协议访问Storybook中的组件元数据、props定义、stories和文档。AI代理可以据此生成符合设计系统规范的组件代码，使用更少token完成更高质量的UI开发。这标志着设计系统与AI辅助开发的深度融合。}}
+
+{{Storybook无障碍测试}}{{Storybook 9+内置了完整的无障碍测试管线：开发时实时axe-core检测、交互测试中自动验证WCAG合规性、CI/CD中批量运行无障碍检查、可视化高亮对比度问题和焦点陷阱。通过 @storybook/addon-a11y 插件，团队可以在组件开发阶段就捕获无障碍问题，而非等到QA阶段才发现。}}
+
+{{设计系统文档站点}}{{2025年设计系统文档工具包括：Storybook（交互式组件文档）、Docusaurus（React驱动的文档站点生成器）、VitePress（Vue生态的静态站点生成器，极速）、ZeroHeight（非技术友好的设计文档平台）、Specify（设计Token管理平台）。优秀的文档应包含：组件展示、API文档、设计指南、代码示例和可交互的Playground。}}
+
+{{Figma与代码同步}}{{2025年Figma已成为设计系统的核心设计工具。Figma Variables功能原生支持设计Token管理，可通过API导出为JSON格式。工具链包括：Figma Tokens插件（Token管理）、Style Dictionary（Token转换为多平台代码）、Specify（自动化Token同步）、Tokens Studio（Figma Token管理的高级方案）。设计-代码双向同步是高效设计系统的关键能力。}}
+
+{{Style Dictionary}}{{Style Dictionary是Amazon开源的设计Token转换工具，可以将一份Token源文件转换为CSS变量、SCSS变量、iOS/Android原生值、JavaScript对象等多种输出格式。2025年Style Dictionary v4支持W3C DTCG格式，引入了更灵活的Token引用和主题机制。它是实现"单一Token源、多平台输出"架构的核心工具。}}
+
+{{主题切换机制}}{{2025年前端设计系统的主题切换方案：1）CSS自定义属性切换（通过data-theme属性或class切换不同CSS变量集）；2）CSS light-dark()函数（CSS Color Level 5新特性，自动适配系统偏好）；3）CSS color-scheme属性；4）JavaScript运行时主题切换（结合localStorage持久化）。Bootstrap 5.3使用[data-bs-theme]属性实现深色/浅色模式切换。}}
+
+{{CSS color-scheme与light-dark()}}{{CSS Color Level 5引入light-dark()函数，允许在一个声明中同时定义浅色和深色模式的值，例如：background: light-dark(#fff, #000)。配合color-scheme: light dark属性，浏览器自动根据用户偏好选择对应值。这比手动管理两套CSS变量更简洁，2025年已在所有主流浏览器中获得支持。}}
+
+{{响应式设计Token}}{{设计Token应支持响应式适配。方案包括：1）基于断点的Token覆盖（如spacing-md在移动端为12px，桌面端为16px）；2）CSS clamp()函数实现流式缩放；3）容器查询(Container Queries)驱动的Token切换。2025年CSS容器查询已被广泛支持，使组件级响应式设计成为可能，不再仅依赖视口宽度。}}
+
+{{CSS容器查询}}{{CSS Container Queries（@container）允许组件根据其容器尺寸而非视口尺寸来调整样式。2025年已被所有主流浏览器支持，是设计系统组件实现真正独立响应式的关键技术。配合container-type: inline-size，组件可以在不同布局环境中自动适配，无需了解外部页面结构。}}
+
+{{设计系统治理}}{{设计系统治理包括：贡献流程（如何提议新组件/修改）、版本管理（语义化版本控制）、变更日志、废弃策略、Breaking Change迁移指南。2025年成熟的设计系统采用RFC(Request for Comments)流程处理重大变更，通过GitHub Issues/Discussions收集社区反馈，使用Changesets或semantic-release自动化版本发布。}}
+
+{{组件API设计原则}}{{优秀的组件API设计遵循：1）组合优于配置（提供灵活的组合方式而非大量props）；2）受控与非受控模式并存（类似React的controlled/uncontrolled）；3）合理的默认值（开箱即用体验好）；4）一致的命名约定（on*事件处理、*ClassName样式覆盖）；5）Slot/Pattern插槽模式（允许注入自定义内容）。}}
+
+{{可访问性(A11y)标准}}{{2025年设计系统必须内建无障碍支持。核心标准：WCAG 2.2 AA级别合规、ARIA属性正确使用、键盘导航完整支持、焦点管理（Focus Trap/Focus Ring）、颜色对比度≥4.5:1、屏幕阅读器测试。欧盟EAA(European Accessibility Act)于2025年6月生效，强制要求数字产品满足无障碍标准，使a11y从"加分项"变为"必选项"。}}
+
+{{微前端与设计系统}}{{微前端架构下设计系统面临特殊挑战：多个团队独立开发但需要视觉一致。解决方案包括：1）共享Design Token包（通过npm包或CDN分发CSS变量）；2）Web Components封装组件（跨框架兼容）；3）Module Federation共享组件运行时；4）CSS作用域隔离（Shadow DOM或CSS Modules）。2025年Module Federation 2.0提供了更灵活的远程模块共享机制。}}
+
+{{Web Components设计系统}}{{Web Components（Custom Elements + Shadow DOM + HTML Templates）是构建跨框架设计系统的原生方案。代表项目：Shoelace/Web Awesome、Lit（Google的Web Components库）、FAST（Microsoft的Web Components框架）。优势：框架无关、浏览器原生、样式隔离。2025年Web Components的浏览器支持已非常成熟，但开发者体验仍落后于React/Vue组件。}}
+
+{{设计系统度量指标}}{{衡量设计系统成功的关键指标：1）采纳率（多少项目/团队在使用）；2）覆盖率（UI中使用系统组件的比例）；3）贡献活跃度（PR数、Issue数）；4）组件复用次数；5）开发者满意度（NPS调查）；6）Bug修复时间；7）从设计到上线的平均时间。定期度量这些指标有助于持续改进设计系统的价值。}}
+
+{{Monorepo管理设计系统}}{{2025年大型设计系统普遍采用Monorepo架构管理多个包。工具链：Turborepo（构建编排，增量缓存）、Nx（智能构建系统）、pnpm workspaces（包管理）。典型的Monorepo结构：packages/tokens（Token包）、packages/components（组件库）、packages/icons（图标库）、packages/utils（工具函数）、apps/docs（文档站点）、apps/playground（实验场）。}}
+
+{{版本策略与发布}}{{设计系统版本管理遵循语义化版本(SemVer)：主版本含Breaking Changes、次版本含新功能、补丁版本含Bug修复。发布工具：Changesets（GitHub生态首选，PR驱动的变更管理）、semantic-release（自动化版本和changelog）、Lerna（Monorepo包发布）。重要实践：每个包独立版本化、提供迁移指南、废弃API至少保留一个主版本。}}
+
+{{图标系统}}{{2025年前端图标系统方案：1）SVG图标组件（如Lucide、Heroicons，通过React/Vue组件使用）；2）图标字体（Icon Font，逐渐被SVG替代）；3）SVG Sprite（雪碧图方式）；4）按需加载（动态import SVG组件）。Lucide Icons因其轻量、Tree-shaking友好和丰富的图标数量成为2025年最受欢迎的开源图标库之一。}}
+
+{{国际化(i18n)支持}}{{设计系统需内建国际化支持：1）RTL（从右到左）布局适配（通过[dir=rtl]或逻辑属性如margin-inline-start）；2）文本长度适配（不同语言文本长度差异大，组件需弹性布局）；3）日期/数字格式化；4）图标方向镜像。CSS逻辑属性(Logical Properties)在2025年已被广泛支持，是实现RTL友好布局的核心技术。}}
+
+{{动效系统}}{{设计系统的动效规范包括：1）缓动函数标准（ease-in-out、spring等）；2）持续时间层级（micro: 100-200ms、macro: 200-500ms、complex: 500ms+）；3）减少动画偏好（prefers-reduced-motion媒体查询）；4）入场/退场动画模式。CSS @starting-style和transition-behavior: allow-discrete使离散属性（如display）的动画成为可能。}}
+
+{{设计系统Token命名规范}}{{Token命名遵循结构化约定：{category}-{concept}-{property}-{variant}-{state}。例如：color-button-primary-bg-hover、spacing-card-padding-inline、font-heading-lg-size。2025年W3C DTCG规范建议使用"语义名称"而非"表现名称"（如color-primary而非color-blue），以支持主题切换和平台适配。}}
+
+{{组件测试策略}}{{2025年设计系统的测试策略：1）视觉回归测试（Chromatic、Percy、Playwright截图对比）；2）组件单元测试（Vitest + Testing Library）；3）交互测试（Storybook play functions）；4）无障碍测试（axe-core集成到CI）；5）跨浏览器测试（Playwright多浏览器矩阵）。Storybook 10将组件测试与Vitest深度集成，stories即测试用例。}}
+
+{{AI驱动的设计系统}}{{2025年AI与设计系统的融合趋势：1）AI代码生成遵循设计系统规范（通过MCP协议让AI访问组件文档）；2）AI辅助设计评审（自动检测设计稿是否符合系统规范）；3）AI驱动的组件推荐（基于上下文推荐合适的组件）；4）自动化文档生成（从代码注释和类型定义生成文档）。Storybook MCP是这一趋势的典型代表。}}
+
+{{设计Token的多平台输出}}{{一份设计Token源文件需要输出为多平台格式：Web端（CSS自定义属性、SCSS变量、Tailwind配置）、iOS端（Swift枚举/结构体）、Android端（Kotlin常量/资源XML）、Flutter端（Dart常量类）。Style Dictionary和Tokens Studio是实现这一目标的主流工具。Token应保持平台无关的抽象层，由转换工具负责平台特定的实现。}}
+
+{{性能优化策略}}{{设计系统性能优化关键点：1）Tree-shaking确保只打包使用的组件；2）CSS代码分割（按需加载组件样式）；3）避免运行时CSS-in-JS（2025年趋势转向零运行时方案如vanilla-extract、Panda CSS）；4）SVG图标按需导入；5）合理的chunk策略。Storybook 10的ESM-only架构和29%体积缩减体现了2025年对性能的高度关注。}}
+
+{{零运行时CSS方案}}{{2025年前端设计系统从运行时CSS-in-JS（如styled-components、Emotion）转向零运行时方案：vanilla-extract（类型安全的CSS提取）、Panda CSS（零运行时CSS-in-JS）、Tailwind CSS（实用类优先）、CSS Modules（原生作用域隔离）。原因：零运行时方案有更好的首屏性能、SSR兼容性和更小的JS bundle。}}
+
+{{设计系统社区与资源}}{{2025年设计系统社区资源：Design Systems Repo（designsystemsrepo.com，收集真实世界设计系统案例）、Design Systems Slack社区、Smashing Magazine设计系统专栏、Storybook官方博客、Figma Config年度大会。知名开源设计系统参考：GitHub Primer、Shopify Polaris、Atlassian Design System、IBM Carbon、Adobe Spectrum。}}
+
+{{CSS层叠层(CSS Layers)}}{{CSS @layer规则（Cascade Layers）允许开发者显式控制样式的层叠优先级，对设计系统尤其重要。可以将基础层、组件层、工具层和用户覆盖层明确分离，避免特异性(Specificity)战争。2025年已被所有A级浏览器支持。设计系统可在基础层定义默认样式，消费方通过更高优先级的层进行覆盖。}}
+
+{{设计系统的未来趋势}}{{2025-2026年前端设计系统关键趋势：1）AI原生设计系统（AI深度参与组件生成和维护）；2）Token标准化（W3C DTCG规范成熟）；3）跨平台统一（一套Token覆盖Web/Mobile/Desktop）；4）可组合性优先（Headless + Composition模式主导）；5）零运行时（构建时提取CSS）；6）设计-开发一体化工具（Figma Dev Mode、Storybook等工具持续融合）。}}

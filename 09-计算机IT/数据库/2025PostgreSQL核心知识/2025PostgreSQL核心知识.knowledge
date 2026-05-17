@@ -1,0 +1,81 @@
+# 2025PostgreSQL核心知识
+# 领域: 计算机IT
+# 学科: 数据库
+# 来源: 2025PostgreSQL核心知识
+# 描述: PostgreSQL核心知识点
+
+{{PostgreSQL概述}}{{PostgreSQL是世界上最先进的开源关系型数据库管理系统(RDBMS)，支持SQL标准的绝大部分特性。它以稳定性、扩展性和功能丰富著称，广泛应用于企业级应用、地理信息系统(GIS)、数据分析等领域。PostgreSQL采用客户端/服务器架构，支持多版本并发控制(MVCC)、丰富的数据类型、强大的索引机制和可扩展的插件体系。截至2025年，最新稳定版本为PostgreSQL 17，带来了性能提升、逻辑复制增强、增量备份改进等新特性。}}
+
+{{基本数据类型}}{{PostgreSQL提供丰富的内置数据类型：数值类型包括SMALLINT(2字节)、INTEGER(4字节)、BIGINT(8字节)、DECIMAL/NUMERIC(精确小数)、REAL(4字节浮点)、DOUBLE PRECISION(8字节浮点)、SERIAL/BIGSERIAL(自增整数)；文本类型包括VARCHAR(n)(可变长度)、TEXT(无限长度)、CHAR(n)(固定长度)；日期时间类型包括DATE、TIME、TIMESTAMP、TIMESTAMPTZ(带时区)、INTERVAL；布尔类型BOOLEAN；二进制类型BYTEA。还有枚举类型ENUM、位串类型BIT/VARBIT等。}}
+
+{{JSON与JSONB类型}}{{PostgreSQL对JSON的支持是其核心优势之一。JSON类型存储原始JSON文本，JSONB类型以分解的二进制格式存储，支持索引和高效查询。JSONB支持GIN索引，可通过->>、#>、#>>、@>、<@、?、?|、?&等操作符进行查询。PostgreSQL 17增强了JSON_TABLE功能，支持从JSON数据创建关系表。常用函数包括jsonb_build_object()、jsonb_array_elements()、jsonb_pretty()、jsonb_path_query()等。JSONB适合需要频繁查询和更新JSON字段的场景。}}
+
+{{数组类型}}{{PostgreSQL原生支持数组类型，可以创建一维或多维数组。语法为column_name data_type[]，如INTEGER[]、TEXT[][]。支持ARRAY构造器和花括号语法初始化。数组操作符包括||(连接)、&&(重叠)、@>(包含)、<@(被包含)。数组函数包括array_append()、array_remove()、array_length()、array_agg()、unnest()等。可以使用ANY和ALL操作符配合数组进行查询。GIN索引可以加速数组包含查询。数组类型在标签系统、多值属性等场景中非常实用。}}
+
+{{范围类型与多范围类型}}{{PostgreSQL提供多种范围类型：INT4RANGE(整数范围)、INT8RANGE(大整数范围)、NUMRANGE(数值范围)、TSRANGE(时间戳范围)、TSTZRANGE(带时区时间戳范围)、DATERANGE(日期范围)。范围类型使用方括号[]和圆括号()表示包含和排除边界。PostgreSQL 14引入了MULTIRANGE类型，一个列可以存储多个不连续的范围。范围类型支持操作符&&(重叠)、@>(包含)、<@(被包含)以及运算符+、*、-。在预约系统、时间调度等场景中非常有用。}}
+
+{{表与模式管理}}{{PostgreSQL使用模式(SCHEMA)组织数据库对象，默认模式为public。CREATE SCHEMA创建命名空间，避免对象名冲突。表支持继承(INHERITS)，子表自动继承父表的列和约束。分区表(PARTITION BY RANGE/LIST/HASH)将大表拆分为多个物理子表，提升查询性能和管理效率。PostgreSQL 17增强了声明式分区的性能。常用DDL操作：CREATE TABLE、ALTER TABLE、DROP TABLE。表空间(TABLESPACE)控制数据的物理存储位置。临时表(TEMP/TEMPORARY)仅在当前会话可见。}}
+
+{{约束系统}}{{PostgreSQL支持完整的约束体系保证数据完整性：PRIMARY KEY(主键约束，唯一且非空)、UNIQUE(唯一约束)、NOT NULL(非空约束)、CHECK(检查约束)、FOREIGN KEY(外键约束，支持CASCADE/SET NULL/SET DEFAULT/RESTRICT/NO ACTION)、EXCLUDE(排他约束，基于GiST索引)。约束可以在列级或表级定义，支持DEFERRABLE(可延迟)和INITIALLY DEFERRED(初始延迟)。命名约束便于管理和错误排查。ALTER TABLE可添加、删除或修改约束。}}
+
+{{索引类型概述}}{{PostgreSQL提供多种索引类型以适应不同查询模式：B-tree(默认，适合等值和范围查询)、Hash(等值查询，更紧凑)、GiST(通用搜索树，支持几何、全文搜索等)、SP-GiST(空间分区GiST，适合不平衡数据)、GIN(倒排索引，适合数组、JSONB、全文搜索)、BRIN(块范围索引，适合自然有序的大表)、HNSW(向量索引，支持pgvector扩展的近似最近邻搜索)。PostgreSQL 17改进了并行索引构建性能。}}
+
+{{B-tree索引详解}}{{B-tree是PostgreSQL默认且最常用的索引类型。它支持等值查询(=)、范围查询(<、>、BETWEEN)、排序(ORDER BY)、LIKE前缀匹配以及IS NULL查询。B-tree索引支持多列复合索引，遵循最左前缀原则。可以创建唯一索引(UNIQUE INDEX)保证列值唯一。INCLUDE子句允许将非键列加入索引实现仅索引扫描(Index-Only Scan)。NULLS FIRST/NULLS LAST控制空值排序。DESC排序也可纳入索引。索引维护由VACUUM和autovacuum自动处理。}}
+
+{{GIN索引详解}}{{GIN(Generalized Inverted Index)倒排索引专为复合值设计，如数组、JSONB、全文搜索tsvector。GIN支持@>(包含)、&&(重叠)、?(存在)等操作符。fastupdate技术通过延迟写入提升批量插入性能。GIN索引在全文搜索中至关重要：to_tsvector()将文本转为词素向量，配合to_tsquery()和@@操作符实现高效文本搜索。支持ts_rank()和ts_rank_cd()进行相关性排序。GIN索引构建较慢但查询极快，适合读多写少场景。}}
+
+{{部分索引与表达式索引}}{{部分索引(Partial Index)仅对满足WHERE条件的行创建索引，减少索引大小和维护成本。语法：CREATE INDEX idx ON table(column) WHERE condition。适合查询总是带特定条件的场景，如WHERE status='active'。表达式索引(Index on Expression)对函数或表达式的结果创建索引，如CREATE INDEX idx ON table(LOWER(email))。查询时必须使用相同的表达式才能命中索引。两者结合使用可以创建高度优化的查询路径。PostgreSQL的查询规划器能自动匹配表达式索引。}}
+
+{{MVCC多版本并发控制}}{{MVCC是PostgreSQL的核心并发控制机制。每个事务看到的是数据库的快照(Snapshot)，通过xmin(创建事务ID)和xmax(删除事务ID)判断行的可见性。读操作不阻塞写操作，写操作不阻塞读操作。删除和更新不会立即物理删除旧行，而是标记为不可见，产生死元组(Dead Tuple)。VACUUM进程负责回收死元组占用的空间。MVCC保证了SQL标准的四种隔离级别：READ UNCOMMITTED(在PG中等同于READ COMMITTED)、READ COMMITTED、REPEATABLE READ、SERIALIZABLE。}}
+
+{{事务与隔离级别}}{{PostgreSQL通过BEGIN、COMMIT、ROLLBACK控制事务。SAVEPOINT支持事务内保存点，可部分回滚。READ COMMITTED(默认)每条语句看到最新已提交数据。REPEATABLE READ保证事务内多次读取结果一致，通过快照实现。SERIALIZABLE提供最强隔离，使用Serializable Snapshot Isolation(SSI)检测读写冲突，需要应用处理serialization_failure异常。PostgreSQL 17优化了长事务的性能表现。两阶段提交(PREPARE TRANSACTION/COMMIT PREPARED)支持分布式事务。}}
+
+{{VACUUM机制}}{{VACUUM是PostgreSQL特有的空间回收机制。标准VACUUM回收死元组空间但不将空间归还操作系统，不锁表。VACUUM FULL重建表并释放空间到OS，但会锁表。autovacuum守护进程自动执行VACUUM和ANALYZE。关键参数：autovacuum_vacuum_threshold(触发阈值)、autovacuum_vacuum_scale_factor(触发比例)、autovacuum_naptime(检查间隔)、vacuum_cost_limit(资源限制)。PostgreSQL 17引入VACUUM的内存管理改进，大表VACUUM性能显著提升。事务ID回卷(Wraparound)防护也依赖VACUUM。}}
+
+{{查询执行计划(EXPLAIN)}}{{EXPLAIN命令显示查询的执行计划，EXPLAIN ANALYZE还显示实际执行时间和行数。关键节点：Seq Scan(顺序扫描)、Index Scan(索引扫描)、Index Only Scan(仅索引扫描)、Bitmap Index/Heap Scan(位图扫描)、Nested Loop/Hash Join/Merge Join(连接方式)、Sort(排序)、Hash Aggregate/GroupAggregate(聚合)。关注指标：cost(估算成本)、rows(估算行数)、actual time(实际时间)、loops(循环次数)。Buffers显示缓冲区读写情况。ANALYZE关键字执行实际查询，小心在生产环境使用。}}
+
+{{查询优化技巧}}{{优化关键点：1)确保WHERE子句条件能命中索引，避免函数包裹索引列；2)使用EXPLAIN ANALYZE分析实际执行计划；3)合理使用连接(JOIN)代替子查询；4)避免SELECT *，只选需要的列；5)使用LIMIT和OFFSET分页时考虑keyset分页(cursor-based)；6)统计信息准确性：定期ANALYZE更新统计，调整default_statistics_target；7)work_mem影响排序和哈希操作性能；8)合理设置random_page_cost( SSD设为1.1)；9)使用CTE(WITH子句)优化复杂查询(注意PG12+CTE不再默认内联)。}}
+
+{{表连接策略}}{{PostgreSQL的连接优化器支持三种物理连接方式：Nested Loop Join(嵌套循环连接)，对外表每行扫描内表，适合内表有索引且外表行数少的场景；Hash Join(哈希连接)，对内表建哈希表后探测，适合等值连接且无合适索引的场景；Merge Join(合并连接)，要求两表按连接键排序后归并，适合已排序的数据。优化器根据统计信息和成本估算自动选择。enable_nestloop、enable_hashjoin、enable_mergejoin参数可控制连接策略。JOIN子类型包括INNER、LEFT/RIGHT/FULL OUTER、CROSS、SELF、NATURAL。}}
+
+{{窗口函数}}{{窗口函数在结果集的"窗口"(一组相关行)上执行计算，不折叠行。语法：function() OVER (PARTITION BY ... ORDER BY ... frame_clause)。常用窗口函数：ROW_NUMBER()、RANK()、DENSE_RANK()、NTILE(n)、LAG()/LEAD()、FIRST_VALUE()/LAST_VALUE()/NTH_VALUE()、SUM()/AVG()/COUNT() OVER(...)。frame_clause定义窗口帧：ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW、RANGE BETWEEN等。PostgreSQL 17增强了GROUPS窗口帧的性能。窗口函数不能在WHERE中使用，需用子查询或CTE包装。}}
+
+{{CTE公共表表达式}}{{WITH子句定义CTE(Common Table Expression)，提升复杂查询可读性。语法：WITH cte_name AS (SELECT ...) SELECT ... FROM cte_name。PostgreSQL 12起，非递归CTE可以被优化器内联(INLINE)，与子查询等效。递归CTE(WITH RECURSIVE)用于层次结构和图遍历：WITH RECURSIVE cte AS (初始查询 UNION ALL 递归查询) SELECT ... FROM cte。递归CTE中必须有终止条件防止无限循环。SEARCH和CYCLE子句控制遍历顺序和循环检测。CTE在树形结构(组织架构、评论嵌套)中极为实用。}}
+
+{{存储过程与函数}}{{PostgreSQL使用CREATE FUNCTION创建函数，支持PL/pgSQL、PL/Python、PL/Perl、PL/Tcl、SQL等多种过程语言。PL/pgSQL是最常用的，支持变量声明、条件判断(IF/ELSIF/ELSE/CASE)、循环(LOOP/WHILE/FOR/FOREACH)、异常处理(EXCEPTION WHEN)、游标(CURSOR)、动态SQL(EXECUTE)。函数可以返回标量、记录、集合(SETOF/TABLE)。触发器函数无参数返回TRIGGER。PostgreSQL 17增强了PL/pgSQL的性能。RETURNS TABLE语法简化集合返回函数的定义。}}
+
+{{触发器与事件触发器}}{{触发器(TRIGGER)在表的INSERT/UPDATE/DELETE/TRUNCATE操作前后自动执行。语法：CREATE TRIGGER name BEFORE/AFTER/INSTEAD OF event ON table FOR EACH ROW/STATEMENT EXECUTE FUNCTION trigger_func()。触发器函数返回TRIGGER类型，通过NEW/OLD记录访问行数据，RETURN NEW修改行或RETURN NULL取消操作。条件WHEN控制触发范围。语句级触发器(FOR EACH STATEMENT)每条SQL执行一次。事件触发器(Event Trigger)在DDL操作时触发，支持ddl_command_start/ddl_command_end/sql_drop事件。}}
+
+{{PostgreSQL复制机制}}{{PostgreSQL支持物理复制和逻辑复制。物理复制(Streaming Replication)通过WAL(Write-Ahead Log)传输实现，主库(Publisher)将WAL流式发送到备库(Subscriber)。同步模式：异步(默认)、同步(指定备库确认)、远程写入。pg_basebackup创建初始备份。级联复制允许备库转发WAL。逻辑复制(Logic Replication)基于发布/订阅模型，支持表级别的数据复制，允许选择性复制、版本升级、多主复制。PostgreSQL 17增强了逻辑复制的灵活性，支持复制序列和大对象。}}
+
+{{WAL预写式日志}}{{WAL是PostgreSQL数据持久性的基石。所有数据修改先写入WAL再写入数据文件，保证崩溃恢复。WAL由一系列段文件(默认16MB)组成。关键参数：wal_level(replica/logical)、max_wal_size(触发检查点的WAL量)、min_wal_size、wal_keep_size(保留WAL量)、checkpoint_timeout(检查点间隔)、checkpoint_completion_target(检查点平滑度)。检查点(Checkpoint)将脏页刷入数据文件并推进恢复起点。pg_switch_wal()手动切换WAL段。WAL归档(archive_command)用于时间点恢复(PITR)。}}
+
+{{角色与权限系统}}{{PostgreSQL使用角色(Role)统一管理用户和组。CREATE ROLE创建角色，WITH LOGIN使其可登录(等同于用户)。权限层级：数据库级、模式级、表级、列级。GRANT/REVOKE管理权限：SELECT、INSERT、UPDATE、DELETE、TRUNCATE、REFERENCES、TRIGGER、EXECUTE、USAGE等。默认权限(ALTER DEFAULT PRIVILEGES)简化权限管理。行级安全(RLS/Row Level Security)通过CREATE POLICY控制行级访问。角色继承通过GRANT role TO role实现。PostgreSQL 17增强了组角色的权限检查效率。}}
+
+{{备份与恢复策略}}{{PostgreSQL提供多种备份方式：pg_dump(逻辑备份单库)、pg_dumpall(备份所有库包括角色)、pg_basebackup(物理备份)。逻辑备份格式：纯SQL(-Fp)、自定义(-Fc)、目录(-Fd)、tar(-Ft)。目录格式支持并行备份恢复(-j)。pg_restore恢复自定义/目录/tar格式。时间点恢复(PITR)基于基础备份+WAL归档，可恢复到任意时间点。pgBackRest和Barman是流行的第三方备份工具。PostgreSQL 17支持增量备份(pg_basebackup --incremental)，显著减少备份时间和存储空间。}}
+
+{{性能调优参数}}{{关键配置参数：shared_buffers(建议系统内存25%)、effective_cache_size(系统可用缓存总量)、work_mem(每个排序/哈希操作内存)、maintenance_work_mem(VACUUM/CREATE INDEX内存)、random_page_cost(随机IO成本，SSD设1.1)、effective_io_concurrency(并发IO数，SSD设200)、max_parallel_workers_per_gather(并行查询worker数)、max_worker_processes(总worker数)、wal_buffers(WAL缓冲区)、max_connections(最大连接数，建议配合连接池)。使用pg_stat_statements分析慢查询。pgBadger分析日志。}}
+
+{{连接池管理}}{{PostgreSQL每个连接fork一个进程，高并发下连接创建开销大。推荐使用连接池：PgBouncer(轻量级，支持会话/事务/语句三种池化模式)、Pgpool-II(功能更丰富，支持查询缓存、负载均衡、复制)。应用层连接池：HikariCP(Java)、asyncpg内置池(Python)、node-postgres pool(Node.js)。最佳实践：max_connections设保守值(如200)，配合PgBouncer处理数千并发。transaction模式最常用但不支持PREPARE语句和LISTEN/NOTIFY。}}
+
+{{PostgreSQL扩展生态}}{{PostgreSQL通过扩展(Extension)实现功能增强。CREATE EXTENSION安装，pg_available_extensions查看可用扩展。核心扩展：PostGIS(地理空间)、pg_trgm(模糊搜索)、pg_stat_statements(查询统计)、auto_explain(自动记录慢查询计划)、pgcrypto(加密)、uuid-ossp(UUID生成)、pgvector(向量相似度搜索)、pg_partman(自动分区管理)、TimescaleDB(时序数据库)、Citus(分布式)、pg_cron(定时任务)、pg_repack(在线表重组)、pg_stat_kcache(操作系统级统计)。}}
+
+{{全文搜索}}{{PostgreSQL内置全文搜索引擎。核心概念：tsvector(词素向量，文档的文本表示)、tsquery(搜索查询)。to_tsvector()分词并生成tsvector，to_tsquery()解析查询。@@操作符匹配。配置(Configuration)控制分词规则：支持多语言(english、chinese等)。GIN索引加速全文搜索。排序函数ts_rank()和ts_rank_cd()计算相关性分数。支持短语搜索(使用<->操作符)、否定(!)、前缀(:*)。自定义字典和解析器可扩展分词规则。WebSearch_to_tsquery()(PG16+)支持Web风格搜索语法。}}
+
+{{分区表策略}}{{PostgreSQL支持声明式分区：RANGE(范围)、LIST(列表)、HASH(哈希)。语法：CREATE TABLE parent(...) PARTITION BY RANGE(col)，然后CREATE TABLE child PARTITION OF parent FOR VALUES FROM ... TO ...。默认分区(DEFAULT)处理不匹配的行。分区裁剪(Partition Pruning)在查询时自动排除无关分区。分区键支持多列。pg_partman扩展自动化分区管理(创建、删除、维护)。最佳实践：分区数控制在合理范围(数百以内)，分区键选择常用于查询条件的列，定期归档旧分区。}}
+
+{{并行查询}}{{PostgreSQL支持查询级并行化。关键并行节点：Parallel Seq Scan(并行顺序扫描)、Parallel Hash Join(并行哈希连接)、Parallel Append(并行追加)、Parallel Aggregate(并行聚合)。控制参数：max_parallel_workers_per_gather(每查询最大worker)、max_parallel_workers(总并行worker)、max_parallel_maintenance_workers(维护操作并行worker)、parallel_tuple_cost/parallel_setup_cost(成本参数)、min_parallel_table_scan_size/min_parallel_index_scan_size(触发阈值)。并行查询在大数据量扫描和聚合中效果显著。PostgreSQL 17进一步优化了并行性能。}}
+
+{{监控与统计视图}}{{PostgreSQL提供丰富的系统视图用于监控：pg_stat_activity(当前连接和查询)、pg_stat_user_tables(表级统计：行数变化、扫描方式)、pg_stat_user_indexes(索引使用统计)、pg_stat_bgwriter(后台写进程统计)、pg_stat_wal(WAL统计)、pg_stat_replication(复制状态)、pg_stat_statements(扩展，查询级统计)、pg_locks(锁信息)、pg_stat_progress_create_index(索引创建进度)。pg_stat_statements是最实用的扩展，记录查询执行次数、总时间、行数等。结合Grafana+Prometheus实现可视化监控。}}
+
+{{安全加固建议}}{{PostgreSQL安全最佳实践：1)使用SCRAM-SHA-256认证(pg_hba.conf中配置)替代md5；2)限制pg_hba.conf中允许的IP范围；3)启用SSL加密连接(ssl=on，配置证书)；4)使用行级安全(RLS)控制数据访问；5)最小权限原则，避免使用超级用户运行应用；6)定期审计pg_stat_activity中的可疑连接；7)启用pgaudit扩展记录DDL和DML操作；8)设置statement_timeout防止长时间查询；9)限制max_connections避免资源耗尽；10)及时应用安全补丁，关注PostgreSQL安全公告。}}
+
+{{高可用架构设计}}{{PostgreSQL高可用方案：1)流复制+自动故障转移：Patroni(基于etcd/Consul/Zookeeper)是最流行的高可用方案；2)pg_auto_failover：官方提供的自动故障转移工具；3)repmgr：复制管理和故障转移工具；4)Pgpool-II：连接池+负载均衡+故障转移；5)集群方案：Citus(分布式)、CockroachDB(PG兼容分布式)、YugabyteDB(PG兼容分布式)；6)云托管方案：AWS RDS/Aurora、Azure Database、Cloud SQL、Neon(无服务器)。关键指标：RTO(恢复时间目标)、RPO(数据丢失目标)。}}
+
+{{PostgreSQL 17新特性}}{{PostgreSQL 17(2024年9月发布)核心新特性：1)增量备份支持(pg_basebackup --incremental)大幅减少备份时间和存储；2)COPY命令性能提升，大文件导入速度提高2倍；3)JSON_TABLE函数支持从JSON创建关系表；4)MERGE命令增强，支持RETURNING子句；5)逻辑复制改进，支持复制序列；6)VACUUM内存管理优化，大表清理更高效；7)查询性能提升，特别是窗口函数和聚合查询；8)新增pg_maintain角色简化维护权限管理；9)BRIN索引并行构建支持；10)vacuum_truncate选项在表级别控制空间回收。}}
+
+{{PostgreSQL与AI/ML集成}}{{PostgreSQL在AI/ML领域的应用日益重要：1)pgvector扩展支持向量存储和相似度搜索，支持IVFFlat和HNSW索引，是RAG(检索增强生成)的基础设施；2)PostgreSQL 17增强了向量搜索性能；3)MADlib扩展提供库内机器学习算法；4)pgml(前身postgresml)支持在数据库内训练和推理ML模型；5)timescaledb用于时序数据分析；6)Apache AGE扩展支持图数据库功能；7)pg_embedding存储高维向量。PostgreSQL正在成为AI应用的核心数据层，减少数据在系统间迁移的需求。}}
+
+{{数据迁移与升级策略}}{{PostgreSQL升级方法：1)pg_dump/pg_restore逻辑迁移(停机时间长但最安全)；2)pg_upgrade原地升级(快速，支持--link模式)；3)逻辑复制在线升级(零停机，PG10+)。pg_upgrade最佳实践：先在测试环境验证，使用--check模式检查兼容性，--link模式减少磁盘需求但限制数据目录操作。跨版本迁移注意事项：废弃特性检查、扩展兼容性、编码变更、统计信息重建。逻辑复制升级要求源和目标主键一致，需处理序列和DDL同步。pg_dump自定义格式(-Fc)是最灵活的迁移方式。}}
+
+{{开发实践与最佳实践}}{{PostgreSQL开发最佳实践：1)使用参数化查询防止SQL注入；2)合理设计范式化表结构，适度反范式化；3)使用RETURNING子句减少查询次数；4)批量操作使用INSERT ... ON CONFLICT(UPSERT)；5)合理使用事务和锁，避免长事务；6)使用LISTEN/NOTIFY实现异步通知；7)利用CTE提高复杂查询可读性；8)使用EXCLUDE约束替代触发器实现业务规则；9)定期运行ANALYZE保持统计信息准确；10)使用pg_stat_statements定位慢查询。开发环境可使用pgAdmin4或DBeaver进行管理。}}

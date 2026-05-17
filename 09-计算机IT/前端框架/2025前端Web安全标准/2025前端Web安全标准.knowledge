@@ -1,0 +1,138 @@
+# 2025前端Web安全标准
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}
+CSP（Content Security Policy，内容安全策略）是防御跨站脚本攻击（XSS）的核心安全机制。通过HTTP响应头Content-Security-Policy声明浏览器可以加载哪些资源来源，从而限制攻击者注入恶意脚本的能力。CSP应设置在所有响应上，不仅限于主文档。也可通过HTML的meta元素的http-equiv属性设置，但不支持所有CSP功能（如frame-ancestors和report-uri）。
+
+{{知识点2}}
+CSP的策略由一系列指令（directives）组成，用分号分隔。每个指令控制不同方面的安全策略。例如：Content-Security-Policy: default-src 'self'; img-src 'self' example.com，其中default-src设置默认资源来源策略，img-src设置图片来源策略。当特定资源类型未设置专门指令时，会回退到default-src的策略。
+
+{{知识点3}}
+CSP的fetch指令用于控制文档允许加载的资源类别。主要指令包括：script-src（控制JavaScript来源）、style-src（控制CSS样式表来源）、img-src（控制图片来源）、font-src（控制字体来源）、connect-src（控制fetch/XHR等网络请求来源）、media-src（控制音视频来源）、object-src（控制插件资源来源）、frame-src（控制iframe来源）等。
+
+{{知识点4}}
+CSP的source表达式支持多种来源声明方式。'self'表示与文档同源的资源；'none'表示完全阻止该类型资源加载（不可与其他来源组合使用）；特定域名如example.com；通配符*.example.com；协议如https:；以及特定路径如https://example.com/path/。多个来源用空格分隔，任一来源匹配即允许加载。
+
+{{知识点5}}
+CSP的nonce（随机数）机制是限制脚本加载的推荐方法。服务器为每个请求生成唯一随机nonce值，只有script标签携带正确nonce值才能执行。用法：Content-Security-Policy: script-src 'nonce-randomValue'，配合<script nonce="randomValue">使用。nonce应每次请求都不同，防止攻击者预测。
+
+{{知识点6}}
+CSP的hash机制用于限制脚本加载，适用于静态内容。在策略中指定脚本内容的加密哈希值（SHA-256、SHA-384或SHA-512），浏览器会计算脚本实际内容的哈希并与策略中的值比对。若属性中包含多个不同算法的哈希，浏览器只使用最强算法的哈希进行验证。提供同一算法的多个哈希值时，任一匹配即可通过验证。
+
+{{知识点7}}
+CSP的Strict CSP（严格CSP）策略是Google推荐的最佳实践。核心要素包括：使用nonce或hash基于的fetch指令确保只有正确携带验证信息的脚本才能执行；禁用unsafe-inline以阻止内联事件处理器（如onclick）；禁用unsafe-eval以阻止eval()等危险API调用；设置object-src 'none'禁用插件嵌入；设置base-uri 'none'阻止base标签修改。
+
+{{知识点8}}
+CSP的strict-dynamic关键字用于在严格CSP中处理动态加载的第三方脚本。当一个已通过nonce或hash验证的脚本动态创建新script标签加载其他脚本时，strict-dynamic赋予这些动态加载的脚本同等信任级别，无需为每个脚本单独提供nonce或hash。这解决了现代前端框架和第三方库动态加载脚本的问题。
+
+{{知识点9}}
+CSP的unsafe-inline关键字允许执行内联脚本和内联事件处理器，unsafe-eval允许使用eval()等动态代码执行API。在严格CSP中应避免使用这两个关键字，因为它们会显著削弱CSP的安全防护能力。替代方案：用nonce/hash替代unsafe-inline，用addEventListener替代内联事件处理器，重构代码避免eval()。
+
+{{知识点10}}
+CSP的frame-ancestors指令用于防点击劫持（Clickjacking）攻击，控制哪些来源的文档可以将当前页面嵌入iframe。用法：frame-ancestors 'self'仅允许同源嵌入，frame-ancestors 'none'完全禁止嵌入。这是X-Frame-Options头的现代替代方案，支持更细粒度的来源控制。同时设置两者可确保向后兼容。
+
+{{知识点11}}
+CSP的upgrade-insecure-requests指令自动将站点所有HTTP不安全URL升级为HTTPS处理。适用于有大量遗留HTTP URL需要迁移到HTTPS的场景。该指令不会升级顶层导航的第三方站点链接，因此不能替代HSTS头。配合Content-Security-Policy-Report-Only头可同时监控哪些不安全请求被升级。
+
+{{知识点12}}
+CSP的sandbox指令为页面启用HTML5沙箱，类似于sandbox iframe的效果。可限制页面的表单提交、脚本执行、弹窗等功能。sandbox是CSP中独立于fetch指令的文档指令，用于进一步限制页面能力，提供额外的安全层。
+
+{{知识点13}}
+Content-Security-Policy-Report-Only头用于在不实际执行策略的情况下监控CSP违规。它支持与Content-Security-Policy相同的指令（sandbox除外），但仅报告违规而不阻止资源加载。必须配合report-to指令使用才能发送报告。这是部署新CSP策略前的测试和调试利器。
+
+{{知识点14}}
+SRI（Subresource Integrity，子资源完整性）通过在script或link标签的integrity属性中指定资源的加密哈希值，确保从第三方（如CDN）加载的文件内容未被篡改。浏览器下载资源后计算其哈希值并与integrity中的预期值比对，不匹配则拒绝加载。这是防御供应链攻击的关键机制。
+
+{{知识点15}}
+SRI的integrity属性值格式为：算法前缀-base64编码的哈希值，支持sha256、sha384、sha512三种算法前缀。可指定多个不同算法的哈希值，浏览器自动选择最强算法验证；也可指定同一算法的多个哈希值（如资源有多个版本），任一匹配即通过。使用SRI的跨域资源必须配合crossorigin属性和CORS机制。
+
+{{知识点16}}
+SRI与CORS的配合要求：使用integrity属性的跨域请求必须通过CORS协议获取资源。默认的no-cors模式下，跨域请求虽可成功但响应内容不会共享给请求者，而SRI需要读取响应内容计算哈希，因此必须设置crossorigin="anonymous"属性，并且服务器需返回Access-Control-Allow-Origin头。这是因为SRI可被滥用于推断跨域资源内容。
+
+{{知识点17}}
+新的Integrity-Policy和Integrity-Policy-Report-Only HTTP头允许文档定义策略，要求加载的script和stylesheet子资源必须指定integrity属性。当设置了Integrity-Policy头时，浏览器会阻止没有integrity属性的no-cors模式请求，为强制SRI验证提供了机制。
+
+{{知识点18}}
+CORS（Cross-Origin Resource Sharing，跨域资源共享）是基于HTTP头的机制，允许浏览器向跨源服务器发起XMLHttpRequest或fetch请求。通过添加新的HTTP头，服务器声明哪些来源可以读取其资源。适用于fetch()、XMLHttpRequest、Web Fonts、WebGL纹理、canvas的drawImage()、CSS Shapes等跨域场景。
+
+{{知识点19}}
+CORS的预检请求（Preflight Request）是浏览器在发送非简单请求前自动发起的OPTIONS请求，用于确认服务器是否允许该跨域操作。服务器响应Access-Control-Allow-Methods和Access-Control-Allow-Headers头声明允许的HTTP方法和自定义头。Access-Control-Max-Age头指定预检结果的缓存时间，减少重复预检请求。
+
+{{知识点20}}
+CORS简单请求（Simple Request）不触发预检，需满足：方法为GET/HEAD/POST之一；仅含CORS安全列表请求头（Accept、Accept-Language、Content-Language、Content-Type、Range）；Content-Type仅限application/x-www-form-urlencoded、multipart/form-data或text/plain。服务器仍需返回Access-Control-Allow-Origin头才能共享响应。
+
+{{知识点21}}
+CORS凭证请求通过credentials选项（fetch的'include'或XHR的true）发送Cookie和HTTP认证信息。此时服务器Access-Control-Allow-Origin不能用通配符*，必须指定具体来源；且必须设置Access-Control-Allow-Credentials: true。Access-Control-Expose-Headers控制哪些响应头可被JavaScript读取。
+
+{{知识点22}}
+COOP（Cross-Origin Opener Policy，跨源开放者策略）响应头控制页面是否与其他文档共享浏览上下文组（BCG）。值为same-origin时，页面只能与同源文档共享BCG，提供进程隔离。same-origin-allow-popups类似但允许通过window.open打开的unsafe-none文档留在同一BCG（用于OAuth等跨源集成场景）。noopener-allow-popups始终在新BCG中打开。
+
+{{知识点23}}
+COEP（Cross-Origin Embedder Policy，跨源嵌入者策略）响应头控制页面能否加载跨源资源。require-corp值要求跨域资源必须通过CORP头或CORS显式授权。credentialless值允许加载跨域资源但自动剥离凭证（Cookie等）。COEP与COOP配合使用，确保浏览器进程只包含同意共享的资源或不含私密数据的资源。
+
+{{知识点24}}
+CORP（Cross-Origin Resource Policy，跨源资源策略）响应头是资源所有者的策略声明，指定哪些站点可加载该资源。三个值：same-origin（仅同源可加载）、same-site（仅同站可加载）、cross-origin（任何来源可加载）。用于防御no-cors模式下的跨源资源读取攻击。推荐所有敏感资源部署CORP头，参考resourcepolicy.fyi。
+
+{{知识点25}}
+跨源隔离（Cross-Origin Isolation）通过同时设置COOP: same-origin和COEP: require-corp（或credentialless）实现。跨源隔离后window.crossOriginIsolated返回true，页面可安全使用SharedArrayBuffer、performance.measureUserAgentSpecificMemory()等高精度API。这些API因Spectre漏洞风险曾被默认禁用，跨源隔离是重新启用的前提。
+
+{{知识点26}}
+HSTS（HTTP Strict Transport Security）响应头告知浏览器该站点必须通过HTTPS访问。Strict-Transport-Security: max-age=31536000; includeSubDomains; preload。max-age指定记忆时间（秒），includeSubDomains扩展到子域名，preload允许加入浏览器预加载列表。必须仅在HTTPS响应中发送，浏览器会忽略HTTP响应中的HSTS头以防中间人攻击篡改。
+
+{{知识点27}}
+HSTS预加载（Preload）要求max-age至少31536000（1年）且包含includeSubDomains。提交到hstspreload.org被纳入后，浏览器内置该站点HSTS策略，首次访问即强制HTTPS，消除首次HTTP请求的窗口期。Chrome、Firefox、Edge等主流浏览器均支持HSTS预加载列表。设置max-age=0可禁用HSTS，但只在HTTPS请求收到响应后生效。
+
+{{知识点28}}
+X-Content-Type-Options响应头防止MIME类型嗅探，唯一有效值为nosniff。对script和style类型请求，浏览器会阻止MIME类型不匹配的响应（脚本必须是JavaScript MIME类型，样式必须是text/css）；对其他类型响应，浏览器直接使用Content-Type声明的类型而不嗅探内容。这防止了用户上传的纯文本被浏览器误解析为HTML导致的XSS。
+
+{{知识点29}}
+X-Frame-Options响应头控制页面是否可被嵌入iframe。DENY完全禁止嵌入，SAMEORIGIN仅允许同源嵌入。ALLOW-FROM已废弃，现代浏览器会忽略该值。X-Frame-Options只能通过HTTP头设置（不能用meta标签），其功能已被CSP的frame-ancestors指令替代，后者支持更灵活的来源控制和通配符。
+
+{{知识点30}}
+Referrer-Policy响应头控制HTTP请求中Referer头携带的信息量。strict-origin-when-cross-origin是当前默认策略：同源请求发送完整origin+path+query，跨源HTTPS请求仅发送origin，降级到HTTP时不发送。其他选项：no-referrer（不发送）、origin（只发origin）、same-origin（同源完整发送跨源不发）、unsafe-url（始终发送完整URL，有隐私风险）。
+
+{{知识点31}}
+Permissions-Policy（权限策略）响应头（原名Feature-Policy）控制页面及其嵌入iframe可使用的浏览器特性。语法：Permissions-Policy: camera=(), geolocation=(self)。空列表()禁用特性，self仅当前源可用，*允许所有来源。可控制数十种特性如camera、microphone、geolocation、accelerometer、payment等，实施最小权限原则。
+
+{{知识点32}}
+Trusted Types API是W3C标准（2026年2月达到Baseline跨浏览器可用），用于防御DOM XSS攻击。通过CSP指令require-trusted-types-for 'script'强制所有DOM XSS注入点（innerHTML、eval等）只接受Trusted Type类型的值而非普通字符串。trusted-types CSP指令控制允许创建的策略名称。策略中定义转换函数（如用DOMPurify净化），确保数据安全后才能传入注入点。
+
+{{知识点33}}
+Trusted Types区分三类注入点：HTML sinks（innerHTML、outerHTML、document.write等，需TrustedHTML）、JavaScript sinks（eval、HTMLScriptElement.text等，需TrustedScript）、JavaScript URL sinks（script.src等，需TrustedScriptURL）。开发者创建TrustedTypePolicy对象定义转换函数，API确保数据必须通过策略转换后才能传入对应注入点，否则抛出TypeError。
+
+{{知识点34}}
+Cookie安全属性对Web安全至关重要。Secure属性确保Cookie仅通过HTTPS传输。HttpOnly属性禁止JavaScript通过document.cookie访问Cookie，防御XSS窃取会话。SameSite属性控制跨站请求中Cookie的发送：Strict完全不发送、Lax允许顶层导航携带（当前默认值）、None允许跨站发送（必须同时设置Secure）。Partitioned属性实现CHIPS分区Cookie，防御跨站追踪。
+
+{{知识点35}}
+Web安全的纵深防御（Defense in Depth）原则：不应依赖单一安全机制。应组合多层防御：输入验证和输出编码防注入→CSP控制资源加载→Trusted Types强制安全DOM操作→SRI验证外部资源完整性→CORS控制跨域访问→COOP/COEP提供进程隔离→HSTS确保HTTPS传输→安全Cookie属性保护会话。任一层被突破不会导致全面沦陷。
+
+{{知识点36}}
+CSP的Report-Only模式与Reporting API配合实现安全策略的渐进部署。通过Content-Security-Policy-Report-Only头测试新策略而不实际执行，违规通过report-to指令发送到Reporting-Endpoints头定义的端点。报告以JSON格式POST，包含type、url、body等字段。COEP和Permissions-Policy也支持类似的违规报告机制。
+
+{{知识点37}}
+CSP的navigate-to指令控制文档可以导航到的URL，限制表单提交和链接跳转的目标。form-action指令控制表单可提交到的URL。这两个指令配合frame-ancestors可全面控制页面的导航和嵌入行为。注意form-action会阻止表单提交到未列出的来源，部署时需确保覆盖所有合法的表单提交目标。
+
+{{知识点38}}
+混合内容（Mixed Content）指HTTPS页面加载HTTP资源的情况。浏览器会阻止混合的主动混合内容（脚本、样式、iframe等），对被动混合内容（图片、音视频）显示警告。upgrade-insecure-requests指令可自动升级子资源请求为HTTPS。完全迁移到HTTPS并设置HSTS是根本解决方案。
+
+{{知识点39}}
+供应链安全在2025年前端安全中尤为重要。现代Web应用大量依赖npm包和CDN资源，攻击者通过入侵包仓库或CDN注入恶意代码。防御措施：SRI验证CDN资源完整性、锁定依赖版本（lockfile）、npm audit扫描已知漏洞、CSP限制脚本来源、定期审查第三方依赖。Integrity-Policy头可强制所有子资源使用完整性验证。
+
+{{知识点40}}
+跨源隔离对SharedArrayBuffer的影响：SharedArrayBuffer在Spectre漏洞曝光后被默认禁用，因为它可被用于高精度计时攻击。跨源隔离（COOP + COEP）是重新启用SharedArrayBuffer的前提条件。类似地，performance.measureUserAgentSpecificMemory()等高精度API也需要跨源隔离。开发者可通过window.crossOriginIsolated属性检测隔离状态。
+
+{{知识点41}}
+CSP的media-src指令控制音视频资源来源，worker-src控制Worker脚本来源，manifest-src控制应用清单来源，prefetch-src（已废弃，使用default-src替代）控制预取资源来源。child-src控制Worker和iframe的来源（现代推荐分别用worker-src和frame-src替代）。这些细粒度指令让安全策略可精确匹配应用的实际资源加载模式。
+
+{{知识点42}}
+CORS的简单响应（Simple Response）需满足：状态码为200、204、206、301、302、303、307或308；仅含CORS安全响应头（Cache-Control、Content-Language、Content-Length、Content-Type、Expires、Last-Modified、Pragma）。服务器通过Access-Control-Allow-Origin头声明允许的来源，Access-Control-Allow-Methods声明允许的方法，Access-Control-Allow-Headers声明允许的自定义头。
+
+{{知识点43}}
+点击劫持（Clickjacking）攻击通过创建诱饵页面并将目标网站嵌入隐藏iframe，诱使用户与隐藏的敏感元素交互。防御措施：CSP的frame-ancestors指令精确控制允许嵌入的来源，X-Frame-Options提供向后兼容的SAMEORIGIN或DENY保护。frame-ancestors比X-Frame-Options更灵活，支持多来源列表和通配符，是推荐方案。
+
+{{知识点44}}
+Web安全中的主要攻击类型：XSS（跨站脚本，通过注入恶意脚本）、CSRF（跨站请求伪造，利用用户已认证状态发起请求）、点击劫持（诱导用户与隐藏UI交互）、供应链攻击（篡改第三方资源）、中间人攻击（拦截篡改通信）、Spectre/Meltdown侧信道攻击（利用CPU推测执行泄露数据）。各安全头和API分别针对这些攻击向量提供防御。
+
+{{知识点45}}
+2025年前端安全最佳实践安全头配置：CSP使用严格策略（nonce + strict-dynamic + object-src 'none' + base-uri 'none'）、COOP: same-origin、COEP: credentialless、CORP: same-origin、HSTS: max-age=31536000; includeSubDomains; preload、X-Content-Type-Options: nosniff、Referrer-Policy: strict-origin-when-cross-origin、Permissions-Policy按最小权限配置、X-Frame-Options: SAMEORIGIN（作为frame-ancestors后备）。

@@ -1,0 +1,83 @@
+# 2025前端前端CSS Variables详解
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{CSS Variables（CSS变量）也称为CSS自定义属性（Custom Properties），是以两个短横线（--）为前缀定义的CSS属性。例如 --main-color: red;。它们允许开发者在CSS中定义可复用的值，通过 var() 函数引用，实现DRY（Don't Repeat Yourself）原则，提升代码可维护性。}}
+
+{{知识点2}}{{CSS变量必须在选择器内声明，以双短横线开头。命名区分大小写：--my-color 和 --My-color 是两个不同的属性。名称只能包含字母、数字和短横线，不能使用特殊字符如@、&、^等。推荐使用kebab-case命名法如 --main-bg-color。}}
+
+{{知识点3}}{{var() 函数用于引用CSS变量，语法为 var(--custom-property, fallback)。第一个参数是变量名，第二个可选参数是后备值。当变量未定义或值无效时使用后备值。例如 color: var(--text-color, black); 在 --text-color 未定义时回退为 black。}}
+
+{{知识点4}}{{:root 伪类是定义全局CSS变量的常用位置。:root 选择的是文档根元素（HTML中等同于html元素），但具有更高的特异性。在 :root 中定义的变量可在整个文档中使用，适合作为全局主题变量的容器。}}
+
+{{知识点5}}{{CSS变量遵循CSS级联和继承规则。父元素定义的变量会被子元素继承。如果子元素重新定义了同名变量，则子元素使用自己的值。变量值在使用处计算，而非存储后复用——不能在兄弟元素的后代中获取另一个兄弟设置的变量值。}}
+
+{{知识点6}}{{CSS变量的后备值（fallback）不是为了解决浏览器兼容性问题（不支持变量的浏览器会忽略整个声明），而是为了处理变量未定义或值无效的情况。支持嵌套后备：var(--a, var(--b, pink))，但需注意嵌套越多解析性能开销越大。}}
+
+{{知识点7}}{{CSS变量的值在解析时几乎都被视为有效，因为浏览器在解析时不知道它们会被用在何处。当 var() 替换后导致属性值无效时，浏览器会使用该属性的初始值（而非回退到上一个有效声明）。这与普通CSS属性的无效值处理方式不同。}}
+
+{{知识点8}}{{@property CSS at-rule 允许显式注册自定义属性，属于CSS Houdini API的一部分。通过 @property 可以指定变量的语法类型（syntax）、是否继承（inherits）和初始值（initial-value）。这使得浏览器能进行类型检查、约束值范围，并控制继承行为。}}
+
+{{知识点9}}{{@property 的 syntax 描述符接受标准CSS数据类型如 "<color>"、"<length>"、"<percentage>"、"<angle>" 等，也支持组合语法如 "<length> | <percentage>"，以及通用语法 "*"（接受任何值）。语法值必须用引号包裹。}}
+
+{{知识点10}}{{@property 的 inherits 描述符是布尔值，控制自定义属性是否默认继承。使用 @property 定义 inherits: false 时，子元素不会继承父元素的变量值，而是使用 initial-value。这与双短横线定义的变量（始终继承）形成对比。}}
+
+{{知识点11}}{{@property 的 initial-value 描述符设置变量的初始值。当 syntax 不是 "*" 时，initial-value 必须是计算无关的值（computationally independent）——例如 10px 有效，但 3em 无效（因为 em 依赖父元素 font-size）。如果 syntax 为 "*" 则 initial-value 可选。}}
+
+{{知识点12}}{{通过 @property 注册的自定义属性支持CSS动画和过渡。未注册的变量被视为无类型字符串，无法进行平滑插值。例如，用 @property 注册 --progress 为 "<percentage>" 类型后，可以在 @keyframes 中对其从 25% 到 100% 进行动画。}}
+
+{{知识点13}}{{CSS变量可以在JavaScript中操作。读取变量：getComputedStyle(element).getPropertyValue("--my-var")；设置变量：element.style.setProperty("--my-var", value)；删除变量：element.style.removeProperty("--my-var")。这使得动态主题切换和运行时样式修改变得简单。}}
+
+{{知识点14}}{{CSS变量可用于拆分复合值的各个部分。例如将HSL颜色拆分为 --h、--s、--l、--a 四个变量，在 hover、focus、disabled 等状态下只修改需要改变的部分，而不需要重新声明整个属性值。这大大简化了状态样式的管理。}}
+
+{{知识点15}}{{CSS变量可以用于控制 box-shadow 的扩散值（spread），因为CSS没有单独控制 shadow spread 的简写属性。通过 --spread: 5px 和 box-shadow: 0 0 20px var(--spread) black 的方式，在 hover 时只需修改 --spread 即可。}}
+
+{{知识点16}}{{CSS变量可用于控制渐变角度。通过 --angle: 180deg 和 background: linear-gradient(var(--angle), red, blue)，可以在不同状态或媒体查询中只改变角度而无需重写整个渐变声明。}}
+
+{{知识点17}}{{CSS变量可用于管理逗号分隔的多值属性，如多背景图（background-image）。将每个背景图URL存为独立变量，可在媒体查询中轻松添加或移除单个背景，无需重写整个列表。}}
+
+{{知识点18}}{{CSS变量可用于构建灵活的Grid布局系统。例如将 grid-template-columns 的边缘值抽象为 --edge 变量，在不同断点下只需修改 --edge 值即可改变整个网格布局。}}
+
+{{知识点19}}{{CSS变量可用于模拟单独的transform属性控制。通过定义 --scale 和 --translate 变量，在 transform 中使用 var(--scale, scale(1)) var(--translate, translate(0))，然后在 :active 或 :hover 状态下单独修改某个变换。}}
+
+{{知识点20}}{{CSS变量的值不能直接拼接单位。例如 --value: 24 和 --unit: px 不能通过 var(--value) + var(--unit) 拼成 24px。正确做法是使用 calc()：font-size: calc(var(--value) * 1px)。通过乘法运算将无单位数值转换为带单位的值。}}
+
+{{知识点21}}{{CSS变量可与 calc() 结合使用，实现动态计算。例如 --spacing: 1rem 和 margin: calc(var(--spacing) * 2)。这种组合使得响应式间距、尺寸缩放等计算变得灵活。需要注意 calc() 中变量替换后的值必须对属性有效。}}
+
+{{知识点22}}{{CSS变量可通过 !important 修饰符使用。对变量本身使用 --color: red !important 会使变量值难以被覆盖，但可以通过改变 color 属性本身来绕过。!important 在变量值内部的行为较特殊——它会被从值中剥离。}}
+
+{{知识点23}}{{CSS变量与媒体查询配合使用是实现响应式设计的强大模式。在媒体查询中重新定义变量值即可全局改变样式，例如在 max-width: 600px 时修改 --size: 14px，所有使用该变量的元素自动更新。}}
+
+{{知识点24}}{{CSS变量是实现深色模式（Dark Mode）的理想方案。通过 @media (prefers-color-scheme: dark) 媒体查询重新定义 --bg-color 和 --text-color 等变量，即可实现整个网站的主题切换，无需修改大量CSS规则。}}
+
+{{知识点25}}{{CSS变量与Sass/Less等预处理器变量有本质区别：CSS变量是运行时特性，支持级联、继承、JavaScript动态修改和媒体查询响应；预处理器变量是编译时特性，编译后就变成固定值。CSS变量不能被预处理器在编译时处理。}}
+
+{{知识点26}}{{CSS变量可用于Web Components和Shadow DOM。自定义属性可以穿透Shadow DOM边界，使得外部样式可以通过CSS变量影响组件内部样式，这是Web Components实现可配置样式的重要机制。}}
+
+{{知识点27}}{{@property 规则中如果 syntax 和 inherits 描述符缺失，整个 @property 规则无效并被忽略。initial-value 在 syntax 不为 "*" 时是必需的，缺失同样导致规则无效。未知描述符会被忽略但不会使规则失效。}}
+
+{{知识点28}}{{多个同名 @property 规则以样式表顺序中最后一个为准。如果同时使用CSS中的 @property 和JavaScript的 registerProperty() 注册同名属性，JavaScript注册优先。}}
+
+{{知识点29}}{{CSS变量的作用域由定义它的选择器决定。在组件内部定义的变量（如 .module { --spacing: 1rem; }）会覆盖从祖先继承的值，适合作为组件级变量。在 :root 或 body 上定义的变量适合全局主题变量。}}
+
+{{知识点30}}{{CSS变量可以被另一个CSS变量引用，实现变量链。例如 --red: #a24e34; --error: var(--red);。这允许创建语义化名称映射到底层设计token，提高代码可读性和可维护性。但需注意避免循环引用。}}
+
+{{知识点31}}{{CSS变量可以定义在内联样式中（HTML的style属性），如 style="--color: red"。内联样式的变量具有最高特异性，会覆盖样式表中的同名定义。结合JavaScript可以在运行时动态修改内联变量。}}
+
+{{知识点32}}{{CSS变量支持过渡（transition）效果，但前提是变量通过 @property 注册且指定了类型。未注册的变量被视为字符串类型，无法进行平滑过渡。注册后可以在 transition: --my-color 0.3s 中使用。}}
+
+{{知识点33}}{{CSS变量在性能方面需注意：过度使用嵌套var()后备（如 var(--a, var(--b, var(--c, default)))）会增加解析时间。浏览器需要解析整个后备链。建议合理组织变量定义，减少深层嵌套。}}
+
+{{知识点34}}{{CSS变量可用于创建设计系统（Design System）。底层定义原始token（如 --color-blue-500: #3b82f6），中间层定义语义token（如 --color-primary: var(--color-blue-500)），组件层使用语义token。这种分层架构使主题切换和维护变得简单。}}
+
+{{知识点35}}{{CSS变量可以与 @supports 特性查询配合使用，检测浏览器是否支持自定义属性：@supports (--custom: value) { ... }。这为渐进增强提供了优雅的降级方案。}}
+
+{{知识点36}}{{CSS变量的值可以包含空格和逗号。例如 --font-stack: "Helvetica Neue", Arial, sans-serif 是有效的。在 var() 的后备值中，第一个逗号之后的所有内容都被视为后备值，因此 var(--foo, red, blue) 的后备值是 "red, blue"。}}
+
+{{知识点37}}{{使用 @property 注册变量后，当变量值无效时会回退到 initial-value 而非属性的初始值。例如 @property --box-color 设置 initial-value: teal，当赋值 --box-color: peenk（无效颜色）时，会使用 teal 而非 transparent。}}
+
+{{知识点38}}{{CSS变量可以通过JavaScript的CSS.registerProperty() API以编程方式注册，功能等同于CSS中的 @property 规则。这允许在运行时动态注册带类型的自定义属性，实现更灵活的动态主题系统。}}
+
+{{知识点39}}{{CSS变量在Shadow DOM中的穿透行为使其成为组件库样式定制的标准方案。组件内部使用 var(--component-color, default) 引用变量，外部可通过定义 --component-color 来定制，无需暴露内部CSS结构。}}
+
+{{知识点40}}{{CSS Variables在2025年已成为前端开发的基础技术，所有主流浏览器均已完整支持 @property 规则和 var() 函数。它是现代CSS架构、设计系统、主题切换和动态样式的核心基石，取代了大量过去需要JavaScript或预处理器才能实现的场景。}}

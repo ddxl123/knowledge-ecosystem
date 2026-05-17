@@ -1,0 +1,83 @@
+# 2025前端CORS跨域详解
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{CORS全称Cross-Origin Resource Sharing（跨源资源共享），是一种基于HTTP头的机制，允许服务器声明哪些源站可以通过浏览器访问其资源。CORS是W3C标准，它放宽了同源策略的限制，同时保留了安全性控制。浏览器在发起跨源HTTP请求时，会自动附加CORS相关头信息，服务器据此决定是否允许该请求。}}
+
+{{知识点2}}{{同源策略（Same-Origin Policy）是浏览器的安全基石，规定只有协议、域名、端口三者完全相同的两个URL才被视为同源。同源策略限制了来自某个源的脚本读取另一个源的资源，CORS正是为了在保证安全的前提下有选择地放宽这一限制而设计的。}}
+
+{{知识点3}}{{CORS请求的判定基于Origin请求头。浏览器在发起跨域请求时会自动添加Origin头，值为当前页面的源（protocol + host + port）。服务器通过检查Origin头来判断请求是否来自允许的源，并在响应中设置Access-Control-Allow-Origin头。}}
+
+{{知识点4}}{{简单请求（Simple Request）不会触发CORS预检（preflight）。满足以下所有条件即为简单请求：使用GET、HEAD或POST方法；仅使用CORS安全的请求头（Accept、Accept-Language、Content-Language、Content-Type、Range）；Content-Type仅限text/plain、multipart/form-data或application/x-www-form-urlencoded；没有使用ReadableStream。}}
+
+{{知识点5}}{{非简单请求会触发预检请求（Preflight Request）。当请求使用了非简单方法（如PUT、DELETE、PATCH）、携带了非安全请求头（如自定义头X-Custom-Header）、或Content-Type为application/json等非简单类型时，浏览器会先自动发送一个OPTIONS方法的预检请求。}}
+
+{{知识点6}}{{预检请求的流程：浏览器先发送OPTIONS请求到服务器，携带Access-Control-Request-Method（声明实际请求方法）和Access-Control-Request-Headers（声明实际请求携带的自定义头）。服务器返回Access-Control-Allow-Origin、Access-Control-Allow-Methods、Access-Control-Allow-Headers等头信息。预检通过后，浏览器才发送实际请求。}}
+
+{{知识点7}}{{Access-Control-Allow-Origin是CORS最核心的响应头，指定允许访问资源的源。其值可以为*（通配符，允许任意源）、具体的Origin值（如https://example.com）、或null。当响应附带身份凭证时，不能使用*通配符，必须指定明确的源。一个响应中只能有一个Access-Control-Allow-Origin值，设置多个会导致错误。}}
+
+{{知识点8}}{{Access-Control-Allow-Methods响应头指定在预检请求的响应中，允许的HTTP方法列表。值为逗号分隔的方法名，如GET, POST, PUT, DELETE。在无凭据请求中可使用*通配符表示允许所有方法。在有凭据请求中，*被视为字面值而非通配符。}}
+
+{{知识点9}}{{Access-Control-Allow-Headers响应头指定在预检请求的响应中，允许的自定义请求头列表。值为逗号分隔的头名称，如X-Custom-Header, Content-Type, Authorization。同样在有凭据请求中不能使用*通配符，必须列出具体的头名称。}}
+
+{{知识点10}}{{Access-Control-Allow-Credentials响应头指示浏览器是否允许跨源请求携带凭据（credentials）。凭据包括Cookie、TLS客户端证书和HTTP认证头。该头的唯一有效值为true（区分大小写）。如果不需要携带凭据，应省略此头而非设为false。}}
+
+{{知识点11}}{{附带身份凭证的请求需要客户端和服务器端同时配合。客户端方面，使用Fetch API时设置credentials: "include"，使用XMLHttpRequest时设置withCredentials = true。服务器端方面，必须返回Access-Control-Allow-Credentials: true，且Access-Control-Allow-Origin不能为*。}}
+
+{{知识点12}}{{Access-Control-Max-Age响应头指定预检请求结果的缓存时间（秒）。在缓存有效期内，浏览器无需为相同的请求再次发送预检请求。默认值为5秒。Chrome最大允许缓存2小时（7200秒），Firefox最大允许24小时（86400秒）。合理设置此值可显著减少预检请求次数，提升性能。}}
+
+{{知识点13}}{{Access-Control-Expose-Headers响应头指定哪些响应头可以被JavaScript代码访问。默认情况下，跨源请求中只有CORS安全的响应头（Cache-Control、Content-Language、Content-Length、Content-Type、Expires、Last-Modified、Pragma）可被前端读取。需要读取自定义响应头时，服务器需在此头中列出。}}
+
+{{知识点14}}{{Access-Control-Request-Method请求头用于预检请求，告诉服务器实际请求将使用的方法。例如Access-Control-Request-Method: POST表示实际请求为POST方法。浏览器自动设置，开发者无需手动添加。}}
+
+{{知识点15}}{{Access-Control-Request-Headers请求头用于预检请求，告诉服务器实际请求将携带的自定义头。例如Access-Control-Request-Headers: X-Custom, Authorization。同样是浏览器自动设置，列出所有非简单的请求头。}}
+
+{{知识点16}}{{Origin请求头是CORS机制的基础。浏览器在跨域请求时自动添加，值为发起请求的页面源。该头不可被JavaScript修改或删除（属于禁止修改的头）。服务器通过读取Origin来判断请求来源。对于同源请求，某些情况下浏览器不会发送Origin头。}}
+
+{{知识点17}}{{Vary: Origin响应头在CORS中非常重要。当Access-Control-Allow-Origin不是*而是具体的源时，服务器必须在响应中添加Vary: Origin。这告诉CDN和浏览器的缓存机制，响应内容会因Origin头的不同而变化，避免缓存混乱导致的安全问题。}}
+
+{{知识点18}}{{CORS错误排查是前端开发的常见难题。浏览器出于安全原因，JavaScript代码无法获取CORS错误的具体细节，只能看到通用的网络错误。具体错误信息只能通过浏览器开发者工具的控制台查看。常见错误包括：缺少Access-Control-Allow-Origin头、Origin不匹配、凭据配置不一致等。}}
+
+{{知识点19}}{{"CORS header 'Access-Control-Allow-Origin' missing"错误表示服务器响应中没有返回Access-Control-Allow-Origin头。解决方案是服务器端配置CORS中间件或手动添加该头。Node.js中常用cors中间件，Nginx中添加add_header指令，Spring Boot中使用@CrossOrigin注解或WebMvcConfigurer。}}
+
+{{知识点20}}{{"Access-Control-Allow-Origin does not match Origin"错误表示服务器返回的Access-Control-Allow-Origin值与请求的Origin不匹配。常见原因：服务器硬编码了错误的Origin、多环境切换时Origin未动态更新、代理服务器修改了Origin头。解决方案是服务器动态匹配Origin值。}}
+
+{{知识点21}}{{"Credential is not supported if the CORS header 'Access-Control-Allow-Origin' is '*'"错误表示在附带凭据的请求中使用了通配符*作为Access-Control-Allow-Origin的值。CORS规范禁止这种情况，必须将Access-Control-Allow-Origin设为请求的具体Origin值。}}
+
+{{知识点22}}{{CORS请求失败时浏览器会阻止前端读取响应内容，但这并不意味着服务器没有收到请求或没有返回响应。CORS是浏览器端的安全机制，请求实际上已经到达服务器并被处理，只是浏览器拦截了响应不让前端代码读取。因此CORS不是服务器端的安全措施。}}
+
+{{知识点23}}{{CORS与Cookie的SameSite属性密切相关。现代浏览器默认将Cookie的SameSite属性设为Lax，这意味着跨站请求中只有顶级导航（如点击链接）才会携带Cookie。跨域AJAX请求默认不携带Cookie，除非Cookie显式设置SameSite=None; Secure。这与CORS的凭据机制配合使用。}}
+
+{{知识点24}}{{第三方Cookie与CORS的关系：在CORS请求中携带Cookie时，这些Cookie受第三方Cookie策略约束。浏览器可设置拒绝所有第三方Cookie，此时CORS的凭据请求将无法携带Cookie。隐私法规（如GDPR）和浏览器趋势（如Chrome的Privacy Sandbox）正在逐步限制第三方Cookie。}}
+
+{{知识点25}}{{JSONP（JSON with Padding）是CORS出现之前的跨域解决方案。通过动态创建<script>标签，利用script标签不受同源策略限制的特性实现跨域。JSONP只支持GET请求，存在XSS安全风险。现代开发中已被CORS全面替代，但在需要兼容旧浏览器的场景仍有使用。}}
+
+{{知识点26}}{{代理服务器（Proxy）是解决CORS问题的另一种常用方案。开发环境中，webpack-dev-server的proxy、Vite的server.proxy配置将跨域请求代理到同源的开发服务器，再由开发服务器转发到目标API。生产环境中，Nginx反向代理将前端和API放在同一域名下，从根本上避免跨域。}}
+
+{{知识点27}}{{CORS在Node.js/Express中的配置：使用cors中间件是最简便的方式，可配置origin（允许的源）、methods（允许的方法）、allowedHeaders（允许的请求头）、credentials（是否允许凭据）、maxAge（预检缓存时间）等选项。手动配置则需在每个响应中设置相应的CORS头。}}
+
+{{知识点28}}{{CORS在Nginx中的配置需要使用add_header指令添加CORS相关头。典型配置包括：add_header Access-Control-Allow-Origin $http_origin（动态匹配Origin）、add_header Access-Control-Allow-Methods、add_header Access-Control-Allow-Headers、add_header Access-Control-Allow-Credentials true。对于OPTIONS预检请求需返回204状态码。}}
+
+{{知识点29}}{{CORS预检请求与重定向存在兼容性问题。如果预检请求（OPTIONS）被服务器重定向，部分浏览器会报错"CORS request external redirect not allowed"。解决方案：服务器不对OPTIONS请求返回重定向；将请求简化为简单请求避免预检；或先发简单请求获取重定向URL，再用该URL发实际请求。}}
+
+{{知识点30}}{{CORS与WebSocket的关系：WebSocket连接不受CORS限制。WebSocket通过HTTP升级握手建立连接，浏览器不会对WebSocket的握手请求执行CORS检查。但服务器可以在握手阶段通过检查Origin头来验证连接来源的合法性，作为安全措施。}}
+
+{{知识点31}}{{CORS与fetch API的mode选项密切相关。mode可设为cors（默认，遵循CORS协议）、no-cors（只允许简单请求，响应不可读）、same-origin（同源请求）、navigate（页面导航）。mode: "no-cors"允许发送跨域请求但无法读取响应，适用于不需要响应内容的场景（如发送分析数据）。}}
+
+{{知识点32}}{{CORS安全最佳实践：不要将Access-Control-Allow-Origin设为*再配合凭据；限制允许的Origin为信任的源列表；限制允许的HTTP方法和请求头；设置合理的Access-Control-Max-Age减少预检开销；在服务器端验证Origin头而非仅依赖CORS；使用Vary: Origin避免缓存问题。}}
+
+{{知识点33}}{{CORS攻击场景包括：错误配置Access-Control-Allow-Origin为null（沙盒iframe的Origin为null）；使用正则匹配Origin时的绕过（如匹配example.com也会匹配evil-example.com）；反射Origin头但未做白名单校验（任意Origin都被允许）。开发者应严格校验Origin，使用白名单而非正则模糊匹配。}}
+
+{{知识点34}}{{CORS与Content-Security-Policy（CSP）的关系：CSP是另一层安全机制，控制页面可加载的资源来源。CSP的connect-src指令可限制AJAX请求的目标，与CORS配合形成双重防护。即使CORS允许跨域，CSP仍可阻止请求发出。两者互不替代，建议同时配置。}}
+
+{{知识点35}}{{Cross-Origin-Resource-Policy（CORP）是一个较新的HTTP响应头，值可为same-site、same-origin或cross-origin。它允许服务器声明资源只允许同源或同站加载，即使CORS头允许也不行。CORP主要防御Spectre等侧信道攻击，保护图片、脚本等资源不被跨源读取。}}
+
+{{知识点36}}{{Cross-Origin-Opener-Policy（COOP）和Cross-Origin-Embedder-Policy（COEP）是2020年后引入的安全头，用于实现跨源隔离。COOP控制页面能否被其他窗口引用，COEP控制页面能否加载跨源资源。它们与CORS互补，共同构建更精细的跨源安全模型，是SharedArrayBuffer等高危API的前提条件。}}
+
+{{知识点37}}{{CORS的性能影响主要来自预检请求。每次非简单跨域请求都会额外发送一次OPTIONS请求，增加一次网络往返。优化策略：合理设置Access-Control-Max-Age缓存预检结果；尽量使用简单请求格式（如用application/x-www-form-urlencoded代替application/json）；在API设计时考虑CORS友好性。}}
+
+{{知识点38}}{{CORS在微前端架构中尤为重要。微前端通常涉及多个子应用从不同源加载资源，需要在主应用和子应用服务器上都正确配置CORS。常见方案包括：使用Nginx统一代理所有子应用到同一域名下；子应用服务器动态配置允许主应用的Origin；使用postMessage替代跨域请求通信。}}
+
+{{知识点39}}{{CORS与Service Worker的关系：Service Worker的fetch事件拦截的请求同样受CORS约束。Service Worker可以修改请求的mode和credentials选项，但不能绕过CORS。如果响应缺少正确的CORS头，Service Worker无法读取响应体。Service Worker本身通过navigator.serviceWorker.register注册时也受同源策略限制。}}
+
+{{知识点40}}{{HTTP/2和HTTP/3对CORS的影响：虽然HTTP/2引入了多路复用减少了连接开销，但CORS预检仍基于HTTP语义层面的工作方式不变。HTTP/2的Server Push不能替代CORS，push的资源仍需符合CORS规则。不过HTTP/2减少了预检的延迟开销，因为无需建立新TCP连接。}}

@@ -1,0 +1,85 @@
+# 2025Vue.js入门
+# 领域: 计算机IT
+# 学科: 前端框架
+# 来源: 2025Vue.js入门
+# 描述: Vue.js核心知识点
+
+{{什么是Vue.js}}{{Vue.js是一个用于构建用户界面的渐进式JavaScript框架。它的核心库只关注视图层，易于上手，同时通过生态系统（Router、Pinia等）支持大型单页应用开发。Vue 3基于Composition API和Proxy响应式系统，性能更优、TypeScript支持更好。}}
+
+{{Vue实例的创建}}{{通过createApp函数创建Vue应用实例：const app = Vue.createApp({...})。传入一个选项对象（包含data、methods、computed等），然后调用app.mount('#app')将应用挂载到DOM元素上。每个Vue应用都是通过这种方式启动的。}}
+
+{{模板语法-插值}}{{使用双大括号{{message}}进行文本插值，将数据绑定到DOM。插值中可以使用JavaScript表达式，但只能包含单个表达式，不能使用语句。}}
+
+{{模板语法-指令}}{{指令是带有v-前缀的特殊属性，如v-bind（动态绑定属性）、v-on（事件监听）、v-if/v-show（条件渲染）、v-for（列表渲染）、v-model（双向绑定）。指令的值是单个JavaScript表达式，用于在表达式变化时响应式地更新DOM。}}
+
+{{v-bind与v-on}}{{v-bind:title="msg"或简写:title="msg"用于动态绑定HTML属性。v-on:click="handler"或@click="handler"用于监听DOM事件。两者是最常用的指令，支持动态参数：[attrName]="value"和[eventName]="handler"。}}
+
+{{v-model双向绑定}}{{v-model是v-bind:value和v-on:input的语法糖，实现表单元素与数据的双向绑定。支持input、textarea、select等表单元素，还可使用.lazy、.number、.trim等修饰符控制同步行为。在组件上使用时通过modelValue和update:modelValue实现。}}
+
+{{v-if与v-show的区别}}{{v-if是"真正的"条件渲染，切换时会销毁和重建元素及其事件监听器和子组件，适合条件不常变化的场景。v-show通过CSS display属性切换可见性，元素始终保留在DOM中，适合频繁切换的场景。v-if支持v-else和v-else-if链。}}
+
+{{v-for列表渲染}}{{v-for="item in items"用于基于数组渲染列表。可使用(item, index)获取索引。绑定:key属性至关重要，它帮助Vue识别节点身份，优化diff算法性能。v-for也可遍历对象：v-for="(value, key) in object"。}}
+
+{{计算属性computed}}{{计算属性基于响应式依赖进行缓存，只有依赖变化时才重新计算。适合处理复杂逻辑。相比方法，computed有缓存优势；相比watch，computed更简洁。在Composition API中使用computed()函数。}}
+
+{{侦听器watch}}{{watch用于在响应式数据变化时执行副作用（如异步请求、DOM操作）。可以侦听单个响应式引用：watch(source, callback)。支持deep（深层侦听）、immediate（立即执行）、once（只执行一次）等选项。watchEffect是自动收集依赖的变体。}}
+
+{{Composition API概述}}{{Composition API是Vue 3引入的一组基于函数的API，通过setup()函数组织组件逻辑。核心包括ref/reactive（响应式数据）、computed（计算属性）、watch/watchEffect（侦听器）、生命周期钩子等。解决了Options API中相关逻辑分散的问题，提升代码复用性和可读性。}}
+
+{{ref与reactive的区别}}{{ref用于包装基本类型值（也可包装对象），通过.value访问：const count = ref(0)。reactive用于创建对象的响应式代理：const state = reactive({ count: 0 })，直接访问属性。ref在模板中自动解包，在JS中需.value。reactive不能解构（会丢失响应性），需用toRefs转换。}}
+
+{{toRef与toRefs}}{{toRef(reactive, 'key')从reactive对象中提取单个属性作为ref，保持与源对象的响应式连接。toRefs将reactive对象的所有属性转换为ref，解构后仍保持响应性。常用于组合式函数的返回值。}}
+
+{{生命周期钩子}}{{Vue 3中在setup内使用onMounted、onUpdated、onUnmounted等生命周期钩子（需导入）。常用钩子：onMounted（DOM已挂载）、onUnmounted（清理副作用）、onUpdated（响应式数据更新后）。beforeCreate和created在setup中无需使用，setup本身替代了它们。}}
+
+{{组件系统基础}}{{Vue应用由组件树构成。组件是可复用的Vue实例，拥有自己的模板、逻辑和样式。通过defineComponent或直接导出对象定义组件，使用import引入后在模板中以标签形式使用。组件名推荐使用PascalCase。}}
+
+{{组件注册}}{{全局注册：app.component('MyComponent', component)，应用内任何地方可用。局部注册：在父组件中import后直接使用，性能更好（打包时可tree-shake）。2025年推荐优先使用局部注册或script setup中的自动注册。}}
+
+{{Props父传子}}{{Props是父组件向子组件传递数据的机制。声明：defineProps({ title: String, count: { type: Number, default: 0, required: true } })。支持类型验证、默认值、自定义验证器。单项数据流：子组件不能直接修改prop，应通过emit通知父组件。}}
+
+{{Events子传父}}{{子组件通过emit向父组件发送事件：const emit = defineEmits(['update', 'delete'])，emit('update', newValue)。父组件通过@update监听。支持事件验证。v-model在组件上本质是prop+emit的语法糖。}}
+
+{{Slots插槽}}{{插槽允许父组件向子组件传递模板内容。默认插槽：slot标签。具名插槽：使用name属性，父组件用v-slot:header或#header。作用域插槽：子组件通过slot的属性传递数据，父组件通过slotProps获取。}}
+
+{{Provide/Inject依赖注入}}{{provide/inject允许跨层级组件通信，无需逐层传递props。祖先组件provide('key', value)，后代组件inject('key')。支持默认值和工厂函数。适合全局配置（主题、国际化）。与响应式数据结合时需provide ref而非普通值。}}
+
+{{组件v-model}}{{v-model在组件上双向绑定。子组件声明modelValue prop和update:modelValue事件。可用v-model:title自定义prop名。支持多个v-model：v-model:title和v-model:content。底层是单向数据流+事件的组合。}}
+
+{{Vue Router基础}}{{Vue Router是Vue.js的官方路由管理器。通过createRouter创建实例，定义routes数组映射路径与组件。router-view是路由出口，router-link实现声明式导航。支持动态路由、嵌套路由、命名路由、编程式导航（router.push）。}}
+
+{{路由守卫}}{{全局守卫：beforeEach、beforeResolve、afterEach。路由独享：beforeEnter。组件内：onBeforeRouteLeave、onBeforeRouteUpdate。守卫常用于权限验证、页面访问控制。next()函数在Vue Router 4中可选，直接返回true/false或路径即可。}}
+
+{{动态路由与路由参数}}{{通过:path定义动态段，如/user/:id。通过route.params.id访问。响应路由变化可用watch监听route.params，或使用onBeforeRouteUpdate。支持可选参数和正则匹配。}}
+
+{{路由懒加载}}{{使用动态import实现路由懒加载：{ path: '/about', component: () => import('./About.vue') }。打包工具会自动进行代码分割，访问该路由时才加载对应组件，显著减小初始包体积，提升首屏加载速度。}}
+
+{{Pinia状态管理}}{{Pinia是Vue 3推荐的状态管理库，替代Vuex。通过defineStore定义store，包含state、getters、actions。支持Composition API和Options API两种风格。相比Vuex：去除mutations、完整TypeScript支持、扁平化结构、更好的模块化。}}
+
+{{Pinia的使用模式}}{{定义Store：const useUserStore = defineStore('user', { state: () => ({ name: '', token: '' }), getters: { isLoggedIn: (state) => !!state.token }, actions: { async login(creds) { ... } } })。组件中使用：const user = useUserStore()，直接访问user.name、调用user.login()。支持$reset、$patch、$subscribe。}}
+
+{{Pinia持久化}}{{通过pinia-plugin-persistedstate插件实现状态持久化。配置persist: true或自定义storage选项，将state自动同步到localStorage。适合用户token、主题偏好等需要跨会话保留的数据。注意敏感数据的安全性。}}
+
+{{单文件组件SFC结构}}{{.vue文件由三部分组成：template（HTML模板）、script setup（组件逻辑）、style scoped（样式）。script setup是编译时语法糖，更简洁、性能更好，2025年推荐作为默认写法。scoped样式自动添加作用域隔离。}}
+
+{{响应式原理-Proxy}}{{Vue 3使用ES6 Proxy实现响应式，替代Vue 2的Object.defineProperty。Proxy能拦截对象的所有操作（包括新增/删除属性、数组索引修改），无需像Vue 2那样使用Vue.set。通过reactive()创建响应式代理，依赖收集和触发更新在getter/setter中完成。}}
+
+{{虚拟DOM与Diff算法}}{{Vue使用虚拟DOM（轻量JS对象）描述真实DOM结构。数据变化时生成新旧虚拟DOM树，通过Diff算法比较差异，最小化真实DOM操作。Vue 3引入静态树提升和Patch Flag优化，跳过静态内容，只比较动态部分，大幅提升更新性能。}}
+
+{{NextTick的使用}}{{DOM更新是异步的，数据变化后DOM不会立即更新。使用nextTick()可以在DOM更新完成后执行回调。常见场景：获取更新后的DOM元素尺寸、焦点设置等。在Composition API中导入nextTick，在Options API中使用this.$nextTick。}}
+
+{{Teleport传送门}}{{Teleport允许将组件模板渲染到DOM中指定的目标元素下，而不受父组件DOM层级限制。常用于模态框、通知、工具提示等需要脱离当前组件层级的UI元素。支持disabled属性动态控制。}}
+
+{{Suspense异步组件}}{{Suspense用于处理异步依赖的组件。当子组件中有异步setup或异步组件时，显示fallback插槽的加载状态，异步完成后切换到默认插槽。适合代码分割和数据预加载场景。}}
+
+{{KeepAlive缓存组件}}{{KeepAlive包裹动态组件时，缓存被切换掉的组件实例，避免重复渲染。支持include/exclude按名称过滤、max限制缓存数量。被缓存的组件触发onActivated/onDeactivated钩子。常用于Tab切换、路由缓存等场景。}}
+
+{{自定义指令}}{{通过app.directive('focus', { mounted(el) { el.focus() } })注册全局自定义指令。钩子函数：created、beforeMount、mounted、beforeUpdate、updated、beforeUnmount、unmounted。常用场景：自动聚焦、点击外部关闭、拖拽、权限控制等。}}
+
+{{Composables组合式函数}}{{以use开头的函数（如useMouse、useFetch），封装可复用的状态逻辑。内部使用ref/reactive/watch等Composition API。替代了Mixins的缺点（命名冲突、隐式依赖）。是Vue 3中代码复用的推荐方式，社区有vueuse等优秀库。}}
+
+{{TypeScript与Vue 3}}{{Vue 3从底层用TypeScript重写，提供一流的TS支持。defineProps、defineEmits、ref等都有完整的类型推导。推荐使用script setup lang="ts"。泛型组件通过generic属性支持。}}
+
+{{Vue CLI与Vite}}{{Vite是Vue团队开发的下一代前端构建工具，利用ES模块实现极速开发服务器启动。2025年推荐使用Vite创建Vue项目：npm create vue@latest。相比Webpack，Vite的HMR（热更新）几乎即时，构建速度也更快。Vue CLI已进入维护模式。}}
+
+{{项目结构最佳实践}}{{标准Vue 3项目结构：src/下包含views（页面级组件）、components（通用组件）、composables（组合式函数）、stores（Pinia状态）、router（路由配置）、assets（静态资源）。按功能或模块组织目录，大型项目可用domain-driven方式。}}

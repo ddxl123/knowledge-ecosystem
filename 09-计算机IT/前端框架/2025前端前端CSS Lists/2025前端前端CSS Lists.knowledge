@@ -1,0 +1,95 @@
+# 2025前端前端CSS Lists
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{CSS Lists and Counters模块概述：CSS Lists and Counters模块允许开发者样式化和定位列表项的项目符号（markers），并使用字符串、计数器和其他功能来操纵列表项的值。该模块规范为CSS Lists and Counters Module Level 3，定义了列表样式、计数器控制和自定义标记的相关属性和函数。}}
+
+{{知识点2}}{{display: list-item与列表项：列表项不限于嵌套在ol或ul元素中的li元素。任何设置了display: list-item的元素都是列表项。只有少数元素（如li和summary）默认具有display: list-item样式。}}
+
+{{知识点3}}{{list-style-type属性：用于设置列表项标记的类型。初始值为disc（实心圆）。可应用于任何display值为list-item的元素，且属性可继承，通常设置在父元素（如ol或ul）上使其对所有列表项生效。}}
+
+{{知识点4}}{{list-style-type无序列表值：disc（实心圆，默认值）、circle（空心圆）、square（实心方块）。这些是最常用的无序列表标记类型。}}
+
+{{知识点5}}{{list-style-type有序列表值：decimal（十进制数字，从1开始）、decimal-leading-zero（前导零的十进制数字）、lower-roman（小写罗马数字）、upper-roman（大写罗马数字）、lower-alpha/lower-latin（小写ASCII字母）、upper-alpha/upper-latin（大写ASCII字母）。}}
+
+{{知识点6}}{{list-style-type多语言支持值：georgian（格鲁吉亚传统编号）、armenian（亚美尼亚传统编号）、hebrew（希伯来传统编号）、simp-chinese-formal/informal（简体中文正式/非正式）、trad-chinese-formal/informal（繁体中文正式/非正式）、japanese-formal/informal（日语正式/非正式）、korean-hangul-formal（韩文正式）、persian（波斯语编号）、devanagari（天城文编号）、tamil（泰米尔语编号）等数十种。}}
+
+{{知识点7}}{{list-style-type特殊值：none（不显示标记）、disclosure-open（展开控件指示符）、disclosure-closed（折叠控件指示符）。其中cjk-ideographic与trad-chinese-informal相同，仅为遗留兼容而存在。}}
+
+{{知识点8}}{{list-style-type接受自定义字符串：可以使用任意字符串值作为列表项标记，例如list-style-type: "-"; 会用短横线作为标记符号。}}
+
+{{知识点9}}{{list-style-type与@counter-style：可以通过自定义标识符匹配@counter-style规则来定义列表标记样式，也可以使用symbols()函数定义匿名样式。}}
+
+{{知识点10}}{{list-style-image属性：用于将图像设置为列表项标记。初始值为none。接受任何有效的CSS <image>值，包括url()、linear-gradient()等。如果设置了list-style-image且图片不可用，将回退使用list-style-type定义的标记。}}
+
+{{知识点11}}{{list-style-image支持的值：url()（外部图片）、linear-gradient()等渐变函数、image()、image-set()、cross-fade()等CSS图像函数，以及none（不使用图像，回退到list-style-type）。}}
+
+{{知识点12}}{{list-style-position属性：控制列表项标记相对于列表项内容的位置。初始值为outside。只有两个关键字值：inside和outside。}}
+
+{{知识点13}}{{list-style-position: inside：标记作为列表项内容的第一个元素排列，标记在文本流内。当列表项内容换行时，内容会对齐到标记之后。}}
+
+{{知识点14}}{{list-style-position: outside（默认值）：标记位于主块盒（principal block box）之外。这是默认行为，标记悬挂在列表项内容的左侧。}}
+
+{{知识点15}}{{list-style简写属性：是list-style-image、list-style-position和list-style-type三个属性的简写。可以指定1-3个值，顺序任意。如果同时设置了list-style-type和list-style-image，当图片不可用时list-style-type作为回退。}}
+
+{{知识点16}}{{list-style简写语法示例：list-style: square;（仅类型）、list-style: inside;（仅位置）、list-style: url("img.png");（仅图像）、list-style: georgian outside;（类型+位置）、list-style: lower-roman url("img.png") outside;（全部三个值）、list-style: none;（无样式）。}}
+
+{{知识点17}}{{counter-reset属性：用于创建和初始化CSS计数器。初始值为none。应用于所有元素，不可继承。可以一次创建多个计数器，用空格分隔。如果不指定初始值，普通计数器默认初始值为0。}}
+
+{{知识点18}}{{counter-reset创建普通计数器：语法为counter-reset: counter-name integer;。例如counter-reset: chapter section 4 page;会创建chapter、section（初始值为4）和page三个计数器。}}
+
+{{知识点19}}{{counter-reset创建反向计数器：使用reversed()函数记法。例如counter-reset: reversed(chapter);创建反向计数器，其默认初始值等于元素集的数量。反向计数器默认递减1，可用于实现倒序编号（如从5到1）。}}
+
+{{知识点20}}{{counter-increment属性：用于增加或减少CSS计数器的值。初始值为none。应用于所有元素，不可继承。默认增量为1，可以指定负值实现递减，指定0则不改变计数器值。}}
+
+{{知识点21}}{{counter-increment语法：counter-increment: counter-name integer;。例如counter-increment: counter1 counter2 -4;使counter1增加1，counter2减少4。使用none可以覆盖更具体规则中的所有计数器递增。}}
+
+{{知识点22}}{{counter-set属性：用于设置已有计数器的值。初始值为none。应用于所有元素，不可继承。如果计数器不存在会创建新计数器，但推荐使用counter-reset来创建新计数器。自2023年12月起在所有主流浏览器中可用。}}
+
+{{知识点23}}{{counter-set与counter-reset的区别：counter-reset用于创建和初始化计数器，而counter-set用于重置已有计数器的值。尽管名称上有些反直觉，counter-reset实际上用于创建计数器，counter-set用于修改已有计数器的值。}}
+
+{{知识点24}}{{counter()函数：用于返回计数器当前值的字符串表示。语法为counter(counter-name, counter-style?)。第一个参数是计数器名称，第二个可选参数是计数器样式（默认为decimal）。通常与content属性配合在::before或::after伪元素中使用。}}
+
+{{知识点25}}{{counters()函数：用于在嵌套计数器中组合标记。语法为counters(counter-name, string, counter-style?)。返回一个字符串，将所有同名嵌套计数器的当前值用指定的分隔符字符串连接起来。例如counters(index, ".", decimal)会生成"1.2.3"这样的嵌套编号。}}
+
+{{知识点26}}{{counters()函数的三个参数：第一个是计数器名称（custom-ident），第二个是连接字符串，第三个可选参数是计数器样式（默认decimal）。计数器按从最外层到最内层的顺序排列，用指定的字符串分隔。自2015年起在所有浏览器中广泛可用。}}
+
+{{知识点27}}{{::marker伪元素：选择列表项的标记框，通常包含项目符号或编号。适用于任何display: list-item的元素（如li和summary）。可以设置的CSS属性有限，包括：所有动画和过渡属性、所有字体属性、color、content、counter系列属性、quotes、text-combine-upright、unicode-bidi、direction、white-space。}}
+
+{{知识点28}}{{@counter-style规则：用于定义自定义计数器样式。由计数器样式名称和描述符列表组成。不能使用none、decimal、disc、square、circle、disclosure-open、disclosure-closed作为自定义计数器名称。}}
+
+{{知识点29}}{{@counter-style的system描述符：指定将整数值转换为字符串表示的算法。可选值包括cyclic（循环）、numeric（数字）、alphabetic（字母）、symbolic（符号）、fixed（固定）、additive（加法）。如果值为cyclic/numeric/alphabetic/symbolic/fixed则必须指定symbols描述符；如果为additive则必须指定additive-symbols描述符。}}
+
+{{知识点30}}{{@counter-style的symbols描述符：指定用于标记表示的符号，可以包含字符串、图像或自定义标识符。当system为cyclic/numeric/alphabetic/symbolic/fixed时是必需的。}}
+
+{{知识点31}}{{@counter-style的additive-symbols描述符：定义加法系统的加法元组。类似于罗马数字的表示方式，由一系列带权重的符号组成，按权重降序排列。当system为additive时是必需的。}}
+
+{{知识点32}}{{@counter-style的其他描述符：negative（负值前/后缀）、prefix（标记前缀）、suffix（标记后缀）、range（适用值范围）、pad（最小长度填充）、speak-as（语音合成器播报方式）、fallback（回退样式，最终回退到decimal）。}}
+
+{{知识点33}}{{内置list-item计数器：有序列表（ol）内置list-item计数器来控制编号。可以通过counter-reset: list-item N来改变起始值。计数器默认每个列表项递增或递减1，可通过counter-increment属性调整。}}
+
+{{知识点34}}{{CSS列表的无障碍性问题：Safari不会将list-style-type值为none的有序或无序列表识别为无障碍树中的列表。解决方案包括：添加role="list"属性到ol/ul元素，或使用CSS添加非空伪内容。如果列表嵌套在nav元素内则不受影响。}}
+
+{{知识点35}}{{list-style-type的颜色行为：列表标记的颜色与元素的computed color值相同（即currentColor），继承自元素的color属性。这意味着可以通过设置color属性来改变标记的颜色。}}
+
+{{知识点36}}{{list-style-type的animatable特性：list-style-type、list-style-position和list-style-image的动画类型都是discrete（离散的），意味着它们不能平滑过渡，只能在关键帧之间直接切换。}}
+
+{{知识点37}}{{list-style-image的渐变标记：可以使用CSS渐变函数作为列表标记，例如list-style-image: linear-gradient(to left bottom, red, blue);。这提供了不依赖外部图片文件创建自定义标记的能力。}}
+
+{{知识点38}}{{symbols()函数：用于在list-style-type和counter()中定义匿名计数器样式。语法为symbols(type? symbols+)，type可以是cyclic、numeric、alphabetic、symbolic或fixed。提供了一种无需@counter-style规则即可快速定义简单计数器样式的方式。}}
+
+{{知识点39}}{{反向计数器的自动计算：当创建反向计数器（使用reversed()）且未指定初始值时，浏览器会在布局时自动计算初始值，使计数从元素总数开始递减到1。这使得实现倒序编号无需手动计算元素数量。}}
+
+{{知识点40}}{{CSS计数器的作用域：CSS计数器在DOM树中自动创建嵌套作用域。如果在父元素和子元素上都重置同名计数器，子元素会创建新的计数器实例。这对理解counters()函数的嵌套行为至关重要。}}
+
+{{知识点41}}{{list-style简写对子属性的重置：使用list-style简写属性时，未显式指定的子属性会被重置为其初始值。例如list-style: square;会将list-style-position重置为outside，list-style-image重置为none。这遵循CSS简写属性的一般规则。}}
+
+{{知识点42}}{{marker-side属性：CSS Lists and Counters模块中定义了marker-side属性，用于控制标记位于哪一侧，但该属性尚未被完全定义或实现。属于未来可能扩展的特性。}}
+
+{{知识点43}}{{W3C预定义计数器样式：W3C提供了超过100种现成的计数器样式代码片段（Ready-made Counter Styles），满足世界各地语言和文化的需求。开发者可以在https://w3c.github.io/predefined-counter-styles/找到这些样式并直接使用或自定义。}}
+
+{{知识点44}}{{counter-reset的覆盖机制：在特定性更高的选择器上设置counter-increment: none会覆盖特定性较低的选择器上设置的命名计数器创建。使用counter-reset: none可以覆盖更不具体规则中的counter-reset声明。}}
+
+{{知识点45}}{{@counter-style的CSSCounterStyleRule接口：浏览器提供了CSSCounterStyleRule JavaScript接口，允许通过脚本操作@counter-style规则。这为动态创建和修改计数器样式提供了编程接口。}}
+
+{{知识点46}}{{list-style-type在有序列表中的替代方案：除了CSS的list-style-type，HTML的ol元素还支持start属性（起始值）、reversed属性（反向计数）和type属性（标记类型）。li元素的value属性可以覆盖特定列表项的编号值。这些HTML属性是CSS计数器的简化替代方案。}}

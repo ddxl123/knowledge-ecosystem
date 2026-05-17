@@ -1,0 +1,83 @@
+# 2025前端Rust for Web
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{WebAssembly（WASM）概述：WebAssembly是一种开放标准的虚拟机格式，可在现代浏览器中以接近原生速度运行。Rust是编译到WASM的首选语言之一，因其零成本抽象、无垃圾回收和小代码体积的特性，非常适合生成高性能的WASM模块。}}
+
+{{知识点2}}{{Rust适合WASM的原因——可预测性能：Rust编译到WASM时没有不可预测的垃圾回收暂停，也没有JIT编译器的性能陡降。底层控制与高层人体工学相结合，提供一致的高性能表现。}}
+
+{{知识点3}}{{Rust适合WASM的原因——小代码体积：Rust生成的.wasm文件不包含垃圾回收器等额外膨胀内容。高级优化和tree shaking可移除死代码，这意味着更快的页面加载速度。}}
+
+{{知识点4}}{{Rust与JavaScript的协同工作：WebAssembly的目标不是取代JavaScript，而是与其并肩工作。Rust/WASM用于处理计算密集型或底层任务，JavaScript负责UI逻辑和DOM操作，两者互补。}}
+
+{{知识点5}}{{wasm-bindgen简介：wasm-bindgen是促进WASM模块与JavaScript之间高级交互的核心工具库。它允许在Rust中导入JavaScript功能，也将Rust功能导出给JavaScript使用，支持ECMAScript模块格式。}}
+
+{{知识点6}}{{wasm-bindgen的轻量特性：wasm-bindgen只为实际使用的JavaScript导入和导出的Rust功能生成绑定和胶水代码。例如导入document.querySelector不会导致Node.prototype.appendChild也被包含在绑定中。}}
+
+{{知识点7}}{{web-sys与js-sys：web-sys提供整个Web平台的预打包Rust绑定（如DOM操作、Fetch API等），js-sys提供JavaScript内置对象的绑定。它们与wasm-bindgen配合，实现Rust与Web API的无缝互操作。}}
+
+{{知识点8}}{{wasm-pack工具：wasm-pack是Rust到WASM的一站式工作流工具，可构建、测试和发布Rust生成的WebAssembly包。它能生成可发布到npm注册表的包，与webpack、Parcel等现有JavaScript工具链无缝集成。}}
+
+{{知识点9}}{{wasm-pack核心命令：wasm-pack提供new（模板生成项目）、build（构建npm wasm包）、test（运行浏览器测试）、pack和publish（打包发布到npm注册表）等命令，覆盖完整的开发工作流。}}
+
+{{知识点10}}{{Leptos框架概述：Leptos是Rust全栈Web框架，用于构建交互式Web应用。它结合了现代Web开发的最佳范式与Rust的强大能力，支持SSR（服务端渲染）和客户端交互的渐进增强。}}
+
+{{知识点11}}{{Leptos的细粒度响应式系统：Leptos采用细粒度的响应式信号（reactive signals）进行状态管理。当组件状态变化时，系统只精确更新DOM的受影响部分，保持应用对用户输入的高响应性。}}
+
+{{知识点12}}{{Leptos的Server Functions：Leptos的#[server]宏允许编写跨越客户端-服务端边界的函数，无需手动设置API端点。这使得可以创建"全栈组件"，在同一个地方编写从SQL查询到按钮点击的所有逻辑。}}
+
+{{知识点13}}{{Leptos的类型安全：Leptos利用Rust强大的类型安全特性保护整个应用，从后端到前端。编译时类型检查减少了运行时错误，提高了应用的可靠性和安全性。}}
+
+{{知识点14}}{{Leptos的工具集成：Leptos支持Tailwind CSS集成、热重载模板更新、专用语言服务器和VSCode扩展，提供流畅的开发体验和一致的代码风格。}}
+
+{{知识点15}}{{Yew框架概述：Yew是Rust前端框架，用于构建Web客户端应用。它采用组件化架构，类似于React和Elm的设计理念。开发者可以使用Rust编写在浏览器中运行的前端应用。}}
+
+{{知识点16}}{{Yew的HTML宏：Yew提供html!宏用于声明式编写交互式HTML，类似于React中的JSX语法。开发者可以在HTML模板中嵌入Rust表达式，实现动态UI渲染。}}
+
+{{知识点17}}{{Yew的服务端渲染（SSR）：Yew支持服务端渲染，在保持单页应用（SPA）体验的同时，获得SEO优化和服务器渲染的所有优势。这使得Yew应用可以被搜索引擎正确索引。}}
+
+{{知识点18}}{{Dioxus框架概述：Dioxus是Rust跨平台全栈框架，可用于构建Web、桌面和移动端应用。一个代码库即可部署到所有平台，支持实时热重载和Server Functions。}}
+
+{{知识点19}}{{Dioxus的特点：Dioxus提供类似React的声明式UI模型，使用Rust的宏系统实现类似JSX的语法。它专注于开发者体验，提供快速迭代的工作流和简单的部署流程。}}
+
+{{知识点20}}{{Axum框架概述：Axum是Tokio团队开发的HTTP路由和请求处理库，专注于人体工学和模块化设计。它是Rust生态中最流行的Web后端框架之一，性能接近底层hyper。}}
+
+{{知识点21}}{{Axum的核心特性——提取器（Extractors）：Axum使用声明式的提取器系统从HTTP请求中解析数据。例如Json<T>提取器自动将请求体反序列化为指定类型，使得处理函数可以是简洁的同步代码，同时享受异步IO的优势。}}
+
+{{知识点22}}{{Axum的核心特性——Tower中间件：Axum没有自有的中间件系统，而是使用tower::Service trait。这意味着Axum可以直接复用Tower和tower-http生态中的超时、追踪、压缩、授权等中间件，也可与hyper、tonic共享中间件。}}
+
+{{知识点23}}{{Axum的错误处理模型：Axum提供简单且可预测的错误处理模型。处理函数可以返回实现了IntoResponse trait的多种类型，包括元组(StatusCode, Json<T>)形式的响应，自定义错误类型可通过中间件统一处理。}}
+
+{{知识点24}}{{Axum的性能：Axum是hyper之上的一个相对薄层，添加极少的开销。其性能与hyper本身相当，在Rust Web框架基准测试中表现优异。Axum使用#![forbid(unsafe_code)]确保100%安全Rust代码。}}
+
+{{知识点25}}{{Actix Web框架概述：Actix Web是成熟高性能的Rust Web框架，提供类型安全的请求到响应处理。内置HTTP/2、日志等功能，支持灵活的Responder trait和强大的Extractor系统。}}
+
+{{知识点26}}{{Actix Web的Extractor系统：Actix Web的提取器系统从传入HTTP请求中提取数据并传递给视图函数。这不仅提供了方便的API，还意味着视图函数可以是同步代码却仍能受益于异步IO处理。}}
+
+{{知识点27}}{{Tower生态与Service trait：Tower是Rust异步服务的通用抽象，定义了Service trait。Axum、hyper、tonic等都基于Tower构建，共享中间件和服务组合能力。这是Rust Web后端架构的核心设计模式。}}
+
+{{知识点28}}{{Tokio运行时：Tokio是Rust的异步运行时，为Axum等Web框架提供底层支持。它提供异步TCP/UDP、定时器、任务调度等基础设施。#[tokio::main]宏是启动Tokio运行时的惯用方式。}}
+
+{{知识点29}}{{Serde序列化框架：Serde是Rust生态中最核心的序列化/反序列化框架，支持JSON、YAML、TOML等多种格式。在Web开发中，Serde与Axum/Actix的Json提取器配合，实现请求体和响应体的自动转换。}}
+
+{{知识点30}}{{Rust Web开发的WASM工具链：Rust到WASM的编译需要wasm32-unknown-unknown目标，通过rustup target add安装。配合wasm-pack或trunk等工具完成构建、优化和打包，生成可在浏览器中加载的.wasm文件。}}
+
+{{知识点31}}{{Trunk——WASM应用构建工具：Trunk是专为Rust WASM应用设计的构建工具，支持自动watch和热重载。与wasm-pack不同，Trunk直接生成完整的HTML入口页面，更适合Leptos、Yew等全栈前端框架的开发工作流。}}
+
+{{知识点32}}{{Rust全栈架构模式——Server-Side Rendering（SSR）：Leptos、Dioxus等框架支持SSR，首次请求由服务端Rust代码渲染完整HTML，然后在客户端通过WASM水合（hydration）添加交互性。这兼顾了首屏加载速度和SEO。}}
+
+{{知识点33}}{{Rust全栈架构模式——Server Functions：Server Functions是Leptos和Dioxus的核心创新，允许开发者用Rust编写看起来像本地函数调用的代码，实际在服务端执行。编译器自动生成客户端调用的RPC层，开发者无需手动创建REST/GraphQL端点。}}
+
+{{知识点34}}{{Rust在边缘计算中的应用：Cloudflare Workers等边缘计算平台支持Rust/WASM，允许在CDN边缘节点运行高性能的Rust代码。这使得延迟敏感的Web应用可以在全球范围内获得接近原生的性能。}}
+
+{{知识点35}}{{Rust前端框架与npm生态的集成：通过wasm-pack构建的Rust WASM包可发布到npm注册表，与现有JavaScript项目无缝集成。webpack、Vite等打包工具可直接导入WASM模块，实现渐进式采用Rust。}}
+
+{{知识点36}}{{Rust Web开发的内存安全优势：Rust的所有权系统和借用检查器在编译时保证内存安全，消除了Web后端常见的内存泄漏、缓冲区溢出、数据竞争等问题。这在高并发Web服务中尤为重要。}}
+
+{{知识点37}}{{Rust Web框架的性能对比：在TechEmpower Web框架基准测试中，Rust框架（Actix、Axum）经常位居前列，性能远超Node.js、Python、Java等主流Web框架。Rust的零成本抽象意味着高级API不带来运行时开销。}}
+
+{{知识点38}}{{Rust前端开发的学习曲线：Rust前端开发的主要挑战是学习曲线较陡——所有权、生命周期、泛型等概念需要时间掌握。但对于追求性能和安全的项目，这些投入是值得的。社区提供了大量教程和示例降低入门门槛。}}
+
+{{知识点39}}{{WebAssembly的局限性：WASM目前不能直接操作DOM，需要通过JavaScript胶水代码（如wasm-bindgen生成的绑定）间接访问。WASM与JavaScript之间的调用有一定开销，因此适合计算密集型任务而非频繁的DOM操作。}}
+
+{{知识点40}}{{Rust Web开发生态现状（2025）：截至2025年，Rust Web生态已相当成熟。后端有Axum、Actix Web、Rocket；前端有Leptos、Yew、Dioxus；全栈框架支持SSR和Server Functions。wasm-bindgen和wasm-pack工具链完善，社区活跃，适合生产环境使用。}}

@@ -1,0 +1,123 @@
+# 2025前端Less预处理器
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}
+Less（Leaner Style Sheets）是一种向后兼容的CSS扩展语言，由Alexis Sellier于2009年创建。Less.js是将Less样式编译为CSS样式的JavaScript工具。Less的语法与CSS几乎相同，学习成本极低，只在CSS基础上增加了少量便捷特性。
+
+{{知识点2}}
+Less变量使用@符号声明，用于集中管理常用值，避免重复。变量可以在属性值、选择器名、属性名、URL和@import语句中使用。例如：@link-color: #428bca; 然后在选择器中通过 color: @link-color; 引用。
+
+{{知识点3}}
+Less变量支持插值（Interpolation），使用@{变量名}语法将变量嵌入选择器名、属性名、URL和@import路径中。例如 @my-selector: banner; 可通过.@{my-selector} { } 生成 .banner { } 选择器。
+
+{{知识点4}}
+Less变量采用惰性求值（Lazy Evaluation），变量无需在使用前声明。变量的值在当前作用域内取最后一次定义的值，从当前作用域向上搜索。这与CSS自定义属性的行为类似。
+
+{{知识点5}}
+Less支持"变量的变量"（Variable Variables），即用一个变量的值作为另一个变量的名称。例如 @color: primary; 然后通过 @@color 引用 @primary 变量的值。
+
+{{知识点6}}
+Less的$prop语法（v3.0.0+）允许将CSS属性当作变量使用。例如 .widget { color: #efefef; background-color: $color; } 中 $color 会引用同选择器中 color 属性的最终值。
+
+{{知识点7}}
+Less默认变量机制：由于惰性求值特性，可以在导入库文件后重新定义变量来覆盖默认值。例如先 @import "library.less"; 再 @base-color: red; 即可覆盖库中定义的绿色。
+
+{{知识点8}}
+Less Mixin（混入）是一种将一个规则集的属性"混入"到另一个规则集的方式。通过类名或ID名即可引用。例如定义 .bordered { border-top: dotted 1px black; } 后，在其他选择器中调用 .bordered(); 即可复用。
+
+{{知识点9}}
+Less Mixin支持参数（Parametric Mixins），可以像函数一样传参。例如 .border-radius(@radius) { border-radius: @radius; } 然后调用 .border-radius(5px); 实现参数化复用。
+
+{{知识点10}}
+Less Mixin支持默认参数值，例如 .border-radius(@radius: 5px) { border-radius: @radius; } 调用时不传参则使用默认值5px。
+
+{{知识点11}}
+Less Mixin Guard（守卫）类似于函数的条件判断，使用when关键字为mixin添加条件。例如 .mixin(@a) when (lightness(@a) > 50%) { } 仅当条件为真时才应用该mixin。
+
+{{知识点12}}
+Less支持模式匹配（Pattern Matching），通过不同的参数值触发不同的mixin实现。例如 .mixin(dark) { } 和 .mixin(light) { }，调用时根据传入参数选择匹配的mixin。
+
+{{知识点13}}
+Less的@arguments变量包含mixin调用时传入的所有参数，类似JavaScript中的arguments对象。在mixin内使用 box-shadow: @arguments; 可一次性传递所有参数。
+
+{{知识点14}}
+Less嵌套（Nesting）允许在父选择器内部嵌套子选择器，替代CSS中的级联写法，使代码结构更贴近HTML结构。例如 #header { .navigation { font-size: 12px; } } 编译为 #header .navigation { font-size: 12px; }。
+
+{{知识点15}}
+Less使用&符号引用父选择器（Parent Selectors）。&代表当前嵌套规则的父选择器，常用于伪类和伪元素。例如 a { &:hover { color: green; } } 编译为 a:hover { color: green; }。
+
+{{知识点16}}
+Less的&符号可以在选择器中出现多次，生成所有可能的组合排列。例如 p, a { & + & { border-top: 0; } } 会生成 p+p, p+a, a+p, a+a 四种组合。
+
+{{知识点17}}
+Less支持在选择器中改变&的位置来调整选择器顺序。将&放在当前选择器之后可以将父选择器前置，例如 .no-borderradius & { } 会将 .no-borderradius 添加到父选择器前面。
+
+{{知识点18}}
+Less支持@media和@supports等At-Rule的嵌套和冒泡（Bubbling）。在选择器内部嵌套@media规则时，Less会自动将@media提升到外层并保持内部选择器的相对顺序不变。
+
+{{知识点19}}
+Less支持算术运算（Operations），可对数字、颜色和变量执行加减乘除运算。运算时会自动进行单位转换，例如 5cm + 10mm 结果为 6cm。结果使用最左侧显式声明的单位类型。
+
+{{知识点20}}
+Less 4.0起，除法运算不再在括号外自动执行，使用/运算符时需用括号包裹。例如 (#224488 / 2) 结果为 #112244，而 #222 / 2 则原样输出不进行计算。
+
+{{知识点21}}
+Less的calc()函数中不执行数学运算以兼容CSS，但会解析变量和嵌套函数中的数学表达式。例如 calc(50% + (@var - 20px)) 中会计算变量部分但保留calc()整体结构。
+
+{{知识点22}}
+Less转义（Escaping）允许使用任意字符串作为属性或变量值。使用~"anything"或~'anything'包裹的内容原样输出。Less 3.5+后许多场景无需引号转义，例如 @min768: (min-width: 768px); 可直接使用。
+
+{{知识点23}}
+Less提供丰富的内置函数，包括颜色函数、字符串函数、数学函数和列表函数。颜色函数如 lighten()、darken()、saturate()、spin() 等可直接操作颜色值；percentage() 将数字转为百分比。
+
+{{知识点24}}
+Less的命名空间（Namespace）用于组织和分组mixin。使用#bundle() { .button { } } 定义后，通过 #bundle > .button(); 或 #bundle.button(); 调用特定mixin，实现封装和组织。
+
+{{知识点25}}
+Less的@import支持导入其他Less文件或CSS文件。根据文件扩展名自动判断：.css文件作为CSS处理保持原样，其他或无扩展名文件自动追加.less并作为Less导入。@import语句在Less中可放在任意位置。
+
+{{知识点26}}
+Less提供逻辑函数 if() 和 boolean()（v3.0.0+）。if(condition, value1, value2) 根据条件返回两个值之一；boolean() 将条件表达式存储为布尔值供后续使用。
+
+{{知识点27}}
+Less提供字符串函数：escape() 进行URL编码，e() 去除引号输出原始字符串，%() 格式化字符串（类似sprintf），replace() 使用正则替换字符串内容。
+
+{{知识点28}}
+Less提供列表函数：length() 返回列表元素个数，extract() 获取指定位置的元素，range() 生成数值范围列表（v3.9.0+），each() 遍历列表并对每个元素执行规则（v3.7.0+）。
+
+{{知识点29}}
+Less的each()函数可遍历列表并绑定@value、@key和@index变量。例如 each(@selectors, { .sel-@{value} { a: b; } }) 会对列表中每个值生成对应的选择器规则。
+
+{{知识点30}}
+Less支持mixin中的"rest参数"（Variadic Arguments），使用...语法收集不定数量参数。例如 .mixin(...) { } 可接收任意数量参数，@arguments 包含所有传入值。
+
+{{知识点31}}
+Less支持合并（Merge）属性，使用+或+_标记将多个mixin中的同名属性值合并为逗号或空格分隔的列表。例如多个mixin都设置 transform 时可合并为一个值。
+
+{{知识点32}}
+Less支持递归mixin，通过mixin守卫实现循环。经典用法是生成网格系统：使用递归调用自身并递减计数器，直到满足终止条件，从而自动生成一系列CSS规则。
+
+{{知识点33}}
+Less支持@plugin指令加载自定义JavaScript插件，在编译时执行JavaScript代码扩展Less功能。可以定义自定义函数、访问Less的树结构和API。
+
+{{知识点34}}
+Less支持样式表作用域变量。变量的作用域遵循块级作用域规则，内部定义的变量仅在内部和子作用域中可见。使用 !important 后缀可以提升mixin中所有属性的优先级。
+
+{{知识点35}}
+Less与Sass的主要区别：Less使用@声明变量，Sass使用$；Less变量采用惰性求值，Sass采用立即求值；Less基于JavaScript（Node.js），Sass基于Ruby/Dart；Less语法更接近原生CSS，学习曲线更平缓。
+
+{{知识点36}}
+Less可通过npm安装：npm install -g less，使用lessc命令编译：lessc styles.less styles.css。也可在浏览器端引入less.js脚本实现客户端编译（仅建议开发环境使用）。
+
+{{知识点37}}
+Less支持source map生成，使用--source-map选项编译时可输出.map文件，方便在浏览器开发工具中直接调试原始Less源码而非编译后的CSS。
+
+{{知识点38}}
+Less的math选项控制数学运算行为。默认"parens-division"模式仅在括号内执行除法；"always"模式始终执行数学运算（不推荐）；"parens"模式在括号内执行所有运算。
+
+{{知识点39}}
+Less支持JavaScript表达式求值，使用反引号`包裹JavaScript代码。例如 @var: `window.innerWidth + 'px'`; 可在Less中访问浏览器或Node.js环境的值。
+
+{{知识点40}}
+Less的@import支持多个关键词选项：(reference) 仅引用不输出、(inline) 不编译直接内联、(less) 强制作为Less处理、(css) 强制作为CSS处理、(once) 仅导入一次（默认）、(multiple) 允许多次导入、(optional) 文件不存在时不报错。

@@ -1,0 +1,79 @@
+# 2025前端前端CSS Content Visibility
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{content-visibility 是什么：content-visibility 是一个CSS属性，用于控制元素的内容是否应在初始加载时被渲染。它允许浏览器推迟渲染不在视口中的元素内容，直到用户滚动到该元素附近，从而显著提升页面加载性能。属于 CSS Containment Module Level 2 规范。}}
+
+{{知识点2}}{{语法格式：content-visibility 接受三个关键字值：visible（默认值，正常渲染）、hidden（跳过内容渲染，类似 display:none 但保留渲染状态缓存）、auto（浏览器自动判断是否跳过不可见内容的渲染）。还支持 inherit、initial、revert、revert-layer、unset 等全局值。}}
+
+{{知识点3}}{{content-visibility: visible：默认值，元素的内容按照正常方式布局和渲染，没有任何效果。相当于不使用该属性。}}
+
+{{知识点4}}{{content-visibility: hidden：元素跳过其内容的渲染，类似于对内容应用 display: none。但关键区别在于：hidden 会缓存元素的渲染状态，当移除该规则时，浏览器无需从头重新渲染元素，恢复速度更快。}}
+
+{{知识点5}}{{content-visibility: auto：最常用的值。元素启用布局包含（layout containment）、样式包含（style containment）和绘制包含（paint containment）。如果元素对用户"不相关"（即不在视口中），则跳过其内容渲染。与 hidden 不同，auto 模式下被跳过的内容仍然对用户代理功能（如页面内搜索、Tab 导航等）可用，且可聚焦和可选择。}}
+
+{{知识点6}}{{性能优化原理：content-visibility 的核心性能收益来自"跳过渲染"。浏览器在页面加载时不需要计算、布局和绘制不可见元素的内容，减少了初始渲染时间。测试显示，对于长页面，使用 content-visibility: auto 可以将渲染时间减少 50% 以上。}}
+
+{{知识点7}}{{与 display: none 的区别：display: none 完全移除元素的渲染和布局空间，恢复时需要重新计算。content-visibility: hidden 则保留渲染状态缓存，恢复时更快。display: none 下元素不在文档流中；content-visibility: hidden 下元素仍占据布局空间（取决于其他样式）。}}
+
+{{知识点8}}{{与 visibility: hidden 的区别：visibility: hidden 使元素不可见但仍占据布局空间，浏览器仍会进行布局和样式计算。content-visibility: hidden 则跳过整个渲染流水线（布局、绘制等），性能更优。}}
+
+{{知识点9}}{{CSS Containment 包含机制：content-visibility 的 auto 值自动启用了三种 CSS 包含——layout containment（布局包含）、style containment（样式包含）和 paint containment（绘制包含）。这意味着浏览器可以独立优化该子树的渲染，不受外部影响。}}
+
+{{知识点10}}{{contain-intrinsic-size 配合使用：当 content-visibility: auto 跳过内容渲染时，元素被视为高度为 0（如果未设置 height），会导致布局偏移（CLS）。配合 contain-intrinsic-size 属性可为未渲染内容提供占位尺寸，减少布局偏移。例如：contain-intrinsic-size: auto 500px。}}
+
+{{知识点11}}{{contain-intrinsic-size 的 auto 关键字：contain-intrinsic-size: auto <length> 中的 auto 关键字让浏览器记住元素"正常渲染"时的尺寸。当元素再次跳过内容渲染时，使用记住的尺寸而非指定的占位值，从而更精确地避免布局偏移。}}
+
+{{知识点12}}{{contain-intrinsic-size: auto none：在 Grid 或多列布局中，0px 固定长度与 none 行为不同。auto none 值允许元素在没有记住的尺寸时回退到 none（即认为没有内容），这在网格布局中几乎总是比设置 0px 更可取。}}
+
+{{知识点13}}{{contain-intrinsic-size 简写属性：是 contain-intrinsic-width 和 contain-intrinsic-height 的简写。可以接受一个值（同时设置宽高）或两个值（分别设置宽度和高度）。初始值为 none。}}
+
+{{知识点14}}{{滚动条抖动问题：使用 content-visibility: auto 时，如果大量内容被跳过渲染，滚动条长度可能不准确，导致滚动体验不流畅（scrollbar jitter）。解决方案是准确设置 contain-intrinsic-size 值。Alex Russell 提出了专门的修复方案。}}
+
+{{知识点15}}{{可访问性（Accessibility）：content-visibility: auto 跳过的内容仍保留在 DOM 和无障碍树（accessibility tree）中，对屏幕阅读器等辅助技术可见。这确保了性能优化不会损害可访问性。但 content-visibility: hidden 的内容则不可被辅助技术访问。}}
+
+{{知识点16}}{{页面内搜索兼容性：content-visibility: auto 跳过的内容仍然支持浏览器的"在页面中查找"功能（Ctrl+F / Cmd+F），也支持 Tab 键导航。而 content-visibility: hidden 的内容则不支持这些功能。}}
+
+{{知识点17}}{{contentvisibilityautostatechange 事件：当设置 content-visibility: auto 的元素开始或停止跳过内容渲染时，浏览器会触发 contentvisibilityautostatechange 事件。该事件的 skipped 属性指示元素当前是否正在跳过渲染，可用于暂停/恢复 Canvas 绘制等开销较大的操作。}}
+
+{{知识点18}}{{ContentVisibilityAutoStateChangeEvent 接口：contentvisibilityautostatechange 事件的事件对象，包含 skipped 布尔属性。当 skipped 为 true 时，元素正在跳过渲染；为 false 时，元素恢复渲染。Baseline 2024 新增可用。}}
+
+{{知识点19}}{{动画与过渡支持：content-visibility 支持 CSS 动画和过渡，使用"离散动画"类型的变体。从 hidden 到 visible 的动画在 0% 时就切换为 visible（整个动画期间可见）；从 visible 到 hidden 的动画在 100% 时才切换为 hidden（整个动画期间可见）。}}
+
+{{知识点20}}{{CSS 过渡需要 transition-behavior: allow-discrete：要使用 CSS transition 过渡 content-visibility，需要设置 transition-behavior: allow-discrete。不需要像 display 过渡那样使用 @starting-style 块，因为 content-visibility 不会从 DOM 中移除元素。}}
+
+{{知识点21}}{{动画示例——淡入淡出：可以结合 content-visibility 和 color 属性创建平滑的显示/隐藏动画。使用 @keyframes 同时动画 content-visibility 和 color（如从 transparent 到 black），实现带颜色渐变的内容显示效果。}}
+
+{{知识点22}}{{性能提升的量化指标：web.dev 的性能测试显示，在一个包含大量内容的典型网页上，使用 content-visibility: auto 可将渲染性能提升约 50%。具体收益取决于页面内容量和不可见内容占比。}}
+
+{{知识点23}}{{最佳实践——长页面优化：对于包含大量独立 section 的长页面，为每个 section 设置 content-visibility: auto 和 contain-intrinsic-size，可以显著减少首屏加载时间。示例：section { content-visibility: auto; contain-intrinsic-size: auto 500px; }。}}
+
+{{知识点24}}{{最佳实践——模态框/弹窗：对于默认隐藏但可能频繁显示的模态框，使用 content-visibility: hidden 优于 display: none，因为隐藏状态的渲染被缓存，再次显示时加载更快。}}
+
+{{知识点25}}{{最佳实践——列表渲染：对于大型列表（如无限滚动列表），可以为列表项容器设置 content-visibility: auto，让浏览器自动跳过视口外的列表项渲染，实现类似虚拟滚动的效果但无需 JavaScript。}}
+
+{{知识点26}}{{与 contain 属性的关系：content-visibility 的 auto 值隐式启用了 contain: layout style paint。也可以单独使用 contain 属性来启用特定类型的包含，但 content-visibility 提供了更高级的自动跳过渲染能力。}}
+
+{{知识点27}}{{浏览器兼容性：content-visibility 在 Chromium 85+（Chrome、Edge）、Firefox 125+、Safari 18+ 中支持。auto 值兼容性较好；hidden 值在 Safari 18+ 中才支持。截至 2025 年，主流浏览器均已支持。}}
+
+{{知识点28}}{{规范状态：content-visibility 定义在 CSS Containment Module Level 2 规范中（CSS Containment Module Level 2）。该规范还定义了 contain 属性和容器查询相关内容。Level 3 规范正在开发中。}}
+
+{{知识点29}}{{应用范围（Applies to）：content-visibility 应用于"可以应用尺寸包含的元素"（elements for which size containment can apply）。不可继承，初始值为 visible，计算值为指定值。}}
+
+{{知识点30}}{{实际应用场景——SPA 路由切换：在单页应用中，使用 content-visibility: hidden 隐藏非活跃路由组件，而非销毁 DOM。用户切回时渲染更快，适合频繁在固定几个页面间切换的场景。}}
+
+{{知识点31}}{{实际应用场景——手风琴/折叠面板：为折叠的内容面板使用 content-visibility: hidden，展开时切换为 visible。由于渲染状态被缓存，展开动画更流畅，且避免了频繁创建/销毁 DOM 节点。}}
+
+{{知识点32}}{{与懒加载（Lazy Loading）的区别：图片懒加载（loading="lazy"）是推迟资源的网络请求；content-visibility 是推迟元素的渲染流水线（布局+绘制）。两者可同时使用：lazy loading 减少网络开销，content-visibility 减少渲染开销。}}
+
+{{知识点33}}{{与虚拟滚动的对比：虚拟滚动（Virtual Scrolling）通过 JavaScript 动态创建/销毁 DOM 节点来优化长列表；content-visibility: auto 则保留所有 DOM 节点但跳过渲染。content-visibility 实现更简单、无 JS 依赖，但虚拟滚动在超大列表（数万项）中内存效率更高。}}
+
+{{知识点34}}{{@supports 特性查询：可以使用 @supports (content-visibility: auto) 来检测浏览器支持情况，为不支持的浏览器提供回退方案。}}
+
+{{知识点35}}{{调试技巧：在 Chrome DevTools 中，当元素因 content-visibility: auto 而跳过渲染时，可以在 Elements 面板中看到相关提示。Performance 面板可以直观看到渲染时间的减少。Layout Shift 区域可以帮助定位因缺少 contain-intrinsic-size 导致的布局偏移。}}
+
+{{知识点36}}{{注意事项——滚动锚定：使用 content-visibility: auto 时，浏览器需要处理滚动锚定（scroll anchoring）以确保滚动位置不因内容突然出现/消失而跳动。这依赖于 contain-intrinsic-size 的准确设置。}}
+
+{{知识点37}}{{注意事项——固定定位元素：对固定定位（position: fixed）的元素使用 content-visibility: auto 可能不会产生预期效果，因为固定定位元素始终"在视口中"，浏览器不会跳过其渲染。}}
+
+{{知识点38}}{{CSS Containment Module Level 2 中的相关 API：该规范定义了 content-visibility 属性、contain 属性、contentvisibilityautostatechange 事件、ContentVisibilityAutoStateChangeEvent 接口，以及 contain-intrinsic-size 系列属性，形成完整的渲染优化工具链。}}

@@ -1,0 +1,77 @@
+# 2025前端Screen Wake Lock API
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{Screen Wake Lock API 概述：Screen Wake Lock API 是一个 Web API，允许 Web 应用请求屏幕唤醒锁，防止设备屏幕在应用需要持续运行时变暗、关闭或进入屏保。该 API 通过简单的平台级解决方案，让可见（活跃）文档能够获取平台屏幕唤醒锁。规范由 W3C 维护，地址为 https://w3c.github.io/screen-wake-lock/。}}
+
+{{知识点2}}{{Baseline 2025 支持状态：Screen Wake Lock API 于 2025 年 3 月达到 Baseline 状态（Newly available），意味着该功能在最新设备和浏览器版本上均可使用，但在较旧的设备或浏览器中可能不可用。}}
+
+{{知识点3}}{{安全上下文要求：Screen Wake Lock API 仅在安全上下文（HTTPS）中可用。这意味着该 API 只能在通过 HTTPS 提供服务的页面中使用，HTTP 页面无法访问。}}
+
+{{知识点4}}{{WakeLock 接口：WakeLock 是 Screen Wake Lock API 的核心接口，用于防止设备屏幕在应用需要运行时变暗或锁定。该接口通过 navigator.wakeLock 属性暴露给开发者。WakeLock 接口只有一个实例方法 request()。}}
+
+{{知识点5}}{{WakeLockSentinel 接口：WakeLockSentinel 是屏幕唤醒锁的句柄对象，提供了对底层平台唤醒锁的访问。可以通过它手动释放锁、检查锁状态、监听释放事件。一个已释放的 WakeLockSentinel 不能被重用，需要重新请求新的。}}
+
+{{知识点6}}{{Navigator.wakeLock 属性：Navigator 接口的 wakeLock 只读属性返回一个 WakeLock 实例对象，是访问 Screen Wake Lock API 的入口点。该属性的存在也可用于特性检测。当屏幕唤醒锁激活时，用户代理会尝试阻止设备变暗、关闭屏幕或显示屏保。}}
+
+{{知识点7}}{{WakeLock.request() 方法语法：request(type) 方法返回一个 Promise，如果系统屏幕唤醒锁被授予，则该 Promise 会兑现一个 WakeLockSentinel 对象。type 参数是可选的字符串，目前只支持 "screen" 类型。如果不指定 type 参数，默认使用 "screen"。}}
+
+{{知识点8}}{{request() 方法的 "screen" 类型：当 type 为 "screen" 时，request() 方法会阻止屏幕关闭。只有可见的文档才能获取屏幕唤醒锁。这是目前唯一支持的唤醒锁类型，未来规范可能添加更多类型（如 "system" 阻止 CPU 挂起）。}}
+
+{{知识点9}}{{request() 方法的返回值：request() 方法返回一个 Promise，该 Promise 在成功获取唤醒锁时兑现为一个 WakeLockSentinel 对象。开发者应将返回的 sentinel 对象保存为引用，以便后续手动控制释放。}}
+
+{{知识点10}}{{request() 方法的异常处理：request() 方法可能抛出 NotAllowedError DOMException，原因包括：Permissions Policy 阻止了该功能的使用；文档不完全活跃；文档的可见性状态为 hidden；用户代理无法获取平台唤醒锁（如设备电量低）。开发者应始终使用 try...catch 包裹请求。}}
+
+{{知识点11}}{{WakeLockSentinel.release() 方法：release() 方法用于手动释放 WakeLockSentinel，返回一个 Promise，在 sentinel 成功释放后兑现为 undefined。该方法不会抛出异常，开发者应通过监听 release 事件来确认锁是否已释放。}}
+
+{{知识点12}}{{WakeLockSentinel.released 属性：released 是一个只读布尔属性，指示 WakeLockSentinel 是否已被释放。初始值为 false，当 sentinel 被释放（无论是手动调用 release() 还是系统自动释放）且 release 事件触发后，该值变为 true 且不再改变。}}
+
+{{知识点13}}{{WakeLockSentinel.type 属性：type 是一个只读属性，返回当前获取的 WakeLockSentinel 类型的字符串表示。目前唯一的返回值是 "screen"，表示屏幕唤醒锁。}}
+
+{{知识点14}}{{release 事件：当 WakeLockSentinel 的句柄被释放时会触发 release 事件。无论是通过手动调用 release() 方法还是通过平台唤醒锁自动释放，都会触发此事件。可以使用 addEventListener("release", callback) 或 onrelease 属性来监听。事件类型为通用的 Event。}}
+
+{{知识点15}}{{系统自动释放条件：屏幕唤醒锁可能在以下情况被系统自动释放：文档变为非活跃状态或失去可见性；设备电量过低；用户开启了省电模式。已获取的锁会在文档变为非活跃时自动释放，无需开发者手动处理。}}
+
+{{知识点16}}{{不可复用的 Sentinel：一个已释放的 WakeLockSentinel 不能被重用。如果应用需要再次获取屏幕唤醒锁，必须通过 navigator.wakeLock.request() 重新请求一个新的 WakeLockSentinel 对象。释放所有给定类型的 WakeLockSentinel 实例会导致底层平台唤醒锁被释放。}}
+
+{{知识点17}}{{特性检测方法：可以通过检查 "wakeLock" in navigator 来判断浏览器是否支持 Screen Wake Lock API。这是推荐的特性检测方式，在尝试请求唤醒锁之前应先进行检测，以提供适当的降级方案或禁用相关 UI。}}
+
+{{知识点18}}{{基本使用流程：1) 通过 navigator.wakeLock.request("screen") 请求锁；2) 保存返回的 sentinel 引用；3) 监听 release 事件处理 UI 更新；4) 在不需要时手动调用 release() 释放锁；5) 监听 visibilitychange 事件在文档重新可见时重新获取锁。}}
+
+{{知识点19}}{{可见性变化重新获取锁：由于屏幕唤醒锁在文档失去可见性时会被自动释放，开发者需要监听 document 的 visibilitychange 事件。当 document.visibilityState 变为 "visible" 且之前的锁已释放时，应重新调用 navigator.wakeLock.request("screen") 来获取新的锁。}}
+
+{{知识点20}}{{Permissions Policy 控制：Screen Wake Lock API 的访问受 Permissions-Policy HTTP 头的 screen-wake-lock 指令控制。默认允许列表为 self，允许同源嵌套框架使用，但阻止第三方内容使用。当策略阻止时，request() 会返回被 NotAllowedError 拒绝的 Promise。}}
+
+{{知识点21}}{{第三方使用配置：要在第三方 iframe 中启用 Screen Wake Lock API，需要两步：1) 服务器设置 Permissions-Policy 响应头，如 Permissions-Policy: screen-wake-lock=(self b.example.com)；2) 在 iframe 元素上添加 allow="screen-wake-lock" 属性。}}
+
+{{知识点22}}{{典型使用场景：Screen Wake Lock API 适用于多种需要屏幕持续亮起的场景，包括：阅读电子书、地图导航、跟随烹饪食谱、向观众演示文稿、扫描二维码/条形码、使用语音或手势控制的应用，以及其他需要屏幕常亮以保证用户体验的场景。}}
+
+{{知识点23}}{{与 setInterval 模拟方案的对比：在 Screen Wake Lock API 出现之前，开发者常用 setInterval 循环播放空视频等方式来阻止屏幕锁定。这些方案不够优雅且可能消耗不必要的资源。Screen Wake Lock API 提供了原生、标准化的解决方案，更高效且更可靠。}}
+
+{{知识点24}}{{性能最佳实践 - 及时释放锁：仅在用户进行需要屏幕常亮的活动时持有锁，活动结束后应立即释放。例如，票务应用在显示二维码时获取锁，扫描完成后释放；演示应用在演示进行时持有锁，编辑时释放。避免不必要的长时间持有锁。}}
+
+{{知识点25}}{{性能最佳实践 - 替代方案：对于长时间运行的下载，应考虑使用 Background Fetch API；对于从远程服务器同步数据，应考虑使用 Background Sync API。Screen Wake Lock API 不适合用于这些后台任务场景。}}
+
+{{知识点26}}{{WakeLock 接口继承关系：WakeLock 接口不继承自任何其他接口，是一个独立的顶层接口。而 WakeLockSentinel 接口继承自 EventTarget 接口，因此拥有 addEventListener()、removeEventListener()、dispatchEvent() 等事件处理方法。}}
+
+{{知识点27}}{{UI 反馈最佳实践：使用 Screen Wake Lock API 时，应在界面上显示唤醒锁状态的反馈，并提供用户手动禁用锁的方式。浏览器可能会提供不显眼的机制告知用户唤醒锁处于活跃状态，并允许用户移除应用的屏幕锁。}}
+
+{{知识点28}}{{用户代理实现差异：浏览器可能因特定的实现原因在某个文档中阻止屏幕锁，例如用户设置或平台设置。开发者不应假设锁请求一定会成功，必须处理 Promise 被拒绝的情况并提供适当的降级方案。}}
+
+{{知识点29}}{{与其他 Web API 的协作：Screen Wake Lock API 可以与其他 API 配合使用，例如与 Page Visibility API 配合处理可见性变化重新获取锁；与 Permissions API 配合测试屏幕锁权限状态（granted、denied 或 prompt）。}}
+
+{{知识点30}}{{W3C 规范状态：Screen Wake Lock API 由 W3C 的 Web 平台工作组（Web Platform Working Group）维护，规范地址为 https://w3c.github.io/screen-wake-lock/。2025 年 3 月达到 Baseline Newly available 状态，标志着跨浏览器兼容性的达成。}}
+
+{{知识点31}}{{WakeLock 接口只有一个方法：WakeLock 接口的设计非常精简，只定义了一个实例方法 request()。这种简洁的设计使得 API 易于学习和使用，开发者只需掌握一个入口方法即可使用整个功能。}}
+
+{{知识点32}}{{并发请求行为：当对同一类型的唤醒锁进行多次 request() 调用时，每次调用都会返回一个新的 WakeLockSentinel 对象。所有相同类型的 sentinel 共享底层平台唤醒锁，只有当所有 sentinel 都被释放后，平台唤醒锁才会真正释放。}}
+
+{{知识点33}}{{Promise 拒绝的常见原因：request() 返回的 Promise 被拒绝的最常见原因是设备电量过低。此外，文档不可见、用户代理策略限制、Permissions Policy 阻止等也会导致拒绝。开发者应根据错误类型提供相应的用户提示。}}
+
+{{知识点34}}{{事件处理方式：WakeLockSentinel 的 release 事件支持两种监听方式：使用 addEventListener("release", handler) 方法，或直接赋值 onrelease 属性。推荐使用 addEventListener 方式以支持多个监听器。}}
+
+{{知识点35}}{{完整代码示例结构：一个完整的 Screen Wake Lock API 使用示例应包含：特性检测、请求锁（try...catch）、保存 sentinel 引用、监听 release 事件、释放锁逻辑、visibilitychange 事件监听重新获取锁、UI 状态更新。MDN 提供了完整的 demo 代码仓库：https://github.com/mdn/dom-examples/tree/main/screen-wake-lock-api。}}
+
+{{知识点36}}{{浏览器兼容性详情：Screen Wake Lock API 在 Chrome 84+、Edge 84+、Opera 70+、Samsung Internet 14.0+ 中得到支持。Firefox 从 128 版本开始支持，Safari 从 16.4 版本开始支持。Android WebView 从 84 版本开始支持。2025 年 3 月达到全面跨浏览器支持。}}
+
+{{知识点37}}{{与旧版 API 的区别：早期的实现使用 navigator.wakeLock.request() 的返回值直接作为事件目标，现在规范明确使用 WakeLockSentinel 作为独立接口。WakeLock 和 WakeLockSentinel 的分离设计更清晰，WakeLock 是获取锁的工厂，Sentinel 是锁的实例句柄。}}

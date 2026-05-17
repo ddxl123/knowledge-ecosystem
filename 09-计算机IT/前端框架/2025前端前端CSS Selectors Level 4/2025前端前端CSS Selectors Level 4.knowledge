@@ -1,0 +1,93 @@
+# 2025前端前端CSS Selectors Level 4
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{CSS Selectors Level 4 概述：CSS Selectors Level 4 是 W3C 规范（https://drafts.csswg.org/selectors/），在 Level 3 基础上新增了大量选择器能力。核心新特性包括：关系伪类 :has()、匹配伪类 :is() 和 :where()、增强的 :not() 支持选择器列表、:nth-child(of S) 语法、属性选择器大小写修饰符 i/s、:dir() 方向伪类、:lang() 增强、列组合器 || 等。提供超过 60 种选择器和 5 种组合器。}}
+
+{{知识点2}}{{:is() 伪类 — 语法与功能：:is(<forgiving-selector-list>) 接受一个"容错选择器列表"作为参数，匹配列表中任一选择器的元素。核心价值是简化复杂选择器，将指数级膨胀的选择器列表压缩为一行。例如 :is(section, article, aside, nav) h1 可替代 4 条单独规则。}}
+
+{{知识点3}}{{:is() 伪类 — 特异性（Specificity）：:is() 的特异性取其参数中最高特异性的选择器。例如 #foo:is(.bar) 的特异性为 (1,1,0)（1个ID + 1个类）。这与直接写 #foo.bar 相同，但需要注意参数中高特异性选择器会提升整体特异性。}}
+
+{{知识点4}}{{:is() 伪类 — 容错选择器解析：:is() 和 :where() 接受"容错选择器列表"（forgiving selector list）。如果列表中某个选择器无效或浏览器不支持，仅忽略该选择器，其余仍然有效。而普通选择器列表中任何一个无效就会导致整条规则失效。}}
+
+{{知识点5}}{{:where() 伪类 — 语法与功能：:where(<complex-selector-list>) 与 :is() 语法完全相同，功能也一样接受选择器列表来匹配元素。唯一区别是 :where() 的特异性始终为 0，不影响整体选择器的特异性计算。}}
+
+{{知识点6}}{{:where() 伪类 — 特异性为零的应用场景：:where() 特异性为 0 的特性使其非常适合编写可被轻松覆盖的默认样式。常见用例：CSS Reset 样式库、组件库的基础样式、用户自定义主题覆盖。例如 :where(section, article) a { color: blue } 可被简单的 footer a { color: red } 覆盖。}}
+
+{{知识点7}}{{:is() 与 :where() 的核心区别：两者功能相同，唯一区别在于特异性。:is() 取参数中最高特异性，:where() 特异性始终为 0。选择依据：需要保留特异性时用 :is()，需要可覆盖的低优先级默认样式时用 :where()。}}
+
+{{知识点8}}{{:not() 伪类 — Level 4 增强：Level 4 中 :not() 从只接受单个简单选择器扩展为接受选择器列表 :not(<complex-selector-list>)。支持 :not(.foo, .bar) 等价于 :not(.foo):not(.bar)。特异性取参数中最高特异性的选择器。}}
+
+{{知识点9}}{{:not() 伪类 — 注意事项：:not(.foo) 会匹配 html 和 body 等所有非 .foo 元素。body :not(table) a 仍会匹配 table 内的链接（因为 tr、td 等不是 table）。应使用 body a:not(table a) 来正确排除。:not() 不支持伪元素作为参数。}}
+
+{{知识点10}}{{:not() 与 :is() 组合使用：:not() 不使用容错选择器列表，无效参数会导致整条规则失效。可通过嵌套 :is() 实现容错：:not(:is(.foo, :invalid-pseudo-class)) 即使参数中有无效选择器也不会使规则失效。}}
+
+{{知识点11}}{{:has() 伪类 — 概述：:has(<relative-selector-list>) 是 CSS Selectors Level 4 最重要的新增功能，被称为"父选择器"。它允许根据元素的后代、兄弟等关系来选择元素，打破了 CSS 只能向下选择的限制。所有主流浏览器从 2023 年底起支持。}}
+
+{{知识点12}}{{:has() 伪类 — 选择父元素：section:has(.featured) 选择包含 .featured 子元素的 section。section:has(> .featured) 仅选择直接子元素含 .featured 的 section。这是 CSS 历史上首次能"向上"选择元素，无需 JavaScript。}}
+
+{{知识点13}}{{:has() 伪类 — 兄弟组合器配合：h1:has(+ h2) 选择后面紧跟 h2 的 h1 元素。配合 ~ 后续兄弟组合器：h1:has(~ h2) 选择后面有 h2 兄弟的 h1。可与 :is() 组合：:is(h1,h2,h3):has(+ :is(h2,h3,h4)) 处理多级标题间距。}}
+
+{{知识点14}}{{:has() 伪类 — 逻辑运算：:has() 可实现 AND 和 OR 逻辑。OR 逻辑：body:has(video, audio) 匹配含 video 或 audio 的 body。AND 逻辑：body:has(video):has(audio) 匹配同时含 video 和 audio 的 body。通过链式调用实现 AND，逗号分隔实现 OR。}}
+
+{{知识点15}}{{:has() 伪类 — 限制条件：:has() 内不能嵌套另一个 :has()。伪元素不能作为 :has() 的参数，伪元素也不能作为 :has() 的锚点（因为伪元素的存在可能依赖祖先样式，会导致循环查询）。}}
+
+{{知识点16}}{{:has() 伪类 — 性能考量：:has() 可能影响页面性能，尤其在 DOM 动态更新时。避免将 :has() 锚定到过于宽泛的选择器（如 body:has(.sidebar)、:root:has(.content)、*:has(.item)），因为任何 DOM 变更都会触发整个子树的重新检查。应尽量缩小锚定元素范围。}}
+
+{{知识点17}}{{相对选择器（Relative Selector）：相对选择器是 Selectors Level 4 引入的新概念，表示相对于一个或多个锚定元素的选择器。以组合器开头（如 +、>、~），若无显式组合器则隐含后代组合器。只能在 :has() 等特定上下文中使用，不能用于普通选择器列表。}}
+
+{{知识点18}}{{选择器结构 — 简单选择器（Simple Selector）：单个组件的选择器，如类型选择器 div、类选择器 .foo、ID 选择器 #bar、属性选择器 [type="text"]、伪类 :hover。匹配条件是该选择器准确描述了元素的某一方面。}}
+
+{{知识点19}}{{选择器结构 — 复合选择器（Compound Selector）：由多个简单选择器组成的序列，无组合器分隔。如 a#selected[type="text"]:hover 表示同时满足所有条件的单个元素。类型选择器或通配选择器必须放在最前面，且只能有一个。各简单选择器之间不能有空格。}}
+
+{{知识点20}}{{选择器结构 — 复杂选择器（Complex Selector）：由一个或多个简单/复合选择器通过组合器连接而成。如 .box h2 + p 选择 .box 后代中紧跟 h2 之后的 p。选择器从右向左匹配：最右边的是目标元素，左边的是上下文约束。}}
+
+{{知识点21}}{{选择器列表（Selector List）：以逗号分隔的简单、复合和/或复杂选择器的列表。元素匹配列表中任一选择器即为匹配。普通选择器列表中任何一个无效选择器会导致整条规则失效。:is() 和 :where() 提供容错选择器列表来解决这个问题。}}
+
+{{知识点22}}{{:nth-child() 的 of S 语法（Level 4 新增）：:nth-child(An+B of <selector>) 先筛选匹配选择器的子元素，再从中取第 An+B 个。例如 li:nth-child(-n+3 of .noted) 选择 .noted 类中前 3 个 li。这与 li.noted:nth-child(-n+3) 不同——后者是选择前 3 个子元素中恰好是 .noted 的 li。}}
+
+{{知识点23}}{{:nth-child() An+B 记法详解：An+B 表示一个算术序列。A 是步长，B 是偏移，n 从 0 开始递增。:nth-child(2n+1) 匹配第 1,3,5,7... 个（奇数）。:nth-child(-n+3) 匹配前 3 个（3,2,1）。:nth-child(3n) 匹配第 3,6,9... 个。even 等价于 2n，odd 等价于 2n+1。}}
+
+{{知识点24}}{{属性选择器 — 大小写修饰符 i 和 s（Level 4 新增）：在属性选择器的右方括号前添加 i（case-insensitive）或 s（case-sensitive）。如 a[href$=".org" i] 不区分大小写匹配 .org 结尾的链接。s 修饰符强制区分大小写。默认行为取决于文档语言和属性类型。}}
+
+{{知识点25}}{{属性选择器完整语法：[attr] 存在性匹配、[attr=value] 精确匹配、[attr~=value] 空格分隔词匹配、[attr|=value] 语言前缀匹配（如 zh 匹配 zh-Hans）、[attr^=value] 前缀匹配、[attr$=value] 后缀匹配、[attr*=value] 子串匹配。}}
+
+{{知识点26}}{{:dir() 伪类 — 文本方向选择：:dir(ltr) 和 :dir(rtl) 根据元素内文本的方向性进行匹配。与 [dir] 属性选择器不同：:dir() 匹配用户代理计算的方向性（包括继承值），而 [dir=rtl] 仅匹配显式设置的 HTML dir 属性。2023 年底起所有主流浏览器支持。}}
+
+{{知识点27}}{{:lang() 伪类 — Level 4 增强：Level 4 中 :lang() 支持通配符语言匹配。如 :lang(en) 匹配 en、en-US、en-GB 等所有英语变体。:lang(*-Hant) 匹配所有繁体中文变体（zh-Hant-TW 等）。比属性选择器 [lang|="en"] 更智能，能匹配继承的语言设置。}}
+
+{{知识点28}}{{组合器概览：CSS Selectors Level 4 定义了 6 种组合器/分隔符：后代组合器（空格）、子组合器 >、相邻兄弟 +、后续兄弟 ~、命名空间分隔符 |、选择器列表逗号 ,。另外定义了列组合器 ||（用于表格列选择），但目前无浏览器支持。}}
+
+{{知识点29}}{{列组合器 ||（Column Combinator）：Level 4 引入 col || td 语法，用于选择属于特定表格列的单元格元素。例如 col.selected || td 选择 selected 列中的所有 td。这是专门为表格场景设计的组合器，截至 2025 年仍无浏览器实现。}}
+
+{{知识点30}}{{结构化伪类汇总：:first-child、:last-child、:only-child、:first-of-type、:last-of-type、:only-of-type、:nth-child()、:nth-last-child()、:nth-of-type()、:nth-last-of-type()。Level 4 主要增强了 :nth-child(of S) 的筛选能力。}}
+
+{{知识点31}}{{用户交互伪类：:hover（悬停）、:active（激活）、:focus（焦点）、:focus-visible（键盘焦点时可见）、:focus-within（自身或后代获焦）。:focus-visible 是 Level 4 新增，仅在键盘导航等需要视觉焦点指示时显示焦点环，鼠标点击时不显示。}}
+
+{{知识点32}}{{表单相关伪类（Level 4 增强）：:enabled、:disabled、:checked、:indeterminate、:default、:valid、:invalid、:in-range、:out-of-range、:required、:optional、:read-only、:read-write、:placeholder-shown。Level 4 新增 :user-valid 和 :user-invalid，仅在用户交互后才生效，避免初始状态就显示错误样式。}}
+
+{{知识点33}}{{:defined 伪类：匹配已定义的元素，包括标准 HTML 内置元素和已注册的自定义元素（custom elements）。用于确保自定义元素在升级（upgrade）完成前不显示，实现无 FOUC（Flash of Unstyled Content）的自定义元素加载策略。}}
+
+{{知识点34}}{{:modal 伪类：匹配处于模态状态的元素，如 <dialog> 通过 showModal() 打开时、全屏模式下的元素。用于在元素进入模态状态时应用特殊样式，如背景遮罩、居中布局等。}}
+
+{{知识点35}}{{:open 与 :popover-open 伪类：:open 匹配处于 open 状态的 details、select、dialog 等元素。:popover-open 匹配通过 Popover API 显示的弹出层元素。这些是与 HTML 新特性配套的交互状态选择器。}}
+
+{{知识点36}}{{:autofill 伪类：匹配被浏览器自动填充的 input 元素。浏览器自动填充时会添加此伪类，开发者可用它覆盖浏览器默认的自动填充样式（通常是黄色背景），保持表单视觉一致性。}}
+
+{{知识点37}}{{:playing 和 :paused 伪类：匹配正在播放或暂停的媒体元素（audio、video）。:buffering、:seeking、:stalled 匹配处于缓冲、 seek 中、停滞状态的媒体。:muted 和 :volume-locked 匹配静音和音量锁定状态。用于为媒体播放器提供状态反馈样式。}}
+
+{{知识点38}}{{:picture-in-picture 伪类：匹配当前处于画中画模式的视频元素。配合 documentPictureInPicture API，可为画中画窗口中的视频应用特殊样式。}}
+
+{{知识点39}}{{作用域伪类 :scope：在 CSS 中 :scope 代表上下文根元素。在 style 标签中 :scope 等同于 :root。在 JavaScript 的 querySelector 中，:scope 代表调用该方法的元素。如 element.querySelectorAll(':scope > .child') 仅选择直接子元素。}}
+
+{{知识点40}}{{特异性（Specificity）在 Level 4 中的变化：Level 4 引入了四级特异性 (ID, Class, Type, Universal) 的概念框架。:is() 取参数最高特异性，:where() 特异性为 0，:not() 取参数最高特异性。:has() 的特异性也取参数中最高特异性的选择器。嵌套的 :not(:is(...)) 组合遵循相同规则。}}
+
+{{知识点41}}{{CSS 嵌套与选择器 Level 4 的关系：CSS Nesting 规范（原生嵌套语法）与 Selectors Level 4 密切相关。嵌套选择器中的 & 嵌套选择器（nesting selector）引用父规则，而 Level 4 的 :is()、:where()、:has() 使嵌套写法更加灵活和强大。}}
+
+{{知识点42}}{{JavaScript 中使用 CSS Selectors Level 4：querySelector() 和 querySelectorAll() 支持所有浏览器已实现的 Level 4 选择器。:is() 和 :where() 可在 querySelectorAll 中使用，:has() 也可用于动态 DOM 查询。这使得复杂的元素选择不再需要多步 JavaScript 遍历。}}
+
+{{知识点43}}{{:has() 与正则表达式前瞻断言的类比：:has() 类似正则的前瞻断言 (?=pattern)。.abc:has(+ .xyz) 类似 abc(?=xyz)，只在后面有 .xyz 时匹配 .abc。负向前瞻 (?!pattern) 对应 .abc:has(+ :not(.xyz))。这种类比有助于理解 :has() 的"条件匹配但不选中条件元素"的特性。}}
+
+{{知识点44}}{{选择器性能最佳实践：避免过于宽泛的后代选择器（如 * .foo）；优先使用类选择器而非标签选择器；:has() 避免锚定到 body/:root 等宽泛元素；:where() 用于低优先级默认样式以减少特异性战争；减少选择器嵌套深度，选择器从右向左匹配。}}
+
+{{知识点45}}{{浏览器兼容性与渐进增强策略：截至 2025 年，:is()、:where()、:not() 列表语法、:has()、属性选择器 i/s 修饰符、:dir() 等主流特性已获得所有现代浏览器支持。对于列组合器 || 和 :blank、:current、:local-link 等尚未实现的特性，可使用 @supports 进行特性检测并提供回退方案。}}

@@ -1,0 +1,123 @@
+# 2025前端前端WebCodecs API
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{WebCodecs API 概述}}
+WebCodecs API 是 W3C 标准，提供浏览器原生接口来表示和处理原始视频帧（VideoFrame）、编码视频帧（EncodedVideoChunk）、原始音频数据（AudioData）和编码音频数据（EncodedAudioChunk）。它允许开发者直接访问浏览器底层的编解码器（包括硬件加速的编解码器），实现高性能的音视频编解码操作。该 API 仅处理编解码（压缩/解压缩），不涉及容器格式的封装（muxing）和解封装（demuxing），这些需要第三方库如 Mediabunny 或 web-demuxer 来完成。
+
+{{知识点2}}{{WebCodecs API 核心接口分类}}
+WebCodecs API 包含四类核心接口：编码器（VideoEncoder、AudioEncoder）、解码器（VideoDecoder、AudioDecoder）、原始数据（VideoFrame、AudioData）、编码数据（EncodedVideoChunk、EncodedAudioChunk）。此外还有辅助接口 VideoColorSpace（色彩空间）和 ImageDecoder（图像解码）。所有编码器和解码器都继承自 EventTarget，支持事件监听。
+
+{{知识点3}}{{VideoFrame 详解}}
+VideoFrame 表示一个未编码的视频帧，绑定到设备显存中的像素数据，包含时间戳和时长（微秒）、格式和分辨率等元数据。可以从任何图像源（Canvas、ImageBitmap、HTMLVideoElement、OffscreenCanvas 等）构造，也可以渲染到 Canvas。关键属性包括 format（像素格式）、codedWidth/codedHeight（编码尺寸，含填充）、visibleRect（可见矩形）、displayWidth/displayHeight（显示尺寸，经宽高比调整）、timestamp、duration、colorSpace、flip（水平镜像）、rotation（旋转角度 0/90/180/270）。
+
+{{知识点4}}{{VideoFrame 创建方式}}
+VideoFrame 有三种创建方式：1）从图像源构造（Canvas、ImageBitmap、Video、Image 等），数据从显存复制到显存，效率较高；2）从二进制数据构造（ArrayBuffer/TypedArray/DataView），需要指定 format 和 codedWidth/codedHeight，会触发 CPU 到显存的拷贝，有性能开销；3）通过 MediaStreamTrackProcessor 从媒体轨道分解获得。时间戳单位为微秒（1/1000000 秒）。
+
+{{知识点5}}{{VideoFrame 内存管理}}
+VideoFrame 对象占用大量 GPU 显存，必须显式调用 close() 释放。编码时应在 encode 后立即关闭帧；渲染到 Canvas 后也应立即关闭。在线程间传递 VideoFrame 时应使用 Transferable 对象（postMessage 的第二个参数）。未关闭的 VideoFrame 可能导致应用崩溃，100 个活跃帧就可能耗尽显存。clone() 方法创建引用相同媒体资源的新对象，close() 清除所有状态并释放引用。
+
+{{知识点6}}{{VideoFrame 渲染方式}}
+将 VideoFrame 渲染到 Canvas 有三种方式：1）Canvas2D 的 drawImage()，API 简单但跨浏览器性能不一致；2）BitmapRenderer 的 transferFromImageBitmap()，先创建 ImageBitmap 再传输，性能更一致；3）WebGPU 的 importExternalTexture()，零拷贝操作，性能最优但设置最复杂。WebGPU 方式将 VideoFrame 直接作为外部纹理导入 GPU 管道，是渲染 VideoFrame 最高效的方式。
+
+{{知识点7}}{{EncodedVideoChunk 详解}}
+EncodedVideoChunk 表示编码（压缩）后的视频帧数据块。包含二进制数据和元数据，与 VideoFrame 有 1:1 对应关系。不能直接渲染显示，但可以通过 muxing 库写入视频文件。关键属性：type（"key" 关键帧或 "delta" 帧间预测帧）、timestamp（微秒）、duration（微秒）、byteLength（字节长度）。方法 copyTo() 用于复制编码数据。通常比对应的原始 VideoFrame 小 10 到 100 倍。
+
+{{知识点8}}{{关键帧与 Delta 帧}}
+视频编解码器不独立编码每帧，而是编码帧间差异。关键帧（key frame）是完整图像，delta 帧只存储与前帧的差异，通常小 2-10 倍。在 H.264 中有 I 帧（关键帧）、P 帧（前向预测）和 B 帧（双向预测）。WebCodecs 将其简化为 "key" 和 "delta" 两种类型。视频通常每 30-60 帧插入一个关键帧。解码时必须按顺序处理 chunk，解码器内部维护缓冲区处理帧间依赖。
+
+{{知识点9}}{{VideoEncoder 使用流程}}
+VideoEncoder 使用模式：1）实例化，定义 output 回调（接收 chunk 和 meta）和 error 回调；2）调用 configure() 配置编解码器、宽高、比特率、帧率等；3）调用 encode() 编码 VideoFrame，指定 keyFrame 参数；4）调用 flush() 等待所有编码完成；5）调用 close() 释放资源。第一帧应设为关键帧。configure/encode/flush 是异步操作（追加到队列），reset/close 同步中止所有挂起的工作。
+
+{{知识点10}}{{VideoEncoder 队列管理}}
+VideoEncoder 内部维护编码队列（encodeQueueSize 属性）。如果渲染速度超过编码速度，队列会无限增长直到显存耗尽导致崩溃。解决方案：在渲染循环中检查 encodeQueueSize，队列过大时丢弃帧；监听 dequeue 事件检测队列减少。编码器出错后永久进入 "closed" 状态，必须创建新实例，新实例的第一帧必须是关键帧。
+
+{{知识点11}}{{VideoDecoder 使用流程}}
+VideoDecoder 使用模式：1）实例化，定义 output 回调（接收 VideoFrame）和 error 回调；2）通过 demuxing 库获取 decoderConfig 并调用 configure()；3）批量调用 decode() 提交 EncodedVideoChunk；4）调用 flush() 等待解码完成；5）调用 close() 释放资源。注意不应逐个提交 chunk 并等待输出，可能需要多个 chunk 后才开始返回帧。同样需要管理 decodeQueueSize 防止队列溢出。
+
+{{知识点12}}{{VideoDecoder 错误恢复}}
+解码器出错后永久进入 "closed" 状态，必须创建新 VideoDecoder 实例。恢复步骤：从当前位置向前查找下一个关键帧（type === "key"），用该关键帧开始新解码器的解码。这是因为新解码器必须从关键帧开始。decodeQueueSize 和 dequeue 事件用于队列管理，避免一次提交过多 chunk 导致失败。
+
+{{知识点13}}{{AudioData 详解}}
+AudioData 表示未编码的音频采样数据。支持交错（interleaved）和平面（planar）两种格式：交错格式所有声道在一个平面中，平面格式每个声道独立。关键属性：format（采样格式）、sampleRate（采样率 Hz）、numberOfFrames（帧数，典型 1024）、numberOfChannels（声道数）、duration（微秒）、timestamp（微秒）。方法 copyTo() 将采样数据复制到目标缓冲区。
+
+{{知识点14}}{{EncodedAudioChunk 详解}}
+EncodedAudioChunk 表示编码后的音频数据块。属性：type、timestamp、duration、byteLength。方法 copyTo() 复制编码数据。与视频不同，音频没有关键帧概念，每个 AudioData 产生恰好一个 EncodedAudioChunk。如果只是转码视频且不修改音频，EncodedAudioChunk 可以直接从 demuxing 库传递到 muxing 库，无需解码再编码。
+
+{{知识点15}}{{AudioEncoder 详解}}
+AudioEncoder 将 AudioData 编码为 EncodedAudioChunk。音频编码比视频简单：无关键帧、无硬件加速问题、一对一对应。使用模式与 VideoEncoder 相同：实例化 → configure（codec、sampleRate、numberOfChannels）→ encode → flush → close。支持的编码格式主要为 Opus（推荐，开源低延迟）和 AAC（MP4 标准，但支持有平台限制）。static 方法 isConfigSupported() 检查配置支持。
+
+{{知识点16}}{{AudioDecoder 详解}}
+AudioDecoder 将 EncodedAudioChunk 解码为 AudioData。支持的解码格式广泛：Opus、AAC、MP3、FLAC、Vorbis、PCM 等。WebCodecs 没有内置音频播放功能，解码后的 AudioData 需要通过 Web Audio API 播放。推荐方式：mux EncodedAudioChunk 为 ArrayBuffer，用 audioContext.decodeAudioData() 解码后创建 BufferSource 播放。
+
+{{知识点17}}{{异步处理模型}}
+WebCodecs API 使用异步处理模型。每个编码器/解码器维护独立的内部处理队列。configure()、encode()/decode()、flush() 将控制消息追加到队列末尾异步执行；reset() 同步中止所有挂起的工作并清空队列（之后可重新 configure 继续使用）；close() 永久关闭，释放系统资源。flush() 应在所有工作排队后调用，频繁调用会影响编码质量（编码器）或导致解码器需要关键帧（解码器）。
+
+{{知识点18}}{{支持的视频编解码器 - H.264}}
+H.264（AVC）是最广泛支持的视频编解码器。推荐 codec 字符串：avc1.42001f（Baseline, 720p, 99.6% 支持）、avc1.4d0034（Main, 4K, 98.9% 支持）、avc1.64003e（High, 8K, 85.9% 支持）。格式解析：avc1=标识符，4d=Profile IDC（Main=4d），00=约束标志，34=Level IDC（5.2=34，支持 4K）。H.264 是受专利保护的编解码器，某些情况下需要支付版税。是 MP4 文件最常用的编解码器。
+
+{{知识点19}}{{支持的视频编解码器 - VP9}}
+VP9 是 Google 开发的开源编解码器，压缩效率优于 H.264。推荐 codec 字符串：vp09.00.30.08.00（Level 3, 720p, 99.98%）、vp09.00.40.08.00（Level 4, 2K, 99.96%）、vp09.00.50.08.00（Level 5, 4K, 99.97%）。格式：vp09=标识，00=Profile，40=Level，08=8-bit 色深，00=色度子采样。是 WebM 容器的标准编解码器，在 MP4 中部分支持。macOS/iOS 缺少原生播放支持。
+
+{{知识点20}}{{支持的视频编解码器 - AV1}}
+AV1 是更新的开源编解码器（Alliance for Open Media），压缩效率优于 VP9 和 H.264。推荐 codec 字符串：av01.0.05M.08（Level 3.1, 720p, 87.9%）、av01.0.08M.08（Level 4.0, 1080p, 87.8%）、av01.0.12M.08（Level 5.0, 4K, 87.8%）。解码支持超过 90% 全球覆盖，但编码支持在 Safari 和 Android 上有限。计算密集度高于 VP9，但越来越多消费设备支持硬件加速。适合大规模流媒体场景。
+
+{{知识点21}}{{支持的视频编解码器 - HEVC}}
+HEVC（H.265）压缩效率优于 H.264，但浏览器编码支持在 Apple 平台外有显著差距。推荐 codec 字符串：hvc1.1.6.L120.B0（Level 4.0, 1080p, 73.6%）、hvc1.1.6.L150.B0（Level 5.0, 4K, 73.6%）、hvc1.1.6.L180.B0（Level 6.0, 8K, 73.1%）。不推荐作为通用编码目标。与 H.264 一样受专利保护。
+
+{{知识点22}}{{支持的音频编解码器}}
+音频编解码器选择：Opus（推荐，开源低延迟，编码支持 96.1%，WebM 标准音频）、AAC/mp4a.40.2（MP4 标准音频，编码支持 90.1%，但 Firefox 和桌面 Linux 不支持编码）、MP3（编码支持 0%，仅解码 96.5%）、FLAC（编码 0%，解码 96.5%）、PCM（pcm-f32 等变体，编码支持有限）。编码前应检查 typeof AudioEncoder !== "undefined" 再调用 isConfigSupported()。
+
+{{知识点23}}{{编解码器容器兼容性}}
+视频编解码器与容器的兼容性：H.264 → MP4（是）/WebM（否）；VP9 → MP4（部分）/WebM（是）；AV1 → MP4（部分）/WebM（是）；HEVC → MP4（是）/WebM（否）。音频：Opus 配 WebM，AAC 配 MP4。最大兼容性方案：H.264 + AAC + MP4；开源方案：VP9 + Opus + WebM；最大压缩方案：AV1 + Opus + WebM（需验证硬件支持）。
+
+{{知识点24}}{{运行时编解码器支持检测}}
+使用 VideoEncoder.isConfigSupported() 和 VideoDecoder.isConfigSupported() 在运行时检测配置支持。推荐模式：从最高质量到最低质量依次测试 codec 字符串，使用第一个支持的。示例：const candidates = ["avc1.64003e", "avc1.4d0034", "avc1.42003e"]; 遍历检测。AudioEncoder 需先检查 typeof AudioEncoder !== "undefined"。因为硬件支持因设备而异，运行时检测是必要的。
+
+{{知识点25}}{{Muxing 和 Demuxing 概念}}
+WebCodecs API 只处理编解码，不处理容器格式。Demuxing（解封装）：从视频文件提取编码 chunk，需要库如 Mediabunny 或 web-demuxer（Bilibili 开源）。Muxing（封装）：将编码 chunk 写入可播放视频文件，主要库为 Mediabunny。Muxing 库按照容器规范格式化二进制数据并放置在正确位置。流式传输场景（如 WebRTC）中不需要 muxing，EncodedVideoChunk 可直接传输。
+
+{{知识点26}}{{Mediabunny 库使用}}
+Mediabunny 是 WebCodecs 生态中主要的 muxing/demuxing 库（https://mediabunny.dev/）。Demuxing 示例：创建 Input 对象，获取主视频轨道，使用 EncodedPacketSink 提取 packet 并转为 EncodedVideoChunk。支持所有主流容器格式（MP4、WebM 等）。编码输出的 output 回调中收到的 chunk 和 meta（包含 decoderConfig）通常直接传递给 muxing 库处理。
+
+{{知识点27}}{{VideoFrame 与 Canvas 交互}}
+VideoFrame 可以从 Canvas 创建（new VideoFrame(canvas, { timestamp })），也可以渲染到 Canvas。VideoFrame 是图像源，支持 Canvas2D 的 drawImage()、BitmapRenderer 的 transferFromImageBitmap()、以及 WebGPU 的 importExternalTexture()。从 Canvas 创建 VideoFrame 时数据在显存间复制（高效），从 ArrayBuffer 创建时触发 CPU→显存复制（较慢）。VideoFrame 也支持 drawImage() 作为目标。
+
+{{知识点28}}{{VideoFrame 的 format 属性}}
+VideoFrame.format 返回像素格式字符串，如 "I420"（YUV 4:2:0 planar）、"NV12"（YUV 4:2:0 semi-planar）、"RGBA"、"BGRA" 等。YUV 格式是视频编解码的常用格式，直接使用可避免色彩空间转换开销。从 ArrayBuffer 构造 VideoFrame 时必须指定 format，且数据布局必须与格式匹配。format 为 null 表示帧处于"detached"状态。
+
+{{知识点29}}{{VideoColorSpace 接口}}
+VideoColorSpace 表示视频帧的色彩空间信息。属性：primaries（色彩原色/色域）、transfer（传输特性/光电转换函数）、matrix（矩阵系数，描述分量与颜色坐标关系）、fullRange（布尔值，是否全范围）。方法 toJSON() 返回 JSON 表示。通过 VideoFrame.colorSpace 获取。2024 年 9 月成为 Baseline 特性。在视频处理管线中正确处理色彩空间对画质至关重要。
+
+{{知识点30}}{{ImageDecoder 图像解码器}}
+ImageDecoder 接口用于解码图像数据，属于 WebCodecs API 的扩展。需要安全上下文（HTTPS）。支持解码各种图像格式（包括动画图像如 GIF）。构造函数接受 data（ReadableStream 或 BufferSource）和 type（MIME 类型）。关键属性：complete（数据是否完全接收）、completed（Promise）、tracks（ImageTrackList）、type。方法：decode({ frameIndex }) 解码指定帧、reset()、close()。static isTypeSupported() 检查格式支持。
+
+{{知识点31}}{{WebCodecs 与 WebGPU 集成}}
+WebCodecs 与 WebGPU 的集成是高性能视频处理的关键。最高效的渲染路径：VideoFrame → device.importExternalTexture({ source: frame }) → WebGPU 管道处理。这是零拷贝操作，VideoFrame 直接作为 GPU 纹理使用。结合 Compute Shader 可实现实时视频特效、AI 视频处理等。WebGPU Canvas 通过 configure() 与 WebCodecs 配合，实现从视频解码到 GPU 渲染的全硬件加速管线。
+
+{{知识点32}}{{WebCodecs 与 MediaStreamTrackProcessor}}
+MediaStreamTrackProcessor 将 MediaStreamTrack 分解为 VideoFrame/AudioData 流，是 WebCodecs 与实时媒体流的桥梁。典型流程：getUserMedia/getDisplayMedia → getVideoTracks() → new MediaStreamTrackProcessor(track) → readable.getReader() → 逐帧读取 VideoFrame → encoder.encode()。结合 MediaStreamTrackGenerator 可从处理后的帧流重建媒体轨道，实现完整的实时视频处理管线。
+
+{{知识点33}}{{WebCodecs 性能优化要点}}
+性能优化关键点：1）及时关闭 VideoFrame 避免显存泄漏；2）监控 encodeQueueSize/decodeQueueSize 防止队列溢出；3）使用 dequeue 事件而非轮询队列大小；4）选择合适的渲染方式（WebGPU > BitmapRenderer > Canvas2D）；5）从图像源创建 VideoFrame 优于从 ArrayBuffer 创建（避免 CPU→GPU 拷贝）；6）音频直通（pass-through）避免不必要的解码再编码；7）合理设置关键帧间隔平衡文件大小和随机访问能力。
+
+{{知识点34}}{{WebCodecs 安全上下文要求}}
+WebCodecs API 的大部分接口需要安全上下文（HTTPS）。VideoDecoder、AudioDecoder、EncodedVideoChunk、EncodedAudioChunk、ImageDecoder 等明确标注需要安全上下文。VideoEncoder 和 VideoFrame 在某些浏览器中也需要安全上下文。localhost 被视为安全上下文。使用前应检查 navigator.mediaCapabilities 或直接尝试实例化来确认支持。
+
+{{知识点35}}{{WebCodecs 浏览器兼容性现状}}
+截至 2025 年：Chrome 94+ 全面支持视频编解码，Chrome 106+ 支持音频编解码；Edge 跟随 Chromium 支持；Safari 16.4+ 支持视频编解码，Safari 17+ 更完善；Firefox 113+ 支持视频编解码。AudioEncoder 在 Firefox 上不支持 AAC 编码。HEVC 编码主要在 Safari/Apple 设备上支持。AV1 编码在桌面浏览器上支持较好，移动设备有限。VideoColorSpace 2024 年成为 Baseline。
+
+{{知识点36}}{{WebCodecs 应用场景 - 屏幕录制}}
+屏幕录制是 WebCodecs 的经典应用场景。流程：getDisplayMedia() 获取屏幕流 → MediaStreamTrackProcessor 分解为 VideoFrame → VideoEncoder 编码 → muxing 库写入文件。优势：可选择编解码器（H.264/VP9/AV1）、控制比特率和质量、硬件加速编码。比 MediaRecorder API 提供更细粒度的控制。可同时录制系统音频（AudioEncoder 编码）。
+
+{{知识点37}}{{WebCodecs 应用场景 - 视频编辑}}
+浏览器端视频编辑：用 Canvas 合成/处理视频帧（特效、滤镜、裁剪、转场）→ VideoEncoder 编码输出。VideoFrame 可从 Canvas 直接创建，处理后的帧可直接编码，避免 CPU↔GPU 来回拷贝。与 WebGPU/WebGL 结合可实现 GPU 加速的实时特效。最终通过 muxing 库生成可下载的视频文件。完全在浏览器端运行，无需服务器。
+
+{{知识点38}}{{WebCodecs 应用场景 - 实时通信}}
+实时视频通信中 WebCodecs 的优势：1）直接控制编解码参数（码率、分辨率、帧率自适应）；2）硬件加速降低延迟和 CPU 占用；3）与 WebTransport 结合实现自定义传输协议；4）EncodedVideoChunk 可直接通过 DataChannel/WebSocket 传输，编码后数据量减少 100 倍以上（如 320x240 从 72Mbps 降至约 0.7Mbps）。配合 Insertable Streams API 可实现自定义视频处理。
+
+{{知识点39}}{{WebCodecs 应用场景 - 视频转码}}
+视频转码：demuxing 库提取源文件的 EncodedVideoChunk → VideoDecoder 解码为 VideoFrame → 可选的帧处理（缩放、滤镜）→ VideoEncoder 用目标编码重新编码 → muxing 库写入输出文件。音频可直接直通（无需解码再编码）。支持在浏览器中将视频从一种格式转换为另一种，如 H.264 MP4 → VP9 WebM 或 AV1 WebM。
+
+{{知识点40}}{{WebCodecs API 规范与发展}}
+WebCodecs API 由 W3C Web Codecs 工作组维护，规范地址 w3c.github.io/webcodecs/。参考实现和示例：w3c.github.io/webcodecs/samples/。学习资源：WebCodecs Fundamentals (webcodecsfundamentals.org) 提供完整教程和支持表；Chrome 团队文档 developer.chrome.com/docs/web-platform/best-practices/webcodecs。API 持续演进中，关注浏览器更新以获取最新特性和兼容性改进。

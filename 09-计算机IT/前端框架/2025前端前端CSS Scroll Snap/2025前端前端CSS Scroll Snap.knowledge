@@ -1,0 +1,83 @@
+# 2025前端前端CSS Scroll Snap
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{CSS Scroll Snap 是什么：CSS Scroll Snap 是一组 CSS 模块属性，允许开发者控制滚动容器的平移和滚动行为，通过定义吸附位置（snap positions），使用户停止滚动时内容自动对齐到预设位置，提供类似分页的滚动体验。规范来源：CSS Scroll Snap Module Level 1 和 Level 2。}}
+
+{{知识点2}}{{Scroll Snap 的核心作用：Scroll Snap 主要用于构建卡片轮播、全屏页面滚动、图片画廊、移动端列表等需要精确滚动定位的交互场景，替代了早期基于 JavaScript 的滚动吸附方案，性能更优且无需额外依赖。}}
+
+{{知识点3}}{{scroll-snap-type 属性基础：scroll-snap-type 是设置在滚动容器（父元素）上的属性，用于定义是否启用滚动吸附、吸附的严格程度以及吸附发生的轴向。语法：scroll-snap-type: none | [ x | y | block | inline | both ] [ mandatory | proximity ]?。}}
+
+{{知识点4}}{{scroll-snap-type 的轴向值：x 表示水平轴吸附，y 表示垂直轴吸附，block 表示块级方向吸附，inline 表示行内方向吸附，both 表示两个轴都启用吸附。block/inline 是逻辑属性，适应不同书写模式。}}
+
+{{知识点5}}{{mandatory 与 proximity 的区别：mandatory 表示浏览器必须在用户停止滚动时吸附到最近的吸附点，体验一致但若子元素大于容器可能导致部分内容无法查看；proximity 表示浏览器仅在滚动位置接近吸附点时才吸附，行为更灵活自然。}}
+
+{{知识点6}}{{scroll-snap-type: mandatory 的注意事项：当子元素内容溢出滚动容器时，mandatory 会导致用户无法滚动查看溢出部分，因为滚动总是被强制吸附到边缘。MDN 明确警告：永远不要在子元素可能溢出容器时使用 mandatory。}}
+
+{{知识点7}}{{scroll-snap-align 属性：scroll-snap-align 设置在滚动容器的子元素上，定义该子元素的哪个位置对齐到滚动容器。可选值：start（起始边缘）、center（居中）、end（结束边缘）、none（不参与吸附）。}}
+
+{{知识点8}}{{scroll-snap-align 的双轴语法：scroll-snap-align 可以接受两个值，分别指定块级和行内方向的对齐方式，如 scroll-snap-align: center start 表示块级方向居中、行内方向对齐起始。只写一个值时两个方向相同。}}
+
+{{知识点9}}{{scroll-snap-align 方向的相对性：start/end 的含义取决于滚动方向。垂直滚动时 start 指元素顶部，水平滚动时 start 指元素左侧。使用 block/inline 逻辑轴时同理，适应不同书写模式。}}
+
+{{知识点10}}{{scroll-snap-stop 属性：scroll-snap-stop 设置在子元素上，值为 normal（默认）或 always。normal 允许用户快速滚动跳过多个吸附点；always 强制滚动容器必须在该元素处停留吸附后才能继续滚动，适合需要用户逐个查看的场景。}}
+
+{{知识点11}}{{scroll-padding 属性：scroll-padding 设置在滚动容器上，语法与 padding 相同，用于在吸附对齐时在容器边缘预留空间。典型用途：为固定定位的导航栏、侧边栏等留出空间，防止吸附时内容被遮挡。}}
+
+{{知识点12}}{{scroll-padding 的单方向属性：scroll-padding-top、scroll-padding-right、scroll-padding-bottom、scroll-padding-left 可单独设置各方向的吸附内边距。逻辑属性版本包括 scroll-padding-inline、scroll-padding-block 及其 start/end 变体。}}
+
+{{知识点13}}{{scroll-margin 属性：scroll-margin 设置在子元素上，语法与 margin 相同，用于在吸附对齐时为该元素添加外边距偏移。可以微调单个元素的吸附位置，使吸附停在元素边缘之外的指定距离处。}}
+
+{{知识点14}}{{scroll-margin 的单方向属性：scroll-margin-top、scroll-margin-right、scroll-margin-bottom、scroll-margin-left 可单独设置。逻辑属性版本包括 scroll-margin-inline、scroll-margin-block 及其 start/end 变体，适应不同书写方向。}}
+
+{{知识点15}}{{滚动容器的前提条件：要使 Scroll Snap 生效，必须先确保元素成为滚动容器——需要设定明确的尺寸（height/width）并且启用 overflow（overflow: auto 或 scroll）。没有溢出就没有滚动，吸附自然无效。}}
+
+{{知识点16}}{{全屏页面滚动实现：通过在 html 或 body 上设置 scroll-snap-type: y mandatory，每个 section 设置 height: 100vh 和 scroll-snap-align: start，即可实现全屏逐页滚动效果。注意：Safari 中 html 和 body 的行为可能不同，建议同时设置。}}
+
+{{知识点17}}{{水平轮播/画廊实现：容器设置 scroll-snap-type: x mandatory 和 scroll-padding: 50%（居中吸附），子元素设置 scroll-snap-align: center 和 flex-shrink: 0 固定宽度，即可实现无需 JavaScript 的水平轮播组件。}}
+
+{{知识点18}}{{垂直列表吸附实现：最简单的用法——容器设置 scroll-snap-type: y mandatory，子元素设置 scroll-snap-align: start，即可让每个列表项在滚动停止时自动对齐到容器顶部，常用于移动端列表交互。}}
+
+{{知识点19}}{{滚动吸附与固定头部的配合：当页面有 position: sticky 或 position: fixed 的导航栏时，使用 scroll-padding-top 预留头部高度，确保吸附对齐时内容不被头部遮挡。例如 scroll-padding-top: 60px。}}
+
+{{知识点20}}{{scroll-snap-type: both 的用法：当设置为 both 时，滚动容器在水平和垂直方向都启用吸附。适合二维网格布局，如地图浏览或图片网格查看器，需要在 X 和 Y 轴都精确定位的场景。}}
+
+{{知识点21}}{{SnapEvent 事件接口：CSS Scroll Snap Level 2 引入了 SnapEvent 接口，包含 scrollsnapchange 和 scrollsnapchanging 两个事件，分别在浏览器确定新的吸附目标和吸附目标正在变化时触发。}}
+
+{{知识点22}}{{scrollsnapchange 事件：当滚动容器完成滚动并确定了最终吸附目标时触发。通过事件对象的 snapTargetBlock 和 snapTargetInline 属性可以获取吸附目标元素，适合用于更新指示器、导航状态等。}}
+
+{{知识点23}}{{scrollsnapchanging 事件：当用户正在滚动且浏览器预判将要吸附到某个目标时持续触发。可用于实时更新 UI 指示器、实现平滑的过渡动画等需要提前响应的场景。}}
+
+{{知识点24}}{{scroll-initial-target 属性：CSS Scroll Snap Level 2 新增属性，设置在子元素上，用于指定该元素是否应作为滚动容器的初始吸附目标。解决了页面加载时自动滚动到指定位置的需求，无需 JavaScript 干预。}}
+
+{{知识点25}}{{CSS Scroll Snap 的浏览器兼容性：所有现代浏览器（Chrome 69+、Firefox 68+、Safari 11+、Edge 79+）均支持 CSS Scroll Snap Level 1。移动端 iOS Safari 11.0+、Android Chrome 均完整支持。IE11 支持旧版语法但不支持新语法。}}
+
+{{知识点26}}{{旧版 Scroll Snap 语法：早期规范使用 scroll-snap-points-y: repeat(300px) 定义等间距吸附点，局限性大——只能均匀分布，无法适配不同尺寸元素。新版采用基于元素的吸附方式，灵活性大幅提升。}}
+
+{{知识点27}}{{scroll-snap-type 的 none 值：none 是默认值，表示禁用滚动吸附。可用于在特定条件下（如响应式布局中大屏幕时）通过覆盖为 none 来动态关闭吸附行为。}}
+
+{{知识点28}}{{吸附与 overflow 的关系：Scroll Snap 依赖 overflow 产生滚动上下文。overflow: visible（默认）不会产生滚动容器，吸附无效。overflow: hidden 虽然隐藏溢出但不产生可滚动区域，吸附同样无效。必须使用 auto 或 scroll。}}
+
+{{知识点29}}{{Scroll Snap 与 Flexbox/Grid 的配合：滚动容器常与 display: flex 或 display: grid 结合使用。例如水平轮播使用 flex + flex-wrap: nowrap + overflow-x: auto + scroll-snap-type: x mandatory，子元素用 flex: 0 0 auto 固定尺寸。}}
+
+{{知识点30}}{{吸附位置的精确控制组合：通过 scroll-padding（容器端）和 scroll-margin（子元素端）的组合，可以精确控制吸附停止的最终位置。scroll-padding 定义全局偏移，scroll-margin 定义单个元素的微调偏移。}}
+
+{{知识点31}}{{多值 scroll-snap-align 的实际应用：当子元素尺寸不确定时，使用 center 对齐可以确保元素在视口中居中显示。当需要列表式排列时，start 对齐保证元素从容器顶部开始排列。end 适合反向滚动布局。}}
+
+{{知识点32}}{{scroll-snap-stop: always 的适用场景：轮播图/幻灯片演示（每张必须停留）、表单步骤向导（每步必须阅读）、产品展示列表（每个产品需仔细查看）。需注意过度使用会让快速浏览的用户感到不便。}}
+
+{{知识点33}}{{Scroll Snap 的无障碍性考虑：使用 scroll-snap 时应确保键盘用户可以通过 Tab 键导航到吸附区域内的元素。参考 Adrian Roselli 的文章《Keyboard-only scrolling areas》，确保可滚动区域有适当的 ARIA 标记。}}
+
+{{知识点34}}{{CSS Scroll Snap Level 2 的新增特性：Level 2 规范在 Level 1 基础上增加了 SnapEvent 事件、scroll-initial-target 属性，提供了更精细的吸附行为控制和 JavaScript 交互能力，使开发者能响应吸附状态变化。}}
+
+{{知识点35}}{{Scroll Snap 性能优势：纯 CSS 实现的滚动吸附由浏览器原生处理，无需 JavaScript 监听 scroll 事件和计算位置，避免了 JavaScript 方案中的频繁重排重绘，滚动动画由浏览器合成器线程处理，性能显著优于 JS 方案。}}
+
+{{知识点36}}{{常见陷阱——mandatory 下内容溢出：如果某个子元素的高度超过滚动容器，mandatory 模式下用户将无法滚动到该元素的中间部分，因为滚动总是被吸附到元素的 start 或 end 边缘。解决方案：改用 proximity 或确保内容不溢出。}}
+
+{{知识点37}}{{常见陷阱——未设置 overflow：开发者设置了 scroll-snap-type 但忘记设置 overflow，导致吸附完全无效。记住：scroll-snap-type 必须搭配 overflow: auto 或 overflow: scroll 才能生效。}}
+
+{{知识点38}}{{常见陷阱——子元素未设置 scroll-snap-align：容器设置了 scroll-snap-type 但子元素未设置 scroll-snap-align（默认为 none），则该子元素不参与吸附。mandatory 模式下用户可能无法正常滚动到这些元素。}}
+
+{{知识点39}}{{Scroll Snap 与平滑滚动：配合 scroll-behavior: smooth 可以实现平滑的吸附动画过渡。当用户点击锚点链接或调用 scrollTo() 时，滚动会以动画形式到达吸附位置而非瞬间跳转。}}
+
+{{知识点40}}{{JavaScript 与 Scroll Snap 的交互：可以通过 Element.scrollBy()、Element.scrollTo()、Element.scrollIntoView() 等 API 程序化触发吸附滚动。结合 scrollsnapchange 事件可以实现更复杂的交互逻辑，如指示器同步、懒加载等。}}

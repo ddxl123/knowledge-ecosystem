@@ -1,0 +1,83 @@
+# 2025前端前端CSS Scroll-driven Animations
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{CSS Scroll-driven Animations 概述：这是 CSS 动画模块的扩展，允许开发者将 CSS 关键帧动画与滚动行为绑定，而非默认的基于时间的文档时间线（DocumentTimeline）。通过滚动元素、其滚动容器或根元素来驱动动画进度，无需 JavaScript。规范来自 W3C CSS Scroll-driven Animations Module Level 1（drafts.csswg.org/scroll-animations-1/）。}}
+
+{{知识点2}}{{核心思想——用滚动替代时间驱动：传统 CSS 动画的进度由时间流逝决定（animation-duration 控制时长），而 Scroll-driven Animations 将动画进度直接映射到滚动位置。滚动到页面 50% 位置时动画执行到 50%，暂停滚动时动画也暂停，反向滚动时动画倒放。}}
+
+{{知识点3}}{{性能优势：CSS scroll-driven 动画运行在合成器线程（compositor thread）上，不需要主线程的 scroll 事件监听器或 IntersectionObserver。相比 JavaScript 实现的滚动动画，能避免主线程阻塞导致的卡顿（jank），提供更流畅的用户体验。}}
+
+{{知识点4}}{{animation-timeline 属性：这是控制动画时间线的核心属性。可选值包括：auto（默认，使用文档时间线）、none（无时间线，不执行动画）、dashed-ident（引用命名时间线）、scroll()（匿名滚动进度时间线）、view()（匿名视图进度时间线）。支持逗号分隔的多值语法，按 animation-name 顺序一一对应。}}
+
+{{知识点5}}{{animation-timeline 的重置陷阱：animation 简写属性会将 animation-timeline 重置为 auto（因为它是简写中的仅重置值）。因此在创建滚动驱动动画时，必须在 animation 简写之后声明 animation-timeline，否则会被覆盖。}}
+
+{{知识点6}}{{scroll() 函数——匿名滚动进度时间线：用于在 animation-timeline 中直接定义滚动容器和轴向。语法为 scroll([<scroller> || <axis>])，两个参数均可选且顺序可互换。默认值为 scroll(block nearest)，即最近祖先滚动容器的 block 轴。}}
+
+{{知识点7}}{{scroll() 的 <scroller> 参数：定义提供滚动进度时间线的滚动元素。可选值：nearest（默认，最近的有滚动条的祖先元素）、root（文档根元素 <html>）、self（当前元素自身）。}}
+
+{{知识点8}}{{scroll() 的 <axis> 参数：定义驱动动画的滚动方向。可选值：block（默认，块级方向，通常为垂直）、inline（行内方向，通常为水平）、x（水平轴）、y（垂直轴）。如果指定的轴方向没有滚动条，时间线将处于非活动状态。}}
+
+{{知识点9}}{{view() 函数——匿名视图进度时间线：基于元素在其最近祖先滚动容器中的可见性变化来驱动动画进度。语法为 view([<axis> || <view-timeline-inset>])。默认使用 block 轴，0% 在元素开始进入滚动端口时，100% 在元素完全离开时。}}
+
+{{知识点10}}{{view() 的 inset 参数：控制元素何时被视为"在视图中"。接受 auto 或最多两个 length-percentage 值。第一个值定义起始内边距（从滚动端口起始边缘向内偏移），第二个值定义结束内边距。正值为内缩，负值为外扩。例如 view(block 50% 10%) 表示动画在元素距底部 10% 时开始，距顶部 50% 时结束。}}
+
+{{知识点11}}{{命名滚动进度时间线（Named Scroll Progress Timeline）：通过在滚动容器上设置 scroll-timeline-name 属性（值为 dashed-ident，如 --my-timeline）来命名时间线，然后在要动画化的元素上通过 animation-timeline: --my-timeline 引用它。这种方式适合滚动容器和动画元素不在同一父子关系中的场景。}}
+
+{{知识点12}}{{scroll-timeline-name 属性：设置在滚动容器上，定义命名滚动进度时间线的名称。值为 none（默认）或 dashed-ident（必须以 -- 开头）。注意：如果元素在指定轴向上没有溢出（即没有滚动条），则不会创建时间线。}}
+
+{{知识点13}}{{scroll-timeline-axis 属性：与 scroll-timeline-name 配合使用，指定命名滚动时间线的轴向。可选值为 block（默认）、inline、x、y。也可通过 scroll-timeline 简写属性同时设置 name 和 axis。}}
+
+{{知识点14}}{{scroll-timeline 简写属性：同时设置 scroll-timeline-name 和 scroll-timeline-axis。语法为 scroll-timeline: <name> <axis>。}}
+
+{{知识点15}}{{命名视图进度时间线（Named View Progress Timeline）：通过 view-timeline-name 属性在"主题元素"（subject，即要被追踪可见性的元素）上命名时间线，然后在任何后代元素上通过 animation-timeline 引用该名称。与命名滚动时间线不同，动画元素不必是主题元素本身。}}
+
+{{知识点16}}{{view-timeline-name 属性：设置在主题元素上，定义命名视图进度时间线。值为 none（默认）或 dashed-ident。如果滚动容器在指定轴向上没有溢出，不会创建时间线。}}
+
+{{知识点17}}{{view-timeline-axis 属性：指定视图进度时间线追踪的轴向。可选值为 block（默认）、inline、x、y。通过 view-timeline 简写可同时设置 axis、name 和 inset。}}
+
+{{知识点18}}{{view-timeline-inset 属性：调整视图进度时间线中"元素在视图中"的判定范围。效果如同移动滚动端口的边缘——正值向内缩进，负值向外扩展。默认值为 auto。可在 view-timeline 简写或 view() 函数中指定。}}
+
+{{知识点19}}{{timeline-scope 属性——扩展时间线作用域：默认情况下，命名时间线只能被直接后代元素引用。timeline-scope 可以将命名时间线的作用域提升到当前元素及其所有后代。可选值：none（默认）、all（提升所有后代时间线）、dashed-ident（提升指定名称的时间线）。这对于非父子关系的"兄弟"元素间共享时间线至关重要。}}
+
+{{知识点20}}{{animation-range 属性：定义动画在时间线上的起止范围。是 animation-range-start 和 animation-range-end 的简写。接受 normal、length-percentage、timeline-range-name 或 timeline-range-name + length-percentage 的组合。}}
+
+{{知识点21}}{{animation-range-start 和 animation-range-end：分别控制动画在时间线上从哪里开始、到哪里结束。animation-range-start 默认为 normal（等同于 0%），animation-range-end 默认为 normal（等同于 100%）。可以结合 timeline-range-name 精细控制。}}
+
+{{知识点22}}{{Timeline Range Name——cover 范围：表示完整的视图进度时间线范围。0% 对应主题元素起始边缘对齐滚动端口结束边缘，100% 对应主题元素结束边缘到达滚动端口起始边缘。范围大小 = 滚动端口高度 + 主题元素高度。这是默认的动画附加范围。}}
+
+{{知识点23}}{{Timeline Range Name——contain 范围：确保动画完全在滚动端口内完成。当元素小于滚动端口时，0% 在元素完全进入时，100% 在元素开始离开时。当元素大于滚动端口时，0% 在起始边缘对齐时，100% 在结束边缘对齐时。}}
+
+{{知识点24}}{{Timeline Range Name——entry 和 exit 范围：entry 范围使动画仅在元素进入滚动端口时执行（基于元素尺寸而非滚动端口尺寸）。exit 范围使动画仅在元素离开滚动端口时执行。适用于入场/出场动画效果。}}
+
+{{知识点25}}{{Timeline Range Name——entry-crossing 和 exit-crossing：这两个范围关注元素跨越滚动端口中心线的过程。entry-crossing 是元素从进入边缘到达中心线，exit-crossing 是从中心线到达离开边缘。}}
+
+{{知识点26}}{{Web Animations API 中的 ScrollTimeline 接口：JavaScript 中可通过 new ScrollTimeline({ source, axis }) 创建滚动时间线对象。source 属性返回驱动时间线的滚动元素引用，axis 属性返回滚动轴枚举值。可传入 element.animate() 的 options 参数中。}}
+
+{{知识点27}}{{Web Animations API 中的 ViewTimeline 接口：JavaScript 中可通过 new ViewTimeline({ subject, axis, inset }) 创建视图进度时间线。用于更精细的编程式控制滚动驱动动画。}}
+
+{{知识点28}}{{animation-duration 的注意事项：在滚动驱动动画中，animation-duration 不影响动画持续时间（因为进度由滚动决定）。但 Firefox 要求非零的 animation-duration 才能应用动画，因此推荐设置 animation-duration: 1ms 以确保跨浏览器兼容性。}}
+
+{{知识点29}}{{animation-fill-mode 的配合使用：默认情况下，动画样式只在动画范围内生效。设置 animation-fill-mode: forwards 可在动画结束后保持最后一帧样式，backwards 在动画开始前应用第一帧样式，both 则两者兼顾。在视图进度动画中特别有用。}}
+
+{{知识点30}}{{CSS 基础要求——overflow 必须可滚动：要创建滚动进度时间线，滚动容器必须实际存在滚动条。需要设置足够的子元素高度或宽度使容器溢出，并设置 overflow: scroll（或 overflow-y/overflow-x: scroll）。没有溢出就没有时间线。}}
+
+{{知识点31}}{{实际应用场景——滚动进度指示器：用 scroll() 创建页面顶部的阅读进度条，随着用户向下滚动页面，进度条宽度从 0% 增长到 100%。这是最常见的 scroll-driven animation 应用之一。}}
+
+{{知识点32}}{{实际应用场景——滚动触发动画（Scroll-triggered Animations）：利用 view() 或 view-timeline，实现元素进入视口时的淡入、缩放、滑入等效果。结合 animation-range 可精确控制动画在元素进入过程中的哪个阶段触发。}}
+
+{{知识点33}}{{实际应用场景——视差滚动效果（Parallax Scrolling）：通过在不同元素上应用不同速度的滚动驱动动画，创建视差滚动效果。多层背景以不同速率移动，增加页面深度感和视觉层次。}}
+
+{{知识点34}}{{实际应用场景——固定导航栏状态切换：当页面滚动到特定位置时，导航栏从透明变为有背景色、从大尺寸缩小等。使用 scroll() 结合 @keyframes 即可纯 CSS 实现。}}
+
+{{知识点35}}{{与 JavaScript 滚动动画的对比：JS 方案（如 IntersectionObserver + scroll 事件）功能更灵活但有性能开销。CSS scroll-driven 动画性能更好（合成器线程执行），代码更简洁，但灵活性略低（仅限 CSS 可动画属性）。2025 年推荐优先使用 CSS 方案，JS 方案作为降级或复杂逻辑的补充。}}
+
+{{知识点36}}{{浏览器兼容性（2025年）：Chrome 115+、Edge 115+ 完整支持。Firefox 110+ 支持（需要 animation-duration: 1ms）。Safari 17.4+ 开始部分支持。建议使用 @supports (animation-timeline: scroll()) 进行特性检测，提供 JavaScript 降级方案。}}
+
+{{知识点37}}{{多时间线支持：一个元素可以同时关联多个动画时间线。animation-timeline 接受逗号分隔的多个值，每个值对应一个 animation-name。多余的时间线值会被忽略，不足时会循环重复。}}
+
+{{知识点38}}{{滚动方向与书写模式的关系：block 和 inline 轴向会根据书写模式（writing-mode）自动适配。在水平书写模式下 block 为垂直、inline 为水平；在垂直书写模式下则相反。x 和 y 则是物理方向，不受书写模式影响。}}
+
+{{知识点39}}{{动画方向与滚动方向的对应：当用户向上滚动时，动画沿 @keyframes 的反方向播放（从 to 回到 from）。当用户向下滚动时，动画正向播放。这意味着动画天然跟随用户的滚动意图，无需额外处理。}}
+
+{{知识点40}}{{调试技巧：可以使用 Chrome DevTools 的 Animations 面板来检查滚动驱动动画。在 Elements 面板中选中元素后，Animations 标签页会显示动画时间线、当前进度和关键帧状态。也可以在 Console 中通过 getComputedStyle(el).animationTimeline 查看当前时间线。}}

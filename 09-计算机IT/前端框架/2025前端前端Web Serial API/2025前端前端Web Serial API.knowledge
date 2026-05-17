@@ -1,0 +1,93 @@
+# 2025前端Web Serial API
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{Web Serial API 是什么？Web Serial API 是一组允许网站与连接到用户计算机的外设进行通信的 API 之一，提供了通过串口（Serial API）与设备通信的能力。典型应用场景包括与 3D 打印机、Arduino、BBC micro:bit 等微控制器通信。它与 WebUSB API（USB 通信）和 WebHID API（输入设备）互补。}}
+
+{{知识点2}}{{Web Serial API 的规范状态？Web Serial API 由 WICG（Web Incubator Community Group）维护，规范地址为 https://wicg.github.io/serial/ 。目前属于实验性技术（Experimental），尚未成为正式 W3C 标准，但已在 Chromium 系浏览器中获得稳定支持。}}
+
+{{知识点3}}{{Web Serial API 的浏览器兼容性？截至 2025 年，Web Serial API 在 Chrome 89+、Edge 89+、Opera 75+ 中获得完整支持。Safari 和 Firefox 尚未支持。该 API 标记为"有限可用性"（Limited availability），需要安全上下文（HTTPS）。}}
+
+{{知识点4}}{{Web Serial API 的安全上下文要求？Web Serial API 仅在安全上下文（Secure Contexts）中可用，即必须通过 HTTPS 或 localhost 访问。这是浏览器对涉及硬件访问的 API 的通用安全策略，防止中间人攻击窃取串口通信数据。}}
+
+{{知识点5}}{{Web Serial API 的核心接口有哪些？Web Serial API 包含两个核心接口：Serial（提供查找和连接串口的方法和属性）和 SerialPort（提供对主机设备上串口的访问）。通过 navigator.serial 获取 Serial 对象作为 API 入口。}}
+
+{{知识点6}}{{navigator.serial 是什么？navigator.serial 是 Navigator 接口上的只读属性，返回一个 Serial 对象，是进入 Web Serial API 的入口点。它始终返回同一个 Serial 实例。同样 WorkerNavigator.serial 允许在 Web Worker 中使用该 API。}}
+
+{{知识点7}}{{Serial.requestPort() 方法的作用？Serial.requestPort() 方法返回一个 Promise，解析为用户选择的 SerialPort 实例。该方法必须通过用户交互（transient activation）触发，如点击按钮。首次访问时网站没有任何串口权限，必须调用此方法提示用户选择设备。}}
+
+{{知识点8}}{{Serial.requestPort() 的 filters 参数？requestPort() 接受可选的 filters 参数，用于过滤可选设备列表。过滤器可包含 usbVendorId（USB 厂商 ID）、usbProductId（USB 产品 ID）和 bluetoothServiceClassId（蓝牙服务类 ID）。不传 filters 则显示所有可用设备。}}
+
+{{知识点9}}{{Serial.requestPort() 的 allowedBluetoothServiceClassIds 参数？当设备使用自定义蓝牙 RFCOMM 服务（非标准蓝牙串口配置 SPP）时，需要传入 allowedBluetoothServiceClassIds 参数来允许访问这些自定义服务类 ID，否则这些端口会被排除在可选列表之外。}}
+
+{{知识点10}}{{Serial.getPorts() 方法的作用？Serial.getPorts() 返回一个 Promise，解析为 SerialPort 数组，表示当前源（origin）已有权限访问的已连接串口。通常在页面加载时调用，用于恢复之前已授权的端口连接。}}
+
+{{知识点11}}{{Serial 的 connect 和 disconnect 事件？Serial 对象通过事件冒泡接收 SerialPort 的 connect 和 disconnect 事件。connect 事件在端口连接到设备时触发，disconnect 事件在端口断开时触发。这些事件使网站能动态响应设备的插拔。}}
+
+{{知识点12}}{{SerialPort 接口概述？SerialPort 提供对主机设备上串口的访问。它没有自己的构造函数，只能通过 Serial 接口的方法（requestPort 或 getPorts）获取实例。核心属性包括 connected、readable、writable，核心方法包括 open、close、read、write 等。}}
+
+{{知识点13}}{{SerialPort.connected 属性？SerialPort.connected 是只读布尔值属性，指示端口是否在逻辑上连接到设备。可用于在发送数据前检查连接状态，避免对已断开的端口执行操作导致错误。}}
+
+{{知识点14}}{{SerialPort.readable 属性？SerialPort.readable 是只读属性，返回一个 ReadableStream，用于从连接到端口的设备接收数据。只有在调用 open() 成功打开端口后才能访问。数据以 Uint8Array 格式返回。}}
+
+{{知识点15}}{{SerialPort.writable 属性？SerialPort.writable 是只读属性，返回一个 WritableStream，用于向连接到端口的设备发送数据。同样需要先调用 open() 打开端口。发送字符串时需先用 TextEncoder 转换为 Uint8Array。}}
+
+{{知识点16}}{{SerialPort.open() 方法的使用？open() 方法返回一个 Promise，在端口打开时解析。baudRate（波特率）是唯一必需的参数。默认配置为 8 数据位、1 停止位、无奇偶校验。如果端口已打开会抛出 InvalidStateError。}}
+
+{{知识点17}}{{SerialPort.open() 的完整配置参数？open() 的 options 对象可包含：baudRate（必需，波特率）、bufferSize（缓冲区大小，默认 255）、dataBits（数据位，7 或 8，默认 8）、flowControl（流控制，"none" 或 "hardware"，默认 "none"）、parity（奇偶校验，"none"/"even"/"odd"，默认 "none"）、stopBits（停止位，1 或 2，默认 1）。}}
+
+{{知识点18}}{{如何从串口读取数据？读取数据的标准模式是使用 port.readable.getReader() 获取读取器，然后在循环中调用 reader.read()。返回的 value 是 Uint8Array，done 为 true 表示读取完成。外层 while 循环处理非致命错误，内层循环持续读取直到遇到错误或取消。}}
+
+{{知识点19}}{{如何向串口写入数据？使用 port.writable.getWriter() 获取写入器，然后调用 writer.write() 发送数据。发送字符串需先用 new TextEncoder().encode("PING") 转换为 Uint8Array。写入完成后应调用 writer.releaseLock() 释放锁。}}
+
+{{知识点20}}{{SerialPort.close() 方法的工作原理？close() 返回一个 Promise，在端口关闭时解析。调用前必须确保 readable 和 writable 的 reader/writer 已调用 releaseLock()。如果正在持续读取，需要先调用 reader.cancel() 让 read() 解析为 { value: undefined, done: true }，然后释放锁再关闭。}}
+
+{{知识点21}}{{SerialPort.setSignals() 方法的作用？setSignals() 用于设置端口的控制信号，返回 Promise。可设置三个信号：dataTerminalReady（DTR，数据终端就绪）、requestToSend（RTS，请求发送）和 break（中断信号）。每个参数为布尔值，true 表示 assert，false 表示 de-assert。}}
+
+{{知识点22}}{{SerialPort.getSignals() 方法的作用？getSignals() 返回一个 Promise，解析为包含当前端口控制信号状态的对象。返回的属性包括：clearToSend（CTS，允许发送）、dataCarrierDetect（DCD，数据载波检测）、dataSetReady（DSR，数据设备就绪）和 ringIndicator（RI，振铃指示）。}}
+
+{{知识点23}}{{SerialPort.getInfo() 方法的作用？getInfo() 返回一个包含设备标识信息的对象。属性包括：usbVendorId（USB 厂商 ID，非 USB 设备为 undefined）、usbProductId（USB 产品 ID）、bluetoothServiceClassId（蓝牙服务类 ID）。可用于识别已连接设备的具体型号。}}
+
+{{知识点24}}{{SerialPort.forget() 方法的作用？forget() 返回一个 Promise，撤销对串口的访问权限。调用后设备的权限会被重置，网站将无法再与该端口通信。适用于共享计算机等场景，避免累积过多的用户授权。}}
+
+{{知识点25}}{{Web Serial API 的 Permissions-Policy 控制？HTTP 头 Permissions-Policy: serial=<allowlist> 控制文档是否允许使用 Web Serial API。默认允许列表为 self（同源）。当策略阻止时，requestPort() 和 getPorts() 会抛出 SecurityError。适用于限制 iframe 中的串口访问。}}
+
+{{知识点26}}{{Web Serial API 的用户授权机制？Web Serial API 采用用户许可模式：首次调用 requestPort() 会弹出设备选择对话框，用户必须手动选择允许访问的设备。已授权的端口可通过 getPorts() 在后续访问中自动恢复，无需再次弹窗。}}
+
+{{知识点27}}{{Web Serial API 中的 transient activation 要求？requestPort() 必须在用户交互（如点击按钮）的上下文中调用，这称为 transient activation（瞬态激活）。直接在页面加载或其他非用户触发的上下文中调用会失败，这是防止网站未经用户同意就请求硬件访问的安全措施。}}
+
+{{知识点28}}{{Web Serial API 的错误处理机制？主要的异常类型包括：SecurityError（权限策略阻止或用户拒绝）、NotFoundError（用户未选择端口）、InvalidStateError（端口已打开或未打开时操作）、NetworkError（打开端口或设置信号失败）。建议对所有 API 调用使用 try-catch 错误处理。}}
+
+{{知识点29}}{{Web Serial API 与 Transform Streams 的配合？Web Serial API 可以与 TransformStream 配合使用，实现数据流的转换处理（如协议解析、数据编码转换）。使用 Transform Streams 时关闭串口更复杂，需要先关闭 TransformStream 再关闭端口。}}
+
+{{知识点30}}{{Web Serial API 的 Worker 支持？通过 WorkerNavigator.serial 属性，Web Serial API 可在 Web Worker 中使用。这允许将串口通信的计算密集型操作（如数据解析）移至后台线程，避免阻塞主线程 UI 渲染。}}
+
+{{知识点31}}{{Web Serial API 的典型应用场景？主要场景包括：IoT 设备配置和调试、Arduino/micro:bit 编程和通信、3D 打印机控制、工业设备监控、POS 终端通信、GPS 接收器数据读取、嵌入式系统固件更新等。任何通过串口通信的设备都可以通过浏览器直接控制。}}
+
+{{知识点32}}{{Web Serial API 与 WebUSB API 的区别？Web Serial API 用于通过操作系统串口驱动与设备通信（通常设备显示为 COM 端口或 /dev/tty），而 Web USB API 直接通过 USB 协议与设备通信。许多 USB 设备同时支持两种方式，Web Serial API 通过操作系统驱动层提供更通用的兼容性。}}
+
+{{知识点33}}{{Web Serial API 的数据编码处理？串口通信返回的原始数据为 Uint8Array 格式。发送字符串需使用 TextEncoder 编码，接收数据如需显示为文本可使用 TextDecoder 解码。对于二进制协议（如 Modbus），直接操作 Uint8Array 即可。}}
+
+{{知识点34}}{{Web Serial API 的 readUntilClosed 模式？推荐的持续读取模式是 readUntilClosed：外层 while 循环检查 port.readable 和 keepReading 标志，内层循环持续调用 reader.read()。通过设置 keepReading = false 并调用 reader.cancel() 可优雅地退出读取循环，然后调用 port.close() 关闭端口。}}
+
+{{知识点35}}{{Web Serial API 的流控制（Flow Control）？open() 的 flowControl 参数支持 "none"（无流控制）和 "hardware"（硬件流控制，即 RTS/CTS）。硬件流控制用于防止数据丢失，当接收端缓冲区满时通过 RTS/CTS 信号通知发送端暂停。对于高速通信或大数据量传输建议启用。}}
+
+{{知识点36}}{{Web Serial API 的连接和断开事件处理？通过监听 navigator.serial 的 connect 和 disconnect 事件可以实现热插拔支持。connect 事件在设备物理连接时触发（e.target 为新端口），disconnect 事件在设备断开时触发。事件通过冒泡从 SerialPort 传递到 Serial 对象。}}
+
+{{知识点37}}{{Web Serial API 的端口状态管理？在实际应用中需要维护端口状态：跟踪已连接的端口列表、记录当前活跃端口、处理意外断开。建议在 disconnect 事件处理中清理状态，在 connect 事件中更新可用端口列表，并在 UI 中反映连接状态。}}
+
+{{知识点38}}{{Web Serial API 的缓冲区配置？open() 的 bufferSize 参数控制读写缓冲区大小，默认 255 字节。对于高速数据传输或大数据包场景，增大缓冲区可以减少读取次数提高效率。但过大的缓冲区会增加内存使用和延迟。需要根据实际设备的数据速率和包大小调整。}}
+
+{{知识点39}}{{Web Serial API 与其他硬件 API 的生态关系？Web Serial API 是 Chromium 能力项目（Capabilities Project）的一部分，与 WebUSB、WebHID、Web Bluetooth、Web NFC 等共同构成浏览器硬件访问能力。这些 API 互补：WebUSB 用于原始 USB 通信，WebHID 用于人机接口设备，Web Serial 用于串口设备。}}
+
+{{知识点40}}{{Web Serial API 的开发调试技巧？Chrome DevTools 提供了 Web Serial API 的检查能力。开发时可使用 chrome://device-log 查看设备通信日志。localhost 被视为安全上下文，方便本地开发。建议使用 console.log 记录收发数据用于调试，生产环境中使用更结构化的日志方案。}}
+
+{{知识点41}}{{Web Serial API 中 Arduino Uno 的典型连接示例？连接 Arduino Uno 需要使用特定的 USB Vendor ID（0x2341）和 Product ID（0x0043 或 0x0001）作为过滤器。获取端口后调用 getInfo() 可验证设备信息。打开端口时 Arduino 默认使用 9600 波特率（可通过 Serial.begin() 修改）。}}
+
+{{知识点42}}{{Web Serial API 的安全考虑？Web Serial API 的安全模型基于：必须 HTTPS、用户显式授权、transient activation 要求、Permissions-Policy 控制。但注意串口通信本身不加密，传输敏感数据需在应用层加密。用户授权仅限当前源（origin），不同网站需要分别授权。}}
+
+{{知识点43}}{{Web Serial API 的 spec 跟踪与社区资源？Web Serial API 规范在 WICG 的 serial 仓库中维护。MDN 提供了完整的 API 参考文档。Chrome 官方文档有详细的入门教程。Google Codelabs 提供了交互式学习教程。社区库如 serialport.js 提供了更高层的封装。}}
+
+{{知识点44}}{{Web Serial API 的 HTTP Headers 交互？使用 Web Serial API 时涉及的 HTTP 头主要是 Permissions-Policy: serial，用于控制哪些源可以使用该 API。服务器可以配置此头来限制第三方嵌入内容的串口访问。默认策略为 self，即只允许同源访问。}}
+
+{{知识点45}}{{Web Serial API 的实际工程实践建议？生产环境建议：始终检查 navigator.serial 是否存在（特性检测）；实现优雅降级方案；使用 async/await 管理异步操作；实现完善的错误处理和重连机制；在 UI 中清晰显示连接状态；使用 TextDecoder/TextEncoder 处理数据编码；定期释放不再需要的端口权限。}}

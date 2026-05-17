@@ -1,0 +1,103 @@
+# 2025前端Performance Timeline
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{Performance Timeline API概述：Performance Timeline API是一组用于衡量Web应用性能的标准API集合。它提供了高精度时间戳和性能条目（PerformanceEntry），可显示在开发者工具中，也可发送到分析端点记录长期性能数据。每个性能指标由一个PerformanceEntry表示，包含name、duration、startTime和type四个基本属性。}}
+
+{{知识点2}}{{Performance主接口：Performance对象在Window和Worker全局作用域中均可用（通过window.performance或self.performance访问）。它提供了添加自定义性能条目、清除性能条目和检索性能条目的能力，是访问所有性能测量的主入口。}}
+
+{{知识点3}}{{PerformanceEntry基础接口：PerformanceEntry是所有性能条目的基类，包含四个只读属性：name（条目名称）、entryType（类型字符串）、startTime（DOMHighResTimeStamp起始时间）、duration（DOMHighResTimeStamp持续时间）。所有性能指标子类都继承并扩展此接口。}}
+
+{{知识点4}}{{Performance.getEntries()方法：返回性能时间线中当前所有PerformanceEntry对象的数组，按startTime时间顺序排列。此方法不会通知新条目——仅返回调用时已存在的条目。element、event、largest-contentful-paint、layout-shift、longtask类型不支持此方法，必须使用PerformanceObserver。}}
+
+{{知识点5}}{{Performance.getEntriesByType(type)方法：按类型过滤返回PerformanceEntry数组。参数type为entryType字符串（如"mark"、"resource"、"navigation"等），返回结果按startTime排序。同样不支持element、event、largest-contentful-paint、layout-shift、longtask类型。}}
+
+{{知识点6}}{{Performance.getEntriesByName(name, type?)方法：按名称（和可选类型）过滤返回PerformanceEntry数组。可用于精确查找特定标记或资源的性能数据。例如performance.getEntriesByName("debug-mark", "mark")返回名为debug-mark的所有标记。}}
+
+{{知识点7}}{{PerformanceObserver接口：用于观察性能测量事件并在新性能条目记录时收到通知的接口。自2020年1月起在所有主流浏览器中广泛可用。构造函数接收回调函数，当指定类型的性能条目被记录时调用。是获取性能数据的首选方式。}}
+
+{{知识点8}}{{PerformanceObserver.observe()方法：指定要观察的条目类型。支持两种选项模式：(1) entryTypes数组——观察多种类型，不能与buffered/durationThreshold一起使用；(2) type单字符串——观察单一类型，可配合buffered和durationThreshold使用。}}
+
+{{知识点9}}{{PerformanceObserver buffered选项：当使用type选项时，设置buffered: true可获取在观察者创建之前浏览器已缓冲的性能条目。这对于页面加载后才初始化观察者的场景至关重要，确保不丢失早期性能数据。}}
+
+{{知识点10}}{{PerformanceObserver durationThreshold选项：用于PerformanceEventTiming条目，默认阈值104ms（100ms后第一个8的倍数），最低可设16ms。用于控制哪些事件被报告——只有duration超过阈值的事件才会触发回调。不能与entryTypes一起使用。}}
+
+{{知识点11}}{{PerformanceObserver.supportedEntryTypes静态属性：返回当前用户代理支持的entryType值数组。Chrome 129主线程返回：["element","event","first-input","largest-contentful-paint","layout-shift","long-animation-frame","longtask","mark","measure","navigation","paint","resource","visibility-state"]，Worker线程仅返回["mark","measure","resource"]。}}
+
+{{知识点12}}{{PerformanceObserver.disconnect()方法：停止观察者回调接收性能条目。调用后观察者不再接收通知，但已缓冲在观察者中的条目可通过takeRecords()获取。}}
+
+{{知识点13}}{{PerformanceObserver.takeRecords()方法：返回当前存储在观察者中的性能条目列表，同时清空观察者的内部缓冲区。用于在disconnect前获取尚未处理的条目。}}
+
+{{知识点14}}{{PerformanceObserverEntryList：PerformanceObserver回调中提供的条目列表对象，提供getEntries()、getEntriesByType()和getEntriesByName()方法，用于在回调中获取已观察到的性能条目。}}
+
+{{知识点15}}{{PerformanceMark（性能标记）：entryType为"mark"的PerformanceEntry子类。通过performance.mark(name)创建，用于在代码中设置自定义时间戳。duration始终为0。支持detail属性存储任意元数据。也可通过构造函数创建不添加到时间线的标记。标记条目的缓冲区大小为无限。}}
+
+{{知识点16}}{{PerformanceMeasure（性能度量）：entryType为"measure"的PerformanceEntry子类。通过performance.measure(name, startMark, endMark)在两个标记之间创建时间度量。duration为结束标记时间减去起始标记时间。支持detail属性。缓冲区大小为无限。}}
+
+{{知识点17}}{{PerformanceNavigationTiming（导航计时）：entryType为"navigation"的接口，提供浏览器文档导航事件的度量。继承自PerformanceResourceTiming。每个文档只有一个此类条目。关键属性包括：domInteractive、domContentLoadedEventStart/End、domComplete、loadEventStart/End、type（"navigate"/"reload"/"back_forward"）、redirectCount等。缓冲区大小为无限。}}
+
+{{知识点18}}{{PerformanceNavigationTiming关键时间点：按时间顺序包括unloadEventStart/End（前文档卸载）、redirectStart/End（重定向）、domInteractive（DOM就绪）、domContentLoadedEventStart/End（DOMContentLoaded事件）、domComplete（DOM完成）、loadEventStart/End（load事件）。duration为loadEventEnd减去startTime。}}
+
+{{知识点19}}{{PerformanceResourceTiming（资源计时）：entryType为"resource"的接口，记录网络加载指标。提供完整的时间戳链：redirectStart/End→workerStart→fetchStart→domainLookupStart/End→connectStart/secureConnectionStart/connectEnd→requestStart→firstInterimResponseStart→responseStart→finalResponseHeadersStart→responseEnd。默认缓冲区250条目（可调整）。}}
+
+{{知识点20}}{{PerformanceResourceTiming资源信息属性：包含transferSize（传输大小含头）、encodedBodySize（编码前大小）、decodedBodySize（解码后大小）、initiatorType（发起者类型如"img"/"script"/"css"等）、nextHopProtocol（网络协议如"h2"/"h3"）、renderBlockingStatus（"blocking"/"non-blocking"）、deliveryType（交付方式如缓存）、contentType、responseStatus。}}
+
+{{知识点21}}{{跨域资源计时限制：跨域请求的资源计时属性默认返回0或空字符串，包括redirectStart/End、domainLookupStart/End、connectStart/End、secureConnectionStart、requestStart、responseStart。需设置Timing-Allow-Origin响应头才能暴露跨域计时信息。}}
+
+{{知识点22}}{{PerformancePaintTiming（绘制计时）：entryType为"paint"的接口，提供两个关键绘制时刻：First Paint (FP，"first-paint")——任何内容首次渲染的时间；First Contentful Paint (FCP，"first-contentful-paint")——首个DOM文本或图像内容渲染的时间。缓冲区仅2条（不会有更多）。支持paintTime和presentationTime属性。}}
+
+{{知识点23}}{{LargestContentfulPaint（最大内容绘制LCP）：entryType为"largest-contentful-paint"的接口，度量视口内最大图像或文本块的渲染时间。考虑的元素包括img、SVG中的image、video的poster、background-image元素、文本节点组。关键属性：element、renderTime、loadTime、size（面积）、id、url。缓冲区150条目。必须使用PerformanceObserver获取。}}
+
+{{知识点24}}{{PerformanceEventTiming（事件计时）：entryType为"event"（长事件）或"first-input"（首次交互）的接口。用于衡量Interaction to Next Paint (INP)。默认阈值104ms（可设最低16ms）。关键属性：processingStart（事件派发开始）、processingEnd（事件派发结束）、interactionId（交互ID）、cancelable、target。first-input缓冲区仅1条，event缓冲区150条。}}
+
+{{知识点25}}{{事件计时暴露的事件类型：包括click类（click/dblclick/contextmenu/auxclick）、composition类、drag&drop类、input类（beforeinput/input）、keyboard类（keydown/keypress/keyup）、mouse类、pointer类、touch类。不包含mousemove/pointermove/touchmove/wheel/drag等连续事件。可通过performance.eventCounts.keys()获取完整列表。}}
+
+{{知识点26}}{{LayoutShift（布局偏移）：entryType为"layout-shift"的接口，用于衡量页面布局稳定性（CLS指标）。关键属性：value（偏移分数=影响分数×距离分数）、hadRecentInput（500ms内是否有用户输入，有则排除在CLS计算外）、lastInputTime、sources（LayoutShiftAttribution数组，含偏移元素信息）。缓冲区150条目。必须使用PerformanceObserver。}}
+
+{{知识点27}}{{PerformanceLongTaskTiming（长任务计时）：entryType为"longtask"的接口，记录主线程占用超过50ms的不间断任务。name属性标识上下文来源（如"self"/"same-origin"/"cross-origin-ancestor"等）。attribution属性返回TaskAttributionTiming数组，提供containerId/containerName/containerSrc定位责任容器。缓冲区200条目。必须使用PerformanceObserver。}}
+
+{{知识点28}}{{PerformanceLongAnimationFrameTiming（长动画帧）：提供长动画帧(LoAF)的指标，这些帧占用渲染并阻止其他任务执行。比Long Tasks API更详细，能关联到具体脚本。是Chrome较新的性能监控能力。}}
+
+{{知识点29}}{{PerformanceServerTiming（服务器计时）：通过Server-Timing HTTP响应头暴露服务器端指标。通过PerformanceResourceTiming.serverTiming数组访问。允许将后端处理时间（如数据库查询耗时、缓存命中状态）传递到前端性能时间线中。}}
+
+{{知识点30}}{{PerformanceElementTiming（元素计时）：entryType为"element"的接口，度量特定DOM元素的渲染时间戳。需在元素上添加elementtiming属性才能启用（opt-in机制）。用于测量对用户重要的特定元素（如hero image）的渲染性能。缓冲区150条目。}}
+
+{{知识点31}}{{VisibilityStateEntry（可见性状态条目）：entryType为"visibility-state"的接口，记录页面可见性状态变化的计时——即标签页从前台切换到后台或反之的时间点。缓冲区50条目。}}
+
+{{知识点32}}{{NotRestoredReasons：提供报告数据说明当前文档为何被阻止使用往返缓存（bfcache）。通过PerformanceNavigationTiming.notRestoredReasons访问。帮助诊断bfcache不生效的原因。}}
+
+{{知识点33}}{{性能条目缓冲区管理：每种entryType有固定的缓冲区限制。mark/measure/navigation为无限；resource默认250（可调整）；longtask为200；paint为2；element/event/layout-shift/LCP为150；first-input为1；visibility-state为50。缓冲区满时新条目会被丢弃，可通过observe回调的droppedEntriesCount参数获知丢弃数量。}}
+
+{{知识点34}}{{资源缓冲区大小调整：对于resource类型的缓冲区，默认250条可能不够。可通过performance.setResourceTimingBufferSize(size)方法调整。在大量资源加载（如轮询）场景下需要增大此值。也可使用performance.clearResourceTimings()手动清除。}}
+
+{{知识点35}}{{performance.timeOrigin属性：返回性能时间线的高精度起始时间（DOMHighResTimeStamp）。在Window和Worker上下文中收集性能数据时，使用此属性同步不同上下文的时间原点，确保跨上下文的时间戳可比较。}}
+
+{{知识点36}}{{performance.eventCounts：只读的EventCounts映射，包含已派发的每种事件类型的计数。可结合PerformanceEventTiming使用，获取事件频率和性能数据的完整视图。键值可通过.keys()枚举获取所有已暴露的事件类型。}}
+
+{{知识点37}}{{DOMHighResTimeStamp高精度时间：Performance API使用DOMHighResTimeStamp类型表示时间，精度为微秒级（5微秒），比Date.now()精度高得多。时间值为浮点数，整数部分为毫秒，小数部分为微秒。基于单调时钟（monotonic clock），不受系统时间调整影响。}}
+
+{{知识点38}}{{PerformanceObserver vs getEntries*方法：首选PerformanceObserver的原因：(1)异步通知，浏览器可在空闲时调度以最小化性能影响；(2)不会重复返回已见过的条目；(3)某些entryType（element/event/LCP/layout-shift/longtask）只能通过Observer获取。getEntries*方法适用于需要同步获取所有历史条目的简单场景。}}
+
+{{知识点39}}{{性能数据toJSON序列化：所有PerformanceEntry提供toJSON()方法，返回条目的JSON表示。可配合JSON.stringify(entry)直接序列化为字符串。适用于将性能数据收集后发送到分析服务器或存储。}}
+
+{{知识点40}}{{Web Workers中的性能API：Performance对象在Worker上下文中同样可用，但支持的entryType有限（Chrome中仅mark/measure/resource）。Worker中可用performance.mark()、performance.measure()和performance.getEntries*()方法。注意Worker与主线程有不同的时间原点，需通过performance.timeOrigin同步。}}
+
+{{知识点41}}{{Chrome DevTools性能扩展API：Chrome DevTools使用performance.mark()和performance.measure()的detail结构化属性作为其扩展API的一部分，可在性能追踪中显示自定义轨道。开发者可利用此机制在DevTools Performance面板中注入自定义性能数据。}}
+
+{{知识点42}}{{Performance Navigation Timing Level 2规范：W3C标准（Navigation Timing Level 2），定义了PerformanceNavigationTiming接口。相比Level 1（已废弃的PerformanceTiming），提供了更清晰的时间戳模型、与Performance Timeline的集成、以及Worker支持。所有现代浏览器均已支持。}}
+
+{{知识点43}}{{Resource Timing API规范：W3C标准（Resource Timing），定义了PerformanceResourceTiming接口。记录所有资源（图片、脚本、CSS、fetch请求等）的网络加载指标。可通过initiatorType区分资源类型，通过nextHopProtocol检查是否使用HTTP/2或HTTP/3等现代协议。}}
+
+{{知识点44}}{{User Timing API规范：W3C标准（User Timing），定义了PerformanceMark和PerformanceMeasure接口。允许开发者在应用自定义操作（如用户登录、表单提交等）的关键点添加性能标记和度量。Chrome DevTools的自定义轨道功能也基于此API。}}
+
+{{知识点45}}{{Paint Timing API规范：W3C标准（Paint Timing），定义了PerformancePaintTiming接口。提供FP和FCP两个关键绘制时刻。新增的paintTime和presentationTime属性区分了渲染阶段结束时间和像素实际上屏时间，后者为实现相关。}}
+
+{{知识点46}}{{Long Tasks API规范：W3C标准（Long Tasks API），定义了PerformanceLongTaskTiming和TaskAttributionTiming接口。识别50ms以上的主线程阻塞任务。任务来源通过name属性标识（如"self"表示当前帧，"cross-origin-ancestor"表示跨域祖先帧等）。}}
+
+{{知识点47}}{{Interaction to Next Paint (INP)测量：通过PerformanceEventTiming接口测量INP——从用户交互到浏览器实际能够响应的最长时间（去除异常值）。INP是Core Web Vitals的三大指标之一（与LCP和CLS并列），替代了已废弃的FID（First Input Delay）。}}
+
+{{知识点48}}{{First Input Delay (FID)测量：通过entryType为"first-input"的PerformanceEventTiming条目测量。记录首次用户交互的输入延迟（processingStart - startTime）。FID已被INP取代，但仍可通过PerformanceObserver观察type: "first-input"获取。缓冲区仅1条。}}
+
+{{知识点49}}{{Core Web Vitals与Performance Timeline关系：三大Core Web Vitals指标均通过Performance Timeline API获取——LCP通过LargestContentfulPaint接口、INP通过PerformanceEventTiming接口、CLS通过LayoutShift接口。这些是Google搜索排名因素，对SEO至关重要。}}
+
+{{知识点50}}{{性能监控最佳实践：(1)使用PerformanceObserver而非getEntries*方法；(2)使用buffered: true确保不遗漏早期数据；(3)在主线程和Worker中分别设置观察者；(4)注意缓冲区限制，对resource类型可能需要增大；(5)跨域资源需配置Timing-Allow-Origin；(6)利用toJSON()和droppedEntriesCount进行数据收集和错误处理。}}

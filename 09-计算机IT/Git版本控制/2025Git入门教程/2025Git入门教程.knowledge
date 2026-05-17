@@ -1,0 +1,121 @@
+# 2025Git入门教程
+# 领域: 计算机IT
+# 学科: Git
+# 来源: 2025Git入门教程
+# 描述: Git版本控制核心知识点
+
+{{Git是什么}}{{Git是一个分布式版本控制系统，由Linus Torvalds于2005年创建，用于跟踪文件变化、协调多人协作开发。每个开发者本地都拥有完整的代码仓库副本，支持离线工作，是目前世界上最流行的版本控制工具。}}
+
+{{Git的工作区域}}{{Git有三个核心工作区域：工作区（Working Directory）是你编辑文件的地方；暂存区（Staging Area/Index）是准备提交的文件快照区；本地仓库（Repository）存储完整的提交历史。理解这三个区域是掌握Git的基础。}}
+
+{{git init初始化仓库}}{{使用git init命令在当前目录创建一个新的Git仓库，会生成.git隐藏目录，包含所有版本控制所需的元数据。也可以用git init <目录名>在指定路径创建新仓库。}}
+
+{{git clone克隆仓库}}{{git clone <仓库URL>将远程仓库完整复制到本地，自动创建目录并初始化.git。支持HTTPS和SSH协议，例如：git clone https://github.com/user/repo.git。克隆后自动设置远程仓库别名origin。}}
+
+{{git add暂存文件}}{{git add <文件名>将工作区的修改添加到暂存区。git add .暂存当前目录所有变更，git add -A暂存所有变更（包括删除）。暂存是提交前的准备步骤，让你选择性地提交部分内容。}}
+
+{{git commit提交记录}}{{git commit -m "提交说明"将暂存区的内容创建一个新的提交记录。每次提交都有唯一的SHA-1哈希值。好的提交说明应该简洁描述做了什么，例如"修复登录页面样式问题"。git commit -am可以跳过add直接提交已跟踪文件的修改。}}
+
+{{git status查看状态}}{{git status显示工作区和暂存区的状态，哪些文件被修改、暂存或未跟踪。-s参数提供简洁格式输出。这是使用最频繁的Git命令之一，建议在每次操作前都检查一下状态。}}
+
+{{git log查看历史}}{{git log显示提交历史记录，包含作者、日期和提交说明。常用参数：--oneline单行简洁显示，--graph图形化显示分支，--pretty=format自定义格式，-n限制显示条数。}}
+
+{{git diff查看差异}}{{git diff查看工作区与暂存区的差异；git diff --staged查看暂存区与最新提交的差异；git diff <commit1> <commit2>比较两个提交之间的差异。是代码审查和理解变更的重要工具。}}
+
+{{.gitignore忽略文件}}{.gitignore文件用于指定Git应该忽略的文件和目录模式。每行一个规则，支持通配符：*.pyc忽略所有pyc文件，/build忽略根目录的build目录，**/logs忽略所有logs目录。常用模板可在github.com/github/gitignore获取。}}
+
+{{Git分支概念}}{{分支是Git最强大的特性之一。每个分支是一个独立的开发线，默认分支通常叫main或master。分支本质上只是一个指向某个提交的轻量级指针，创建和切换几乎不消耗资源。}}
+
+{{git branch分支管理}}{{git branch列出所有本地分支，git branch <名称>创建新分支，git branch -d <名称>删除已合并分支，git branch -D强制删除。git branch -a查看所有分支（包括远程分支）。}}
+
+{{git checkout切换分支}}{{git checkout <分支名>切换到指定分支，git checkout -b <新分支名>创建并切换到新分支（常用快捷方式）。切换分支会改变工作区的文件内容。在Git 2.23+中推荐使用git switch命令替代。}}
+
+{{git switch分支切换}}{{git switch <分支名>切换分支，git switch -c <新分支名>创建并切换新分支。这是Git 2.23引入的新命令，语义比checkout更清晰，专门用于分支操作。}}
+
+{{git merge合并分支}}{{git merge <分支名>将指定分支的修改合并到当前分支。快进合并（Fast-forward）直接移动指针；三方合并会创建新的合并提交。合并前确保当前分支的工作区是干净的。}}
+
+{{合并冲突解决}}{{当两个分支修改了同一文件的同一部分时会产生合并冲突。Git会在冲突文件中标记冲突区域（<<<<<<<、=======、>>>>>>>）。解决步骤：1.编辑文件解决冲突 2.git add标记已解决 3.git commit完成合并。IDE通常提供可视化冲突解决工具。}}
+
+{{git rebase变基操作}}{{git rebase <目标分支>将当前分支的提交"移植"到目标分支之上，产生线性历史。与merge不同，rebase改写提交历史。规则：不要对已推送到远程的公共分支执行rebase，避免协作混乱。}}
+
+{{merge vs rebase选择}}{{merge保留完整的分支历史，适合公共分支和团队协作；rebase产生线性历史更整洁，适合个人特性分支在合并前整理提交。实践中常在特性分支上rebase主分支，然后用merge合入主分支。}}
+
+{{git stash暂存工作}}{{git stash临时保存未提交的修改，让工作区恢复干净。git stash pop恢复最近的暂存并删除记录，git stash apply恢复但保留记录，git stash list查看所有暂存。适合临时切换分支处理紧急任务时使用。}}
+
+{{git reset重置操作}}{{git reset --soft <commit>只移动HEAD指针；git reset --mixed（默认）同时重置暂存区；git reset --hard同时重置工作区（危险操作，会丢失修改）。常用于撤销最近的提交或整理暂存区。}}
+
+{{git revert撤销提交}}{{git revert <commit>创建一个新的提交来撤销指定提交的更改，不改变历史记录。与reset不同，revert是安全的撤销方式，适合已经推送到远程的提交。}}
+
+{{git remote远程仓库}}{{git remote查看远程仓库列表，git remote add <名称> <URL>添加远程仓库（通常命名为origin），git remote remove删除远程仓库。一个项目可以有多个远程仓库。}}
+
+{{git push推送代码}}{{git push origin <分支名>将本地分支的提交推送到远程仓库。-u参数设置上游追踪关系，之后可直接git push。首次推送新分支时需要-u设置追踪。如果远程有新提交需先pull再push。}}
+
+{{git pull拉取更新}}{{git pull从远程仓库获取并合并到当前分支，等价于git fetch + git merge。git pull --rebase使用rebase方式合并。建议在push前先pull确保本地是最新的。}}
+
+{{git fetch获取远程更新}}{{git fetch origin获取远程仓库的最新状态但不自动合并，让你有机会在合并前检查差异。比pull更安全，因为你可以先审查再决定是否合并。}}
+
+{{远程分支追踪}}{{本地分支可以追踪远程分支，建立上游关系。git branch -u origin/<分支名>设置追踪，git branch -vv查看追踪关系。追踪后可以使用git push/pull时不指定远程分支名。}}
+
+{{HEAD指针}}{{HEAD是一个特殊指针，指向当前所在分支（或某个特定提交）。在分离HEAD状态（detached HEAD）下，HEAD直接指向某个提交而非分支名，常见于checkout某个具体commit时。}}
+
+{{标签管理}}{{git tag <标签名>创建轻量标签，git tag -a <标签名> -m "说明"创建附注标签（推荐）。标签用于标记版本发布点，如v1.0.0。git push origin <标签名>推送标签到远程，git push --tags推送所有标签。}}
+
+{{git cherry-pick拣选提交}}{{git cherry-pick <commit>将指定的提交应用到当前分支，创建一个新的提交。适合将某个bug修复从一个分支应用到另一个分支，而不需要合并整个分支。}}
+
+{{交互式暂存}}{{git add -p进入交互式暂存模式，可以逐个选择要暂存的代码块（hunk）。对于一个文件中的多处修改，可以只暂存其中一部分，实现更精细的提交粒度，有助于创建有意义的原子提交。}}
+
+{{git commit --amend修改提交}}{{git commit --amend修改最近一次提交，可以更改提交说明或添加遗漏的文件。本质上是创建新的提交替代原来的，如果已push到远程需要force push（谨慎使用）。}}
+
+{{Git配置}}{{git config --global user.name "名字"设置全局用户名，git config --global user.email "邮箱"设置全局邮箱。--system系统级，--local仓库级（默认）。配置文件位于~/.gitconfig（全局）和仓库.git/config（本地）。}}
+
+{{Git别名设置}}{{通过git config设置常用命令别名提高效率，例如：git config --global alias.st status，git config --global alias.co checkout，git config --global alias.br branch。设置后可用git st替代git status。}}
+
+{{SSH密钥配置}}{{使用SSH协议连接远程仓库可以免密操作。步骤：ssh-keygen生成密钥对，将公钥（~/.ssh/id_rsa.pub）添加到GitHub/GitLab的SSH Keys设置中。测试连接：ssh -T git@github.com。}}
+
+{{Git工作流：集中式}}{{所有开发者在同一个主分支上工作，适合小型团队。流程：pull最新代码→修改→commit→push。简单但容易产生冲突，不推荐用于多人协作项目。}}
+
+{{Git工作流：功能分支}}{{每个新功能在独立分支上开发（如feature/xxx），完成后通过Pull Request合并到主分支。支持代码审查，是目前最流行的协作方式。主分支始终保持可部署状态。}}
+
+{{Git工作流：Git Flow}}{{定义严格的分支模型：main（生产）、develop（开发）、feature/*（功能）、release/*（预发布）、hotfix/*（热修复）。适合有固定发布周期的项目，但分支较多管理复杂。}}
+
+{{Git工作流：GitHub Flow}}{{简化的分支模型：main分支始终可部署，从main创建特性分支，开发完成后提PR，审查通过后合并到main并部署。简洁高效，适合持续部署的项目。}}
+
+{{Git工作流：Trunk Based}}{{所有开发者直接在主干（trunk/main）上工作，频繁集成小改动。配合特性标志（Feature Flags）控制未完成功能的可见性。适合成熟团队和CI/CD流水线完善的情况。}}
+
+{{Pull Request与代码审查}}{{Pull Request（PR）是GitHub/GitLab上的协作机制，用于请求将分支合并到目标分支。PR中可以讨论代码、请求修改、运行CI检查。良好的PR应该小而专注，附带清晰的描述。}}
+
+{{子模块Submodule}}{{git submodule允许在一个Git仓库中嵌套另一个Git仓库。git submodule add <URL>添加子模块，git submodule init和update初始化和更新。适合管理项目依赖的外部库，但使用较复杂。}}
+
+{{Git大文件处理}}{{Git不适合跟踪大型二进制文件。Git LFS（Large File Storage）通过指针文件替代大文件，实际文件存储在单独服务器。git lfs install安装，git lfs track "*.psd"追踪指定类型文件。}}
+
+{{.git目录结构}}{.git目录包含：HEAD（当前分支指针）、objects/（所有数据对象）、refs/（分支和标签引用）、config（仓库配置）、hooks/（钩子脚本）、index（暂存区）。了解这些有助于深入理解Git原理。}}
+
+{{Git对象模型}}{{Git存储四种对象：blob（文件内容）、tree（目录结构）、commit（提交信息）、tag（标签指向）。所有对象用SHA-1哈希标识，内容相同则哈希相同，实现了高效的存储去重。}}
+
+{{Git钩子Hooks}}{.git/hooks/目录下的脚本会在特定Git操作时自动执行。常用钩子：pre-commit（提交前检查）、commit-msg（验证提交说明）、pre-push（推送前检查）。可用于自动运行测试、代码格式化等。}}
+
+{{git blame追溯修改}}{{git blame <文件名>显示文件每一行最后修改的提交和作者。当发现代码问题时，可以用它快速找到引入问题的人和提交，便于追溯和沟通。}}
+
+{{git bisect二分查找}}{{git bisect start开始，git bisect bad标记有问题的提交，git bisect good标记正常的提交。Git会自动二分定位引入bug的具体提交。对于大型项目回溯历史问题非常高效。}}
+
+{{Git清理操作}}{{git clean -n预览未跟踪文件，git clean -f删除未跟踪文件，git clean -fd删除未跟踪文件和目录。配合git reset --hard可将工作区完全恢复到某次提交的状态（慎用）。}}
+
+{{Git归档打包}}{{git archive --format=zip HEAD > release.zip将指定提交的文件打包为zip或tar格式。不包含.git目录，适合发布源码包。可以指定分支、标签或commit作为打包基准。}}
+
+{{Git引用日志}}{{git reflog记录HEAD和分支引用的所有移动历史，包括被reset删除的提交。是恢复误操作的最后防线，即使误删分支或reset也能通过reflog找到之前的提交哈希并恢复。}}
+
+{{Git补丁操作}}{{git format-patch生成.patch格式的补丁文件，git am应用补丁。适合不方便直接push/pull的场景，如通过邮件发送代码变更。也常用于保存和传输一组提交。}}
+
+{{工作区恢复技巧}}{{误删文件：git checkout -- <文件>恢复暂存区版本。误删分支：git reflog找到提交哈希后git branch <分支名> <哈希>恢复。误reset --hard：git reflog找到之前的提交后git reset --hard <哈希>。}}
+
+{{Git性能优化}}{{大仓库可开启：git config core.fsmonitor true（文件系统监控）、git config core.untrackedCache true（未跟踪文件缓存）、git config feature.manyFiles true（大量文件优化）。定期git gc清理和压缩仓库。}}
+
+{{Git与IDE集成}}{{主流IDE（VS Code、IntelliJ、Xcode）都内置Git支持，提供可视化diff、冲突解决、分支管理等功能。VS Code的GitLens插件提供增强的blame和历史查看能力。命令行和IDE结合使用效率最高。}}
+
+{{Git安全最佳实践}}{{永远不要将密码、API密钥等敏感信息提交到仓库。使用.gitignore排除环境配置文件。如不慎提交了敏感信息，使用git filter-branch或BFG Repo-Cleaner清理历史。启用仓库的分支保护规则。}}
+
+{{Git常见问题排查}}{{冲突频繁→更频繁地pull和小粒度提交。提交历史混乱→学习rebase和交互式rebase整理。仓库过大→使用Git LFS和浅克隆。误操作→先查reflog再行动。养成频繁commit的习惯，提交容易撤销难。}}
+
+{{交互式Rebase整理提交}}{{git rebase -i HEAD~N打开最近N次提交的交互式编辑。可以reword（修改说明）、squash（合并提交）、drop（删除提交）、edit（暂停修改）。在push前整理提交历史，让每个提交都有意义。}}
+
+{{Git浅克隆与部分克隆}}{{git clone --depth 1只克隆最近一次提交，大幅减少下载量。git clone --filter=blob:none实现部分克隆，按需下载文件内容。适合CI/CD和大型仓库，节省时间和磁盘空间。}}

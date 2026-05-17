@@ -1,0 +1,73 @@
+# 2025前端前端CSS Subgrid
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{CSS Subgrid 是 CSS Grid Layout Module Level 2 中引入的特性，允许嵌套网格（nested grid）继承父网格的轨道定义，使嵌套元素的子项能够与主网格对齐。Subgrid 解决了嵌套网格无法与父网格轨道对齐的问题。}}
+
+{{知识点2}}{{Subgrid 的基本语法是在 grid-template-columns 或 grid-template-rows 属性上使用 subgrid 关键字值，例如 grid-template-columns: subgrid。使用 subgrid 后不再创建新的轨道列表，而是使用父网格中被跨越的轨道。}}
+
+{{知识点3}}{{当嵌套网格跨越父网格的三个列轨道时，设置 grid-template-columns: subgrid 后，该嵌套网格将拥有三个与父网格相同尺寸的列轨道。轨道数量由子网格在父网格中跨越的轨道数决定。}}
+
+{{知识点4}}{{Subgrid 可以仅应用于列方向（grid-template-columns: subgrid），此时行方向的轨道独立定义，行为类似普通嵌套网格。这称为"列方向的 subgrid"。}}
+
+{{知识点5}}{{Subgrid 可以仅应用于行方向（grid-template-rows: subgrid），此时列方向的轨道独立定义。例如 grid-template-columns: repeat(3, 1fr); grid-template-rows: subgrid; 列独立而行继承父网格。}}
+
+{{知识点6}}{{Subgrid 可以同时应用于行和列两个方向（grid-template-columns: subgrid; grid-template-rows: subgrid），此时子网格在两个维度上都与父网格对齐，是最严格的 subgrid 模式。}}
+
+{{知识点7}}{{Subgrid 中的线编号（line numbering）会重新开始。subgrid 内的列线 1 是 subgrid 的第一条线，而非父网格的列线 1。这使得组件可以在主网格的不同位置使用时保持一致的内部线编号。}}
+
+{{知识点8}}{{Subgridded 维度不会创建隐式网格（implicit grid）。如果 subgrid 中自动放置的子项数量超过了父网格提供的轨道数，多余的子项将堆叠在最后一个轨道中，这是规范定义的行为。}}
+
+{{知识点9}}{{如果需要隐式网格轨道，应避免对相应维度使用 subgrid。可以通过移除 grid-template-rows 的 subgrid 值并使用 grid-auto-rows 来控制隐式轨道的大小，从而允许创建额外的行。}}
+
+{{知识点10}}{{父网格上指定的 gap、column-gap、row-gap 值会传递到 subgrid 中，在子网格轨道之间创建与父网格相同的间距。这是 subgrid 的默认行为。}}
+
+{{知识点11}}{{Subgrid 可以通过在其容器上设置 gap 属性来覆盖继承的间距值。例如父网格 gap 为 20px，subgrid 上设置 row-gap: 0 会使行间距变为 0，效果类似于对元素应用负 margin。}}
+
+{{知识点12}}{{父网格上定义的命名网格线（named grid lines）会传递到 subgrid 中，子项可以使用父网格的命名线进行定位。例如父网格定义了 [col-start] 和 [col-end]，subgrid 中的子项可以直接使用 grid-column: col-start / col-end。}}
+
+{{知识点13}}{{Subgrid 可以在 subgrid 关键字后附加自己的命名线。语法为 grid-template-columns: subgrid [line1] [line2] [line3] [line4]，subgrid 的命名线会与父网格的命名线合并，两者都可用于定位子项。}}
+
+{{知识点14}}{{Subgrid 的子项虽然不是主网格的直接子元素，但因为 subgrid 继承了父网格的轨道，这些子项实际上可以与主网格的列对齐，实现了跨层级的精确对齐。}}
+
+{{知识点15}}{{Subgrid 最常见的使用场景是卡片布局。当卡片内部有标题、描述、按钮等内容需要与外部卡片对齐时，subgrid 可以让不同卡片的相同内容行精确对齐，而不需要固定高度。}}
+
+{{知识点16}}{{Subgrid 在表单布局中非常有用。标签（label）和输入框（input）可以分别放在不同的 subgrid 行中，即使标签长度不同，也能通过 subgrid 保持对齐。}}
+
+{{知识点17}}{{Subgrid 的规范来自 W3C CSS Grid Layout Module Level 2（https://drafts.csswg.org/css-grid/#subgrids）。这是 CSS 网格布局规范的第二级，专门定义了 subgrid 功能。}}
+
+{{知识点18}}{{Subgrid 在 2023 年底获得了所有主流浏览器的支持。Firefox 最早实现（2019年），Chrome 117+（2023年9月）和 Safari 16+（2022年）陆续支持，使 subgrid 成为可用于生产环境的特性。}}
+
+{{知识点19}}{{在 subgrid 上，子网格的内容大小可以影响父网格的轨道大小。如果父网格的轨道使用了允许内容影响大小的尺寸方法（如 auto 大小），subgrid 中的内容会使相应的轨道增长以适应内容。}}
+
+{{知识点20}}{{Subgrid 与普通嵌套网格的最大区别在于：普通嵌套网格的轨道独立于父网格，而 subgrid 的轨道直接使用父网格定义的轨道尺寸，保证了跨层级的对齐一致性。}}
+
+{{知识点21}}{{使用 subgrid 时，子网格项必须先通过 grid-column 和 grid-row 属性在父网格上占据一定范围的轨道，subgrid 才能知道继承哪些轨道。跨越的轨道数量决定了 subgrid 拥有的轨道数。}}
+
+{{知识点22}}{{Subgrid 的 grid-column 和 grid-row 在子网格内部从 1 开始编号。例如父网格中 item 从列线 2 到列线 7（跨越 5 个轨道），subgrid 内部列线编号为 1 到 6（5 个轨道有 6 条线）。}}
+
+{{知识点23}}{{Subgrid 支持在非 subgrid 维度上使用所有常规网格功能，包括 repeat()、minmax()、auto-fill、auto-fit 等。只有标记为 subgrid 的维度才会继承父网格的轨道定义。}}
+
+{{知识点24}}{{在 DevTools 中检查 subgrid 时，网格检查器（Grid Inspector）会显示 subgrid 线位于间距（gap）的中心位置。这有助于理解 subgrid 如何与父网格的间距交互。}}
+
+{{知识点25}}{{Subgrid 的正式语法为：grid-template-columns = none | <track-list> | <auto-track-list> | subgrid <line-name-list>?。subgrid 后可选的 <line-name-list> 用于为 subgrid 的线条命名。}}
+
+{{知识点26}}{{Subgrid 的计算值（computed value）按指定值返回，但相对长度会转换为绝对长度。Subgrid 的初始值（initial value）为 none，即不使用 subgrid。}}
+
+{{知识点27}}{{Subgrid 的动画类型为"简单列表"（simple list），仅支持长度、百分比或 calc 值的差异部分进行动画。这意味着 subgrid 本身不能直接过渡到普通轨道定义。}}
+
+{{知识点28}}{{使用 subgrid 的最佳实践：只在需要跨层级对齐时使用 subgrid，而非所有嵌套网格场景。如果嵌套网格的内容不需要与外部网格对齐，使用普通嵌套网格更简单灵活。}}
+
+{{知识点29}}{{Subgrid 与 CSS 容器查询（Container Queries）可以结合使用。当组件需要根据容器大小调整布局时，subgrid 保证内部元素对齐，容器查询控制响应式行为。}}
+
+{{知识点30}}{{Subgrid 的降级策略：对于不支持 subgrid 的旧浏览器，可以使用固定尺寸或 CSS 变量作为 fallback。使用 @supports (grid-template-columns: subgrid) 进行特性检测并提供替代布局。}}
+
+{{知识点31}}{{Subgrid 中的对齐属性（align-items、justify-items、align-content、justify-content）在 subgridded 维度上作用于 subgrid 容器，而非父网格。subgrid 的子项对齐由 subgrid 容器控制。}}
+
+{{知识点32}}{{一个常见的误区是认为 subgrid 会让子元素直接成为父网格的网格项。实际上 subgrid 仍然是一个独立的网格容器，只是它的轨道尺寸来自父网格，子元素仍然是 subgrid 的网格项。}}
+
+{{知识点33}}{{Subgrid 可以与 grid-template-areas 结合使用，但 subgridded 维度不支持 grid-template-areas（因为轨道由父网格定义）。只有非 subgrid 维度可以使用 grid-template-areas 定义区域。}}
+
+{{知识点34}}{{Subgrid 在实际项目中的典型模式：文章列表中，每篇文章卡片包含标题、摘要、作者、日期，使用 subgrid 让所有卡片的标题行、摘要行等精确对齐，无论内容长度如何。}}
+
+{{知识点35}}{{Subgrid 的性能与普通嵌套网格相当，因为浏览器在布局计算时已经知道父网格的轨道定义。不会因为使用 subgrid 而产生额外的布局计算开销。}}

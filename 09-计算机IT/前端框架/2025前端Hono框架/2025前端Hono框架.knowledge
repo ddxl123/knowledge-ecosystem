@@ -1,0 +1,123 @@
+# 2025前端Hono框架
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}
+Hono 是一个轻量级、超快速的 Web 框架，名称源自日语"火焰🔥"。它基于 Web Standards 构建，零依赖，支持所有主流 JavaScript 运行时：Cloudflare Workers、Fastly Compute、Deno、Bun、Vercel、Netlify、AWS Lambda、Lambda@Edge 和 Node.js。同一套代码可跨平台运行，无需修改。
+
+{{知识点2}}
+Hono 的核心特性包括：超快速（Ultrafast）——内置 RegExpRouter 是 JavaScript 世界最快的路由器；轻量（Lightweight）——hono/tiny 预设包体小于 14KB（压缩后约 4.34KB），而 Express 为 572KB；多运行时（Multi-runtime）；开箱即用（Batteries Included）——内置大量中间件和助手函数；优秀的开发者体验（Delightful DX）——一流的 TypeScript 支持。
+
+{{知识点3}}
+Hono 内置五种路由器：RegExpRouter（最快，将路由模式编译为单个大正则表达式一次匹配）、TrieRouter（使用 Trie 树算法，支持所有路由模式）、SmartRouter（默认路由器，自动选择 RegExpRouter 和 TrieRouter 中最优的）、LinearRouter（路由注册极快，适合每次请求都初始化的环境）、PatternRouter（最小的路由器，适合资源受限环境）。
+
+{{知识点4}}
+RegExpRouter 是 Hono 默认的核心路由器。与 Express 使用的 path-to-regexp（线性循环逐条匹配）不同，RegExpRouter 将所有路由模式编译为一个大型正则表达式，通过单次匹配即可得到结果。这使得它在大多数情况下比基于 radix-tree 的算法更快。但它不支持所有路由模式，因此通常与 SmartRouter 配合使用。
+
+{{知识点5}}
+SmartRouter 是 Hono 的默认路由器配置。它在应用启动时检测已注册的路由器，自动推断并选择最快的路由器。Hono 核心默认使用 new SmartRouter({ routers: [new RegExpRouter(), new TrieRouter()] })，当 RegExpRouter 无法处理某个路由模式时自动降级到 TrieRouter。
+
+{{知识点6}}
+LinearRouter 专为"一次性"场景优化，路由注册速度极快（比 RegExpRouter 快约 33 倍于 FindMyWay），因为它采用线性方式添加路由而不编译字符串。适用于每次请求都需要初始化应用的环境（如某些 Serverless 平台）。
+
+{{知识点7}}
+PatternRouter 是 Hono 中体积最小的路由器。使用 PatternRouter 的应用总上传大小约 14.68KB（gzip 约 5.38KB），适合对资源有严格限制的边缘计算环境。
+
+{{知识点8}}
+Hono 完全基于 Web Standards 构建，使用 Fetch API 的核心对象：Request、Response、URL、URLSearchParams、Headers 等。这意味着 Hono 可以在任何支持 Web Standards 的运行时上运行。Cloudflare Workers、Deno、Bun 等都基于 Web Standards 构建。Hono 遵循 WinterCG（Web-interoperable Runtimes Community Group）的标准化方向。
+
+{{知识点9}}
+Hono 的中间件采用洋葱模型（Onion Model）。中间件在 Handler 前后执行，处理 Request 和 Response。返回 Response 的原语称为 Handler，中间件通过调用 next() 将控制权传递给下一个中间件。自定义中间件示例：app.use(async (c, next) => { const start = performance.now(); await next(); const end = performance.now(); c.res.headers.set('X-Response-Time', `${end - start}`); })。
+
+{{知识点10}}
+Hono 提供丰富的内置中间件：Basic Auth（基础认证）、Bearer Auth（Bearer 令牌认证）、JWT（JSON Web Token 认证）、CORS（跨域资源共享）、Logger（请求日志）、ETag（缓存标识）、Body Limit（请求体大小限制）、Compress（响应压缩）、Cache（缓存控制）、Secure Headers（安全头设置）、CSRF（跨站请求伪造防护）、Pretty JSON（JSON 格式化输出）、Timing（性能计时）、Language（语言检测）、Request ID（请求标识）、Timeout（超时控制）、IP Restriction（IP 限制）、Method Override（方法覆盖）、Context Storage（上下文存储）、Trailing Slash（尾部斜杠处理）。
+
+{{知识点11}}
+Hono 的 Context 对象（c）在每个请求中实例化，直到响应返回后销毁。通过 Context 可以访问 HonoRequest（c.req）、设置状态码（c.status()）、设置响应头（c.header()）、返回响应体（c.body()、c.text()、c.json()、c.html()）、重定向（c.redirect()）、返回 404（c.notFound()），以及在中间件和处理器之间传递数据（c.set() / c.get()）。
+
+{{知识点12}}
+Hono 支持通过 c.set() 和 c.get() 在请求生命周期内传递任意键值对。这些值仅在当前请求内保留，不能跨请求共享。通过 TypeScript 泛型可以实现类型安全：const app = new Hono<{ Variables: { message: string } }>()。也可以通过 c.var 访问变量，更适合在中间件中注入自定义方法。
+
+{{知识点13}}
+Hono 提供一流的 TypeScript 支持。路径参数会被推断为字面量类型（如 /entry/:date/:id 的参数类型为 "date" | "id"）。通过泛型可以为 Bindings（环境变量）和 Variables（请求变量）定义类型，实现端到端的类型安全。
+
+{{知识点14}}
+Hono 的 RPC 功能允许在服务器和客户端之间共享 API 规范。服务器端导出 Hono app 的 typeof（AppType），客户端通过 hc<AppType>() 创建类型安全的客户端。结合 Zod 等验证器，客户端可以自动推断请求输入类型和响应输出类型，实现全栈类型安全。
+
+{{知识点15}}
+Hono 客户端 hc 是 Hono RPC 功能的核心。使用方式：import { hc } from 'hono/client'; const client = hc<AppType>('http://localhost:8787/')。调用方式为 client.{path}.{method}，如 client.posts.$post({ form: { title: 'Hello', body: 'content' } })。返回的 Response 与 fetch Response 兼容，可通过 res.json() 获取数据。
+
+{{知识点16}}
+Hono RPC 支持路径参数和查询参数的类型推断。路径参数通过 param 传递，查询参数通过 query 传递，所有值必须为 string 类型（即使底层是数字类型）。多参数路由如 /posts/:postId/:authorId 通过 client.posts[':postId'][':authorId'].$get() 方式访问。
+
+{{知识点17}}
+Hono RPC 支持状态码类型推断。当服务器端在 c.json() 中显式指定状态码（如 200、404）时，客户端可以通过 res.status 判断并获取对应类型的响应数据。使用 InferResponseType<typeof client.posts.$get, 200> 可以推断特定状态码的响应类型。
+
+{{知识点18}}
+Hono RPC 支持 ApplyGlobalResponse 类型助手，用于将全局错误处理器（如 app.onError()）的响应类型合并到所有路由中。例如：type AppWithErrors = ApplyGlobalResponse<typeof app, { 500: { json: { error: string } } }>。
+
+{{知识点19}}
+Hono 的 JWT 助手提供 sign()、verify() 和 decode() 三个核心函数。sign() 生成 JWT 令牌，verify() 验证令牌的有效性（检查 exp、nbf、iat、iss 等声明），decode() 解码令牌但不验证签名。支持的算法包括 HS256/384/512、RS256/384/512、PS256/384/512、ES256/384/512 和 EdDSA。
+
+{{知识点20}}
+Hono 的 Cookie 助手提供完整的 Cookie 管理功能：setCookie()、getCookie()、deleteCookie() 设置和读取普通 Cookie；setSignedCookie()、getSignedCookie() 处理签名 Cookie（使用 HMAC SHA-256）。还支持 generateCookie() 和 generateSignedCookie() 直接生成 Cookie 字符串。支持 __Secure- 和 __Host- 前缀、Partitioned 属性等最佳实践。
+
+{{知识点21}}
+Hono 支持 JSX 语法编写 HTML，通过 hono/jsx 实现。在 tsconfig.json 中配置 "jsx": "react-jsx" 和 "jsxImportSource": "hono/jsx" 即可使用。支持 Fragment（<>...</>）、PropsWithChildren、dangerouslySetInnerHTML、memo 缓存优化、createContext/useContext 上下文共享等 React 类似的特性。
+
+{{知识点22}}
+Hono JSX 支持异步组件（Async Component），可以在组件内使用 async/await。当通过 c.html() 渲染时会自动 await。还支持实验性的 Suspense 功能，通过 renderToReadableStream() 实现流式渲染，先显示 fallback 内容，异步组件完成后自动替换为实际内容。
+
+{{知识点23}}
+Hono JSX 支持实验性的 ErrorBoundary 组件，用于捕获子组件中的错误并显示 fallback 内容。可以与 Suspense 和异步组件配合使用，实现优雅的错误处理。示例：<ErrorBoundary fallback={<div>错误</div>}><Suspense fallback={<div>加载中</div>}><AsyncComponent /></Suspense></ErrorBoundary>。
+
+{{知识点24}}
+Hono JSX 支持 Metadata Hoisting（元数据提升）。可以在组件中直接编写 <title>、<link>、<meta> 等标签，它们会自动提升到文档的 <head> 部分。配合 c.setRenderer() 和 c.render() 可以实现灵活的页面布局系统。
+
+{{知识点25}}
+Hono 的使用场景包括：构建 Web API、后端服务器代理、CDN 前端、边缘应用、库的基础服务器、全栈应用。知名用户包括 cdnjs（Cloudflare Workers API 服务器）、Cloudflare D1/KV（内部 API 服务器）、Clerk（用户管理平台 API）、Unkey（API 认证授权）、OpenStatus（监控平台 API，Bun 运行时）、Deno Benchmarks 等。
+
+{{知识点26}}
+Hono 通过 create hono@latest 命令快速创建项目。支持 npm、yarn、pnpm、bun、deno 等包管理器。创建后可以通过各平台的部署指南快速部署到 Cloudflare Workers/Pages、AWS Lambda、Vercel、Netlify、Deno Deploy、Fastly Compute、Azure Functions、Supabase Functions、Google Cloud Run 等平台。
+
+{{知识点27}}
+Hono 提供多种响应方法：c.text() 返回 text/plain、c.json() 返回 application/json、c.html() 返回 text/html、c.body() 返回自定义内容（可指定状态码和头信息）。所有方法都返回标准的 Response 对象，与 Web API 完全兼容。
+
+{{知识点28}}
+Hono 的 Streaming 助手支持流式响应。通过 renderToReadableStream() 可以实现 JSX 的流式渲染，配合 Suspense 实现渐进式页面加载。支持 StreamingContext 提供 CSP nonce 等配置，确保安全策略的正确应用。
+
+{{知识点29}}
+Hono 的 SSG（Static Site Generation）助手可以将 Hono 应用生成静态 HTML 文件。这对于构建静态网站非常有用，可以在构建时将动态路由预渲染为静态页面，部署到任何静态托管服务。
+
+{{知识点30}}
+Hono 的 Testing 助手简化了应用测试。可以使用 app.request() 方法直接发送请求到应用而无需启动 HTTP 服务器，返回标准的 Response 对象。结合 Zod 等验证器和 RPC 功能，可以实现端到端的类型安全测试。
+
+{{知识点31}}
+Hono 的 Factory 助手（createMiddleware、createHandler）提供类型安全的中间件和处理器创建方式。通过 createMiddleware<Env>() 可以创建带类型约束的中间件，确保中间件中访问的 Variables 和 Bindings 类型正确。
+
+{{知识点32}}
+Hono 的 Proxy 助手用于构建代理服务器。可以轻松将请求转发到后端服务器，支持修改请求头、响应头等。适合在边缘节点做请求路由、负载均衡等场景。
+
+{{知识点33}}
+Hono 的 WebSocket 助手支持 WebSocket 连接。可以在 Hono 应用中处理 WebSocket 协议，实现实时双向通信。适用于聊天应用、实时通知等场景。
+
+{{知识点34}}
+Hono 的 Conninfo 助手用于获取客户端连接信息（如 IP 地址）。在不同的运行时环境中，获取客户端 IP 的方式不同，Conninfo 统一了这些差异，提供一致的 API。
+
+{{知识点35}}
+Hono 的 Accepts 助手用于内容协商。根据客户端的 Accept 头决定返回的响应格式（JSON、HTML、XML 等），帮助构建支持多种响应格式的 API。
+
+{{知识点36}}
+Hono 的 CSS 助手（hono/css）允许在 JSX 组件中使用 CSS-in-JS 方式编写样式。支持作用域样式，避免样式冲突，与 Hono 的 JSX 渲染系统无缝集成。
+
+{{知识点37}}
+Hono 的 html 助手（hono/html）提供模板字面量方式编写 HTML。使用 html 标签函数，可以安全地插入动态内容（自动转义）。通过 raw() 可以插入原始 HTML。与 JSX 方式互补，适合简单场景。
+
+{{知识点38}}
+Hono 支持自定义 404 和错误处理。通过 app.notFound() 自定义 404 响应，通过 app.onError() 全局捕获和处理错误。在 RPC 模式下，建议使用 c.json({ error: 'not found' }, 404) 代替 c.notFound() 以确保类型推断正确。
+
+{{知识点39}}
+Hono 的 API 风格类似 Express，但更简洁。基本路由定义：app.get('/path', handler)、app.post('/path', handler) 等。支持链式调用：app.get('/a', handlerA).get('/b', handlerB)。路由分组通过 Hono 的 basePath 实现：new Hono().basePath('/api')。
+
+{{知识点40}}
+Hono 的第三方中间件生态丰富，包括 GraphQL Server、Firebase Authentication、Sentry 错误追踪、Zod Validator（请求验证）、Swagger UI（API 文档）等。社区维护的中间件列表在 honojs/middleware 仓库中，可通过 npm 安装使用。

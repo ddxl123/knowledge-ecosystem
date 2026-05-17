@@ -1,0 +1,73 @@
+# 2025前端前端CustomStateSet
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{CustomStateSet 是 Web API 中的一个接口，允许自定义元素（Custom Elements）定义和管理自定义状态。这些状态可以通过 CSS 伪类选择器进行样式匹配，是 Web Components 生态中实现状态驱动样式的核心机制。}}
+
+{{知识点2}}{{CustomStateSet 实现了 Set-like 接口，其行为类似于 JavaScript 内置的 Set 对象，但专门用于存储自定义元素的状态标识符（string 类型）。它维护一个有序的状态值集合。}}
+
+{{知识点3}}{{CustomStateSet 不能直接通过 new 构造函数创建。它必须通过 ElementInternals.states 属性获取，而 ElementInternals 对象则通过 HTMLElement.attachInternals() 方法获得。}}
+
+{{知识点4}}{{获取 CustomStateSet 的标准流程为：在自定义元素类的构造函数中调用 this.attachInternals() 获得 ElementInternals 对象，然后通过 this._internals.states 访问 CustomStateSet 实例。}}
+
+{{知识点5}}{{CustomStateSet.add(value) 方法向集合中添加一个状态值。value 参数为字符串类型，代表一个自定义状态标识符。添加后该状态变为 true，对应 CSS 伪类选择器可以匹配到该元素。}}
+
+{{知识点6}}{{CustomStateSet.delete(value) 方法从集合中删除一个状态值。返回布尔值，如果该值存在于集合中则返回 true，否则返回 false。删除后该状态变为 false。}}
+
+{{知识点7}}{{CustomStateSet.has(value) 方法用于检测集合中是否存在指定的状态值，返回布尔值。这是判断自定义元素是否处于某个状态的主要方式。}}
+
+{{知识点8}}{{CustomStateSet.clear() 方法清空集合中的所有状态值，将元素的所有自定义状态重置为 false。}}
+
+{{知识点9}}{{CustomStateSet.size 属性返回集合中当前状态值的数量，可用于判断元素当前激活了多少个自定义状态。}}
+
+{{知识点10}}{{CustomStateSet.entries() 方法返回一个新的迭代器，包含集合中每个元素的 [value, value] 键值对（因为 Set 的键和值相同），按插入顺序排列。}}
+
+{{知识点11}}{{CustomStateSet.forEach() 方法对集合中的每个值执行一次提供的回调函数，按插入顺序遍历。接受 callback(value, value, set) 参数。}}
+
+{{知识点12}}{{CustomStateSet.keys() 是 CustomStateSet.values() 的别名，返回一个新的迭代器对象，按插入顺序产出集合中的每个值。}}
+
+{{知识点13}}{{CustomStateSet.values() 方法返回一个新的迭代器对象，按插入顺序产出集合中的每个值。与 keys() 功能完全相同。}}
+
+{{知识点14}}{{:state() CSS 伪类选择器用于匹配处于特定自定义状态的自定义元素。语法为 :state(my-state-name)，当 CustomStateSet 中包含 my-state-name 时选择器匹配成功。}}
+
+{{知识点15}}{{:state() 伪类选择器只能用于自治自定义元素（Autonomous Custom Elements），不能用于继承内置元素的自定义元素（Customized Built-in Elements），因为 ElementInternals 不能附加到基于内置元素的自定义元素上。}}
+
+{{知识点16}}{{在 Shadow DOM 内部使用自定义状态，可以通过 :host(:state(checked))::before 的形式，在自定义元素的影子树内部匹配自身的自定义状态并应用样式。}}
+
+{{知识点17}}{{自定义状态可以与 ::part() 伪元素组合使用，语法为 question-box::part(checkbox):state(checked)，用于匹配暴露为影子部件（shadow parts）且处于特定状态的子元素。}}
+
+{{知识点18}}{{CustomStateSet 中的状态值只能是字符串类型。每个字符串代表一个自定义状态标识符，标识符存在于集合中表示该状态为 true，不存在则为 false。}}
+
+{{知识点19}}{{自定义状态对外部页面来说是只读的——CSS 可以通过 :state() 选择器匹配状态，但 JavaScript 不能直接从外部访问其他元素的 CustomStateSet。状态的添加和删除只能在自定义元素类的内部进行。}}
+
+{{知识点20}}{{多值状态的实现方式：当自定义元素有一个具有多个可能值的属性（如 loading/interactive/complete）时，需要为每个值创建独立的布尔状态，并在 setter 中确保同一时间只有一个状态为 true。}}
+
+{{知识点21}}{{在多值状态的 setter 中，需要先 add 目标状态对应的标识符，然后 delete 所有其他状态的标识符，确保 CustomStateSet 中同一时刻只有一个相关状态存在。}}
+
+{{知识点22}}{{CustomStateSet 于 2024 年 5 月达到 Baseline 状态（Newly Available），意味着该功能在所有主流浏览器的最新版本中均可用，包括 Chrome、Firefox、Safari 和 Edge。}}
+
+{{知识点23}}{{自定义状态标识符命名建议使用有意义的语义化名称，如 checked、expanded、loading、disabled 等，以保持与内置 HTML 元素状态命名风格一致。}}
+
+{{知识点24}}{{CustomStateSet 的规范定义在 WHATWG HTML 标准的 custom-state-pseudo-class 章节中，CSS :state() 选择器的规范定义在 selector-custom 章节中。}}
+
+{{知识点25}}{{早期浏览器版本使用 CSS <dashed-ident> 语法（如 --checked）来选择自定义状态，这种语法现已弃用，取而代之的是标准的 :state() 伪类选择器。可以通过 CSS.supports("selector(:state(checked))") 检测兼容性。}}
+
+{{知识点26}}{{自定义状态与内置伪类（如 :checked、:disabled）的工作方式类似：状态在元素内部维护，CSS 选择器根据状态的真假来匹配元素，实现了状态与样式的解耦。}}
+
+{{知识点27}}{{CustomStateSet 继承了 Set 的迭代协议（iterable protocol），支持 for...of 循环遍历，也支持展开运算符（spread operator），如 [...states] 可将所有状态值转为数组。}}
+
+{{知识点28}}{{调用 add() 时如果传入的值已经在集合中，不会产生重复项（Set 的特性）。同样 delete() 一个不存在的值不会报错，只是返回 false。}}
+
+{{知识点29}}{{自定义状态的变化会自动触发 CSS 重新计算。当通过 add() 或 delete() 改变 CustomStateSet 的内容时，对应的 :state() 选择器会立即生效，无需手动刷新或触发重绘。}}
+
+{{知识点30}}{{ElementInternals 对象除了 states 属性外，还提供 form、validity、validationMessage、labels、shadowRoot 等属性，以及完整的 ARIA 属性支持，使得自定义元素可以无缝集成到表单和无障碍访问体系中。}}
+
+{{知识点31}}{{在实际组件开发中，CustomStateSet 常用于实现自定义开关（toggle）、手风琴组件（accordion）的展开/折叠状态、标签页组件的激活状态、加载指示器等需要状态驱动样式的场景。}}
+
+{{知识点32}}{{最佳实践是在自定义元素的 getter/setter 方法中封装 CustomStateSet 的操作，对外暴露与内置元素一致的属性接口（如 .checked、.expanded），内部通过 states.add()/delete() 管理状态。}}
+
+{{知识点33}}{{与 AttributeChangedCallback 不同，CustomStateSet 不会触发 attributeChangedCallback。它是独立于 HTML 属性的状态管理机制，适用于不需要暴露为 HTML 属性的内部状态。}}
+
+{{知识点34}}{{自定义状态标识符的命名不受 HTML 属性命名规则限制，可以使用任何有效的 CSS 自定义标识符字符串，但应避免与现有 CSS 伪类名称冲突。}}
+
+{{知识点35}}{{CustomStateSet 配合 :state() 选择器可以实现纯 CSS 的主题切换、响应式组件状态变化，减少了对外部 CSS 类名切换的依赖，使组件更加自包含和封装。}}

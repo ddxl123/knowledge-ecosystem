@@ -1,0 +1,138 @@
+# 2025前端前端Permissions API
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{Permissions API 是什么}}
+Permissions API 是一个 Web 标准 API，为开发者提供统一的方式来查询和管理用户对各种 Web API 的权限状态。它解决了历史上不同 API（如 Notifications API、Geolocation API）各自处理权限不一致的问题，使得权限管理有了统一的接口和用户体验。
+
+{{知识点2}}{{Permissions API 解决的核心问题}}
+在 Permissions API 出现之前，不同 Web API 处理权限的方式各不相同。例如 Notifications API 有自己的 permission 属性来检查状态，而 Geolocation API 则没有提供查询权限状态的方法。Permissions API 通过提供统一的 Permissions.query() 方法，让开发者可以用一致的方式检查任何支持该 API 的权限状态。
+
+{{知识点3}}{{Navigator.permissions 属性}}
+通过 Navigator.permissions 属性可以访问全局的 Permissions 对象。该属性不仅在主浏览上下文中可用，在 Worker 上下文中也可通过 WorkerNavigator.permissions 访问，这意味着权限检查可以在 Web Workers 中执行。
+
+{{知识点4}}{{Permissions 接口}}
+Permissions 接口是 Permissions API 的核心，提供了查询和撤销权限的方法。主要方法包括 query() 用于查询权限状态，revoke() 用于撤销权限（已被废弃）。通过 navigator.permissions 获取该接口的实例。
+
+{{知识点5}}{{Permissions.query() 方法}}
+Permissions.query() 方法接受一个 PermissionDescriptor 对象作为参数，返回一个 Promise，解析为 PermissionStatus 对象。基本语法为 navigator.permissions.query({ name: "permissionName" })，其中 permissionName 是要查询的 API 权限名称。
+
+{{知识点6}}{{PermissionDescriptor 字典}}
+PermissionDescriptor 是传递给 query() 方法的参数对象，包含一个必需的 name 属性，其值为权限名称字符串，如 "geolocation"、"camera"、"microphone" 等。某些权限类型有扩展的描述符，如 PushPermissionDescriptor 还包含 userVisibleOnly 属性。
+
+{{知识点7}}{{PermissionStatus 接口}}
+PermissionStatus 接口提供了权限状态的信息和监听状态变化的能力。它有两个只读属性：name 返回请求的权限名称，state 返回权限状态。还有一个 change 事件，当权限状态发生变化时触发。
+
+{{知识点8}}{{PermissionStatus.state 属性}}
+PermissionStatus.state 返回权限的当前状态，有三个可能的值："granted"（已授权）、"denied"（已拒绝）、"prompt"（需要用户提示）。该属性是只读的，反映了当前上下文中该权限的完整状态，包括安全上下文要求、Permissions-Policy 限制和用户交互要求。
+
+{{知识点9}}{{PermissionStatus.name 属性}}
+PermissionStatus.name 是只读属性，返回请求的权限名称，与传递给 Permissions.query() 的 name 值一致。例如查询 geolocation 权限时，name 属性返回 "geolocation"。
+
+{{知识点10}}{{PermissionStatus change 事件}}
+当权限状态发生改变时，PermissionStatus 对象会触发 change 事件。可以通过 addEventListener("change", callback) 或直接设置 onchange 属性来监听。这允许应用实时响应权限变化，如用户在浏览器设置中修改了权限。
+
+{{知识点11}}{{granted 状态的含义}}
+当 PermissionStatus.state 为 "granted" 时，表示用户或策略已授予该权限，应用可以直接使用相关 API 而无需再次提示用户。这是最理想的状态，意味着功能可以立即启用。
+
+{{知识点12}}{{prompt 状态的含义}}
+当 PermissionStatus.state 为 "prompt" 时，表示需要用户确认才能授予权限。此时应用应调用相关 API 的方法来触发浏览器的权限提示框。触发提示的具体机制取决于各个 API，不是 Permissions API 本身定义的。
+
+{{知识点13}}{{denied 状态的含义}}
+当 PermissionStatus.state 为 "denied" 时，表示用户或策略已拒绝该权限。应用不应尝试再次请求，而应提供降级体验或告知用户需要在浏览器设置中手动修改权限。
+
+{{知识点14}}{{geolocation 权限}}
+geolocation 权限控制 Geolocation API 的访问。通过 navigator.permissions.query({ name: "geolocation" }) 查询状态。当状态为 granted 时可直接调用 getCurrentPosition()，为 prompt 时调用该方法会触发权限提示，为 denied 时无法获取位置信息。
+
+{{知识点15}}{{camera 和 microphone 权限}}
+camera 和 microphone 权限控制 Media Capture and Streams API（即 getUserMedia()）的访问。分别用于摄像头和麦克风设备。查询方式为 navigator.permissions.query({ name: "camera" }) 和 navigator.permissions.query({ name: "microphone" })。
+
+{{知识点16}}{{notifications 权限}}
+notifications 权限控制 Notifications API 的访问。查询方式为 navigator.permissions.query({ name: "notifications" })。注意 Notifications API 也有自己的 Notification.permission 静态属性用于检查权限状态，两者结果应一致。
+
+{{知识点17}}{{push 权限}}
+push 权限控制 Push API 的访问。其 PermissionDescriptor 额外支持 userVisibleOnly 布尔属性，用于指定是否需要为每条消息显示通知或能够发送静默推送。默认值为 false。注意 Firefox 不支持 userVisibleOnly。
+
+{{知识点18}}{{clipboard-read 和 clipboard-write 权限}}
+clipboard-read 和 clipboard-write 权限分别控制剪贴板的读取和写入操作。对应 Clipboard API 的 readText() 和 writeText() 等方法。查询方式为 navigator.permissions.query({ name: "clipboard-read" })。
+
+{{知识点19}}{{midi 权限}}
+midi 权限控制 Web MIDI API 的访问。其 PermissionDescriptor 支持额外的 sysex 布尔属性，用于指定是否需要系统独占消息（System Exclusive messages）。默认值为 false。
+
+{{知识点20}}{{bluetooth 权限}}
+bluetooth 权限控制 Web Bluetooth API 的访问。查询方式为 navigator.permissions.query({ name: "bluetooth" })。当权限被禁用时，Bluetooth 对象的方法会返回 false 或 reject Promise。
+
+{{知识点21}}{{screen-wake-lock 权限}}
+screen-wake-lock 权限控制 Screen Wake Lock API 的访问。该 API 允许网页防止屏幕变暗或锁定，常用于演示、导航等需要持续显示的场景。查询名称为 "screen-wake-lock"。
+
+{{知识点22}}{{persistent-storage 权限}}
+persistent-storage 权限控制 Storage API 的持久存储能力。当获得授权时，浏览器不会自动清除该站点的存储数据。这对需要长期保存数据的 PWA（渐进式 Web 应用）尤其重要。
+
+{{知识点23}}{{storage-access 权限}}
+storage-access 权限控制 Storage Access API 的访问，允许嵌入在跨站 iframe 中的文档访问其第一方存储。top-level-storage-access 是其变体，用于顶级上下文。这两个权限在隐私保护场景中非常重要。
+
+{{知识点24}}{{accelerometer、gyroscope、magnetometer 权限}}
+这三个权限分别控制加速度计、陀螺仪和磁力计传感器的访问，属于 Sensor APIs。用于获取设备的运动和方向数据，常见于游戏、AR/VR 应用中。
+
+{{知识点25}}{{ambient-light-sensor 权限}}
+ambient-light-sensor 权限控制环境光传感器的访问。通过 AmbientLightSensor 接口获取设备周围环境的光照强度信息，可用于自适应界面亮度调整。
+
+{{知识点26}}{{window-management 权限}}
+window-management 权限控制 Window Management API 的访问。该 API 允许网页管理多个窗口的放置和排列，适用于多显示器场景和窗口管理应用。
+
+{{知识点27}}{{display-capture 和 captured-surface-control 权限}}
+display-capture 权限控制 Screen Capture API 的屏幕捕获功能（如 getDisplayMedia()）。captured-surface-control 权限控制对捕获表面的控制能力，如远程控制共享屏幕。
+
+{{知识点28}}{{Permissions.revoke() 方法（已废弃）}}
+Permissions.revoke() 方法用于撤销已授予的权限，将权限状态恢复为默认的 prompt 状态。该方法已被从标准规范中移除，属于废弃功能。原因是权限管理应由浏览器和用户控制，而非网站开发者命令式地撤销。
+
+{{知识点29}}{{权限请求机制}}
+Permissions API 本身不提供请求权限的方法，仅用于查询状态。请求权限的机制取决于具体 API。例如调用 Geolocation.getCurrentPosition() 会触发位置权限提示，调用 Notification.requestPermission() 会触发通知权限提示。权限也可能通过 Permissions-Policy 授予或通过瞬态激活（transient activation）隐式授予。
+
+{{知识点30}}{{Permissions-Policy HTTP 头}}
+Permissions-Policy 是一个 HTTP 响应头，允许服务器控制当前文档及其嵌入的 iframe 可以使用哪些 Web 功能。其值由指令和允许列表组成，如 Permissions-Policy: camera=(self), geolocation=() 表示允许同源使用摄像头，禁止所有位置访问。
+
+{{知识点31}}{{Permissions-Policy 允许列表值}}
+Permissions-Policy 的允许列表支持以下值：*（通配符，允许所有来源）、()（空列表，禁用该功能）、self（仅允许同源）、src（仅用于 iframe allow 属性，匹配 src 来源）、具体来源字符串（如 "https://example.com"）。* 和 () 只能单独使用，self 和 src 可与具体来源组合。
+
+{{知识点32}}{{安全上下文要求}}
+Permissions API 要求在安全上下文（Secure Context）中使用，即通过 HTTPS 提供的页面。在非安全上下文中，某些 API 的权限查询可能返回 denied 或被限制。安全上下文、Permissions-Policy 限制和用户交互要求都会被 Permissions API 综合考虑。
+
+{{知识点33}}{{Web Workers 中的权限查询}}
+Permissions API 在 Web Workers 中也可用，通过 WorkerNavigator.permissions 访问。这使得在后台线程中也可以查询权限状态。但有个别权限在 Worker 中可能不支持查询。
+
+{{知识点34}}{{批量查询多个权限}}
+可以通过循环遍历权限名称数组，使用 try...catch 包裹每个 query() 调用来批量查询多个权限。如果某个权限在当前浏览器不支持，Promise 会 reject 并抛出 TypeError，通过 catch 捕获即可。
+
+{{知识点35}}{{InvalidStateError 异常}}
+当在非完全活跃的文档上调用 query() 方法时，会抛出 InvalidStateError DOMException。这通常发生在文档正在卸载或已卸载的情况下。开发者应确保在文档完全活跃时调用权限查询。
+
+{{知识点36}}{{TypeError 异常}}
+当 PermissionDescriptor 中的权限名称不被浏览器支持、不存在或获取描述符信息失败时，query() 返回的 Promise 会 reject 并抛出 TypeError。应使用 try...catch 或 .catch() 处理这种错误以实现优雅降级。
+
+{{知识点37}}{{权限聚合特性}}
+Permissions API 的权限状态是安全限制的聚合结果。它综合考虑了 API 的安全上下文要求、Permissions-Policy 对文档施加的限制、用户交互要求和用户提示。例如如果 API 被 Permissions-Policy 限制，返回的权限状态将直接是 denied，不会提示用户。
+
+{{知识点38}}{{W3C 规范状态}}
+Permissions API 的规范由 W3C 维护，规范地址为 https://w3c.github.io/permissions/。该 API 自 2022 年 9 月起已被主流浏览器广泛支持（Baseline: Widely available），包括 Chrome、Firefox、Safari 和 Edge。
+
+{{知识点39}}{{浏览器兼容性注意事项}}
+虽然 Permissions API 核心功能（query 方法、PermissionStatus）自 2022 年起广泛可用，但不同浏览器对各种权限名称的支持程度不同。某些较新的权限（如 compute-pressure、local-fonts）可能仅在部分浏览器中可用。使用 try...catch 处理不支持的权限是最佳实践。
+
+{{知识点40}}{{实际应用模式：预检查权限}}
+最佳实践是在调用 API 方法前先查询权限状态。如果状态为 granted，直接使用功能；如果为 prompt，调用 API 方法触发提示；如果为 denied，提供降级方案或提示用户手动修改设置。这种模式避免了不必要的权限弹窗，提升了用户体验。
+
+{{知识点41}}{{实际应用模式：监听权限变化}}
+通过监听 PermissionStatus 的 change 事件，可以实时响应用户在浏览器外部（如设置页面）修改权限的行为。当用户撤销权限时，应用可以及时调整 UI 和功能状态，保持应用行为与权限状态一致。
+
+{{知识点42}}{{与旧版 Notification.permission 的对比}}
+旧的 Notifications API 使用静态属性 Notification.permission 检查权限和 Notification.requestPermission() 请求权限。Permissions API 提供了统一的查询接口，但不替代各 API 自身的请求方法。两者查询结果应一致，但 Permissions API 更通用。
+
+{{知识点43}}{{iframe 中的权限行为}}
+在 iframe 中，权限行为受 Permissions-Policy 的 allow 属性控制。默认情况下，iframe 的权限默认行为为 src（即与 iframe src 同源时才允许）。父页面可通过 Permissions-Policy 头或 iframe 的 allow 属性来控制子 iframe 可以使用哪些权限。
+
+{{知识点44}}{{瞬态激活与权限}}
+某些权限的授予与瞬态激活（transient activation）相关，即需要用户刚刚与页面进行了交互（如点击按钮）。在没有用户交互的情况下，某些 API 调用可能被阻止或权限可能无法被授予。这是浏览器防止滥用的重要安全机制。
+
+{{知识点45}}{{权限撤销的用户途径}}
+虽然 Permissions API 不提供命令式的权限撤销方法，但用户可以通过浏览器设置手动撤销已授予的权限。不同浏览器的路径不同，如 Firefox 在"隐私与安全 > 权限"中管理，Chrome 在"隐私与安全 > 网站设置"中管理。

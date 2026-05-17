@@ -1,0 +1,138 @@
+# 2025前端前端Compression Streams
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}
+Compression Streams API 是 WHATWG 组织制定的 Web 标准，定义在 compression.spec.whatwg.org。该 API 提供了 JavaScript 原生的流式数据压缩和解压能力，无需引入第三方压缩库，从而减小应用的下载体积。自 2023 年 5 月起，该 API 已在主流浏览器中广泛可用（Baseline: Widely available）。
+
+{{知识点2}}
+Compression Streams API 包含两个核心接口：CompressionStream（用于压缩数据流）和 DecompressionStream（用于解压数据流）。两者均实现了 TransformStream 的形态，可以无缝接入 Web Streams API 的管道体系。
+
+{{知识点3}}
+CompressionStream 接口用于压缩数据流。其构造函数接受一个 CompressionFormat 枚举值作为参数。创建后，CompressionStream 实例拥有 readable 和 writable 两个属性，分别返回 ReadableStream 和 WritableStream 实例。
+
+{{知识点4}}
+DecompressionStream 接口用于解压数据流。其构造函数同样接受 CompressionFormat 枚举值。解压后的输出块类型为 Uint8Array，可以接受任何 BufferSource 类型作为输入。
+
+{{知识点5}}
+CompressionFormat 枚举定义了支持的压缩格式，包括 "gzip"、"deflate"、"deflate-raw"、"brotli" 和 "zstd" 五种格式。不同浏览器对各格式的支持程度可能存在差异，其中 gzip 和 deflate 支持最为广泛。
+
+{{知识点6}}
+"gzip" 格式基于 RFC 1952 定义的 GZIP 文件格式。实现必须符合 RFC 1952 第 2.3.1.2 节的合规要求。CM（Compression Method）字段唯一有效值为 8。FTEXT 标志应被忽略，FEXTRA/FNAME/FCOMMENT 字段内容也应被忽略（但需验证其正确终止）。CRC32 和 ISIZE 必须与解压数据匹配。一个 gzip 流仅允许包含一个"成员"。
+
+{{知识点7}}
+"deflate" 格式基于 RFC 1950 定义的 ZLIB 压缩数据格式（对应 HTTP Content-Encoding 中的 "deflate"）。包含压缩方法和未压缩大小的头部信息，以及用于验证数据完整性的尾部校验和。CMF 字段的 CM 部分唯一有效值为 8。FDICT 标志不受支持，设置会导致流错误。FLEVEL 标志被解压端忽略。ADLER32 校验和必须正确。
+
+{{知识点8}}
+"deflate-raw" 格式基于 RFC 1951 定义的 DEFLATE 算法本身，不含 ZLIB 格式的头部和尾部校验和信息。当 BFINAL 标志指示最终块后，不允许有额外输入数据。
+
+{{知识点9}}
+"brotli" 格式基于 RFC 7932 定义的 Brotli 压缩数据格式。实现必须符合 RFC 7932 第 1.4 节的合规要求。CompressionStream 不得创建不符合 RFC 7932 的块，DecompressionStream 遇到此类块应报错。
+
+{{知识点10}}
+"zstd" 格式基于 RFC 8478 定义的 ZSTD（Zstandard）算法。ZSTD 是一种较新的压缩格式，提供高压缩比和快速解压性能。该格式的支持在较新浏览器中才被添加。
+
+{{知识点11}}
+CompressionStream 和 DecompressionStream 都实现了 GenericTransformStream mixin，这意味着它们本质上是 TransformStream 的特化形式，拥有 writable 和 readable 属性，可以与 ReadableStream.pipeThrough() 配合使用。
+
+{{知识点12}}
+pipeThrough() 是 ReadableStream 的方法，用于将当前流通过一个 TransformStream（或任何具有 writable/readable 结构的对象）进行链式管道传输。管道期间会锁定流，防止其他读取者锁定它。返回值是 transformStream 的 readable 端。
+
+{{知识点13}}
+使用 CompressionStream 进行流式压缩的基本模式：const compressedStream = inputReadableStream.pipeThrough(new CompressionStream("gzip"))。这行代码创建了一个压缩管道，原始数据流入 writable 端，压缩后的数据从 readable 端流出。
+
+{{知识点14}}
+使用 DecompressionStream 进行流式解压的基本模式：const decompressedStream = blob.stream().pipeThrough(new DecompressionStream("gzip"))。可以配合 new Response(decompressedStream).blob() 将解压结果转为 Blob 对象。
+
+{{知识点15}}
+CompressionStream 内部维护一个压缩上下文（compression context），这是压缩或解压算法的内部状态。上下文内容取决于具体格式、算法和实现，对外表现为不透明对象。上下文初始处于起始状态，等待第一个字节的输入。
+
+{{知识点16}}
+当数据块写入 CompressionStream 的 writable 端时，transform 算法会将块压缩并将结果入队到 readable 端。如果压缩结果为空则直接返回；否则将结果拆分为一个或多个非空片段，转换为 Uint8Array 后逐个入队。
+
+{{知识点17}}
+当输入流结束时，flush 算法会被调用。它使用 finish 标志压缩空输入以刷新任何缓冲的输出数据，确保所有压缩数据都被完整输出。这对保证数据完整性至关重要。
+
+{{知识点18}}
+DecompressionStream 的解压过程如果遇到错误（如校验和不匹配、数据格式不正确等），会抛出 TypeError。如果压缩输入已结束但上下文未完全消费数据块，同样会抛出 TypeError。
+
+{{知识点19}}
+Compression Streams API 支持在 Web Workers 中使用，这意味着可以在后台线程中执行压缩/解压操作，避免阻塞主线程，提升应用性能和用户体验。
+
+{{知识点20}}
+输入块类型必须是 BufferSource（包括 ArrayBuffer 和 ArrayBufferView，如 Uint8Array、DataView 等）。如果传入非 BufferSource 类型的数据，会抛出 TypeError。输出块类型固定为 Uint8Array。
+
+{{知识点21}}
+Compression Streams API 可以与 Fetch API 配合使用。Response 对象可以将流转换为 ArrayBuffer、Blob、Uint8Array、String 或 JSON 等格式，方便后续处理。例如：new Response(compressedStream).blob()。
+
+{{知识点22}}
+流式压缩的优势在于无需将全部数据加载到内存中。对于大文件或网络传输场景，数据可以分块处理，显著降低内存占用。这使得 Compression Streams API 特别适合处理大型文件下载或实时数据传输。
+
+{{知识点23}}
+Compression Streams API 的隐私与安全考量：该 API 不为 Web 平台添加新的权限。但开发者需注意，当攻击者能获取数据长度时，可能通过压缩后的长度差异推断数据内容（即压缩 oracle 攻击/CRIME 攻击的变体）。
+
+{{知识点24}}
+与传统的 pako、fflate 等 JavaScript 压缩库相比，Compression Streams API 的优势在于：零依赖、浏览器原生实现（性能更好）、流式处理（内存效率更高）、标准化（跨浏览器一致性好）。
+
+{{知识点25}}
+Compression Streams API 与 Node.js 中的 zlib 模块概念类似，但面向浏览器环境。Node.js 的 zlib 也是流式的（基于 Stream.Transform），两者的设计理念一致，但 API 形态不同——Compression Streams 遵循 WHATWG Streams 标准。
+
+{{知识点26}}
+可以通过 pipeThrough 链式组合多个 TransformStream。例如，可以先压缩再编码：const result = input.pipeThrough(new CompressionStream("gzip")).pipeThrough(new TextEncoderStream())，实现多步数据处理管道。
+
+{{知识点27}}
+pipeThrough() 支持可选的 options 参数，包含三个控制标志：preventClose（源流关闭时不关闭目标流）、preventAbort（源流错误时不中止目标流）、preventCancel（目标流错误时不取消源流），以及 signal（AbortSignal 用于中止管道操作）。
+
+{{知识点28}}
+使用 pipeTo() 可以将压缩后的 ReadableStream 直接写入 WritableStream。例如：compressedStream.pipeTo(fileStreamWritable)，可以直接将压缩数据写入文件系统流（File System Access API）。
+
+{{知识点29}}
+对于需要在 JavaScript 中实现 HTTP 内容编码处理的场景，Compression Streams API 特别有用。开发者可以在 Service Worker 中拦截请求，使用 DecompressionStream 解压响应体，或使用 CompressionStream 压缩请求体。
+
+{{知识点30}}
+在处理 ArrayBuffer 数据时，可以通过 writer.write() 将数据写入 CompressionStream 的 writable 端，然后通过 reader.read() 从 readable 端读取压缩后的 Uint8Array 块。这种方式适合需要精确控制读写时机的场景。
+
+{{知识点31}}
+Compression Streams API 的错误处理机制：当格式参数不受支持时，构造函数抛出 TypeError；当输入数据不是 BufferSource 时，transform 算法抛出 TypeError；当解压数据校验失败时，同样抛出 TypeError。
+
+{{知识点32}}
+Brotli 压缩格式在 Web 中广泛用于 HTTP 内容编码（Content-Encoding: br），相比 gzip 通常能提供更高的压缩比，尤其对文本内容效果显著。Compression Streams API 使前端也能利用 Brotli 进行数据压缩。
+
+{{知识点33}}
+实际应用场景：压缩 localStorage/sessionStorage 中的大量数据以节省存储空间；压缩 WebSocket 传输的消息以减少带宽；在 IndexedDB 中存储压缩数据以提高 I/O 效率。
+
+{{知识点34}}
+Compression Streams API 与 Response、Request 对象的集成非常自然。可以通过 new Response(compressedStream) 创建包含压缩数据的响应对象，也可以通过 Request body 传递压缩后的请求体数据。
+
+{{知识点35}}
+流式处理的渐进式特性意味着可以在数据还未完全生成时就开始压缩和传输。例如，在实时音视频或大文件上传场景中，可以边生成边压缩边发送，大幅降低延迟。
+
+{{知识点36}}
+压缩比受数据内容和压缩格式影响。对于文本和 JSON 数据，gzip 通常能达到 60-80% 的压缩率；Brotli 可以更高。对于已压缩的数据（如图片、视频），额外压缩效果有限，甚至可能增大体积。
+
+{{知识点37}}
+在 Service Worker 中使用 Compression Streams API 可以实现透明的内容压缩/解压。例如，拦截 fetch 请求，对响应体进行客户端解压，从而绕过服务器不支持特定编码的问题。
+
+{{知识点38}}
+Compression Streams API 的标准化状态：该规范由 WHATWG（Web Hypertext Application Technology Working Group）维护，作者为 Google 的 Adam Rice。规范地址为 compression.spec.whatwg.org，采用 Creative Commons Attribution 4.0 国际许可证。
+
+{{知识点39}}
+浏览器兼容性概况（截至 2025 年）：Chrome 80+、Firefox 113+、Safari 16.4+、Edge 80+ 均支持 Compression Streams API。brotli 格式在部分较新版本中才被添加支持。zstd 格式的支持更加晚近。
+
+{{知识点40}}
+性能优化建议：对于小数据（如少于 1KB），使用 Compression Streams API 的开销可能超过压缩带来的收益，建议根据数据大小和使用场景评估是否需要压缩。对于流式大数据处理，该 API 的性能优势最为明显。
+
+{{知识点41}}
+Compression Streams API 的输入输出不对称性：输入接受任意 BufferSource 类型，输出固定为 Uint8Array。这是因为压缩后的数据本质上是字节序列，而输入可能来自不同类型的二进制数据源。
+
+{{知识点42}}
+与 WebAssembly 版压缩库（如 wasm-zlib）相比，浏览器原生的 Compression Streams API 通常具有更好的性能，因为其实现是高度优化的原生代码，无需 WASM 的编译和运行时开销。
+
+{{知识点43}}
+在 Deno 和 Cloudflare Workers 等非浏览器 JavaScript 运行时中，Compression Streams API 也得到支持，这使得该 API 成为跨平台数据压缩的通用解决方案。
+
+{{知识点44}}
+使用 async iteration 模式读取压缩数据：for await (const chunk of cs.readable) { ... }。这是最简洁的流读取方式，适合现代 JavaScript 异步编程风格。
+
+{{知识点45}}
+当需要收集所有压缩输出块并合并为单个 Uint8Array 时，需要在读取循环中维护 offset 计数器，最后使用 Uint8Array 的 set() 方法将各块拼接到一个新数组中。这是处理流式输出并需要完整结果时的常见模式。

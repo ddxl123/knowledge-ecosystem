@@ -1,0 +1,83 @@
+# 2025前端Battery API
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{Battery Status API 概述：Battery Status API（也称为 Battery API）提供了系统电池充电等级的信息，并允许通过事件监听电池电量和充电状态的变化。开发者可以据此在电量低时减少应用资源消耗，或在电量耗尽前保存数据防止丢失。}}
+
+{{知识点2}}{{规范来源：Battery Status API 的规范由 W3C 制定，规范文档地址为 https://w3c.github.io/battery/。该 API 属于 Web API 的一部分，通过 Navigator 接口扩展实现。}}
+
+{{知识点3}}{{核心接口 BatteryManager：BatteryManager 是 Battery Status API 的核心接口，提供系统电池充电等级信息。通过 navigator.getBattery() 方法返回的 Promise 解析获得 BatteryManager 实例。BatteryManager 继承自 EventTarget 接口。}}
+
+{{知识点4}}{{navigator.getBattery() 方法：Navigator.getBattery() 方法返回一个 Promise，解析后得到 BatteryManager 对象。该方法不接受任何参数。如果被 Permissions Policy 阻止则抛出 NotAllowedError，在不安全上下文中调用则抛出 SecurityError。}}
+
+{{知识点5}}{{secure context 要求：Battery Status API 仅在安全上下文（HTTPS）中可用。从 Chrome 103 开始，BatteryManager 接口和 navigator.getBattery() 方法仅在安全上下文中暴露，HTTP 页面无法使用此 API。}}
+
+{{知识点6}}{{BatteryManager.charging 属性：BatteryManager.charging 是一个只读布尔值，表示设备电池当前是否正在充电。如果电池正在充电或用户代理无法报告电池状态信息，则值为 true；否则为 false。该属性变化时触发 chargingchange 事件。}}
+
+{{知识点7}}{{BatteryManager.level 属性：BatteryManager.level 是一个只读数值，表示当前电池充电等级，取值范围为 0.0 到 1.0。值为 0.0 表示电池为空且系统即将挂起；值为 1.0 表示电池已满或用户代理无法报告电池状态。该属性变化时触发 levelchange 事件。}}
+
+{{知识点8}}{{BatteryManager.chargingTime 属性：BatteryManager.chargingTime 是一个只读数值，表示电池完全充满所需的剩余秒数。电池已满时值为 0，电池正在放电时值为 Infinity。出于隐私原因，浏览器通常将时间四舍五入到最近的 15 分钟间隔。}}
+
+{{知识点9}}{{BatteryManager.dischargingTime 属性：BatteryManager.dischargingTime 是一个只读数值，表示电池完全放电所需的剩余秒数。如果电池正在充电而非放电，或用户代理无法报告状态，值为 Infinity。同样出于隐私考虑，时间会被四舍五入。}}
+
+{{知识点10}}{{chargingchange 事件：当电池充电状态（charging 属性）更新时触发。可以使用 addEventListener("chargingchange", handler) 或 battery.onchargingchange = handler 两种方式监听。事件类型为通用 Event。}}
+
+{{知识点11}}{{levelchange 事件：当电池电量等级（level 属性）更新时触发。可以使用 addEventListener("levelchange", handler) 或 battery.onlevelchange = handler 两种方式监听。适用于实时电量监控场景。}}
+
+{{知识点12}}{{chargingtimechange 事件：当电池充电时间（chargingTime 属性）更新时触发。用于监听充满电所需时间的变化，帮助应用显示准确的充电进度。}}
+
+{{知识点13}}{{dischargingtimechange 事件：当电池放电时间（dischargingTime 属性）更新时触发。用于监听电池剩余使用时间的变化，帮助应用在电量不足时采取节电措施。}}
+
+{{知识点14}}{{基本用法 - 获取电池信息：通过 navigator.getBattery().then(battery => { ... }) 获取 BatteryManager 对象，然后读取 charging、level、chargingTime、dischargingTime 等属性获取当前电池状态。}}
+
+{{知识点15}}{{事件监听用法：获取 BatteryManager 后，通过 addEventListener 监听四个事件（chargingchange、levelchange、chargingtimechange、dischargingtimechange）来实时追踪电池状态变化，并在回调中更新 UI 或调整应用行为。}}
+
+{{知识点16}}{{电池百分比计算：将 battery.level 乘以 100 即可获得百分比形式的电量值，如 battery.level * 100 + "%"。level 属性的精度通常为 1% 的倍数。}}
+
+{{知识点17}}{{充电状态判断场景：battery.charging 为 true 表示设备正在充电，为 false 表示正在放电。应用可以据此在充电时执行高耗能任务（如预加载、数据同步），在放电时降低资源消耗。}}
+
+{{知识点18}}{{低电量策略：通过检查 battery.level 的值，当电量低于阈值（如 0.2 即 20%）时，应用可以减少动画效果、降低刷新频率、关闭后台任务等节电策略。}}
+
+{{知识点19}}{{数据保存提醒：当 battery.level 接近 0 且 battery.charging 为 false 时，应用应自动保存用户数据，防止因电量耗尽导致数据丢失。可结合 battery.dischargingTime 计算剩余时间。}}
+
+{{知识点20}}{{Permissions Policy 控制：Battery API 受 Permissions Policy 的 battery 指令控制。服务器可以通过 HTTP 响应头 Permissions-Policy: battery=() 来禁止嵌入的 iframe 访问电池信息，增强安全性。}}
+
+{{知识点21}}{{NotAllowedError 异常：当 Battery API 的使用被 Permissions Policy 阻止时，navigator.getBattery() 会抛出 NotNotAllowedError DOMException。开发者需要在 Promise 链中做好错误处理。}}
+
+{{知识点22}}{{SecurityError 异常：当在不安全上下文（非 HTTPS）中调用 navigator.getBattery() 时，会抛出 SecurityError DOMException。这是 Chrome 103 之后的安全强化措施。}}
+
+{{知识点23}}{{隐私保护 - 时间精度：出于隐私保护，浏览器会将 chargingTime 和 dischargingTime 的返回值四舍五入到较大的时间间隔（通常为最近的 15 分钟），防止精确时间信息被用于指纹识别。}}
+
+{{知识点24}}{{隐私与安全风险：Battery API 的精确电量和时间信息可能被用于浏览器指纹识别，即使用户未授权其他传感器权限。这也是 Firefox 52 移除该 API 支持的主要原因之一。}}
+
+{{知识点25}}{{Firefox 支持历史：Firefox 从版本 10-15 提供部分支持，16-42 部分支持，43-51 完整支持，但从 Firefox 52 开始因隐私原因移除了对 Battery Status API 的支持。2025 年 Firefox 150+ 均不支持。}}
+
+{{知识点26}}{{Chrome 浏览器支持：Chrome 从版本 38 开始支持 Battery Status API，Chrome 37 默认禁用，38 起完整支持。Chrome 103 起限制为仅安全上下文可用。Chrome 147-151 均支持。}}
+
+{{知识点27}}{{Safari 不支持：Safari 浏览器（包括 iOS Safari）从未支持 Battery Status API。截至 2025 年，Safari 26.x 系列仍然不支持该 API，这意味着 iOS 设备上的 Web 应用无法使用此功能。}}
+
+{{知识点28}}{{Edge 浏览器支持：基于 Chromium 的 Edge 浏览器从版本 79 开始支持 Battery Status API，与 Chrome 的支持策略一致。Edge 79-147 均支持。}}
+
+{{知识点29}}{{移动端浏览器支持：Chrome for Android、Samsung Internet 4+、QQ Browser 14.9+、Baidu Browser 13.52+ 均支持 Battery API。但 iOS Safari 和 Firefox for Android 150 不支持。}}
+
+{{知识点30}}{{继承自 EventTarget：BatteryManager 继承自 EventTarget 接口，因此拥有 addEventListener()、removeEventListener() 和 dispatchEvent() 等方法，用于事件的注册、移除和触发。}}
+
+{{知识点31}}{{事件处理器属性方式：除了 addEventListener 方法外，BatteryManager 还支持 onchargingchange、onlevelchange、onchargingtimechange、ondischargingtimechange 等事件处理器属性，可以直接赋值函数。}}
+
+{{知识点32}}{{Promise 异步模式：navigator.getBattery() 返回 Promise，必须使用 .then() 或 async/await 模式获取 BatteryManager 对象。推荐使用 async/await 语法以获得更清晰的代码结构。}}
+
+{{知识点33}}{{Battery API 实际应用场景：(1) 低电量自动降级 UI 复杂度；(2) 充电时执行后台同步；(3) 电量预警自动保存；(4) 根据电量调整视频画质；(5) 电量不足时减少网络请求频率。}}
+
+{{知识点34}}{{与其他 Web API 配合：Battery API 可与 Page Visibility API、Network Information API 配合使用，实现更精细的资源管理策略。例如页面不可见且电量低时彻底暂停后台任务。}}
+
+{{知识点35}}{{polyfill 与降级方案：由于浏览器兼容性差异较大，建议实现降级方案。检测 navigator.getBattery 是否存在，不支持时提供默认值或使用其他方式（如请求用户手动输入电量信息）。}}
+
+{{知识点36}}{{TypeScript 类型定义：BatteryManager 接口在 TypeScript 的 lib.dom.d.ts 中有完整类型定义，包含 charging: boolean、level: number、chargingTime: number、dischargingTime: number 四个只读属性及对应事件类型。}}
+
+{{知识点37}}{{2025年现状总结：Battery Status API 在 Chromium 系浏览器中仍被支持但使用受限（仅 HTTPS），Firefox 因隐私原因已移除，Safari 从未实现。该 API 的实用性和可用性持续下降，开发者应谨慎使用并准备降级方案。}}
+
+{{知识点38}}{{Vue/React 集成示例：在现代前端框架中，可将 Battery API 封装为自定义 Hook（React）或 Composable（Vue）。例如 useBattery() Hook 内部调用 navigator.getBattery()，管理状态并自动清理事件监听器。}}
+
+{{知识点39}}{{电池状态自动更新机制：BatteryManager 对象获取后，其属性值会自动保持最新。浏览器会在电池状态变化时自动更新属性值并触发相应事件，无需开发者轮询。这是一种响应式的数据模型。}}
+
+{{知识点40}}{{chargingTime 和 dischargingTime 的 Infinity 值：当设备无法确定剩余时间时，chargingTime 在放电状态下返回 Infinity，dischargingTime 在充电状态下返回 Infinity。开发者需要在代码中处理 Infinity 的情况，避免显示异常。}}

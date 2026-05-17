@@ -1,0 +1,83 @@
+# 2025前端前端CSS Painting API
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{CSS Painting API 是 CSS Houdini 项目的一部分，允许开发者使用 JavaScript 编写自定义绘图函数，通过 CSS 的 paint() 函数将绘图结果应用到元素的背景、边框或内容区域。它为 CSS 提供了可编程的绘图能力，使开发者能够创建复杂的动态视觉效果。}}
+
+{{知识点2}}{{Houdini 是一组底层 CSS API 的集合，赋予开发者直接访问 CSS 引擎渲染管线的能力。Houdini 包含多个子 API：CSS Painting API、CSS Properties and Values API、CSS Typed OM、CSS Layout API、Worklets、CSS Parser API 和 Font Metrics API 等。Painting API 是其中最成熟、浏览器支持最广泛的子 API。}}
+
+{{知识点3}}{{paint() 是一个 CSS 图像类型函数，可以用在任何接受 <image> 类型值的 CSS 属性中，如 background-image、border-image、list-style-image 等。语法为 paint(workletName, arg1, arg2, ...)，其中 workletName 是通过 registerPaint() 注册的名称。}}
+
+{{知识点4}}{{registerPaint() 是 PaintWorkletGlobalScope 上的方法，用于注册一个自定义绘图类。它接受两个参数：第一个是字符串名称（用于在 CSS 的 paint() 函数中引用），第二个是包含绘图逻辑的类构造函数。名称不能为空字符串，且不能重复注册同名 worklet。}}
+
+{{知识点5}}{{PaintWorkletGlobalScope 是 paint worklet 的全局执行上下文，继承自 WorkletGlobalScope。它提供了 registerPaint() 方法和 devicePixelRatio 只读属性。Paint worklet 运行在独立于主线程的上下文中，不会阻塞页面渲染。}}
+
+{{知识点6}}{{paint() 函数的类中需要定义一个 paint(ctx, size, props) 方法。ctx 是 PaintRenderingContext2D 绘图上下文，size 是 PaintSize 对象（包含元素宽高），props 是 StylePropertyMapReadOnly 对象（包含声明的 CSS 属性值）。}}
+
+{{知识点7}}{{PaintRenderingContext2D 是 CanvasRenderingContext2D 的子集，提供大部分 Canvas 2D 绘图 API，但不包含 CanvasImageData、CanvasUserInterface、CanvasText 和 CanvasTextDrawingStyles API。开发者可以用熟悉的 Canvas API 进行路径绘制、填充、描边、渐变、阴影等操作。}}
+
+{{知识点8}}{{PaintSize 接口表示输出位图的尺寸，包含两个只读属性：width（宽度）和 height（高度）。它们对应元素的 content box 尺寸，允许绘图函数根据元素大小自适应绘制内容。}}
+
+{{知识点9}}{{inputProperties() 是绘图类的静态方法，返回一个字符串数组，声明该 worklet 需要读取的 CSS 属性。可以包含标准 CSS 属性和自定义属性（--开头）。这些属性值在 paint() 方法的第三个参数 props 中以 StylePropertyMapReadOnly 形式提供。}}
+
+{{知识点10}}{{inputArguments() 是绘图类的静态方法，返回一个 CSS 语法定义字符串数组，声明 paint() 函数接受的额外参数类型。例如返回 ["<color>"] 表示接受颜色参数，在 CSS 中使用如 paint(myWorklet, red) 的形式传递。}}
+
+{{知识点11}}{{contextOptions() 是绘图类的静态方法，返回 PaintRenderingContext2DSettings 对象。目前唯一支持的选项是 alpha（布尔值，默认 true），控制是否允许 alpha 透明度。设为 false 时所有颜色将完全不透明，可能带来性能优化。}}
+
+{{知识点12}}{{加载 paint worklet 使用 CSS.paintWorklet.addModule("filename.js") 方法。该方法返回一个 Promise，在模块加载完成时 resolve。建议在加载前进行特性检测：if ("paintWorklet" in CSS) { CSS.paintWorklet.addModule("paint.js"); }。}}
+
+{{知识点13}}{{paint worklet 文件必须是独立的 JavaScript 文件，不能内联在 HTML 中。文件中直接调用 registerPaint() 注册绘图类，无需引用 paintWorklet 对象。worklet 文件可通过相对路径或绝对 URL 加载。}}
+
+{{知识点14}}{{CSS Painting API 的一个关键特性是响应式绘图：当元素的尺寸或声明的 CSS 属性值发生变化时，浏览器会自动重新调用 paint() 方法生成新的位图。开发者无需手动监听变化或触发重绘。}}
+
+{{知识点15}}{{在 paint() 方法中，自定义属性通过 props.get("--property-name") 获取。返回的是 CSSStyleValue 对象，对于数值型自定义属性需要使用 .value 属性提取数值。例如 props.get("--width-subtractor").value。}}
+
+{{知识点16}}{{PaintRenderingContext2D 支持创建线性渐变（createLinearGradient）、径向渐变（createRadialGradient）、锥形渐变（createConicGradient）和图案（createPattern），可以实现丰富的视觉效果。}}
+
+{{知识点17}}{{PaintRenderingContext2D 支持路径绘制操作，包括 beginPath()、moveTo()、lineTo()、bezierCurveTo()、quadraticCurveTo()、arc()、arcTo()、ellipse()、rect()、roundRect()、closePath() 等方法，以及 fill()、stroke()、clip() 等渲染操作。}}
+
+{{知识点18}}{{PaintRenderingContext2D 支持变换操作：translate()、rotate()、scale()、transform()、setTransform()、getTransform()、resetTransform()，以及状态管理的 save()、restore()、reset() 方法。}}
+
+{{知识点19}}{{PaintRenderingContext2D 支持阴影属性：shadowBlur、shadowColor、shadowOffsetX、shadowOffsetY，以及合成属性 globalAlpha 和 globalCompositeOperation，还有图像平滑控制 imageSmoothingEnabled 和 imageSmoothingQuality。}}
+
+{{知识点20}}{{PaintRenderingContext2D 支持线条样式设置：lineWidth、lineCap、lineJoin、miterLimit、lineDashOffset，以及 getLineDash() 和 setLineDash() 方法用于设置虚线模式。}}
+
+{{知识点21}}{{PaintRenderingContext2D 支持 filter 属性，可以应用 CSS 或 SVG 滤镜效果（如 blur、brightness 等）到画布上。同时支持 drawImage() 方法绘制图像。}}
+
+{{知识点22}}{{Paint worklet 中可以通过 self.devicePixelRatio 访问设备像素比，用于在高 DPI 屏幕上绘制清晰的图形。这对于需要精确像素控制的绘图场景非常重要。}}
+
+{{知识点23}}{{CSS Painting API 的回退方案：可以在 paint() 之前声明一个普通背景作为回退。例如 background-image: url("fallback.png"); background-image: paint(myWorklet);。不支持的浏览器会忽略第二条规则，使用第一条。也可以使用 @supports (background: paint(id)) 进行特性检测。}}
+
+{{知识点24}}{{Paint worklet 运行在独立的 Worklet 线程中，无法直接访问 DOM、Window 对象或大部分 Web API。这是出于性能和安全考虑的设计，确保绘图计算不会阻塞主线程。}}
+
+{{知识点25}}{{浏览器可以随时释放 paint 类的实例以回收内存。当 paint() 函数不再被使用时，浏览器可能会从 paint class instances map 中移除对应实例。因此不应在 paint 类实例上存储需要长期保持的状态。}}
+
+{{知识点26}}{{CSS Painting API 的隐私考虑：为了防止泄露用户浏览历史（已访问链接样式），Chrome 等浏览器对 <a> 元素及其子元素禁用了 paint worklet 功能。这是因为 paint worklet 可能通过 :visited 伪类检测链接访问状态。}}
+
+{{知识点27}}{{Paint worklet 的注册流程：当调用 registerPaint(name, paintCtor) 时，浏览器会验证名称非空、未重复注册，解析 inputProperties、inputArguments 和 contextOptions，然后将 paint definition 存入 PaintWorkletGlobalScope 的 paint definitions map 和 document 的 document paint definitions map。}}
+
+{{知识点28}}{{inputProperties 支持标准 CSS 属性和自定义属性，也支持简写属性（shorthands）。即使包含当前浏览器不支持的属性名称也不会报错，这提供了前向兼容性。属性值通过 StylePropertyMapReadOnly 的 get() 方法获取。}}
+
+{{知识点29}}{{Paint worklet 的绘图坐标系原点在元素 content box 的左上角，x 轴向右为正，y 轴向下为正。绘图区域等于元素的 content box 大小，超出部分会被裁剪。}}
+
+{{知识点30}}{{CSS Painting API 与 CSS Properties and Values API 配合使用效果更佳。通过 registerProperty() 注册的自定义属性可以指定类型（如 <length>、<color>、<number>），在 paint worklet 中获取时已经是解析后的类型化值，无需手动解析。}}
+
+{{知识点31}}{{性能优化建议：paint() 方法应尽量保持简单高效，因为每次样式变化或尺寸变化都会重新调用。避免在 paint() 中进行复杂的计算或创建大量临时对象。对于静态内容，考虑缓存计算结果。}}
+
+{{知识点32}}{{Paint worklet 中的绘图上下文不支持文本绘制 API（fillText、strokeText、measureText 等），因为 CanvasText 和 CanvasTextDrawingStyles 接口不在 PaintRenderingContext2D 的支持范围内。需要文本效果应通过 DOM 元素实现。}}
+
+{{知识点33}}{{CSS Painting API 的浏览器兼容性：Chrome 65+、Edge 79+、Opera 52+ 完全支持，Safari 和 Firefox 目前不支持（截至 2025 年）。使用时需要提供回退方案以确保跨浏览器兼容。}}
+
+{{知识点34}}{{实际应用场景包括：自定义背景图案（如棋盘格、波浪线、网格）、动态装饰效果（如高亮条、波浪形分隔线）、响应式图形（根据元素尺寸自适应的装饰）、主题化组件（通过 CSS 变量传递颜色/尺寸参数）。}}
+
+{{知识点35}}{{paint() 函数的参数传递机制：CSS 中 paint(workletName, arg1, arg2) 的额外参数通过 inputArguments() 声明类型，在 paint(ctx, size, props, args) 方法中通过第四个参数 args 获取。参数类型受 CSS 语法定义约束，支持 <color>、<length>、<number>、<percentage> 等类型。}}
+
+{{知识点36}}{{Paint worklet 与 Web Worker 的区别：Worklet 是由渲染引擎调用的轻量级脚本上下文，专门用于渲染管线的特定阶段（如 paint、layout），而 Web Worker 是通用的后台线程。Paint Worklet 不能主动发送消息，只能响应渲染引擎的调用。}}
+
+{{知识点37}}{{PaintRenderingContext2D 的 drawImage() 方法支持绘制 ImageBitmap、HTMLCanvasElement、HTMLImageElement、OffscreenCanvas、SVGImageElement 和 VideoFrame。但在 paint worklet 中，由于无法直接访问 DOM，通常需要通过 createImageBitmap 或其他方式加载图像。}}
+
+{{知识点38}}{{在实际开发中，推荐使用 CSS 自定义属性作为 paint worklet 的配置接口。例如通过 --border-radius、--shadow-color、--pattern-size 等自定义属性让用户通过纯 CSS 控制 worklet 的外观行为，实现高度可配置的组件。}}
+
+{{知识点39}}{{Paint worklet 的实例化是按需的：浏览器只为使用了该 paint worklet 的元素创建实例，且可能为多个元素共享同一实例。当 CSS 属性变化触发重绘时，浏览器会复用已有实例调用 paint()，而非创建新实例。}}
+
+{{知识点40}}{{CSS Painting API 的规范状态：CSS Painting API Level 1 是 W3C 工作草案（Working Draft），由 CSS Houdini Task Force 负责。规范地址为 https://drafts.css-houdini.org/css-paint-api/。该规范定义了 PaintWorkletGlobalScope、PaintRenderingContext2D 和 PaintSize 三个核心接口。}}

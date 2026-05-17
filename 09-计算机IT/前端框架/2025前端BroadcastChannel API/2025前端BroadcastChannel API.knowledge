@@ -1,0 +1,83 @@
+# 2025前端BroadcastChannel API
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{BroadcastChannel API 是什么：BroadcastChannel API 允许同一来源（origin）的浏览上下文（如窗口、标签页、iframe、frame）和 Worker 之间进行基本通信。它通过命名频道实现跨上下文的消息广播。}}
+
+{{知识点2}}{{Baseline 兼容性状态：BroadcastChannel API 自 2022 年 3 月起在所有主流浏览器中广泛可用（Widely available），属于 Baseline 特性，兼容性良好。}}
+
+{{知识点3}}{{核心接口 BroadcastChannel：BroadcastChannel 接口代表一个命名频道，任何给定来源的浏览上下文都可以订阅该频道。它继承自 EventTarget 接口。}}
+
+{{知识点4}}{{构造函数 BroadcastChannel()：通过 new BroadcastChannel(channelName) 创建频道连接。channelName 是字符串参数，标识频道名称。同一来源下同名频道只有一个。}}
+
+{{知识点5}}{{name 只读属性：BroadcastChannel.name 返回频道名称字符串，该名称在构造时传入，为只读属性，无法修改。}}
+
+{{知识点6}}{{postMessage() 方法：用于向同一频道的所有其他 BroadcastChannel 对象发送消息。参数可以是任何类型的对象，使用结构化克隆算法（structured clone algorithm）进行序列化。}}
+
+{{知识点7}}{{结构化克隆算法：postMessage 发送的数据通过结构化克隆算法序列化，支持广泛的数据对象类型（如 Object、Array、Date、RegExp、Blob、File、ArrayBuffer 等），无需手动序列化。}}
+
+{{知识点8}}{{SharedArrayBuffer 限制：不同 agent cluster 之间不能共享内存，SharedArrayBuffer 对象或其 buffer view 不能通过 BroadcastChannel 发送，否则接收端会触发 messageerror 事件并产生 DataCloneError DOMException。}}
+
+{{知识点9}}{{close() 方法：断开频道连接，允许 BroadcastChannel 对象被垃圾回收。浏览器无法自动判断频道何时不再需要，因此必须显式调用 close() 以释放资源。}}
+
+{{知识点10}}{{message 事件：当频道上有消息到达时触发 message 事件。可通过 addEventListener('message', handler) 或 onmessage 属性监听。事件类型为 MessageEvent。}}
+
+{{知识点11}}{{messageerror 事件：当接收到无法反序列化的消息时触发 messageerror 事件。可通过 addEventListener('messageerror', handler) 或 onmessageerror 属性监听。常见于发送 SharedArrayBuffer 的场景。}}
+
+{{知识点12}}{{MessageEvent.data 属性：message 事件的 event.data 包含发送者传递的数据，为只读属性。}}
+
+{{知识点13}}{{MessageEvent.origin 属性：message 事件的 event.origin 返回消息发送者的来源字符串，为只读属性。}}
+
+{{知识点14}}{{MessageEvent.source 属性：message 事件的 event.source 返回消息发送源，可以是 WindowProxy、MessagePort 或 ServiceWorker 对象。}}
+
+{{知识点15}}{{MessageEvent.ports 属性：message 事件的 event.ports 返回与消息通道关联的 MessagePort 对象数组。}}
+
+{{知识点16}}{{事件监听方式：支持两种方式监听事件：(1) addEventListener() 方法；(2) onmessage/onmessageerror 事件处理器属性。两者等效，推荐使用 addEventListener 以支持多个监听器。}}
+
+{{知识点17}}{{同源策略限制：BroadcastChannel 只允许同一来源的浏览上下文通信。不同源（协议+域名+端口不同）的页面无法通过 BroadcastChannel 交换消息。}}
+
+{{知识点18}}{{存储分区限制：通信实际上基于相同的存储分区（storage partition）。如果 a.com 页面嵌入 b.com 的 iframe，与直接打开 b.com 的页面之间不能通信，因为顶级站点不同导致存储分区不同。}}
+
+{{知识点19}}{{无需维护引用：与 postMessage + window.opener 等方式不同，BroadcastChannel 不需要维护对目标窗口或 Worker 的引用。各上下文通过相同频道名"订阅"即可通信。}}
+
+{{知识点20}}{{双向通信：BroadcastChannel 支持双向通信。任何连接到同一频道的 BroadcastChannel 对象都可以发送和接收消息，没有固定的发送者/接收者角色。}}
+
+{{知识点21}}{{消息广播特性：postMessage 发送的消息会广播到同一频道的所有其他 BroadcastChannel 对象，但不会发送给发送者自身。这是"广播"语义的核心特征。}}
+
+{{知识点22}}{{API 无消息语义：BroadcastChannel API 本身不对消息附加任何语义含义。消息的类型、格式和处理逻辑完全由应用代码自行定义和实现。}}
+
+{{知识点23}}{{Web Worker 支持：BroadcastChannel API 可在 Web Worker 中使用（包括 Dedicated Worker 和 Shared Worker），实现主线程与 Worker 之间、以及不同 Worker 之间的通信。}}
+
+{{知识点24}}{{InvalidStateError 异常：如果在 BroadcastChannel 已经关闭（调用了 close()）后再调用 postMessage()，会抛出 InvalidStateError DOMException。}}
+
+{{知识点25}}{{DataCloneError 异常：如果 postMessage 的参数包含不可序列化的数据（如函数、DOM 节点、Symbol 等），会抛出 DataCloneError DOMException。}}
+
+{{知识点26}}{{自动创建频道：当第一个 BroadcastChannel 对象连接到某个频道名时，底层频道自动创建。无需显式创建/销毁频道，生命周期由连接的 BroadcastChannel 对象管理。}}
+
+{{知识点27}}{{跨标签页登录状态同步：BroadcastChannel 的典型用例之一是在用户在一个标签页登录/登出时，通知其他同源标签页更新登录状态，实现多标签页状态同步。}}
+
+{{知识点28}}{{与 ServiceWorker 的对比：ServiceWorker 是更重量级的跨上下文通信方式，可以代理网络请求、缓存资源等。BroadcastChannel 更轻量，专注于同源上下文间的消息传递，无额外能力。}}
+
+{{知识点29}}{{与 postMessage + window 引用的对比：传统的 window.postMessage 需要持有目标窗口的引用（如 window.open 返回值），而 BroadcastChannel 通过频道名解耦，不需要互相引用。}}
+
+{{知识点30}}{{与 SharedWorker 的对比：SharedWorker 也可以实现多标签页通信，但需要通过 port 手动管理连接。BroadcastChannel 更简单直接，适合简单的消息广播场景。}}
+
+{{知识点31}}{{与 localStorage 事件的对比：可以通过监听 storage 事件实现跨标签页通信（当 localStorage 变化时触发），但 BroadcastChannel 更灵活，支持任意数据类型，且不依赖存储操作。}}
+
+{{知识点32}}{{规范来源：BroadcastChannel API 定义在 WHATWG HTML 规范中（HTML Living Standard），属于 Web Messaging 部分，章节为 "Broadcasting to other browsing contexts"。}}
+
+{{知识点33}}{{继承自 EventTarget：BroadcastChannel 继承自 EventTarget，因此拥有 addEventListener()、removeEventListener()、dispatchEvent() 等标准事件方法。}}
+
+{{知识点34}}{{资源清理最佳实践：使用 BroadcastChannel 时应在组件卸载或页面离开时调用 close()，否则频道对象不会被垃圾回收，可能导致内存泄漏。在 React useEffect 的清理函数中、Vue onUnmounted 中调用 close()。}}
+
+{{知识点35}}{{TypeScript 类型定义：TypeScript 内置 BroadcastChannel 类型定义，无需额外 @types 包。构造函数类型为 new (name: string) => BroadcastChannel，支持完整类型推断。}}
+
+{{知识点36}}{{实例数量不限：同一来源的不同浏览上下文可以创建任意数量的 BroadcastChannel 对象连接到同一频道，也可以在单个上下文中创建多个不同名的频道。}}
+
+{{知识点37}}{{不支持跨域通信：如需跨域通信，应使用 window.postMessage（配合 targetOrigin 参数）或 WebSocket 等方案，BroadcastChannel 仅限同源。}}
+
+{{知识点38}}{{无法发送函数和 DOM 节点：结构化克隆算法不支持函数（Function）、DOM 节点（Node）、Symbol 等类型。尝试发送这些类型会抛出 DataCloneError。}}
+
+{{知识点39}}{{消息传递是异步的：postMessage 调用后，消息通过异步事件循环传递到接收方。发送和接收不在同一个同步调用栈中，类似于 Promise 和 setTimeout 的异步语义。}}
+
+{{知识点40}}{{安全性考虑：BroadcastChannel 限定同源通信，天然具有一定的安全隔离。但由于所有同源页面都能访问同一频道，需注意在共享域名（如 *.github.io）场景下可能的信息泄露风险。}}

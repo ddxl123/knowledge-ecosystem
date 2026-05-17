@@ -1,0 +1,138 @@
+# 2025前端WebCodecs
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{WebCodecs API概述}}
+WebCodecs API 是浏览器原生接口，提供对原始视频帧、编码视频帧、原始音频和编码音频的低级访问能力。它使 Web 应用能够高效地处理媒体编解码，无需依赖 WebAssembly 或第三方插件。WebCodecs 是 W3C 标准，已被主流浏览器广泛支持。
+
+{{知识点2}}{{核心数据模型}}
+WebCodecs 定义了四种核心数据对象：VideoFrame（原始视频帧）、AudioData（原始音频数据）、EncodedVideoChunk（编码视频块）、EncodedAudioChunk（编码音频块）。原始和编码版本之间通常存在 1:1 的对应关系，解码若干 EncodedVideoChunk 会产生相同数量的 VideoFrame。
+
+{{知识点3}}{{VideoFrame 接口}}
+VideoFrame 表示一个未压缩的视频帧，绑定到设备图形内存中的实际像素数据，并附带时间戳、时长（微秒）、格式和分辨率等元数据。可以从任何图像源构造 VideoFrame，也可以使用 canvas 渲染方法将其绘制到 Canvas 上。
+
+{{知识点4}}{{VideoFrame 构造方式}}
+VideoFrame 可以从多种源构造：HTMLImageElement、HTMLVideoElement、HTMLCanvasElement、ImageBitmap、OffscreenCanvas、SVGImageElement、另一个 VideoFrame，或者从 ArrayBuffer/TypedArray/DataView 中的二进制像素数据构造。构造时需指定 timestamp（微秒）和可选的 format。
+
+{{知识点5}}{{VideoFrame 关键属性}}
+VideoFrame 的关键属性包括：format（像素格式）、codedWidth/codedHeight（编码尺寸，可能含非可见填充）、visibleRect（可见矩形区域）、displayWidth/displayHeight（显示尺寸，经宽高比调整）、timestamp（时间戳，微秒）、duration（时长，微秒）、colorSpace（色彩空间）、flip（水平镜像）、rotation（旋转角度，0/90/180/270度）。
+
+{{知识点6}}{{VideoFrame 方法}}
+VideoFrame 提供以下方法：allocationSize() 返回存储帧所需字节数、copyTo() 将帧内容复制到 ArrayBuffer、clone() 创建引用相同媒体资源的新帧、close() 释放媒体资源引用、metadata() 返回帧元数据。使用完毕后必须调用 close() 以避免内存泄漏。
+
+{{知识点7}}{{VideoFrame 内存管理}}
+VideoFrame 占用大量图形内存，约 100 个活跃帧就可能导致应用崩溃。编码后应立即调用 frame.close() 释放帧，渲染后也应立即关闭。在 Worker 间传递 VideoFrame 时应使用 Transferable 对象：worker.postMessage(frame, [frame])。
+
+{{知识点8}}{{EncodedVideoChunk 接口}}
+EncodedVideoChunk 表示一段编码（压缩）视频数据块。其属性包括：type（"key" 或 "delta"，表示是否为关键帧）、timestamp（时间戳，微秒）、duration（时长，微秒）、byteLength（字节长度）。方法 copyTo() 用于复制编码数据。EncodedVideoChunk 通常比原始 VideoFrame 小 10 到 100 倍。
+
+{{知识点9}}{{VideoEncoder 接口}}
+VideoEncoder 用于将 VideoFrame 编码为 EncodedVideoChunk。构造时需提供 output 回调（接收编码后的 chunk 和元数据）和 error 回调。关键方法：configure() 配置编码参数、encode() 编码帧、flush() 等待所有待处理编码完成、reset() 取消待处理编码、close() 释放资源。
+
+{{知识点10}}{{VideoEncoder 配置}}
+VideoEncoder.configure() 接受配置对象，包括：codec（完全指定的编解码器字符串，如 "vp09.00.40.08.00"）、width、height、bitrate（比特率，如 1_000_000 表示 1Mbps）、framerate（帧率，如 30）。必须使用完整编解码器字符串而非模糊名称如 "vp9"。
+
+{{知识点11}}{{VideoEncoder 编码流程}}
+基本编码流程：创建 VideoEncoder → configure() → 循环创建 VideoFrame 并调用 encode(frame, { keyFrame }) → flush() → close()。第一帧应为关键帧。典型关键帧间隔为每 30 或 60 帧一次。更多关键帧增大文件大小，更少可能导致播放不稳定。
+
+{{知识点12}}{{VideoEncoder 队列管理}}
+VideoEncoder 维护编码队列（encodeQueue），通过 encodeQueueSize 属性监控队列大小。如果编码速度跟不上帧产生速度，队列会无限增长直到内存耗尽。可在渲染循环中检查 encodeQueueSize，或监听 dequeue 事件来管理队列深度。
+
+{{知识点13}}{{VideoEncoder 状态与错误处理}}
+VideoEncoder 的 state 属性值为 "unconfigured"、"configured" 或 "closed"。编码错误会导致编码器永久进入 "closed" 状态，无法重新配置，必须创建新实例。新编码器的第一帧必须是关键帧。可通过 isConfigSupported() 静态方法预先检查配置是否支持。
+
+{{知识点14}}{{VideoDecoder 接口}}
+VideoDecoder 用于将 EncodedVideoChunk 解码为 VideoFrame。构造时需提供 output 回调（接收解码后的 VideoFrame）和 error 回调。关键方法：configure() 配置解码器、decode() 提交编码块解码、flush() 等待完成、reset() 重置状态、close() 释放资源。
+
+{{知识点15}}{{VideoDecoder 解码流程}}
+解码流程：创建 VideoDecoder → configure() → 循环调用 decode(chunk) → flush() → close()。不能逐个发送 chunk 并等待帧输出，可能需要发送多个 chunk 后解码器才开始返回帧。需管理 decodeQueueSize 避免队列溢出。
+
+{{知识点16}}{{VideoDecoder 错误恢复}}
+解码错误时 VideoDecoder 永久进入 "closed" 状态。恢复策略：从当前位置向前查找下一个关键帧，创建新 VideoDecoder 实例，从关键帧开始重新解码。新解码器的第一个 chunk 必须是关键帧类型。
+
+{{知识点17}}{{AudioData 接口}}
+AudioData 表示音频样本数据。典型情况下一个 AudioData 对象包含 1024 个样本。属性包括：format（采样格式，交织或平面）、sampleRate（采样率 Hz）、numberOfFrames（帧数）、numberOfChannels（通道数）、duration（时长，微秒）、timestamp（时间戳，微秒）。
+
+{{知识点18}}{{AudioData 平面与交织格式}}
+AudioData 支持两种格式布局：交织（interleaved）格式中所有通道的样本排列在单个缓冲区（一个 plane），元素数 = numberOfFrames × numberOfChannels；平面（planar）格式中每个通道一个缓冲区，plane 数 = numberOfChannels，每个 plane 元素数 = numberOfFrames。
+
+{{知识点19}}{{AudioEncoder 接口}}
+AudioEncoder 用于将 AudioData 编码为 EncodedAudioChunk。音频编码比视频编码简单——无关键帧概念、无硬件加速顾虑、每个 AudioData 产生恰好一个 EncodedAudioChunk。configure() 接受 codec（如 "opus"）、sampleRate、numberOfChannels、bitrate 等参数。
+
+{{知识点20}}{{AudioDecoder 接口}}
+AudioDecoder 用于将 EncodedAudioChunk 解码为 AudioData。与 AudioEncoder 对称，提供 configure()、decode()、flush()、reset()、close() 等方法。同样通过 output 回调接收解码后的 AudioData，error 回调处理错误。
+
+{{知识点21}}{{EncodedAudioChunk 接口}}
+EncodedAudioChunk 表示编码音频数据块。属性包括：type（"key" 或其他）、timestamp（时间戳，微秒）、duration（时长，微秒）、byteLength（字节长度）。方法 copyTo() 用于复制编码数据。
+
+{{知识点22}}{{异步处理模型}}
+WebCodecs 使用异步处理模型，每个编码器/解码器实例维护独立的内部处理队列。configure()、encode()、decode()、flush() 是异步操作，将控制消息追加到队列末尾。reset() 和 close() 同步中止所有待处理工作并清空队列。close() 是不可逆操作。
+
+{{知识点23}}{{flush() 的正确使用}}
+flush() 用于等待调用时所有待处理工作的完成。应仅在所有期望的工作入队后调用一次，不应在常规间隔调用。不必要地调用 flush() 会影响编码器质量，并导致解码器要求下一个输入必须是关键帧。
+
+{{知识点24}}{{支持的视频编解码器}}
+WebCodecs 支持的主要视频编解码器：H.264 (AVC)——最广泛支持，大多数 MP4 文件使用；VP9——Google 开源，比 H.264 压缩更好，YouTube 和 WebM 常用；AV1——最新开源编解码器，比 VP9 压缩更好，解码器广泛支持但硬件编码器支持有限；H.265 (HEVC)——比 H.264 压缩更好，但除 Apple 平台外浏览器支持有限。
+
+{{知识点25}}{{支持的音频编解码器}}
+WebCodecs 支持的音频编解码器：Opus——开源、低延迟，WebCodecs 音频编码推荐选择；AAC——广泛支持，MP4 文件常用；MP3——解码广泛支持但 WebCodecs 不支持编码；PCM——无压缩，无质量损失但文件大。WebCodecs 原生仅支持编码 Opus 和 AAC。
+
+{{知识点26}}{{编解码器字符串要求}}
+WebCodecs 要求使用完全指定的编解码器字符串，而非模糊名称。例如 VP9 应使用 "vp09.00.40.08.00"，H.264 应使用 "avc1.4d0034"。编解码器字符串编码了 profile、level 等参数。不同设备和浏览器可能只支持规范中编解码器的子集，应使用 isConfigSupported() 检查。
+
+{{知识点27}}{{WebCodecs 与封装格式（Muxing/Demuxing）}}
+WebCodecs 仅处理编解码，不提供内置方式从视频文件读取或写入可播放文件。从视频文件提取编码块需要解封装库（如 Mediabunny 或 web-demuxer）；写入可播放文件需要封装库。封装库根据容器规范（webm、mp4 等）处理二进制数据格式化和字节位置。
+
+{{知识点28}}{{音频直通（Pass-through）}}
+转码视频时，如果不需要修改音频，不需要解码和重新编码音频。EncodedAudioChunk 对象可以直接从解封装库传递到封装库，效率显著高于解码-重编码流程。
+
+{{知识点29}}{{音频播放方案}}
+WebCodecs 没有内置音频播放能力，AudioData 不能直接传递给 Web Audio API（后者使用 AudioBuffer）。推荐方案：用封装库将 EncodedAudioChunk 封装为内存缓冲区，通过 AudioContext.decodeAudioData() 解码，再用 BufferSource 播放。替代方案：通过 AudioData.copyTo() 提取样本构造 AudioBuffer，但涉及 CPU 端数据拷贝，较慢。
+
+{{知识点30}}{{VideoFrame 渲染到 Canvas}}
+解码后的 VideoFrame 可通过三种方式渲染到 Canvas：Canvas2D（ctx.drawImage，简单但跨浏览器性能不一致）、BitmapRenderer（通过 createImageBitmap + transferFromImageBitmap，单次拷贝，性能更一致）、WebGPU（通过 importExternalTexture 零拷贝操作，最高效但设置最复杂）。
+
+{{知识点31}}{{VideoFrame 从 Canvas 创建与视频编辑}}
+从 Canvas 构造 VideoFrame 是视频编辑应用的典型模式：源视频和图像在 Canvas context 中处理，应用特效和变换，Canvas 既可预览又可作为 VideoFrame 图像源进行编码。Canvas → VideoFrame 是图形内存间的拷贝，比二进制数据（CPU→GPU 拷贝）更高效。
+
+{{知识点32}}{{MediaStreamTrackProcessor 集成}}
+MediaStreamTrackProcessor 可将 MediaStreamTrack 拆分为单独的 VideoFrame 或 AudioData 对象。结合 VideoEncoder 可实现实时视频流编码。使用 ReadableStream 读取帧：const reader = processor.readable.getReader()，然后循环 await reader.read() 获取帧。
+
+{{知识点33}}{{MediaStreamTrackGenerator 集成}}
+MediaStreamTrackGenerator 可从 VideoFrame 或 AudioData 流创建 MediaStreamTrack。与 MediaStreamTrackProcessor 结合使用，可构建完整的媒体处理管道：接收轨道 → 处理帧 → 生成新轨道。
+
+{{知识点34}}{{VideoColorSpace 接口}}
+VideoColorSpace 表示视频帧的色彩空间信息，通过 VideoFrame.colorSpace 属性获取。提供 primaries（色域）、transfer（传输函数）、matrix（矩阵系数）、fullRange（是否全范围）等属性。色彩空间正确处理对视频质量至关重要。
+
+{{知识点35}}{{ImageDecoder 接口}}
+ImageDecoder 是 WebCodecs API 的一部分，用于解包和解码编码图像数据。支持动画图像（如 GIF），提供对图像帧序列的访问。构造时需指定 data（ReadableStream 或 ArrayBuffer）和 type（MIME 类型）。方法：decode() 解码帧、reset() 中止待处理解码、close() 释放资源。
+
+{{知识点36}}{{ImageDecoder 与动画图像}}
+ImageDecoder 特别适合处理动画图像。通过 tracks.selectedTrack 获取轨道信息，frameCount 获取帧数。逐帧解码并使用 setTimeout 按帧持续时间控制播放。complete 属性标识数据是否完全缓冲，未完全缓冲时 frameCount 可能不稳定。
+
+{{知识点37}}{{ImageTrack 与 ImageTrackList}}
+ImageTrackList 表示图像中可用的轨道列表，提供选择解码轨道的方法。ImageTrack 表示单个图像轨道，包含帧数和重复次数等信息。多页图像（如 TIFF）可能包含多个轨道。
+
+{{知识点38}}{{安全上下文要求}}
+WebCodecs API 中的多个接口（VideoDecoder、EncodedVideoChunk、ImageDecoder 等）要求安全上下文（HTTPS），在非安全上下文中不可用。这是出于安全考虑，防止恶意网站滥用硬件编解码能力。
+
+{{知识点39}}{{WebCodecs 与 WebGPU 协同}}
+WebCodecs 与 WebGPU 的结合是最高效的视频处理方案。VideoFrame 可通过 device.importExternalTexture() 零拷贝导入 WebGPU 管道，避免 CPU-GPU 数据传输开销。适合实时视频处理、AI 视觉推理等高性能场景。
+
+{{知识点40}}{{WebCodecs 实际应用场景}}
+WebCodecs 的主要应用场景包括：浏览器端视频编辑器、实时视频转码、视频录制（Canvas → 编码视频）、屏幕录制、WebRTC 视频处理管道、AI 视觉处理（结合 WebGPU/WebNN）、浏览器端视频播放器自定义解码、GIF/APNG 动画渲染优化。
+
+{{知识点41}}{{WebCodecs 与 Streams API}}
+WebCodecs 可与 Streams API 结合构建流式处理管道。使用 ReadableStream 获取媒体帧，通过 TransformStream 处理，WritableStream 输出结果。支持背压机制，避免内存溢出。WebRTCHacks 等社区有详细的实时视频处理管道实现指南。
+
+{{知识点42}}{{Worker 中使用 WebCodecs}}
+WebCodecs 编解码器可在 Web Worker 中运行，避免阻塞主线程。VideoFrame 作为 Transferable 对象可在 Worker 间高效传递。典型的多线程架构：主线程负责 UI 和渲染，Worker 线程负责编解码和帧处理，通过 postMessage + Transferable 传输帧数据。
+
+{{知识点43}}{{WebCodecs 与 WebCodecs Fundamentals 资源}}
+WebCodecs Fundamentals（webcodecsfundamentals.org）是社区维护的综合教程网站，提供生产级设计模式、实际实现陷阱、编解码器支持数据集等。该网站特别关注 LLM 友好的参考资料，包含编解码器支持表等数据集。
+
+{{知识点44}}{{encodeQueueSize 与背压控制}}
+encodeQueueSize 和 decodeQueueSize 属性是实现背压控制的关键。当队列大小超过阈值时应停止提交新的帧/编码块。建议阈值为 2-5，取决于目标帧率和设备性能。配合 dequeue 事件监听可实现高效的生产者-消费者模式。
+
+{{知识点45}}{{WebCodecs 规范状态与标准化}}
+WebCodecs 规范由 W3C WebCodecs 工作组维护（w3c.github.io/webcodecs）。截至 2025 年，核心 API 已在 Chrome、Edge、Safari、Firefox 等主流浏览器中得到广泛支持。规范持续演进，包括色彩空间支持、硬件编码器能力查询等新特性。

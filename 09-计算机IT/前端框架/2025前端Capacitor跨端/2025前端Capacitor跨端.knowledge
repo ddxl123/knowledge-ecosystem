@@ -1,0 +1,83 @@
+# 2025前端Capacitor跨端
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{Capacitor概述：Capacitor是由Ionic团队开发的跨平台原生运行时框架，允许开发者使用现代Web技术构建在iOS、Android和Web上运行的高性能原生应用。它代表了混合应用的下一代演进，创建"Web Native"应用，提供现代化的原生容器方案，让团队以Web优先的方式开发，同时不牺牲对原生SDK的完整访问能力。}}
+
+{{知识点2}}{{Capacitor与Cordova的关系：Capacitor被设计为Cordova的现代替代方案。虽然从Cordova借鉴了一些理念，但Capacitor采用了全新的架构。它兼容大多数Cordova插件，开发者可以在Capacitor项目中直接使用现有的Cordova插件，通过npm install和npx cap sync即可集成。}}
+
+{{知识点3}}{{Capacitor核心架构：Capacitor的核心架构包含三个部分——JavaScript运行时（@capacitor/core）、CLI工具（@capacitor/cli）和原生平台运行时（@capacitor/android、@capacitor/ios）。Web应用运行在原生WebView中，通过Bridge与原生代码通信。}}
+
+{{知识点4}}{{Capacitor安装与初始化：可以通过npm init @capacitor/app@latest快速创建新项目，也可在已有Web项目中添加Capacitor。已有项目需要：package.json文件、独立的构建输出目录（如dist或www）、输出目录根目录中的index.html文件（必须包含head标签）。}}
+
+{{知识点5}}{{Capacitor核心依赖安装：在项目根目录运行npm i @capacitor/core安装核心运行时，npm i -D @capacitor/cli安装CLI工具。然后运行npx cap init初始化配置，输入应用名称和包ID，生成capacitor.config.ts或capacitor.config.json配置文件。}}
+
+{{知识点6}}{{Capacitor平台添加：安装原生平台通过npm i @capacitor/android和npm i @capacitor/ios，然后运行npx cap add android和npx cap add ios创建原生项目。这会在项目中生成android和ios目录，包含完整的原生工程结构。}}
+
+{{知识点7}}{{Capacitor配置文件详解：capacitor.config.ts是Capacitor的配置文件，核心配置项包括：appId（应用唯一标识，iOS称为Bundle ID，Android称为Application ID）、appName（应用显示名称）、webDir（Web构建输出目录，React为build，Vue为public，Angular为www）。}}
+
+{{知识点8}}{{Capacitor配置高级选项：配置文件支持platform-specific配置，可以为Android和iOS分别设置不同参数。主要高级配置包括：overrideUserAgent（自定义WebView用户代理）、backgroundColor（WebView背景色）、zoomEnabled（是否启用缩放，默认false）、loggingBehavior（日志行为：none/debug/production）、initialFocus（WebView初始焦点，v7+新增）。}}
+
+{{知识点9}}{{npx cap sync命令：这是Capacitor开发中最核心的命令，它完成两件事：将webDir中的构建产物复制到Android和iOS原生项目中；更新/安装原生项目的依赖。每次修改Web代码并重新构建后，都需要运行此命令将最新代码同步到原生项目。}}
+
+{{知识点10}}{{npx cap run命令：用于在设备或模拟器上运行调试版本。npx cap run ios在iOS设备/模拟器上运行，npx cap run android在Android设备/模拟器上运行。命令会提示选择目标设备，支持有线和无线iOS设备连接。}}
+
+{{知识点11}}{{npx cap open命令：用于打开原生IDE。npx cap open ios打开Xcode中的.xcworkspace项目，npx cap open android在Android Studio中打开项目。开发者可以在IDE中进行更精细的原生配置、调试和编译。}}
+
+{{知识点12}}{{npx cap build命令：用于在终端或CI环境中编译原生应用，输出签名的AAB、APK或IPA文件。支持配置keystore路径、密码、alias等Android签名参数，以及releaseType（AAB或APK）和signingType（apksigner或jarsigner）。}}
+
+{{知识点13}}{{插件系统概述：Capacitor的插件系统使JavaScript能够直接与原生API交互。插件封装了跨平台差异，对外暴露一致的跨平台JavaScript API。Capacitor会自动生成JavaScript钩子，大多数插件只需编写Swift/Obj-C（iOS）和Java/Kotlin（Android）原生代码。}}
+
+{{知识点14}}{{官方插件列表：Capacitor团队维护了丰富的官方插件，包括：Action Sheet、App Launcher、App、Background Runner、Barcode Scanner、Browser、Camera、Clipboard、Cookies、Device、Dialog、Filesystem、File Transfer、File Viewer、Geolocation、Google Maps、Haptics、Http、InAppBrowser、Keyboard、Local Notifications、Motion、Network、Preferences、Privacy Screen、Push Notifications、Screen Orientation、Screen Reader、Share、Splash Screen、Status Bar、System Bars、Text Zoom、Toast、Watch等。}}
+
+{{知识点15}}{{官方插件版本管理：Capacitor使用npm标签进行版本管理。latest标签安装最新版本，latest-X标签（如latest-7）安装与Capacitor X兼容的最新插件版本。这些标签表达的是Capacitor版本兼容性，而非插件自身的版本号。示例：npm install @capacitor/camera@latest。}}
+
+{{知识点16}}{{社区插件生态：Capacitor拥有活跃的社区插件生态。Capacitor Community（github.com/capacitor-community）是官方认可的社区插件组织，提供一致的项目和代码规范。Capawesome（github.com/capawesome-team）是另一个重要的社区项目，提供capacitor-firebase和capacitor-mlkit等高质量插件。}}
+
+{{知识点17}}{{Cordova插件兼容性：Capacitor支持大多数Cordova插件的使用。安装方式与Capacitor插件相同：npm install cordova-plugin-name然后npx cap sync。但Capacitor不支持Cordova的安装变量、自动配置和钩子，需要手动在原生项目中进行配置。部分Cordova插件已被标记为不兼容（如cordova-plugin-admobpro、cordova-plugin-firebase等）。}}
+
+{{知识点18}}{{自定义插件开发：开发者可以创建自定义Capacitor插件来封装特定的原生功能。插件开发涉及三部分：JavaScript接口定义、iOS原生实现（Swift/Obj-C）、Android原生实现（Java/Kotlin）。Capacitor会自动处理JavaScript与原生代码之间的桥接通信。}}
+
+{{知识点19}}{{iOS平台支持：Capacitor iOS运行时支持iOS 15+，要求Xcode 26.0+。使用WKWebView作为WebView引擎（而非已废弃的UIWebView）。iOS项目通过Xcode和CocoaPods管理。支持有线和无线设备调试，在Finder中选择"Show this iPhone when on Wi-Fi"即可启用无线调试。}}
+
+{{知识点20}}{{Android平台支持：Capacitor Android运行时支持API 24+（Android 7及以上），覆盖约99%的Android市场。要求Chrome 60+版本的WebView。Android 7-9由Google Chrome提供WebView，Android 10+使用Android System WebView。支持物理设备和模拟器，模拟器需使用API 24+系统镜像。}}
+
+{{知识点21}}{{Capacitor Config TypeScript接口：配置文件支持TypeScript类型定义CapacitorConfig，提供完整的类型提示。主要接口字段包括：appId、appName、webDir、loggingBehavior、overrideUserAgent、appendUserAgent、backgroundColor、zoomEnabled、initialFocus，以及android和ios平台特定配置。}}
+
+{{知识点22}}{{Android特定配置：Android平台特有的配置项包括：allowMixedContent（允许混合内容，仅用于开发）、captureInput（简化键盘输入）、webContentsDebuggingEnabled（启用WebView调试）、minWebViewVersion（最低WebView版本，默认60）、minHuaweiWebViewVersion（华为WebView最低版本，默认10）、flavor（Android构建风味）、useLegacyBridge（使用旧版桥接方式）。}}
+
+{{知识点23}}{{Android构建选项配置：Android平台支持buildOptions配置，包括：keystorePath（签名密钥库路径）、keystorePassword（密钥库密码）、keystoreAlias（密钥库别名）、keystoreAliasPassword（别名密码）、releaseType（发布类型：AAB或APK，默认AAB）、signingType（签名程序：apksigner或jarsigner，默认jarsigner）。}}
+
+{{知识点24}}{{开发工作流程：Capacitor的标准开发流程为：1.在Web框架中开发应用；2.运行构建命令（如npm run build）；3.运行npx cap sync同步到原生项目；4.运行npx cap run ios/android测试；5.在IDE中进行原生调试和配置；6.使用npx cap build或IDE编译最终二进制文件进行发布。}}
+
+{{知识点25}}{{Web框架兼容性：Capacitor可以集成到任何现代JavaScript Web框架中，包括React、Vue、Angular、Svelte、Solid等。只需确保项目有package.json、独立的构建输出目录和index.html文件。不同框架的webDir默认值不同：React为build，Vue为public，Angular为www。}}
+
+{{知识点26}}{{Capacitor与Ionic的关系：Capacitor由Ionic团队开发，是Ionic框架的原生运行时层。但Capacitor并不依赖Ionic，可以在没有Ionic的情况下独立使用。任何Web应用都可以直接使用Capacitor，而不需要引入Ionic的UI组件库。}}
+
+{{知识点27}}{{Capacitor Bridge通信机制：Capacitor通过Bridge机制实现JavaScript与原生代码的通信。JavaScript端通过调用插件的Promise-based API发起请求，Bridge将请求序列化后传递给原生端，原生端执行完毕后将结果返回JavaScript端。这种机制保持了Web标准的异步编程模式。}}
+
+{{知识点28}}{{Capacitor应用架构模型：Capacitor应用本质上是一个运行在原生WebView中的Web应用。WebView提供了完整的浏览器环境，Web标准API（如fetch、localStorage、IndexedDB等）都可以正常使用。当需要访问原生功能时，通过插件系统进行扩展。}}
+
+{{知识点29}}{{Capacitor CLI命令大全：常用CLI命令包括：npx cap init（初始化配置）、npx cap add（添加平台）、npx cap sync（同步Web代码到原生项目）、npx cap run（运行应用）、npx cap open（打开IDE）、npx cap build（编译应用）、npx cap ls（列出已安装的插件）、npx cap update（更新原生项目依赖）。}}
+
+{{知识点30}}{{Capacitor应用发布流程：发布流程包括：使用npx cap build编译原生二进制文件（AAB/APK/IPA），然后通过各平台的分发渠道发布。可以使用Fastlane自动化发布流程，或使用Ionic的Appflow云构建服务。iOS应用发布到Apple App Store，Android应用发布到Google Play Store。}}
+
+{{知识点31}}{{Capacitor更新策略：更新Capacitor运行时非常简单，通过npm install更新所有包即可。关键原则是确保@capacitor/core、@capacitor/ios和@capacitor/android保持相同版本。三个库同时发布，同时安装可以保证版本一致。可以订阅GitHub仓库的Release通知来跟踪新版本。}}
+
+{{知识点32}}{{Capacitor安全性设计：Capacitor在安全方面有多项设计：WebView混合内容默认禁用（allowMixedContent默认false）、WebView缩放默认禁用（zoomEnabled默认false）、从v4.5开始默认使用更安全的addWebMessageListener替代旧版addJavascriptInterface、日志默认仅在debug构建中输出（loggingBehavior默认debug）。}}
+
+{{知识点33}}{{Capacitor与原生项目的关系：Capacitor将原生项目（android/和ios/目录）视为项目的一部分，可以提交到版本控制。这与Cordova不同——Cordova将原生项目视为构建产物。Capacitor的理念是让开发者完全控制原生代码，便于进行自定义原生开发和调试。}}
+
+{{知识点34}}{{Capacitor与PWA的关系：Capacitor应用可以渐进式增强为PWA。同一个Web应用可以同时作为PWA在浏览器中运行、作为原生应用通过Capacitor在移动设备上运行。Capacitor提供了统一的API层，在不同环境中提供一致的体验，同时在原生环境中提供更丰富的功能访问。}}
+
+{{知识点35}}{{Capacitor v8新特性：Capacitor最新稳定版本为v8，带来了性能改进和新API支持。官方插件也同步更新到v8版本。v8继续优化了WebView性能、插件系统稳定性和开发者体验。开发者可以使用npm标签@latest安装最新版本。}}
+
+{{知识点36}}{{Capacitor HTTP插件：@capacitor/http插件允许在原生层执行HTTP请求，绕过WebView的CORS限制。这对于需要直接调用第三方API而不想配置代理的场景非常有用。原生HTTP请求还可以利用平台特定的网络优化和证书管理。}}
+
+{{知识点37}}{{Capacitor本地通知与推送通知：Capacitor提供了@capacitor/local-notifications和@capacitor/push-notifications两个官方插件。本地通知不需要服务器，直接在设备上调度和显示。推送通知需要配合后端服务和平台推送服务（APNs/FCM）使用。}}
+
+{{知识点38}}{{Capacitor文件系统API：@capacitor/filesystem插件提供了跨平台的文件系统访问能力。支持读写文件、创建目录、列出目录内容、删除文件等操作。提供了多种文件系统目录选项：Documents、Data、Cache、External等，适应不同的存储需求。}}
+
+{{知识点39}}{{Capacitor设备信息与网络状态：@capacitor/device插件提供设备信息（操作系统、型号、电量等），@capacitor/network插件提供网络状态监测（在线/离线、网络类型WiFi/Cellular等）。这两个插件常用于实现自适应的网络请求策略和设备适配逻辑。}}
+
+{{知识点40}}{{Capacitor最佳实践：开发建议包括：优先使用Web标准API而非插件（如fetch优于HTTP插件）、将插件调用封装为Service层以便测试和替换、使用TypeScript获得更好的类型安全、定期同步原生项目（npx cap sync）、在真机上测试而非仅依赖模拟器、保持三个核心包版本一致。}}

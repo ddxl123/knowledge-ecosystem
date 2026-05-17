@@ -1,0 +1,83 @@
+# 2025前端Nest.js框架
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{NestJS框架概述：NestJS是一个用于构建高效、可扩展的Node.js服务器端应用程序的渐进式框架。它使用渐进式JavaScript，完全支持TypeScript（也允许纯JavaScript开发），融合了面向对象编程(OOP)、函数式编程(FP)和函数式响应式编程(FRP)的元素。底层默认使用Express，也可配置为使用Fastify。}}
+
+{{知识点2}}{{NestJS设计哲学：NestJS提供了开箱即用的应用架构，使开发者和团队能够创建高度可测试、可扩展、松耦合和易于维护的应用程序。其架构深受Angular启发，解决了Node.js生态中缺乏统一架构方案的核心问题。}}
+
+{{知识点3}}{{NestJS安装与创建项目：通过Nest CLI创建项目是最推荐的方式。命令为npm i -g @nestjs/cli安装CLI，然后nest new project-name创建新项目。也可以通过git clone typescript-starter仓库或从零开始安装@nestjs/core、@nestjs/common、rxjs和reflect-metadata等核心依赖。}}
+
+{{知识点4}}{{模块(Module)系统：模块是用@Module()装饰器注解的类，是NestJS组织应用结构的核心机制。每个NestJS应用至少有一个根模块(root module)，Nest从根模块开始构建应用图(application graph)来解析模块和提供者之间的关系与依赖。@Module()装饰器接受providers、controllers、imports、exports四个属性。}}
+
+{{知识点5}}{{模块封装特性：模块默认封装(encapsulate)其提供者，意味着只能注入当前模块中的提供者或从其他导入模块显式导出的提供者。导出的提供者构成模块的公共接口或API，这是模块间通信的唯一途径。}}
+
+{{知识点6}}{{功能模块(Feature Module)：将相关的控制器和服务按功能领域组织成功能模块是最佳实践。例如将CatsController和CatsService组织到CatsModule中，有助于维护清晰的边界，符合SOLID原则。通过imports数组将功能模块导入根模块使用。}}
+
+{{知识点7}}{{控制器(Controller)：控制器负责处理传入的请求并向客户端发送响应。使用@Controller()装饰器定义，可指定路由前缀(如'cats')。路由机制决定哪个控制器处理每个请求。一个控制器通常有多个路由，每个路由可执行不同操作。}}
+
+{{知识点8}}{{HTTP方法装饰器：NestJS提供@Get()、@Post()、@Put()、@Delete()、@Patch()、@Options()、@Head()等HTTP方法装饰器。这些装饰器告诉Nest为特定端点创建请求处理程序。路由路径由控制器前缀和方法装饰器中的路径组合而成。}}
+
+{{知识点9}}{{请求对象获取：NestJS提供@Request()或@Req()装饰器获取请求对象，@Response()或@Res()获取响应对象，@Next()获取next函数，@Session()获取session，@Param()获取路由参数，@Body()获取请求体，@Query()获取查询参数，@Headers()获取请求头，@Ip()获取IP地址。}}
+
+{{知识点10}}{{响应处理机制：NestJS有两种响应处理方式。标准方式(推荐)：当处理程序返回JS对象或数组时自动序列化为JSON，返回原始类型(string/number/boolean)时直接发送值。POST请求默认状态码为201，其他为200。可通过@HttpCode()装饰器自定义状态码。}}
+
+{{知识点11}}{{提供者(Provider)：提供者是NestJS中非常核心的概念。许多基本的NestJS类可以被视为提供者——服务、仓库、工厂、助手类等。提供者的主要思想是可以作为依赖注入，这意味着对象之间可以创建各种关系，且对象的"接线"可以由Nest运行时系统处理。}}
+
+{{知识点12}}{{依赖注入(DI)：NestJS使用强大的依赖注入系统，基于Angular的DI机制。通过@Injectable()装饰器标记类为可注入的提供者，通过构造函数注入依赖。Nest的IoC容器自动解析和注入依赖关系，使得代码松耦合且高度可测试。}}
+
+{{知识点13}}{{服务(Service)：服务是典型的可注入提供者，用于封装业务逻辑。通过@Injectable()装饰器标记，可在构造函数中注入其他服务。服务通常用于数据访问、业务计算等，与控制器分离实现关注点分离。}}
+
+{{知识点14}}{{自定义装饰器：NestJS基于ES装饰器实现，支持创建自定义参数装饰器。使用createParamDecorator()函数创建，可从ExecutionContext中提取请求对象的属性。例如创建@User()装饰器从request.user提取用户信息，提升代码可读性和复用性。}}
+
+{{知识点15}}{{Guards(守卫)：守卫是用@Injectable()装饰器注解并实现CanActivate接口的类。守卫有单一职责——根据运行时条件(如权限、角色、ACL等)决定请求是否被路由处理器处理，通常用于授权(Authorization)。守卫在所有中间件之后、拦截器和管道之前执行。}}
+
+{{知识点16}}{{ExecutionContext(执行上下文)：ExecutionContext继承自ArgumentsHost，为守卫、拦截器和管道提供当前执行过程的额外详细信息。提供getHandler()、getClass()等辅助方法，可跨广泛的控制器、方法和执行上下文构建更通用的组件。}}
+
+{{知识点17}}{{Pipes(管道)：管道是用@Injectable()装饰器注解并实现PipeTransform接口的类。有两个典型用途：转换(transform)——将输入数据转换为期望形式；验证(validation)——评估输入数据，有效则传递，否则抛出异常。管道在方法调用前对参数进行操作。}}
+
+{{知识点18}}{{内置管道：NestJS提供多种内置管道：ValidationPipe、ParseIntPipe、ParseFloatPipe、ParseBoolPipe、ParseArrayPipe、ParseUUIDPipe、ParseEnumPipe、DefaultValuePipe、ParseFilePipe、ParseDatePipe。通过@Param('id', ParseIntPipe)等语法绑定到路由参数。}}
+
+{{知识点19}}{{Interceptors(拦截器)：拦截器是实现NestInterceptor接口的类，受面向切面编程(AOP)启发。功能包括：在方法执行前后绑定额外逻辑、转换返回结果、转换抛出异常、扩展基本函数行为、完全覆盖函数行为(如缓存)。通过RxJS的Observable处理响应流。}}
+
+{{知识点20}}{{拦截器的CallHandler：拦截器的intercept()方法接收ExecutionContext和CallHandler两个参数。CallHandler的handle()方法用于调用路由处理器。如果不调用handle()，路由处理器不会执行。handle()返回Observable，可使用RxJS操作符进一步操作响应。}}
+
+{{知识点21}}{{Exception Filters(异常过滤器)：NestJS内置全局异常过滤器，处理未被应用代码处理的异常。默认处理HttpException及其子类，未识别的异常返回500 Internal Server Error。可通过throw new HttpException('Forbidden', HttpStatus.FORBIDDEN)抛出标准HTTP异常。}}
+
+{{知识点22}}{{自定义异常过滤器：通过@Catch()装饰器和实现ExceptionFilter接口创建自定义异常过滤器。可捕获特定类型的异常并自定义响应格式。使用ArgumentsHost访问底层请求/响应对象，实现灵活的异常处理策略。}}
+
+{{知识点23}}{{中间件(Middleware)：中间件是在路由处理器之前调用的函数，可访问请求和响应对象及next()函数。类似于Express中间件。通过@Injectable()装饰器和实现NestMiddleware接口创建，使用configure()方法在模块中注册。中间件不知道哪个处理器会被执行。}}
+
+{{知识点24}}{{数据验证(Validation)：NestJS的ValidationPipe利用class-validator和class-transformer包实现声明式验证。通过DTO类上的装饰器(如@IsString()、@IsInt()、@Min()、@Max()等)定义验证规则。支持whitelist(去除未声明属性)、forbidNonWhitelisted(禁止未声明属性)等选项。}}
+
+{{知识点25}}{{序列化(Serialization)：ClassSerializerInterceptor使用class-transformer包提供声明式数据转换。通过@Exclude()排除敏感字段(如password)、@Expose()暴露计算属性、@Transform()自定义转换逻辑。需返回类实例而非普通对象才能正确序列化。}}
+
+{{知识点26}}{{缓存(Caching)：通过@nestjs/cache-manager包实现缓存，底层使用Keyv支持多种存储后端(默认内存，可切换Redis)。CacheModule.register()启用缓存，通过CACHE_MANAGER注入缓存管理器。CacheInterceptor可自动缓存GET端点响应。支持TTL配置。}}
+
+{{知识点27}}{{CQRS模式支持：NestJS通过@nestjs/cqrs包支持命令查询职责分离(CQRS)模式。将应用分为命令(写操作)和查询(读操作)两部分，通过CommandBus和QueryBus分发，使用EventBus处理事件。适合复杂业务逻辑和事件驱动架构。}}
+
+{{知识点28}}{{微服务(Microservices)：NestJS原生支持微服务架构，微服务本质上是使用不同传输层(transport)而非HTTP的应用。支持TCP、Redis、MQTT、NATS、gRPC、Kafka、RabbitMQ等多种传输器。支持请求-响应和事件驱动两种消息模式。通过createMicroservice()创建微服务实例。}}
+
+{{知识点29}}{{GraphQL集成：通过@nestjs/graphql模块支持GraphQL，提供Apollo(@nestjs/apollo)和Mercurius(@nestjs/mercurius)两种驱动。支持code-first(用装饰器和TypeScript类生成Schema)和schema-first(SDL文件为源)两种方式。实现端到端类型安全。}}
+
+{{知识点30}}{{WebSockets支持：NestJS通过@nestjs/websockets模块提供WebSocket支持，使用平台无关的抽象层。支持ws和Socket.IO两种适配器。通过@WebSocketGateway()装饰器定义网关，使用@SubscribeMessage()装饰器处理消息。支持中间件、守卫、拦截器和过滤器。}}
+
+{{知识点31}}{{Nest CLI工具：Nest CLI是强大的命令行工具，用于创建、构建和管理NestJS项目。常用命令包括nest new(创建项目)、nest generate或nest g(生成模块、控制器、服务等)、nest build(构建项目)、nest start(启动应用)。支持CRUD生成器nest g resource。}}
+
+{{知识点32}}{{TypeScript深度集成：NestJS与TypeScript深度集成，利用装饰器、类型系统和元数据反射。需要在tsconfig.json中启用experimentalDecorators和emitDecoratorMetadata。TypeScript提供静态类型检查、接口定义和泛型支持，增强代码质量和开发体验。}}
+
+{{知识点33}}{{测试(Testing)：NestJS内置测试支持，基于Jest测试框架。通过Test.createTestingModule()创建测试模块，可独立测试控制器、服务等组件。支持单元测试和端到端(e2e)测试。通过覆盖(override)机制替换依赖，实现隔离测试。}}
+
+{{知识点34}}{{生命周期钩子(Lifecycle Hooks)：NestJS提供OnModuleInit(模块初始化)、OnApplicationBootstrap(应用启动完成)、OnModuleDestroy(模块销毁)、beforeApplicationShutdown和onApplicationShutdown等生命周期钩子接口，允许在应用生命周期各阶段执行自定义逻辑。}}
+
+{{知识点35}}{{Swagger/OpenAPI集成：通过@nestjs/swagger包自动生成API文档。使用@ApiTags()、@ApiOperation()、@ApiResponse()、@ApiProperty()等装饰器描述API。可在Swagger UI中交互式测试API端点，大幅提升前后端协作效率。}}
+
+{{知识点36}}{{ORM集成：NestJS与主流ORM无缝集成，包括TypeORM(关系型数据库)、Sequelize、Prisma和Mongoose(MongoDB)。通过专用模块(如@nestjs/typeorm)提供集成，支持数据库迁移、实体定义、仓库模式等。TypeORM的forRoot()和forFeature()方法配置数据库连接和实体。}}
+
+{{知识点37}}{{任务调度(Scheduling)：通过@nestjs/schedule包实现定时任务。支持@Cron()装饰器定义Cron表达式定时任务、@Interval()定义间隔执行任务、@Timeout()定义延迟执行任务。底层基于cron库和Bull队列，适合批处理和定期数据同步。}}
+
+{{知识点38}}{{文件上传：NestJS通过Multer中间件处理文件上传，使用@UseInterceptors(FileInterceptor('file'))装饰器。支持ParseFilePipe进行文件验证(大小、类型等)。可配合@nestjs/platform-express或@nestjs/platform-fastify使用。支持流式文件处理StreamableFile。}}
+
+{{知识点39}}{{配置管理(Configuration)：通过@nestjs/config包管理应用配置，基于dotenv。支持.env文件加载、命名空间配置、自定义配置文件、条件验证(Joi)等。ConfigModule.forRoot()全局注册，ConfigService注入后通过get()方法获取配置值，支持类型安全。}}
+
+{{知识点40}}{{安全(Security)：NestJS提供完整的安全方案，包括认证(Authentication)和授权(Authorization)。支持Passport.js集成(@nestjs/passport)、JWT策略、本地策略等。通过AuthGuard实现路由保护。bcrypt等库处理密码加密。Helmet中间件增强HTTP安全头。}}

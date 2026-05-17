@@ -1,0 +1,123 @@
+# 2025前端前端CSS Borders
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{border 简写属性}}
+border 是 CSS 中用于设置元素边框的简写属性，可同时设置 border-width、border-style 和 border-color 三个子属性。语法为 `border: <width> <style> <color>`，顺序不限。若省略某个值则使用其默认值（width 默认 medium，style 默认 none，color 默认 currentColor）。注意：border 简写会将 border-image 重置为 none。
+
+{{知识点2}}{{border-style 属性详解}}
+border-style 定义边框的样式，支持 10 个关键字值：none（无边框，border-width 计算为 0）、hidden（同 none 但在表格边框合并时优先级最高）、dotted（圆点虚线）、dashed（短划线）、solid（实线）、double（双线，总宽度等于 border-width）、groove（凹槽效果）、ridge（凸脊效果）、inset（内嵌效果）、outset（浮出效果）。默认值为 none。
+
+{{知识点3}}{{border-width 属性详解}}
+border-width 设置边框厚度，支持关键字值和长度值。关键字：thin（约 1px）、medium（约 3px，默认值）、thick（约 5px）。也可使用 px、em、rem 等长度单位。当 border-style 为 none 或 hidden 时，计算值为 0。接受 1-4 个值，遵循上右下左的顺序规则。
+
+{{知识点4}}{{border-color 属性详解}}
+border-color 设置边框颜色，默认值为 currentColor（继承元素的 color 属性值）。支持所有 CSS 颜色格式：关键字（red）、十六进制（#ff0000）、rgb/rgba、hsl/hsla 等。也支持 transparent 关键字创建透明边框。接受 1-4 个值，遵循上右下左的顺序规则。
+
+{{知识点5}}{{四值简写顺序规则}}
+border-width、border-style、border-color 等属性都支持 1-4 个值的简写：1 个值应用于四边；2 个值时第一个应用于上下，第二个应用于左右；3 个值时第一个应用于上，第二个应用于左右，第三个应用于下；4 个值按顺时针方向：上、右、下、左。
+
+{{知识点6}}{{单边边框属性}}
+可以单独控制每一边的边框：border-top、border-right、border-bottom、border-left。每个单边属性也是简写，包含对应的 width、style、color。例如 `border-top: 2px solid red` 等同于分别设置 border-top-width、border-top-style、border-top-color。
+
+{{知识点7}}{{border-radius 圆角属性}}
+border-radius 用于设置元素的圆角，是 border-top-left-radius、border-top-right-radius、border-bottom-right-radius、border-bottom-left-radius 四个属性的简写。支持长度值（px、em）和百分比值。百分比相对于 border box 的对应尺寸计算。即使元素没有边框，圆角也会应用于背景。
+
+{{知识点8}}{{border-radius 椭圆圆角}}
+border-radius 支持用斜杠（/）分隔水平和垂直半径来创建椭圆圆角。语法如 `border-radius: 10px / 20px`，其中斜杠前是水平半径，斜杠后是垂直半径。可以为每个角分别指定椭圆半径，如 `border-radius: 4px 3px 6px / 2px 4px`。
+
+{{知识点9}}{{border-radius 单角属性}}
+四个单角属性：border-top-left-radius（左上）、border-top-right-radius（右上）、border-bottom-right-radius（右下）、border-bottom-left-radius（左下）。每个属性接受 1-2 个值，1 个值时为圆形圆角，2 个值时为椭圆圆角（水平 垂直）。
+
+{{知识点10}}{{border-image 图片边框}}
+border-image 允许使用图片或渐变作为边框，是 border-image-source、border-image-slice、border-image-width、border-image-outset、border-image-repeat 的简写。语法如 `border-image: url("image.png") 30 round`。source 指定图片源，slice 定义切割区域，repeat 定义平铺方式（stretch、repeat、round、space）。
+
+{{知识点11}}{{border-image-source 图片源}}
+border-image-source 指定边框图片的源，可以是 url() 引用的图片文件，也可以是 CSS 渐变函数（如 linear-gradient()、repeating-linear-gradient()）。默认值为 none。使用渐变作为边框图片可以创建纯 CSS 的装饰性边框效果。
+
+{{知识点12}}{{border-image-slice 图片切割}}
+border-image-slice 定义如何将源图片切割为 9 个区域（类似九宫格）。接受 1-4 个数值（数字或百分比），以及可选的 fill 关键字。数字值不带单位，表示图片固有尺寸的像素偏移。四角区域用于角部，四边区域用于边框边缘，中间区域默认被丢弃（除非设置了 fill）。
+
+{{知识点13}}{{border-image-repeat 平铺方式}}
+border-image-repeat 定义边框图片边缘区域的平铺方式，接受 1-2 个值（水平 垂直）。可选值：stretch（拉伸，默认）、repeat（重复，可能裁剪）、round（重复，自适应缩放不留间隙）、space（重复，均匀分布留间隙）。
+
+{{知识点14}}{{border-collapse 表格边框合并}}
+border-collapse 控制表格单元格的边框是否合并，仅适用于 table 和 inline-table 元素。值为 collapse 时相邻单元格共享边框（合并边框模型），值为 separate 时每个单元格有独立边框（分离边框模型，默认值）。在 collapse 模式下，inset 样式表现如 ridge，outset 表现如 groove。该属性可继承。
+
+{{知识点15}}{{border-spacing 表格边框间距}}
+border-spacing 定义相邻单元格边框之间的间距，仅在 border-collapse: separate 时有效。接受 1-2 个长度值，1 个值时水平和垂直间距相同，2 个值时第一个为水平间距、第二个为垂直间距。该属性可继承。
+
+{{知识点16}}{{border 与 outline 的区别}}
+border 和 outline 视觉上相似但有重要区别：border 占据文档空间并影响布局，outline 不占据空间（绘制在元素内容之外）；border 可以单独设置每一边，outline 不能；border 支持 border-radius 圆角，outline 按规范不必为矩形但通常也是矩形；outline 可通过 outline-offset 设置与元素边缘的偏移距离。
+
+{{知识点17}}{{逻辑边框属性}}
+CSS 逻辑属性提供与书写模式无关的边框控制：border-block-start、border-block-end、border-inline-start、border-inline-end 对应块方向和行内方向的边框。在 LTR 布局中 border-inline-start 等同于 border-left，在 RTL 布局中等同于 border-right。子属性包括 border-block-start-color、border-block-start-width、border-block-start-style 等。
+
+{{知识点18}}{{边框的动画类型}}
+border-width 的各子属性可通过长度插值动画；border-style 的各子属性以离散方式过渡（无平滑动画）；border-color 的各子属性通过颜色插值动画（在 alpha 预乘的 sRGB 色彩空间中插值以避免出现意外灰色）。border-radius 的各子属性支持长度和百分比插值动画。
+
+{{知识点19}}{{边框与 box-sizing}}
+边框的渲染受 box-sizing 属性影响。默认值 content-box 下，border 不包含在 width/height 内；border-box 模式下，border 包含在 width/height 内。使用 border-box 可以更直观地控制元素总尺寸，这也是现代 CSS 重置中常用 `*, *::before, *::after { box-sizing: border-box; }` 的原因。
+
+{{知识点20}}{{transparent 边框技巧}}
+使用 `border: 2px solid transparent` 可以创建透明边框，常见用途包括：预留空间防止布局偏移（如 hover 时添加边框）、作为额外的可点击区域、配合 background-clip 和 background-origin 实现特殊背景效果。transparent 边框仍占据布局空间。
+
+{{知识点21}}{{边框渐变效果}}
+虽然 CSS 不直接支持渐变边框颜色，但可通过多种技巧实现：1）使用 border-image 配合 linear-gradient()；2）使用 border-image: conic-gradient() 创建旋转渐变边框；3）使用伪元素 + background 渐变 + padding 裁剪模拟。border-image 方式最简洁但会失去 border-radius 圆角支持。
+
+{{知识点22}}{{border-image 与 border-radius 的冲突}}
+当同时使用 border-image 和 border-radius 时，border-image 不会跟随圆角裁剪，这是 CSS 规范的已知限制。解决方法：使用 mask 或 clip-path 裁剪整个元素，或使用伪元素叠加技术绕过此限制。CSS Backgrounds and Borders Level 4 规范正在讨论改进方案。
+
+{{知识点23}}{{多层边框实现}}
+CSS 原生不支持多层边框，但可通过以下方法实现：1）使用 box-shadow 的多个阴影值模拟（不占布局空间）；2）使用 outline + border 组合（两层）；3）使用伪元素 ::before/::after 叠加更多边框层。box-shadow 方式最灵活，可创建任意数量的"边框"层。
+
+{{知识点24}}{{边框与无障碍性}}
+边框对无障碍访问有重要影响：1）表单元素的 focus 状态通常通过 outline 或 border 变化来指示，不应完全移除 focus 指示器；2）border-image 中包含的信息性内容无法被辅助技术解析；3）使用足够对比度的边框颜色有助于视觉识别。WCAG 2.2 要求焦点指示器至少有 2px 的轮廓。
+
+{{知识点25}}{{dotted 与 dashed 的实现差异}}
+dotted 和 dashed 边框的具体渲染在不同浏览器间存在差异。规范未定义点的间距和线段长度，因此各浏览器实现不同：dotted 的点可能是圆形或方形，dashed 的线段长度也可能不同。如需精确控制，建议使用 SVG 或背景图案替代。
+
+{{知识点26}}{{边框的继承特性}}
+所有 border 相关属性默认不继承（inherited: no），但 border-collapse 和 border-spacing 是例外，它们可继承。border-color 的默认值为 currentColor，它会跟随元素的 color 属性值，看起来像继承但实际上是从自身的 color 值获取。
+
+{{知识点27}}{{边框与 ::first-letter}}
+border 属性可应用于 ::first-letter 伪元素，用于装饰段落首字母。常用样式包括首字母加大并添加实线或双线边框。需注意 ::first-letter 只能应用部分 CSS 属性，border 是其中之一。
+
+{{知识点28}}{{边框的全局值}}
+所有 border 相关属性都支持 CSS 全局关键字值：inherit（从父元素继承）、initial（设为初始值）、revert（还原为浏览器默认样式）、revert-layer（还原为上一层级的值）、unset（如果是继承属性则为 inherit，否则为 initial）。
+
+{{知识点29}}{{box-shadow 与边框的配合}}
+box-shadow 常与 border 配合使用来增强边框效果。语法为 `box-shadow: <offset-x> <offset-y> <blur-radius> <spread-radius> <color>`。支持 inset 关键字创建内阴影。可声明多个阴影值（逗号分隔）。当元素有 border-radius 时，阴影也会跟随圆角。阴影不占据布局空间，不影响元素尺寸。
+
+{{知识点30}}{{边框在响应式设计中的应用}}
+响应式设计中边框的最佳实践：1）使用相对单位（em、rem）而非绝对像素值定义 border-width；2）使用百分比 border-radius 创建自适应圆角（如 50% 创建圆形）；3）媒体查询中可改变边框样式或移除不必要的边框；4）在小屏幕上简化复杂边框以提升性能。
+
+{{知识点31}}{{hairline 关键字（新特性）}}
+CSS Backgrounds and Borders Level 4 规范引入了 hairline 关键字作为 border-width 的值，表示比 thin 更细的线条（通常为 0.5px 或设备支持的最细线条）。适用于需要极细边框分隔线的场景，在高 DPI 屏幕上效果尤佳。浏览器支持尚在逐步推进中。
+
+{{知识点32}}{{border-color 与 stripes() 函数}}
+CSS 新规范中 border-color 支持 stripes() 函数，允许创建条纹状的边框颜色。语法如 `border-color: stripes(red 3px, blue 3px)`，可以定义交替颜色的条纹边框效果。这是一个较新的特性，浏览器支持正在逐步实现中。
+
+{{知识点33}}{{表格边框合并的优先级}}
+在 border-collapse: collapse 模式下，当相邻单元格的边框样式冲突时，按以下优先级从高到低排列：hidden（最高优先级，任何冲突边框都不显示）、none（最低优先级）、样式类型（double > solid > dashed > dotted > ridge > groove > inset > outset）、边框宽度（较宽的优先）、来源（cell > row > row-group > col > col-group > table）。
+
+{{知识点34}}{{边框与性能优化}}
+边框对渲染性能的影响：1）大量元素的复杂边框样式（如 groove、ridge、double）比简单 solid 边框消耗更多渲染资源；2）border-image 使用大图片时需注意内存占用；3）动画 border-width 会触发重排（reflow），而动画 box-shadow 只触发重绘（repaint），性能更优；4）使用 will-change 或 transform 动画可优化边框动画性能。
+
+{{知识点35}}{{outline-offset 属性}}
+outline-offset 设置 outline 与元素边框边缘之间的距离，接受长度值（正值向外扩展，负值向内收缩）。常用于创建"双层边框"效果（配合 border 使用），或调整焦点轮廓的位置使其不与 border 重叠。该属性不可动画化。
+
+{{知识点36}}{{边框与打印样式}}
+打印样式中边框的注意事项：1）彩色边框在黑白打印时可能变为灰色，影响可读性；2）建议在 @media print 中确保边框颜色有足够对比度；3）groove、ridge、inset、outset 等三维效果在打印中可能失去视觉效果；4）极细边框在打印时可能不可见。
+
+{{知识点37}}{{边框的层叠上下文}}
+边框本身不创建新的层叠上下文，但当边框与 position、z-index、opacity 等属性组合时会影响元素的层叠顺序。border 是元素 box model 的一部分，绘制在 background 之上、content 之下。在表格合并边框模型中，边框的绘制顺序和优先级遵循特定的 CSS 规范规则。
+
+{{知识点38}}{{CSS Grid/Flexbox 中的边框行为}}
+在 Grid 和 Flexbox 布局中，边框的行为与传统块级布局一致，边框不参与弹性伸缩计算。常见技巧：使用 gap 属性替代边框作为子项间距，避免边框宽度影响布局计算。Flex item 的边框始终包裹在 content + padding 之外，受 box-sizing 设置影响。
+
+{{知识点39}}{{边框与背景裁剪}}
+background-clip 属性影响背景在边框区域的显示。默认值 border-box 时背景延伸到边框下方（边框为透明时可见）；padding-box 时背景只到内边距区域；content-box 时背景只在内容区域。配合 dotted 边框使用 padding-box 可防止背景从圆点间透出。
+
+{{知识点40}}{{常见边框设计模式}}
+实用的边框设计模式：1）分隔线：`border-bottom: 1px solid #eee` 分隔列表项；2）卡片效果：`border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1)`；3）选中状态：使用 border 而非 outline 保持布局稳定；4）骨架屏：使用渐变边框动画模拟加载效果。

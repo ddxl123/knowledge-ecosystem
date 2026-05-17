@@ -1,0 +1,123 @@
+# 2025前端前端Web Share API
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{Web Share API 是什么}}
+Web Share API 是一个浏览器原生 API，允许网站将文本、链接、文件等内容分享到用户选择的任意分享目标，利用底层操作系统的原生共享机制。分享目标通常包括系统剪贴板、电子邮件、通讯录、消息应用以及蓝牙或 Wi-Fi 通道等。
+
+{{知识点2}}{{Web Share API 的核心方法}}
+Web Share API 仅提供两个核心方法：navigator.share() 和 navigator.canShare()。share() 方法用于调用原生分享机制并传递数据，canShare() 方法用于在调用 share() 之前验证数据是否可分享。
+
+{{知识点3}}{{navigator.share() 方法签名}}
+navigator.share(data) 接受一个可选的 data 参数（包含 url、text、title、files 属性），返回一个 Promise，在成功分享时 resolve 为 undefined。所有属性均为可选，但至少需要指定一个已知的数据属性。
+
+{{知识点4}}{{share() 的 data 参数详解}}
+data 参数是一个对象，包含四个可选属性：url（字符串，要分享的 URL）、text（字符串，要分享的文本）、title（字符串，分享标题，可能被目标忽略）、files（File 对象数组，要分享的文件）。
+
+{{知识点5}}{{navigator.canShare() 方法}}
+navigator.canShare(data) 返回布尔值，指示等效的 navigator.share() 调用是否能成功。如果数据无法验证（如参数为空、URL 格式错误、不支持文件分享等），则返回 false。可用于特性检测。
+
+{{知识点6}}{{canShare() 的特性检测用途}}
+canShare() 除了验证分享数据外，还可用于特性检测。传入包含特定属性的测试对象，如果返回 true 则表明该属性在当前平台上被支持。例如先测试 { files } 来判断浏览器是否支持文件分享。
+
+{{知识点7}}{{用户激活要求（Transient Activation）}}
+navigator.share() 必须由用户交互触发（如点击按钮等 UI 事件），需要瞬态激活（transient activation）。脚本不能在任意时间点自动调用分享，这是防止恶意自动分享的安全机制。
+
+{{知识点8}}{{安全上下文要求（HTTPS）}}
+Web Share API 仅在安全上下文（HTTPS）中可用。在 HTTP 页面上无法使用该 API，这是为了保护用户数据在传输过程中的安全性。
+
+{{知识点9}}{{Permissions Policy 控制}}
+Web Share API 受 web-share 权限策略（Permissions Policy）控制。HTTP 响应头 Permissions-Policy: web-share=<allowlist> 可控制哪些源可以使用此 API。默认允许列表为 self（同源）。
+
+{{知识点10}}{{分享操作的错误类型}}
+share() 返回的 Promise 可能抛出多种 DOMException：InvalidStateError（文档非活跃或有其他分享操作进行中）、NotAllowedError（权限策略阻止或缺少用户激活）、TypeError（数据验证失败）、AbortError（用户取消或无分享目标）、DataError（启动分享目标或传输数据出错）。
+
+{{知识点11}}{{AbortError 的两种场景}}
+当用户取消分享操作或系统中没有可用的分享目标时，share() 会抛出 AbortError。开发者应优雅处理此错误，在 UI 上提供适当的反馈。
+
+{{知识点12}}{{平台行为差异}}
+share() 的 Promise 在不同平台上的 resolve 时机不同：Windows 上在分享弹窗启动时即 resolve，而 Android 上在数据成功传递给分享目标后才 resolve。开发者不应假设数据已发送完成。
+
+{{知识点13}}{{可分享的文件类型 — 图像}}
+Web Share API 支持分享多种图像格式，包括：.png（image/png）、.jpg/.jpeg（image/jpeg）、.gif（image/gif）、.webp（image/webp）、.svg（image/svg+xml）、.avif（image/avif）、.bmp（image/bmp）、.tiff（image/tiff）等。
+
+{{知识点14}}{{可分享的文件类型 — 音频}}
+支持的音频格式包括：.mp3（audio/mpeg）、.wav（audio/wav）、.ogg（audio/ogg）、.flac（audio/flac）、.m4a（audio/x-m4a）、.opus（audio/ogg）、.weba（audio/webm）等。
+
+{{知识点15}}{{可分享的文件类型 — 视频}}
+支持的视频格式包括：.mp4（video/mp4）、.webm（video/webm）、.ogv（video/ogg）、.mpeg/.mpg（video/mpeg）、.m4v（video/mp4）等。
+
+{{知识点16}}{{可分享的文件类型 — 文本与文档}}
+支持的文本/文档格式包括：.txt/.text（text/plain）、.html/.htm（text/html）、.csv（text/csv）、.css（text/css）以及 .pdf（application/pdf）。
+
+{{知识点17}}{{文件分享的安全检查}}
+分享文件时，由于安全考虑可能会阻止文件分享。建议始终先使用 navigator.canShare({ files }) 验证文件是否可分享，再调用 share()。
+
+{{知识点18}}{{文件分享的完整代码模式}}
+文件分享的标准模式是：1）检查 canShare 是否存在；2）获取用户选择的文件（如通过 input[type=file]）；3）调用 canShare({ files }) 验证；4）调用 share({ files, title, text }) 执行分享。
+
+{{知识点19}}{{Web Share API 与 Web Share Target API 的区别}}
+Web Share API（分享出去）让网站将内容分享到其他应用；Web Share Target API（接收分享）让网站注册为分享目标，接收其他应用分享过来的内容。两者方向相反，不应混淆。
+
+{{知识点20}}{{Web Share Target API 的 manifest 配置}}
+在 PWA 的 manifest.json 中配置 share_target 字段可将应用注册为分享目标。配置包括 action（接收 URL）、method（GET 或 POST）、enctype（编码方式）和 params（参数映射）。
+
+{{知识点21}}{{Share Target 的 GET 与 POST 方式}}
+GET 方式适用于纯文本/URL 分享，数据通过查询参数传递；POST 方式适用于包含文件或产生副作用的分享，数据通过 multipart/form-data 传递。包含文件时必须使用 POST。
+
+{{知识点22}}{{Share Target 接收文件的配置}}
+接收文件需在 share_target.params.files 中定义 name（表单字段名）和 accept（接受的 MIME 类型或文件扩展名数组）。建议同时指定 MIME 类型和扩展名，因为不同操作系统可能偏好不同。
+
+{{知识点23}}{{Service Worker 处理 Share Target POST 请求}}
+在 Service Worker 中拦截 fetch 事件，检查 method 为 POST 的请求来处理分享目标数据。使用 event.request.formData() 获取数据，处理后应返回 303 See Other 重定向以避免重复提交。
+
+{{知识点24}}{{分享目标的可用性}}
+分享目标取决于设备和操作系统。常见的分享目标包括系统剪贴板、电子邮件客户端、社交媒体应用、即时通讯工具、蓝牙传输等。不同设备上可用目标不同。
+
+{{知识点25}}{{不支持 Web Share API 的降级方案}}
+当 navigator.share 不存在时，应提供降级方案。常见做法包括：复制链接到剪贴板、显示自定义分享弹窗、直接打开邮件客户端的 mailto 链接、或显示社交媒体分享按钮。
+
+{{知识点26}}{{分享操作的 Promise 处理最佳实践}}
+应始终使用 async/await 或 .catch() 处理 share() 的 Promise。AbortError（用户取消）通常不需要特殊处理，但 NotAllowedError 和 TypeError 应记录并提示用户。
+
+{{知识点27}}{{Web Share API 的浏览器兼容性}}
+Web Share API 在主流移动浏览器中支持良好：Chrome for Android 61+、Safari for iOS 12.2+、Samsung Internet、Opera Android 等。桌面浏览器中 Chrome 75+、Edge 75+ 支持，Firefox 桌面端支持有限。
+
+{{知识点28}}{{canShare() 的浏览器支持情况}}
+navigator.canShare() 的支持晚于 navigator.share()。Chrome for Android 75+、Safari 14+ 支持。使用前应先检查 canShare 是否存在作为特性检测。
+
+{{知识点29}}{{Web Share API 的 W3C 规范状态}}
+Web Share API 由 W3C Web Incubator Community Group (WICG) 开发，规范地址为 https://w3c.github.io/web-share/。该规范定义了 Navigator 接口的 share() 和 canShare() 方法。
+
+{{知识点30}}{{在 React/Vue 中使用 Web Share API}}
+在前端框架中使用 Web Share API 时，通常在事件处理函数中调用。React 中在 onClick handler 中使用 async/await 调用 navigator.share()；Vue 中在 @click 事件中调用。注意 this 上下文和组件卸载时的清理。
+
+{{知识点31}}{{分享自定义内容 — 生成动态数据}}
+可分享动态生成的内容，如当前页面的快照链接、用户生成的文本、表单数据等。构建 shareData 对象时可组合 title、text 和 url 来定制分享内容。
+
+{{知识点32}}{{Web Share API 的隐私安全模型}}
+Web Share API 的安全模型包括三个层面：1）必须在安全上下文（HTTPS）中使用；2）必须由用户手势触发；3）受 Permissions Policy 控制。这三个机制共同防止恶意网站滥用分享功能。
+
+{{知识点33}}{{分享操作对用户体验的影响}}
+调用 share() 会触发操作系统原生的分享界面，用户可在其中选择分享目标。这是一个阻断性操作，用户取消后应恢复到之前的界面状态，不应产生负面体验。
+
+{{知识点34}}{{Web Share API 与 Clipboard API 的区别}}
+Web Share API 用于将内容分享到任意应用目标（用户选择），而 Clipboard API（navigator.clipboard）专门用于读写系统剪贴板。Web Share API 的目标列表中可能包含剪贴板，但两者 API 接口和用途不同。
+
+{{知识点35}}{{Share Target 中的数据验证安全}}
+接收分享数据的 PWA 应像处理 HTML 表单提交一样谨慎，对所有传入数据进行验证和清理，防止 XSS 注入或其他安全攻击。不要盲目信任来自分享目标的数据。
+
+{{知识点36}}{{Web Share API 在 PWA 中的应用}}
+Web Share API 在渐进式 Web 应用（PWA）中尤为重要，它弥补了 PWA 无法直接调用原生分享功能的不足。结合 Web Share Target API，PWA 可以实现双向分享交互，增强原生应用体验。
+
+{{知识点37}}{{限制分享源（iframe 嵌入场景）}}
+当 Web Share API 在 iframe 中使用时，需确保 iframe 拥有 allow="web-share" 属性。Permissions Policy 的默认 allowlist 为 self，嵌入的跨源 iframe 需要父页面显式授权。
+
+{{知识点38}}{{多文件分享的注意事项}}
+share() 的 files 参数接受 File 对象数组，可一次分享多个文件。但需注意：1）并非所有分享目标都支持多文件；2）文件总大小可能受限制；3）不同设备的分享目标支持的文件类型不同，始终先用 canShare 验证。
+
+{{知识点39}}{{Web Share API 的 Web Platform Tests}}
+W3C 提供了 Web Platform Tests (WPT) 来验证 Web Share API 的实现一致性，测试地址为 https://wpt.live/web-share/。浏览器厂商使用这些测试确保 API 行为符合规范。
+
+{{知识点40}}{{渐进增强策略}}
+使用 Web Share API 的最佳实践是渐进增强：首先检查 API 是否可用（if ('share' in navigator)），不可用时提供替代方案；然后检查数据是否可分享（canShare），最后执行分享操作。这样确保所有用户都能使用分享功能。

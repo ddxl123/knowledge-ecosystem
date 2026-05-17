@@ -1,0 +1,83 @@
+# 2025前端前端CSS Fonts
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{CSS Fonts 模块概述：CSS Fonts 模块定义了字体相关属性和字体资源的加载方式。它允许定义字体的样式（如字体族、大小、粗细），以及当一个字符有多个字形变体时使用哪个变体。字体是包含字符视觉表示的资源文件，将字符代码映射到代表字母、数字、标点甚至 emoji 的字形。}}
+
+{{知识点2}}{{font 简写属性：font 是一个简写属性，可同时设置 font-style、font-variant、font-weight、font-stretch、font-size、line-height 和 font-family。必须包含 font-size 和 font-family 两个值，其他可选。font-style、font-variant 和 font-weight 必须在 font-size 之前，line-height 必须紧跟 font-size 并用 / 分隔（如 16px/3），font-family 必须是最后一个值。}}
+
+{{知识点3}}{{font-family 属性：指定字体族名称列表，用逗号分隔，按优先级从高到低排列。浏览器会选择列表中第一个已安装或可通过 @font-face 下载的字体。字体选择是逐字符进行的——如果某个可用字体缺少所需字符的字形，会尝试后续字体。应始终在列表末尾包含一个通用字体族名称作为后备。}}
+
+{{知识点4}}{{通用字体族（Generic Font Families）：serif（衬线体）、sans-serif（无衬线体）、monospace（等宽体）、cursive（手写体）、fantasy（装饰体）、system-ui（系统UI字体）、ui-serif、ui-sans-serif、ui-monospace、ui-rounded、math（数学公式字体）、fangsong（仿宋）。通用字体族名称是关键字，不可加引号。}}
+
+{{知识点5}}{{font-size 属性：设置字体大小。支持绝对大小关键字（xx-small、x-small、small、medium、large、x-large、xx-large、xxx-large）、相对大小关键字（smaller、larger）、长度值（如 12px、0.8em）和百分比值。使用 px 值不利于无障碍访问，因为用户无法在某些浏览器中更改字体大小。推荐使用 rem 或 em 等相对单位。}}
+
+{{知识点6}}{{font-size 的 em 与 rem 单位：em 单位相对于父元素的字体大小，会形成复合缩放效果。rem 单位相对于根元素（html）的字体大小，不会产生复合效果，更可预测。使用 rem 可以让整个页面基于用户默认字体大小进行缩放，兼顾精确控制和无障碍性。}}
+
+{{知识点7}}{{font-weight 属性：设置字体粗细。支持关键字 normal（等同 400）、bold（等同 700）、lighter、bolder，以及 1 到 1000 之间的数值。对于可变字体，数值允许精细控制。对于非可变字体，当指定的粗细不可用时，会使用回退粗细算法进行匹配。}}
+
+{{知识点8}}{{font-weight 回退粗细算法：当目标粗细在 400-500 之间时，先向上升序查找 400-500 之间的可用粗细，再向下降序查找小于目标的粗细，最后升序查找大于 500 的粗细。小于 400 时先降序再升序；大于 500 时先升序再降序。此算法仅用于渲染，计算值仍为指定值。}}
+
+{{知识点9}}{{font-weight 相对粗细 lighter/bolder：使用 lighter 或 bolder 时，仅考虑四个粗细级别：100（thin）、400（normal）、700（bold）、900（heavy）。例如继承值为 400 时，bolder 变为 700，lighter 变为 100；继承值为 700 时，bolder 变为 900，lighter 变为 400。}}
+
+{{知识点10}}{{font-style 属性：设置字体样式。normal 选择正常字体，italic 选择斜体（通常具有不同的字形设计），oblique 选择倾斜体（通常是正常字形的倾斜版本）。oblique 可指定角度（如 oblique 40deg），有效范围为 -90deg 到 90deg，默认角度为 14 度。}}
+
+{{知识点11}}{{italic 与 oblique 的区别：italic 字体面通常是手写风格的，使用较少的水平空间；oblique 字体面通常只是正常字体面的倾斜版本。当指定的样式不可用时，两者都会通过人为倾斜正常字形来模拟。可使用 font-synthesis 属性控制此行为。}}
+
+{{知识点12}}{{font-variant 简写属性：是多个子属性的简写，包括 font-variant-alternates、font-variant-caps、font-variant-east-asian、font-variant-emoji、font-variant-ligatures、font-variant-numeric 和 font-variant-position。值 normal 表示正常字体面，none 设置无连字且其他子属性为初始值。}}
+
+{{知识点13}}{{font-variant-caps 小型大写字母：small-caps 启用小型大写字母，将小写字母替换为较小版本的大写字母。all-small-caps 将所有字母转为小型大写。petite-caps 和 all-petite-caps 使用更小的大写字母变体。unicase 混合大小写形式。titling-caps 用于标题的大写字母形式。}}
+
+{{知识点14}}{{font-variant-numeric 数字变体：lining-nums 使用现代等高数字，oldstyle-nums 使用传统高低数字，proportional-nums 使用比例宽度数字，tabular-nums 使用等宽对齐数字（适合表格数据），diagonal-fractions 使用对角分数，stacked-fractions 使用堆叠分数，ordinal 使用序数标记，slashed-zero 使用带斜线的零。}}
+
+{{知识点15}}{{font-variant-ligatures 连字控制：common-ligatures 启用常见连字（如 fi、fl），discretionary-ligatures 启用可选连字，historical-ligatures 启用历史连字，contextual 启用上下文替代。每种连字都有对应的 no- 前缀版本用于禁用。连字是排版中将两个或多个字符组合为一个字形的技法。}}
+
+{{知识点16}}{{font-feature-settings 属性：低级别的 OpenType 字体特性控制。接受四个 ASCII 字符的标签名（如 "liga"、"smcp"、"tnum"）和可选值（on/off 或正整数）。优先使用 font-variant 及其子属性，font-feature-settings 仅在没有其他方式访问 OpenType 特性时使用。}}
+
+{{知识点17}}{{常用 OpenType 特性标签：liga（标准连字）、clig（上下文连字）、smcp（小型大写）、c2sc（大写转小型大写）、onum（旧式数字）、tnum（表格等宽数字）、lnum（等高数字）、pnum（比例数字）、frac（分数）、ordn（序数）、zero（斜线零）、ss01-ss20（样式集）。}}
+
+{{知识点18}}{{@font-face 规则：用于自定义字体加载。必须包含 font-family 描述符（定义字体名称）和 src 描述符（指定字体资源）。可包含 font-weight、font-style、font-stretch 描述符来指定该字体面适用的粗细、样式和宽度范围。还支持 font-display、unicode-range、font-variation-settings 等描述符。}}
+
+{{知识点19}}{{src 描述符与字体加载：src 描述符可使用 url() 指定远程字体文件和 local() 指定本地已安装字体。通常两者结合使用，优先使用本地字体，回退到下载。浏览器按声明顺序尝试加载资源，因此 local() 应写在 url() 之前。可使用 format() 指定字体格式，tech() 指定字体技术。}}
+
+{{知识点20}}{{字体格式与 MIME 类型：TrueType 使用 font/ttf，OpenType 使用 font/otf，WOFF 使用 font/woff，WOFF2 使用 font/woff2。WOFF2 是 Web 字体的推荐格式，因为它压缩效率更高，能减少文件大小并改善加载时间，且在现代浏览器中支持良好。}}
+
+{{知识点21}}{{font-display 描述符：控制字体在下载完成前后的显示行为。auto 使用浏览器默认策略。block 在字体加载期间短暂隐藏文本（约3秒），然后使用后备字体，字体加载后替换。swap 立即显示后备字体，字体加载后替换。fallback 短暂隐藏（约100ms），快速回退。optional 允许浏览器决定是否使用该字体。}}
+
+{{知识点22}}{{unicode-range 描述符：指定该字体面包含的 Unicode 码点范围。浏览器仅在页面内容包含该范围内的字符时才下载字体。可用于按语言/脚本分割字体文件，实现按需加载。例如 unicode-range: U+0000-00FF 仅加载基本拉丁字符。}}
+
+{{知识点23}}{{font-size-adjust 描述符：在 @font-face 中定义字体大小调整因子。font-size-adjust 属性（应用于元素）用于在首选字体不可用时，调整后备字体的大小，使其 x 高度与首选字体匹配。值为 x 高度与字体大小的比率，确保字体切换时视觉大小的一致性。}}
+
+{{知识点24}}{{ascent-override、descent-override、line-gap-override 描述符：在 @font-face 中自定义字体的上升、下降和行间距度量。ascent-override 定义上升度量，descent-override 定义下降度量，line-gap-override 定义行间距度量。可用于调整不同字体之间的对齐方式，减少字体切换时的布局偏移。}}
+
+{{知识点25}}{{size-adjust 描述符：在 @font-face 中为字形轮廓和相关度量定义乘数。使不同字体在相同 font-size 下渲染时更协调。与 ascent-override 等描述符配合使用，可以在使用不同字体作为后备时减少布局偏移（CLS）。}}
+
+{{知识点26}}{{可变字体（Variable Fonts）概述：可变字体将一个字体族的所有样式（粗细、宽度、倾斜等）包含在单个文件中。单个文件通常比加载 4 个静态字体文件（常规、斜体、粗体、粗斜体）更小或相当，但提供了全部样式的访问能力。可变字体是 OpenType 字体规范的一部分。}}
+
+{{知识点27}}{{可变字体的变化轴（Variation Axis）：变化轴描述字体设计的特定方面的允许范围。分为注册轴和自定义轴。五个注册轴：wght（粗细）、wdth（宽度）、slnt（倾斜）、ital（斜体）、opsz（光学大小）。自定义轴由字体设计师定义，使用四个字母的标签标识。}}
+
+{{知识点28}}{{font-variation-settings 属性：低级别控制 OpenType/TrueType 字体变化。通过指定四字母轴名称和变化值来控制可变字体。例如 font-variation-settings: "wght" 350, "wdth" 100。应优先使用对应的高级属性（font-weight、font-width 等），仅在需要自定义轴或无法用高级属性表达时使用此属性。}}
+
+{{知识点29}}{{font-kerning 属性：控制字偶距调整（kerning），即调整特定字母对之间的间距以改善视觉效果。auto 让浏览器决定，normal 启用字偶距，none 禁用。字偶距信息通常嵌入在字体文件中，不同字体的字偶距质量不同。}}
+
+{{知识点30}}{{font-optical-sizing 属性：控制是否启用光学尺寸调整。auto 允许浏览器根据字体大小调整字形的视觉效果（较大字号使用较细笔画和较小 x 高度，较小字号使用较粗笔画和较大 x 高度）。none 禁用此行为。依赖于字体中嵌入的光学尺寸信息。}}
+
+{{知识点31}}{{font-synthesis 简写属性：控制当字体缺少某些样式时浏览器是否自动合成。是 font-synthesis-style、font-synthesis-weight、font-synthesis-small-caps 和 font-synthesis-position 的简写。none 禁用所有合成，auto 允许浏览器自动合成缺失的样式。}}
+
+{{知识点32}}{{font-stretch/font-width 属性：设置字体的宽度变化。font-stretch 是旧名称，font-width 是新标准名称。支持关键字值（如 ultra-condensed、extra-condensed、condensed、semi-condensed、normal、semi-expanded、expanded、extra-expanded、ultra-expanded）和百分比值。对于可变字体，允许任意百分比值进行精细控制。}}
+
+{{知识点33}}{{font-language-override 属性：覆盖字体默认的语言系统。用于指定字体使用哪种语言的字形变体。例如设置为 "ENG" 使用英语字形变体，即使文档语言是其他语言。这对于某些语言中相同字符有不同字形设计的情况很有用。}}
+
+{{知识点34}}{{@font-feature-values 规则：允许为 font-variant-alternates 中使用的特性值定义自定义名称。通过 @swash、@ornaments、@annotation、@styleset、@character-variant 等子规则定义命名特性值，使代码更可读和可维护。}}
+
+{{知识点35}}{{@font-palette-values 规则：用于彩色字体的调色板自定义。包含 base-palette 描述符选择预定义调色板，override-colors 描述符覆盖特定颜色索引，font-family 描述符关联到特定字体族。通过 font-palette 属性在元素上应用自定义调色板。}}
+
+{{知识点36}}{{字体加载性能优化策略：1) 使用 font-display: swap 避免 FOIT（不可见文本闪烁）；2) 使用 WOFF2 格式减小文件体积；3) 使用 unicode-range 按需加载字符子集；4) 预加载关键字体（<link rel="preload">）；5) 自托管字体避免第三方 DNS 查询；6) 使用可变字体减少 HTTP 请求数。}}
+
+{{知识点37}}{{系统字体关键字：font 简写属性支持系统字体关键字：caption（带标题控件的字体）、icon（图标标签字体）、menu（菜单字体）、message-box（对话框字体）、small-caption（小控件标签字体）、status-bar（状态栏字体）。这些关键字让元素继承操作系统对应的系统字体。}}
+
+{{知识点38}}{{字体选择机制（Font Matching Algorithm）：CSS 字体选择是逐字符进行的过程。首先根据 font-family 列表查找可用字体，然后根据 font-weight、font-style、font-stretch 等属性匹配最合适的字体面。如果精确匹配不可用，使用回退算法查找最接近的匹配。只有在所有指定字体都不包含某字符的字形时，才使用下一个字体族。}}
+
+{{知识点39}}{{@font-face 的 font-weight 和 font-style 范围：在 @font-face 中，font-weight 和 font-stretch 描述符接受两个值来指定范围（如 font-weight: 100 400），font-style 支持 oblique 后跟角度范围（如 font-style: oblique 20deg 50deg）。这允许单个 @font-face 声明覆盖一个范围的值，对于可变字体尤其有用。}}
+
+{{知识点40}}{{CSS 字体与无障碍性：为保证无障碍访问：1) 避免使用 px 设置字体大小，改用 rem/em；2) 确保足够的文本与背景对比度；3) 不要仅依赖字体样式（如粗体、斜体）传达信息；4) font-display: swap 确保文本在字体加载期间可见；5) 使用相对单位让用户能调整字体大小；6) line-height 至少为 1.5 倍字体大小以保证可读性。}}

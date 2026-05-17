@@ -1,0 +1,79 @@
+# 2025前端Expo开发框架
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{Expo框架概述：Expo是一个开源的React Native开发平台，提供强大的工具和服务来构建、部署和维护跨平台移动应用。它允许开发者使用JavaScript/TypeScript编写一次代码，运行在Android、iOS和Web平台上。Expo的核心理念是简化React Native开发流程，降低原生开发门槛。}}
+
+{{知识点2}}{{Expo SDK版本演进：截至2026年初，Expo最新稳定版为SDK 55（2026年2月发布），包含React Native 0.83和React 19.2。SDK 56预计在2026年Q2发布，将包含React Native 0.85。版本迭代保持与React Native最新版本同步，确保开发者能使用最新特性。}}
+
+{{知识点3}}{{Expo项目创建：使用npx create-expo-app@latest命令快速创建项目。SDK 55默认模板经过重新设计，采用新的/src文件夹结构，应用代码存放在/src/app中，更好地分离代码与项目配置文件。支持npm、yarn、pnpm和bun多种包管理器。}}
+
+{{知识点4}}{{Expo Go快速体验：Expo Go是一个用于学习和快速体验的沙盒应用，可通过Google Play Store或Apple App Store下载。它内置了一组固定的原生库，允许开发者编写JavaScript代码后即时查看更改，无需自行构建原生应用。但Expo Go不适合生产级项目开发。}}
+
+{{知识点5}}{{开发构建（Development Build）：开发构建是包含expo-dev-client库的Debug版本应用，提供比Expo Go更完整的开发环境。支持网络请求检查、在不同开发服务器间切换、查看EAS Update发布的更新等功能。是生产级Expo应用推荐的开发方式。}}
+
+{{知识点6}}{{Expo Router文件路由：Expo Router是一个开源的基于文件系统的路由库，用于Universal React Native应用。在app目录中添加文件会自动成为路由。它基于React Native Screens构建，提供真正原生的导航体验，支持Android、iOS和Web统一导航结构。}}
+
+{{知识点7}}{{Expo Router核心特性：支持原生导航、自动深度链接（每个屏幕自动可分享）、离线优先（应用缓存并支持离线运行）、自动懒加载优化（生产环境）、Universal Fast Refresh跨平台热更新、Web端静态渲染支持搜索引擎索引。}}
+
+{{知识点8}}{{Expo Router Native Tabs API：SDK 55引入的Native Tabs API为iOS和Android提供平台原生的标签页体验，同时为Web浏览器提供响应式优化布局。默认项目模板已采用此API，提供开箱即用的跨平台标签页导航。}}
+
+{{知识点9}}{{Expo Application Services (EAS)概述：EAS是一套托管服务套件，用于构建、提交和更新应用，支持自动化流程和团队协作。EAS解决需要物理资源的问题，如应用服务器和CDN。提供慷慨的免费计划，适合学生和爱好项目。使用Expo开源工具不强制要求使用EAS。}}
+
+{{知识点10}}{{EAS Build云端构建：EAS Build是托管的构建服务，为Expo和React Native项目构建应用二进制文件。支持Android和iOS云端构建，提供一致的构建环境。自动管理应用签名凭证，支持通过eas.json中的构建配置文件自定义构建设置。}}
+
+{{知识点11}}{{EAS Build核心功能：包括云端构建、自动签名凭证管理、内部分享分发（通过URL分享构建）、构建配置文件自动化、与EAS Submit集成自动提交到应用商店、expo-updates集成、依赖缓存和自定义缓存路径加速构建、支持本地构建。}}
+
+{{知识点12}}{{EAS Build缓存优化：2026年1月引入编译器缓存功能，可将后续构建速度提升高达30%，适用于Android和iOS构建。构建缓存对所有用户免费提供，无论免费还是付费计划。依赖缓存和自定义缓存路径进一步优化构建速度。}}
+
+{{知识点13}}{{EAS Update OTA更新：EAS Update支持通过OTA（空中下载）方式更新应用的JavaScript bundle，无需重新提交到应用商店。SDK 55引入Hermes字节码差分功能，可将更新下载大小减少约75%，显著提升用户端更新速度和带宽效率。}}
+
+{{知识点14}}{{EAS Workflows自动化：EAS Workflows支持自动化构建和提交流程。支持定时Cron任务（如定期自动构建和提交）、TestFlight分发、GitHub PR评论等。2025年12月引入Workflow Insights面板，可监控成功率、活跃运行和失败计数等关键指标。}}
+
+{{知识点15}}{{EAS Submit应用提交：EAS Submit用于将构建的应用提交到App Store和Google Play。支持通过--auto-submit标志在构建成功后自动提交。TestFlight作业类型支持高级控制，包括测试组管理、变更日志分发和Beta App Review提交。}}
+
+{{知识点16}}{{Expo Modules API：Expo Modules API允许使用Swift和Kotlin编写原生模块和视图。设计利用现代语言特性，两个平台保持一致性，需要最少的样板代码。支持React Native新架构，自动向后兼容使用旧架构的现有应用。性能与Turbo Modules API相当。}}
+
+{{知识点17}}{{Expo Modules vs Turbo Modules：如果需要在原生模块中使用C++，推荐Turbo Modules以获得更底层访问。如果追求更好的开发体验且愿意依赖expo包，推荐Expo Modules API。Expo Modules API对应用大小影响可忽略（仅增加几百KB）。}}
+
+{{知识点18}}{{Expo SDK模块生态：Expo SDK提供丰富的内置模块，包括Image（图像）、Camera（相机）、Notifications（通知）、Maps（地图）、Haptics（触觉反馈）、Video（视频）、WebView等。大部分场景无需编写原生代码，SDK模块已覆盖常见需求。}}
+
+{{知识点19}}{{Expo推送通知服务：Expo简化了推送通知的实现，处理了与Firebase Cloud Messaging (FCM)和Apple Push Notification Service (APNs)通信的复杂性。允许以统一方式处理Android和iOS通知，节省前端和后端开发时间。}}
+
+{{知识点20}}{{Expo应用配置：通过app.json或app.config.js配置应用，支持静态和动态配置。配置项包括应用名称、图标、启动画面、权限、原生模块插件等。app.json中的plugins字段用于配置原生模块的额外属性。}}
+
+{{知识点21}}{{Expo CLI命令行工具：Expo CLI是核心开发工具，支持项目启动（npx expo start）、构建、开发服务器管理等。支持热重载和Fast Refresh，提供终端UI可快捷切换平台（按a启动Android，按i启动iOS，按w启动Web）。}}
+
+{{知识点22}}{{Expo Snack在线编辑器：Snack是Expo提供的在线代码编辑器，允许在浏览器中零配置尝试Expo代码。适合快速原型验证和代码分享，无需本地开发环境。通过snack.expo.dev访问。}}
+
+{{知识点23}}{{连续原生生成（Continuous Native Generation）：Expo采用的现代原生开发方法，通过配置和插件系统动态生成原生代码，而非手动维护原生文件。允许在不丢失自定义原生代码的情况下升级Expo SDK版本，简化原生依赖管理。}}
+
+{{知识点24}}{{Expo Web支持：Expo项目天然支持Web平台，使用npx expo start后按w即可在浏览器中运行。Expo Router支持Web端静态渲染，使应用内容可被搜索引擎索引。支持Universal Links和深度链接实现跨平台链接分享。}}
+
+{{知识点25}}{{Hermes JavaScript引擎：Hermes是React Native默认的JavaScript引擎。SDK 55中Hermes v1已可选择启用，展示了显著的性能改进和更好的现代JavaScript特性支持（ES6类、const/let、async/await）。但启用Hermes v1需要从源码构建React Native，会显著增加原生构建时间。}}
+
+{{知识点26}}{{React Native新架构支持：SDK 55已完全放弃旧架构支持，仅支持React Native新架构。新架构使用JSI（JavaScript Interface）替代旧的消息队列桥接方式，提供更快的JavaScript与原生代码交互性能。newArchEnabled配置选项已从app.json中移除。}}
+
+{{知识点27}}{{Expo Orbit设备管理：Expo Orbit是一个设备管理工具，用于在设备上安装构建和更新。简化了开发过程中在物理设备上测试应用的流程，支持直接从EAS下载并安装构建到连接的设备上。}}
+
+{{知识点28}}{{Expo部署与发布：支持多种部署方式——通过npx testflight命令部署到TestFlight，通过npx eas-cli deploy部署Web应用，通过EAS Submit提交到应用商店。Launch服务（launch.expo.dev）提供零配置的应用商店发布引导。}}
+
+{{知识点29}}{{Expo项目结构最佳实践：SDK 55默认模板采用新的/src文件夹结构，应用代码在/src/app目录下，配置文件在项目根目录。这种分离使项目结构更清晰，适合大型项目。支持monorepo工作区配置。}}
+
+{{知识点30}}{{Expo应用签名管理：EAS Build自动处理Android Keystore和iOS Provisioning Profile及分发证书的生成与管理。开发者也可使用自有的签名凭证。支持Ad Hoc和企业级Universal Provisioning进行内部分发。}}
+
+{{知识点31}}{{Expo开发工作流：核心开发循环包括：编写JavaScript/TypeScript代码、使用Fast Refresh实时预览、通过开发构建或Expo Go测试、使用EAS Build构建生产版本、通过EAS Submit提交到应用商店、使用EAS Update进行OTA更新。}}
+
+{{知识点32}}{{Expo社区生态：Expo拥有庞大的开发者社区，Discord超过60000名开发者。开源代码托管在GitHub（github.com/expo/expo），提供丰富的示例项目。支持YouTube教程频道、Bluesky、X（Twitter）、Reddit（r/expo）等多个社区渠道。}}
+
+{{知识点33}}{{Expo与React Navigation：虽然Expo Router是推荐的导航方案，但项目也可使用React Navigation等其他导航库。React Navigation提供createNativeStackNavigator等原生导航API。Expo Router相比React Navigation提供更深度的集成和开箱即用的功能（如自动深度链接、静态渲染等）。}}
+
+{{知识点34}}{{Expo权限管理：Expo提供统一的权限管理API，处理Android和iOS平台不同的权限模型。通过app.json配置声明所需权限，运行时使用expo-modules-core提供的权限API请求和检查权限状态。}}
+
+{{知识点35}}{{Expo版本兼容性策略：Expo SDK版本与React Native版本紧密绑定。每个SDK版本支持特定的React Native版本，确保兼容性。升级SDK版本时需遵循迁移指南，使用expo install命令确保依赖版本兼容。支持使用预发布版本（Canary）提前体验新特性。}}
+
+{{知识点36}}{{Expo本地构建支持：除了云端构建，EAS Build也支持本地构建（eas build --local）。本地构建适合需要调试原生代码的场景。需要本地安装Watchman、JDK 17、Android Studio（Android SDK Platform 35）或Xcode（macOS）等开发环境。}}
+
+{{知识点37}}{{Expo应用内更新机制：expo-updates库支持应用内更新，可按构建配置文件关联不同频道（channel）。支持运行时版本（Runtime Version）管理，确保更新与原生代码兼容。支持增量更新和回滚机制，保障更新安全性。}}
+
+{{知识点38}}{{Expo AI工具集成：SDK 55扩展了AI工具支持，为Expo开发者提供AI辅助开发能力。Expo的llms.txt文件提供完整文档索引，方便AI工具和LLM理解和使用Expo文档。支持通过API Routes集成OpenAI等AI服务。}}

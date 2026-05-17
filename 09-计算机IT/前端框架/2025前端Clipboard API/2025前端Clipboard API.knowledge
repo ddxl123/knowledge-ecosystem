@@ -1,0 +1,83 @@
+# 2025前端Clipboard API
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{Clipboard API概述：Clipboard API 是 W3C 标准的剪贴板操作接口，允许 Web 应用在安全上下文（HTTPS）中以编程方式读写系统剪贴板。它包含两部分：异步剪贴板 API（Async Clipboard API）用于程序化读写数据，剪贴板事件 API（Clipboard Event API）用于处理用户触发的复制、剪切、粘贴操作。自2020年3月起在所有主流浏览器中广泛可用。}}
+
+{{知识点2}}{{访问入口 Navigator.clipboard：通过 navigator.clipboard 属性获取 Clipboard 对象，这是整个 Clipboard API 的入口点。该属性为只读属性，返回的 Clipboard 对象提供了读写剪贴板的全部方法。要求安全上下文（HTTPS），否则返回 null。示例：const clipboard = navigator.clipboard;}}
+
+{{知识点3}}{{Clipboard 接口方法总览：Clipboard 接口继承自 EventTarget，提供四个核心实例方法：read() 读取任意数据（返回 ClipboardItem 数组）、readText() 读取文本（返回字符串）、write() 写入任意数据（接受 ClipboardItem 数组）、writeText() 写入文本。所有方法都是异步的，返回 Promise。}}
+
+{{知识点4}}{{readText() 方法：从系统剪贴板读取纯文本内容。返回一个 Promise，解析为包含剪贴板文本的字符串。如果剪贴板为空或不包含文本，返回空字符串。用法：const text = await navigator.clipboard.readText();。读取操作需要安全上下文，且浏览器可能要求用户授权或在用户交互后才能调用。}}
+
+{{知识点5}}{{writeText() 方法：将纯文本写入系统剪贴板。接受一个字符串参数，返回一个 Promise，在文本完全复制到剪贴板后解析。用法：await navigator.clipboard.writeText('Hello World');。写入操作需要安全上下文，Chromium 浏览器需要 clipboard-write 权限或瞬时用户激活。}}
+
+{{知识点6}}{{read() 方法：从系统剪贴板读取任意格式的数据（包括图片）。返回一个 Promise，解析为 ClipboardItem 对象数组。支持通过 formats 参数指定不需要清理的 MIME 类型（unsanitized 选项）。例如 Chromium 浏览器会默认清理 HTML 中的 script 标签等危险内容。用法：const items = await navigator.clipboard.read();}}
+
+{{知识点7}}{{write() 方法：将任意格式的数据写入系统剪贴板。接受 ClipboardItem 对象数组作为参数。如果操作系统不支持多个原生剪贴板项，则只写入数组中的第一个 ClipboardItem。返回 Promise。用法：await navigator.clipboard.write([new ClipboardItem({[blob.type]: blob})]);}}
+
+{{知识点8}}{{ClipboardItem 接口：表示剪贴板中的单个数据项，用于 read() 和 write() 方法。构造函数接受一个对象，键为 MIME 类型，值为数据（字符串或 Blob）。属性包括 types（可用 MIME 类型数组）和 presentationStyle（"unspecified"/"inline"/"attachment"）。方法包括 getType() 获取指定类型的 Blob 数据。}}
+
+{{知识点9}}{{ClipboardItem 构造函数：new ClipboardItem(data) 创建剪贴板项。data 是一个对象，键为 MIME 类型字符串，值为字符串或 Blob。示例：new ClipboardItem({"text/plain": "hello"}) 或 new ClipboardItem({"image/png": imageBlob})。一个 ClipboardItem 可以包含多种格式的数据。}}
+
+{{知识点10}}{{ClipboardItem.getType() 方法：返回 Promise，解析为请求的 MIME 类型对应的 Blob 对象。如果请求的类型不存在则抛出错误。用于从读取的 ClipboardItem 中提取特定格式的数据。示例：const blob = await item.getType("image/png");}}
+
+{{知识点11}}{{ClipboardItem.supports() 静态方法：检查给定的 MIME 类型是否被剪贴板支持。始终支持的类型包括 text/plain、text/html 和 image/png。可能支持的类型包括 image/svg+xml 以及以 "web " 前缀开头的自定义 MIME 类型。2025年3月起在所有最新浏览器中可用。示例：if (ClipboardItem.supports("image/svg+xml")) { ... }}}
+
+{{知识点12}}{{ClipboardItem.types 属性：只读属性，返回当前 ClipboardItem 中可用的 MIME 类型数组。可用于检查剪贴板项包含哪些格式的数据，然后选择合适的格式进行读取。}}
+
+{{知识点13}}{{ClipboardItem.presentationStyle 属性：只读属性，返回 "unspecified"、"inline" 或 "attachment" 之一。用于指示数据的呈现方式——inline 表示内联显示，attachment 表示作为附件处理，unspecified 表示未指定。}}
+
+{{知识点14}}{{clipboardchange 事件：当系统剪贴板内容发生变化时触发（无论是通过系统复制命令还是 API 方法）。事件类型为 ClipboardChangeEvent，直接在 Clipboard 对象上监听。需要 sticky activation 或 clipboard-read 权限才能触发。用法：navigator.clipboard.addEventListener("clipboardchange", handler);}}
+
+{{知识点15}}{{ClipboardChangeEvent 接口：表示剪贴板内容变化时触发的事件。继承自 Event 接口。可用于通知应用剪贴板内容已改变，例如需要同步自定义剪贴板时。配合 clipboardchange 事件使用。}}
+
+{{知识点16}}{{copy 事件：当用户通过浏览器界面触发复制操作时在目标元素上触发。事件类型为 ClipboardEvent，可通过 event.clipboardData.setData() 修改剪贴板内容（需调用 event.preventDefault()）。事件会冒泡到 Document 和 Window，可取消，默认行为是将当前选区复制到剪贴板。不能读取剪贴板数据。}}
+
+{{知识点17}}{{cut 事件：当用户触发剪切操作时触发。默认行为是将选区复制到剪贴板并从文档中移除。可通过 clipboardData.setData() 修改写入的剪贴板内容。注意：取消默认行为会同时阻止文档更新，需手动使用 selection.deleteFromDocument() 删除选区内容。不能读取剪贴板数据。}}
+
+{{知识点18}}{{paste 事件：当用户触发粘贴操作时触发。如果光标在可编辑上下文中（textarea 或 contenteditable），默认行为是将剪贴板内容插入到光标位置。可通过 event.clipboardData.getData("text") 读取剪贴板文本内容。需调用 event.preventDefault() 来覆盖默认行为并手动插入数据。}}
+
+{{知识点19}}{{ClipboardEvent.clipboardData 属性：只读属性，返回一个 DataTransfer 对象，包含受用户剪切/复制/粘贴操作影响的数据及其 MIME 类型。在 copy 和 cut 事件中可通过 setData() 写入数据，在 paste 事件中可通过 getData() 读取数据。}}
+
+{{知识点20}}{{ClipboardEvent 构造函数：new ClipboardEvent(type, options) 可创建合成剪贴板事件。options 中可指定 clipboardData（DataTransfer 对象）。但注意：构造并分发合成剪贴板事件不会影响系统剪贴板或文档内容。}}
+
+{{知识点21}}{{安全上下文要求：Clipboard API 的所有方法都要求安全上下文（HTTPS）。在非安全上下文（HTTP）中，navigator.clipboard 为 undefined。这是浏览器的安全策略，防止恶意网站在用户不知情的情况下读写剪贴板。localhost 被视为安全上下文。}}
+
+{{知识点22}}{{读取权限机制（Chromium）：在 Chromium 浏览器中，如果不满足规范要求的条件且文档有焦点，会触发 clipboard-read 权限请求。如果权限被授予（用户接受提示或已授权），则读取成功。权限一旦授予则持久有效。}}
+
+{{知识点23}}{{读取权限机制（Firefox/Safari）：Firefox 和 Safari 不支持 clipboard-read 和 clipboard-write 权限 API。在不满足规范条件但有瞬时用户激活时，会显示一个临时上下文菜单（含单个 "Paste" 选项，1秒后启用）。同源剪贴板内容的粘贴提示会被抑制，跨域内容则不会。}}
+
+{{知识点24}}{{写入权限机制（Chromium）：写入需要 clipboard-write 权限或瞬时用户激活（transient user activation）。如果权限已授予则持久有效，后续写入不再需要瞬时激活。HTTP Permissions-Policy 头中的 clipboard-read 和 clipboard-write 必须允许 iframe 元素访问剪贴板。}}
+
+{{知识点25}}{{写入权限机制（Firefox/Safari）：写入需要瞬时用户激活。不支持 Permissions API 的 clipboard-write 权限。Firefox 扩展可通过 clipboardWrite 权限免除瞬时激活要求。}}
+
+{{知识点26}}{{HTML清理与 unsanitized 选项：浏览器在读取剪贴板数据时可能会清理内容以防止恶意代码注入。例如 Chromium 会剥离 script 标签和其他危险内容。read() 方法支持 formats 参数，其中 unsanitized 数组可指定不需要清理的 MIME 类型，让开发者获取原始未清理的数据。}}
+
+{{知识点27}}{{读取图片数据示例：使用 read() 从剪贴板读取图片：const items = await navigator.clipboard.read(); for (const item of items) { if (item.types.includes("image/png")) { const blob = await item.getType("image/png"); img.src = URL.createObjectURL(blob); } }。需要用户授权，且剪贴板中需要有图片数据。}}
+
+{{知识点28}}{{写入图片数据示例：将图片写入剪贴板：const blob = await (await fetch(url)).blob(); await navigator.clipboard.write([new ClipboardItem({[blob.type]: blob})]);。也可将 Canvas 内容写入：canvas.toBlob(blob => navigator.clipboard.write([new ClipboardItem({[blob.type]: blob})]));}}
+
+{{知识点29}}{{复制事件自定义内容示例：在 copy 事件中修改剪贴板内容：element.addEventListener("copy", e => { const sel = document.getSelection(); e.clipboardData.setData("text/plain", sel.toString().toUpperCase()); e.preventDefault(); });。这会将复制的文本转为大写后写入剪贴板。}}
+
+{{知识点30}}{{粘贴事件处理示例：在 paste 事件中拦截并处理粘贴内容：element.addEventListener("paste", e => { e.preventDefault(); const text = (e.clipboardData || window.clipboardData).getData("text"); const processed = text.toUpperCase(); const sel = window.getSelection(); sel.deleteFromDocument(); sel.getRangeAt(0).insertNode(document.createTextNode(processed)); });}}
+
+{{知识点31}}{{writeText 与 write 的区别：writeText() 仅支持纯文本写入，使用简单直接。write() 支持任意格式（文本、HTML、图片等），需要构造 ClipboardItem 对象。如果只需要操作纯文本，优先使用 writeText()/readText()；需要处理富文本或多格式数据时使用 read()/write()。}}
+
+{{知识点32}}{{文档 execCommand 的替代：Clipboard API 是 document.execCommand('copy'/'cut'/'paste') 的现代替代方案。execCommand 已被标记为废弃，Clipboard API 提供更清晰的异步 Promise 接口、更丰富的格式支持和更好的安全性。新项目应优先使用 Clipboard API。}}
+
+{{知识点33}}{{Permissions-Policy 与 iframe：在 iframe 中使用 Clipboard API 时，父页面的 HTTP Permissions-Policy 响应头必须允许 clipboard-read 和 clipboard-write 权限。否则 iframe 中的剪贴板操作将被拒绝。配置示例：Permissions-Policy: clipboard-read=(self), clipboard-write=(self)。}}
+
+{{知识点34}}{{瞬时用户激活（Transient User Activation）：许多剪贴板操作需要瞬时用户激活，即操作必须由用户手势（如点击、按键）触发。在事件处理函数中调用剪贴板方法通常满足此要求。尝试在异步回调（如 setTimeout）中调用可能因激活已过期而失败。}}
+
+{{知识点35}}{{粘性用户激活（Sticky Activation）与 clipboardchange：clipboardchange 事件需要粘性用户激活（页面曾经有过用户交互）或已授予 clipboard-read 权限才能触发。粘性激活一旦获得就不会过期（与瞬时激活不同），确保页面后续能持续监听剪贴板变化。}}
+
+{{知识点36}}{{错误处理：剪贴板操作可能抛出 NotAllowedError DOMException（权限不足或未在安全上下文中）。应始终使用 try-catch 或 .catch() 处理 Promise 拒绝。示例：try { await navigator.clipboard.writeText(text); } catch (err) { console.error("剪贴板写入失败:", err.message); }。}}
+
+{{知识点37}}{{自定义 MIME 类型：ClipboardItem.supports() 支持以 "web " 前缀开头的自定义 MIME 类型格式（如 "web com.example.myformat"）。自定义类型去掉 "web " 前缀后必须符合 MIME 类型格式规范。这允许应用在剪贴板中存储应用特定的数据格式。}}
+
+{{知识点38}}{{操作系统剪贴板限制：write() 方法接受 ClipboardItem 数组，理论上支持写入多个格式的数据项。但如果操作系统不支持多个原生剪贴板项，则只写入数组中的第一个 ClipboardItem。开发者应将最重要的格式放在数组首位。}}
+
+{{知识点39}}{{合成事件的局限性：可以通过 new ClipboardEvent() 或 new Event() 构造并分发合成的 copy/cut/paste 事件，但这些合成事件不会影响系统剪贴板或文档内容。只有用户通过浏览器界面触发的真实操作才会实际修改剪贴板。可通过 navigator.clipboard 方法以编程方式操作剪贴板。}}
+
+{{知识点40}}{{跨浏览器兼容性总结：Clipboard API（Clipboard 接口、Navigator.clipboard）自2020年3月起在所有主流浏览器中可用（Baseline Widely available）。ClipboardEvent 自2017年3月起可用。ClipboardItem 自2024年6月起可用（Baseline 2024）。ClipboardItem.supports() 自2025年3月起可用（Baseline 2025）。clipboardchange 事件支持较新，需检查兼容性。}}

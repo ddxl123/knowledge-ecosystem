@@ -1,0 +1,83 @@
+# 2025前端Bun运行时
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{Bun是一个用于JavaScript和TypeScript应用的一体化开发工具包，以单一可执行文件发布。它包含运行时（Runtime）、包管理器（Package Manager）、测试运行器（Test Runner）和打包器（Bundler），旨在成为Node.js的更快、更现代的替代品。Bun由Zig语言编写，底层使用JavaScriptCore引擎（由Apple为Safari开发）。}}
+
+{{知识点2}}{{Bun运行时的核心优势之一是启动速度极快。在Linux上，Bun的启动时间约为5.2ms，而Node.js约为25.1ms，Bun快约4倍。这得益于使用JavaScriptCore引擎（而非V8）以及Zig语言编写的原生代码。}}
+
+{{知识点3}}{{Bun原生支持TypeScript和JSX/TSX。可以直接执行.ts、.tsx、.jsx文件，无需预先配置tsconfig或安装ts-node等工具。Bun的内置转译器会在执行前将TypeScript和JSX语法转换为纯JavaScript。}}
+
+{{知识点4}}{{Bun同时支持ESM（ES Modules）和CommonJS模块系统。虽然推荐使用ES模块，但Bun完全兼容CommonJS的require语法，可以无缝运行数百万npm包。}}
+
+{{知识点5}}{{Bun实现了标准的Web API，包括fetch、WebSocket、ReadableStream、Headers、URL等。这些API来自Safari的JavaScriptCore实现，使前端开发者可以使用熟悉的浏览器API进行服务端开发。}}
+
+{{知识点6}}{{Bun包管理器（bun install）比npm快约25倍。它使用全局缓存和硬链接来加速安装，支持workspaces、overrides、resolutions等高级功能，并生成bun.lock锁文件。}}
+
+{{知识点7}}{{Bun的安全模型：默认不执行已安装依赖的生命周期脚本（如postinstall）。如需信任某个包，需在package.json的trustedDependencies字段中显式声明。这可以防止供应链攻击。}}
+
+{{知识点8}}{{Bun支持两种包安装策略：hoisted（传统的npm/Yarn扁平化方式）和isolated（类似pnpm的严格隔离方式）。新项目默认使用isolated策略，旧项目保持hoisted以兼容。}}
+
+{{知识点9}}{{Bun内置测试运行器（bun test），兼容Jest API。支持describe、test、expect、beforeEach、afterEach等，原生支持TypeScript，支持快照测试、DOM测试和watch模式。}}
+
+{{知识点10}}{{Bun测试支持test.skip、test.todo、test.only、test.if、test.skipIf、test.todoIf等修饰符。还支持test.retry（自动重试失败测试）和test.repeats（重复运行测试以检测不稳定性）。}}
+
+{{知识点11}}{{Bun内置打包器（Bun Bundler），通过bun build CLI或Bun.build() JS API使用。支持JS/TS/JSX/TSX/CSS/JSON/TOML等多种文件类型，支持代码分割、tree shaking、sourcemap和minification。}}
+
+{{知识点12}}{{Bun打包器支持三种构建目标：browser（浏览器）、bun（Bun运行时）和node（Node.js）。支持ESM、CJS和IIFE三种输出格式。在esbuild的three.js基准测试中表现出色。}}
+
+{{知识点13}}{{Bun.serve()提供高性能HTTP服务器API。支持声明式路由（routes对象）、通配符路由、动态参数路由（/users/:id）、按HTTP方法分发处理、静态文件服务和重定向。}}
+
+{{知识点14}}{{Bun支持HTML imports，可以直接导入HTML文件作为路由。开发模式下支持HMR（热模块替换），生产模式下自动打包前端资源。可以构建全栈应用，前端和后端在同一项目中。}}
+
+{{知识点15}}{{Bun.serve()支持HTTP/3（QUIC）协议（实验性功能）。设置http3: true并配合TLS证书即可启用，服务器会同时监听TCP（HTTP/1.1）和UDP（HTTP/3）。}}
+
+{{知识点16}}{{Bun支持WebSocket服务器，内置发布-订阅API。在简单聊天室基准测试中，Bun的WebSocket吞吐量约为Node.js + ws库的7倍（70万/秒 vs 10万/秒）。底层基于uWebSockets实现。}}
+
+{{知识点17}}{{Bun Shell是一个跨平台的bash-like shell，使用Zig编写。通过模板字面量（$`command`）执行shell命令，支持管道、重定向、glob模式、环境变量，并与JavaScript对象无缝互操作。默认自动转义字符串防止shell注入。}}
+
+{{知识点18}}{{Bun文件I/O API：Bun.file()创建懒加载的文件引用（符合Blob接口），支持.text()、.json()、.stream()、.arrayBuffer()、.bytes()等读取方式。Bun.write()支持多种数据类型写入，自动选择最快的系统调用。}}
+
+{{知识点19}}{{Bun的FileSink API提供增量文件写入能力。通过file.writer()获取FileSink实例，调用.write()逐步写入数据，.flush()刷入磁盘，.end()关闭文件。支持配置highWaterMark控制缓冲区大小。}}
+
+{{知识点20}}{{Bun插件系统（Bun.plugin）提供通用插件API，可同时扩展运行时和打包器。支持onStart、onResolve、onLoad、onBeforeParse等生命周期钩子，可用于添加自定义文件类型支持（如.scss、.yaml）。}}
+
+{{知识点21}}{{Bun运行时的--watch模式：使用bun --watch run index.ts启用文件监听，文件变化时自动重启进程。打包器也支持--watch模式进行增量重建。}}
+
+{{知识点22}}{{Bun支持monorepo工作流。bun install支持workspaces和--filter参数，可以在多个包中同时执行脚本。bun run --filter 'pattern' script可以在匹配的包中运行指定脚本。}}
+
+{{知识点23}}{{Bun的bun run命令可以执行package.json中定义的脚本，启动时间约6ms（npm run约170ms）。支持生命周期钩子（pre/post scripts）、--bun标志（强制使用Bun而非Node执行）、--silent静默模式。}}
+
+{{知识点24}}{{Bun支持Unix域套接字和Linux抽象命名空间套接字。通过unix选项指定socket路径即可启用，适用于高性能本地IPC通信场景。}}
+
+{{知识点25}}{{Bun运行时的--smol标志用于内存受限环境。它使垃圾回收器更频繁运行，减少内存使用但牺牲部分性能。Bun会自动根据cgroups等内存限制调整GC堆大小。}}
+
+{{知识点26}}{{Bun与Node.js的兼容性持续提升。已完全实现的模块包括：node:assert、node:buffer、node:console、node:events、node:fs、node:os、node:path、node:stream、node:zlib等。部分实现的包括：node:crypto、node:http2、node:child_process、node:cluster等。}}
+
+{{知识点27}}{{Bun支持server.reload()热路由更新，可以在不重启服务器的情况下更新路由配置。结合Bun.serve()的export default语法，可以实现零停机部署。}}
+
+{{知识点28}}{{Bun支持从多种来源安装依赖：Git仓库（git+https://）、GitHub（github:user/repo）、本地/远程tarball、npm别名（npm:@types/bun）。还支持overrides和resolutions来覆盖间接依赖版本。}}
+
+{{知识点29}}{{Bun的idleTimeout默认为10秒，最大255秒，0表示禁用。对于流式响应和SSE（Server-Sent Events），需要注意空闲超时会导致连接中断，可通过server.timeout(req, 0)为特定请求禁用。}}
+
+{{知识点30}}{{Bun支持--console-depth标志控制console.log输出的对象深度。默认深度为2，更高的值会显示更多嵌套属性，适合调试复杂对象结构。}}
+
+{{知识点31}}{{Bun支持bun run -从stdin读取代码并执行，无需写入临时文件。所有代码默认作为TypeScript+JSX处理。适合快速测试代码片段或管道操作。}}
+
+{{知识点32}}{{Bun的打包器支持watch模式和内容哈希（content hashing）用于缓存失效。HTML imports会自动处理script和link标签，将TypeScript/JSX转译并打包，CSS通过Bun的CSS解析器处理。}}
+
+{{知识点33}}{{Bun的Docker镜像（oven/bun）支持Linux x64和arm64架构，提供debian、slim、distroless和alpine等多种变体，方便在容器化环境中部署Bun应用。}}
+
+{{知识点34}}{{Bun支持canary构建版本，每次提交到main分支都会自动发布。使用bun upgrade --canary可升级到最新canary版本，bun upgrade --stable切回稳定版。Canary构建会自动上传崩溃报告。}}
+
+{{知识点35}}{{Bun的Bun.serve()支持export default语法，可以将服务器配置作为默认导出。当Bun检测到包含fetch处理器的default导出时，会自动将其传入Bun.serve()，简化代码结构。}}
+
+{{知识点36}}{{Bun内置SQLite数据库模块（bun:sqlite），提供同步和异步API。这是Bun特有的内置功能，无需安装额外依赖即可使用SQLite数据库。}}
+
+{{知识点37}}{{Bun支持最低发布年龄（minimum release age）功能，用于防止供应链攻击。可以配置只安装发布超过指定时间的包版本，过滤掉刚发布的恶意包。}}
+
+{{知识点38}}{{Bun的WebSocket API与客户端WebSocket不同，采用处理器对象模式而非事件监听模式。处理器在服务器级别声明一次并复用于所有连接，减少内存使用和事件监听器开销。}}
+
+{{知识点39}}{{Bun支持开发模式下的浏览器console日志回显到终端。设置development: true后，浏览器中的console.log输出会自动显示在服务器终端中，方便全栈调试。}}
+
+{{知识点40}}{{Bun正在积极发展全栈开发能力。通过HTML imports + Bun.serve()，可以构建包含前端React/Vue应用和后端API的完整应用，开发时支持HMR热更新，生产时自动打包优化。}}

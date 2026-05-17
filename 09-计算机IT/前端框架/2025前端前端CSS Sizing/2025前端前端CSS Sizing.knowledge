@@ -1,0 +1,93 @@
+# 2025前端前端CSS Sizing
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{CSS Sizing 模块概述：CSS Box Sizing 模块定义了元素如何根据内容或布局上下文来确定大小。它包括尺寸属性（width、height）、最小/最大尺寸属性（min-width、max-width、min-height、max-height），以及 box-sizing、aspect-ratio 等属性。该模块还引入了基于内容的内在尺寸关键字（min-content、max-content、fit-content）。}}
+
+{{知识点2}}{{width 属性基础：width 属性设置元素的宽度。支持长度值（如 300px、25em）、百分比（相对于包含块宽度）、auto（浏览器自动计算）。初始值为 auto，适用于除不可替换内联元素、表格行和行组外的所有元素。不继承。}}
+
+{{知识点3}}{{height 属性基础：height 属性设置元素的高度。支持长度值、百分比（相对于包含块高度）、auto。注意：百分比高度的包含块如果未显式指定高度且元素非绝对定位，则百分比会计算为 auto。初始值为 auto。}}
+
+{{知识点4}}{{min-width 属性：min-width 设置元素的最小宽度。当 min-width 大于 width 或 max-width 时，min-width 优先。支持长度值、百分比、auto（块盒解析为0）、min-content、max-content、fit-content 等关键字。默认值为 auto。}}
+
+{{知识点5}}{{max-width 属性：max-width 设置元素的最大宽度。max-width 覆盖 width，但 min-width 覆盖 max-width。特殊值 none 表示无限制。支持长度值、百分比及内在尺寸关键字。默认值为 none。}}
+
+{{知识点6}}{{min-height 和 max-height 属性：与 min-width/max-width 对应，分别控制元素的最小和最大高度。max-height 的默认值也是 none。min-height 默认值为 auto。两者都支持长度、百分比和内在尺寸关键字。}}
+
+{{知识点7}}{{box-sizing 属性——content-box：content-box 是默认值。width 和 height 仅包含内容区域，不包括 padding 和 border。设置 width: 350px 加上 border: 10px，实际渲染宽度为 370px。计算公式：width = 内容宽度，height = 内容高度。}}
+
+{{知识点8}}{{box-sizing 属性——border-box：border-box 使 width 和 height 包含内容、padding 和 border（不包含 margin）。设置 width: 350px 加上 border: 10px，实际渲染宽度就是 350px，内容区域为 330px。计算公式：width = border + padding + 内容宽度。}}
+
+{{知识点9}}{{box-sizing: border-box 最佳实践：现代 CSS 开发中普遍推荐使用 border-box，因为它使元素尺寸计算更直观。常见的全局重置：*, *::before, *::after { box-sizing: border-box; }。注意：table、select、button 及部分 input 类型默认使用 border-box。}}
+
+{{知识点10}}{{尺寸属性优先级关系：当 width、min-width、max-width 同时存在时，优先级为：min-width > max-width > width。即如果 width 超出 min/max 范围，实际值会被限制在约束范围内。height 系列属性同理。}}
+
+{{知识点11}}{{CSS 内在尺寸关键字——min-content：min-content 是元素内容的最小内在宽度，即在不溢出的情况下内容能收缩到的最小尺寸。对于文本，这通常是长单词或不可断行内容的宽度。}}
+
+{{知识点12}}{{CSS 内在尺寸关键字——max-content：max-content 是元素内容的理想/首选内在宽度，即内容不换行时的自然宽度。对于文本，这是一行全部显示所需的宽度。}}
+
+{{知识点13}}{{CSS 内在尺寸关键字——fit-content：fit-content 等价于 min(max-content, max(min-content, stretch))，即使用可用空间，但不超过 max-content，也不小于 min-content。它能自动适应内容大小同时不超出容器。}}
+
+{{知识点14}}{{fit-content() 函数：fit-content() 函数接受一个长度或百分比参数，公式为 min(max-content, max(min-content, argument))。例如 width: fit-content(20em) 将宽度限制在 20em 以内，但不会小于 min-content。}}
+
+{{知识点15}}{{stretch 关键字：stretch 使元素的 margin box 填满包含块的可用空间，类似于 100% 但应用于 margin box 而非由 box-sizing 决定的盒子。注意：浏览器可能使用 -webkit-fill-available 或 -moz-available 作为别名。}}
+
+{{知识点16}}{{aspect-ratio 属性：aspect-ratio 设置元素的首选宽高比。语法如 aspect-ratio: 16/9 或 aspect-ratio: 1（等价于 1/1）。当只有一个维度被显式设置、另一个为 auto 时，浏览器会根据宽高比自动计算缺失的维度。}}
+
+{{知识点17}}{{aspect-ratio 与替换元素：对于 img 等替换元素，可使用 aspect-ratio: auto 3/2 语法。auto 表示在内容加载后使用元素的自然宽高比，3/2 是内容加载前的占位比。这能有效防止图片加载时的布局偏移（CLS）。}}
+
+{{知识点18}}{{aspect-ratio 实际应用：常见用法包括：为图片/视频预留空间防止布局偏移（如 aspect-ratio: 16/9）、创建响应式正方形容器（aspect-ratio: 1）、卡片布局中统一图片比例等。}}
+
+{{知识点19}}{{object-fit 属性：object-fit 控制替换元素（img、video）内容如何适应其容器。值包括：fill（拉伸填满，可能变形）、contain（保持比例完整显示，可能留白）、cover（保持比例填满，可能裁剪）、none（不缩放）、scale-down（取 none 和 contain 中较小的）。}}
+
+{{知识点20}}{{object-position 属性：与 object-fit 配合使用，控制替换元素内容在其容器内的对齐位置。默认值为 50% 50%（居中）。可以使用关键字（如 top、left）或百分比/长度值来精确定位。}}
+
+{{知识点21}}{{CSS 视口单位——vw/vh/vmin/vmax：vw 是视口宽度的 1%，vh 是视口高度的 1%。vmin 取 vw 和 vh 中较小的值，vmax 取较大的值。常用于创建全屏布局或响应式字体大小，如 height: 100vh 创建全屏高度。}}
+
+{{知识点22}}{{CSS 视口单位——svh/lvh/dvh：2025年现代浏览器支持小视口（svh）、大视口（lvh）和动态视口（dvh）单位。svh 对应地址栏展开时的视口高度，lvh 对应收起时，dvh 动态跟随地址栏状态。推荐使用 dvh: 100dvh 实现真正的全屏。}}
+
+{{知识点23}}{{百分比尺寸的工作原理：width 的百分比相对于包含块的宽度计算。height 的百分比相对于包含块的高度计算，但如果包含块高度未显式设置且元素非绝对定位，则百分比 height 会回退为 auto。}}
+
+{{知识点24}}{{em 和 rem 单位在尺寸中的应用：em 相对于当前元素的字体大小，rem 相对于根元素（html）的字体大小。在设置元素尺寸时，rem 提供更可预测的行为，而 em 在需要随组件缩放时更有用。}}
+
+{{知识点25}}{{ch 和 ex 单位：ch 相对于当前字体中 "0" 字符的宽度，常用于限制文本行宽（如 max-width: 65ch）。ex 相对于当前字体的 x-height。这两个单位与字体相关，适合文本驱动的布局。}}
+
+{{知识点26}}{{calc() 函数在尺寸中的应用：calc() 允许在尺寸值中进行数学运算，如 width: calc(100% - 20px)。可以混合不同单位，支持加减乘除运算。2025年浏览器还支持 round()、clamp() 等数学函数用于尺寸计算。}}
+
+{{知识点27}}{{min() 和 max() 函数：min() 取参数中较小的值，max() 取较大的值。例如 width: min(80%, 600px) 表示宽度不超过 600px 且不超过父元素的 80%。它们比媒体查询更灵活，可以在属性级别直接设置响应式约束。}}
+
+{{知识点28}}{{clamp() 函数：clamp(min, preferred, max) 结合了 min() 和 max()，例如 font-size: clamp(1rem, 2.5vw, 2rem)。在尺寸属性中可用于创建自适应但有边界限制的元素，是响应式设计的强大工具。}}
+
+{{知识点29}}{{contain-intrinsic-size 属性：该属性为具有尺寸包含（contain: size）的元素指定内在尺寸。当元素内容被跳过（如离屏时）时，浏览器使用该值进行布局。支持 auto 关键字配合长度值，如 contain-intrinsic-size: auto 300px，表示优先使用记忆值。}}
+
+{{知识点30}}{{contain-intrinsic-size 与 content-visibility：content-visibility: auto 常与 contain-intrinsic-size 配合使用。离屏元素跳过渲染以提升性能，而 contain-intrinsic-size 提供布局占位尺寸。auto <length> 语法允许浏览器记住元素实际渲染后的尺寸，后续直接使用。}}
+
+{{知识点31}}{{contain-intrinsic-block-size 和 contain-intrinsic-inline-size：这是 contain-intrinsic-size 的逻辑属性等价物，分别对应块轴和行内轴尺寸。在不同书写模式下自动映射到正确的物理方向。}}
+
+{{知识点32}}{{anchor-size() 函数（CSS 锚点定位）：anchor-size() 允许基于锚点元素的尺寸设置当前元素的尺寸。例如 width: anchor-size(width) 使用关联锚点的宽度。支持指定锚点名称和尺寸类型（width、height、inline、block 等）。}}
+
+{{知识点33}}{{calc-size() 函数：calc-size() 允许对内在尺寸进行计算，如 width: calc-size(max-content, size / 2) 表示取 max-content 的一半。解决了之前无法对关键字尺寸值进行数学运算的限制。}}
+
+{{知识点34}}{{CSS 逻辑尺寸属性——inline-size 和 block-size：inline-size 对应 writing-mode 下的行内方向尺寸（水平书写模式下等价于 width），block-size 对应块方向尺寸（等价于 height）。它们是国际化布局的基础。}}
+
+{{知识点35}}{{min/max 逻辑尺寸属性：min-inline-size、max-inline-size、min-block-size、max-block-size 分别是 inline-size 和 block-size 的最小/最大值约束。功能与物理属性完全对应，但适应不同书写方向。}}
+
+{{知识点36}}{{Flex 子项的自动最小尺寸：在 Flexbox 布局中，flex 子项的 min-width 默认值为 min-content（而非 0），这可能导致内容溢出。解决方法：显式设置 min-width: 0 或 min-width: min-content 取决于需求。Grid 子项也有类似行为。}}
+
+{{知识点37}}{{替换元素的尺寸行为：img、video 等替换元素有内在宽高比。当仅设置 width 或 height 之一时，另一个维度会按比例自动计算。2025年建议为图片显式设置 width/height 属性或 aspect-ratio 以避免布局偏移。}}
+
+{{知识点38}}{{CSS 内在尺寸与外在尺寸概念：内在尺寸（intrinsic size）由元素内容决定（如 min-content、max-content）。外在尺寸（extrinsic size）由外部上下文决定（如百分比、固定长度）。理解两者的区别有助于选择合适的尺寸策略。}}
+
+{{知识点39}}{{Sizing 在 Grid 布局中的应用：CSS Grid 的 fr 单位是一种灵活的尺寸单位，如 grid-template-columns: 1fr 2fr。auto 轨道尺寸基于内容。minmax() 函数可设置轨道的尺寸范围，如 minmax(200px, 1fr)。}}
+
+{{知识点40}}{{Sizing 在 Flexbox 中的应用：flex-grow、flex-shrink、flex-basis 三个属性共同控制 flex 子项沿主轴的尺寸分配。flex-basis 类似于主轴方向的 width/height，flex-grow 控制剩余空间的分配比例，flex-shrink 控制不足时的收缩比例。}}
+
+{{知识点41}}{{box-sizing 与 Flexbox/Grid 的交互：使用 border-box 时，flex 子项和 grid 子项的百分比尺寸基于边框盒计算，使布局更可预测。content-box 下，padding 和 border 会额外增加元素实际尺寸，可能导致溢出。}}
+
+{{知识点42}}{{容器查询中的尺寸：CSS 容器查询（@container）允许基于父容器而非视口来响应式调整样式。容器的尺寸直接影响查询断点。配合 container-type: inline-size 声明容器后，可用容器查询实现组件级响应式设计。}}
+
+{{知识点43}}{{Sizing 与 overflow 的关系：当内容超出显式设置的尺寸时，overflow 属性控制溢出行为。overflow: hidden 裁剪内容，overflow: auto 添加滚动条，overflow: visible（默认）让内容溢出显示。配合尺寸属性使用时需注意内容可见性。}}
+
+{{知识点44}}{{CSS Subgrid 对尺寸的影响：CSS Subgrid 允许嵌套网格继承父网格的轨道定义。子网格项的尺寸由父网格轨道决定，这在复杂布局中提供了精确的尺寸对齐能力。子网格可通过 grid-template-columns: subgrid 继承列轨道。}}
+
+{{知识点45}}{{Sizing 的性能考量：频繁更改元素尺寸会触发浏览器重排（reflow），影响性能。建议：使用 transform: scale() 代替改变 width/height 做动画；使用 contain: size 减少布局计算范围；使用 will-change 提示浏览器优化。}}

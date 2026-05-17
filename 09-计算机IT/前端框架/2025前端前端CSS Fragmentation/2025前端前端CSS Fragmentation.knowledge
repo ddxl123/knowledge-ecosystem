@@ -1,0 +1,83 @@
+# 2025前端前端CSS Fragmentation
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{CSS Fragmentation（CSS分片）模块定义了内容在被分割（fragmented）并跨越多个页面、区域或列显示时的行为方式。该模块规范了分页、断点控制、变片段大小和方向、寡行（widows）和孤行（orphans）等特性。规范来源：CSS Fragmentation Module Level 3。}}
+
+{{知识点2}}{{Fragmentation Context（分片上下文）是内容可能发生分片的环境。包括分页媒体（paged media，如打印页面）、多列布局（multicol layout）容器和区域（regions）。每种上下文决定了break属性的具体表现形式。}}
+
+{{知识点3}}{{Fragmentainer（片段容器）是CSS Fragmentation规范中的术语，指一个可以容纳内容片段的容器。例如一页纸、一个多列布局中的一列，或一个区域（region）。内容在fragmentainer边界处可能被分片。}}
+
+{{知识点4}}{{Fragment（片段）是元素渲染结果的一部分。当一个元素跨越多个fragmentainer时，它在每个容器中渲染的部分就是一个fragment。例如一个段落跨两页显示，每页上显示的部分就是一个fragment。}}
+
+{{知识点5}}{{break-before属性控制元素主盒子（principal box）之前是否插入分片断点。可应用于块级元素。初始值为auto。该属性不继承。语法包括通用断点值、页面断点值、列断点值和区域断点值四大类。}}
+
+{{知识点6}}{{break-before: auto是最默认的行为，允许但不强制在元素之前插入任何类型的断点（页面、列或区域）。浏览器根据内容自动决定在哪里断开。}}
+
+{{知识点7}}{{break-before: avoid避免在元素之前插入任何类型的断点（页面、列或区域）。当希望某个元素紧跟前一个元素不被分开时使用。}}
+
+{{知识点8}}{{break-before: always强制在元素之前插入断点。断点类型取决于所在的分片上下文：在多列容器中为列断点，在分页媒体中为页面断点。}}
+
+{{知识点9}}{{break-before: all强制在元素之前插入断点，并穿透所有分片上下文。例如在嵌套的多列容器中的分页媒体中，会同时触发列断点和页面断点。}}
+
+{{知识点10}}{{break-before: page强制在元素之前插入页面断点。无论当前在什么上下文中，都会产生页面分页效果。适用于打印样式中章节标题从新页开始的场景。}}
+
+{{知识点11}}{{break-before: left和break-before: right用于双面打印场景。left强制下一页为左侧页（书脊左侧或双面打印的背面），right强制下一页为右侧页（书脊右侧或双面打印的正面）。可能需要插入一个或两个断点。}}
+
+{{知识点12}}{{break-before: recto和break-before: verso是书写方向感知的断点值。recto在从左到右排版中等同于right，在从右到左排版中等同于left。verso则相反。适用于国际化出版物。}}
+
+{{知识点13}}{{break-before: avoid-page避免在元素之前插入页面断点。break-before: avoid-column避免在元素之前插入列断点。break-before: avoid-region避免在元素之前插入区域断点。这些是特定类型的避免值。}}
+
+{{知识点14}}{{break-before: column强制在元素之前插入列断点。break-before: region强制在元素之前插入区域断点。用于精确控制多列布局或区域布局中的断点位置。}}
+
+{{知识点15}}{{break-after属性控制元素主盒子之后是否插入分片断点。语法和值与break-before完全对称。适用于块级元素，初始值为auto，不继承。常用于确保某个元素后面的内容从新页或新列开始。}}
+
+{{知识点16}}{{break-inside属性控制元素内部是否允许插入分片断点。可选值包括：auto（允许断点）、avoid（避免任何断点）、avoid-page（避免页面断点）、avoid-column（避免列断点）、avoid-region（避免区域断点）。初始值为auto，适用于块级元素。}}
+
+{{知识点17}}{{break-inside: avoid是最常用的分片控制值之一。典型应用场景包括：防止图片和图注被分到不同页面/列、防止表格被从中间断开、防止代码块被分割显示。这是实现"保持内容完整"的核心CSS属性。}}
+
+{{知识点18}}{{断点冲突解决规则：当某个断点位置同时受break-after、break-before和break-inside三个属性影响时，遵循以下优先级规则。强制断点值（always, left, right, page, column, region）具有最高优先级。多个强制断点冲突时，流中位置最靠后的元素的值优先（break-before > break-after > break-inside）。}}
+
+{{知识点19}}{{避免断点与强制断点的冲突处理：如果三个相关属性中任何一个为avoid类值（avoid, avoid-page, avoid-region, avoid-column），则在该断点位置不应用对应的分片。但强制断点值会覆盖avoid值。}}
+
+{{知识点20}}{{软断点（soft breaks）是在强制断点应用完毕后，浏览器根据内容长度自动添加的断点。软断点不会出现在具有对应avoid值的元素边界处。浏览器的分页算法会在必要时自动插入软断点。}}
+
+{{知识点21}}{{orphans（孤行）CSS属性设置块容器中在页面、区域或列的底部必须显示的最小行数。默认值为2，表示段落至少要有2行在页面底部显示。值必须为正整数。该属性可继承，适用于块容器元素。}}
+
+{{知识点22}}{{在排版术语中，orphan（孤行）是指段落的第一行单独出现在页面底部的情况（段落其余内容在下一页）。CSS的orphans属性通过设置最小行数来防止这种情况，确保页面底部至少显示指定行数。}}
+
+{{知识点23}}{{widows（寡行）CSS属性设置块容器中在页面、区域或列的顶部必须显示的最小行数。默认值为2，表示新页面顶部至少显示2行。值必须为正整数。该属性可继承，适用于块容器元素。}}
+
+{{知识点24}}{{在排版术语中，widow（寡行）是指段落的最后一行单独出现在页面顶部的情况（段落前面的内容在上一页）。CSS的widows属性通过设置最小行数来防止这种情况，确保页面顶部至少显示指定行数。}}
+
+{{知识点25}}{{box-decoration-break属性控制元素在分片时其装饰（边框、背景、阴影、内边距、外边距等）如何渲染。有两个值：slice（默认，将假想的完整盒子渲染后切片分配）和 clone（每个片段独立渲染所有装饰）。}}
+
+{{知识点26}}{{box-decoration-break: slice是默认值。元素先按未分片的方式渲染为一个假想的完整盒子，然后将渲染结果切片分配给各个fragment。这意味着边框只在片段的起始和结束处显示，背景在所有片段中连续。}}
+
+{{知识点27}}{{box-decoration-break: clone让每个fragment独立渲染完整的装饰。每个片段都会有自己的边框、内边距、外边距、border-radius、border-image、box-shadow和背景。即使background-repeat: no-repeat，背景也可能在每个片段中重复出现。}}
+
+{{知识点28}}{{box-decoration-break影响的CSS属性包括：background、border、border-image、box-shadow、clip-path、margin和padding。这使得它成为控制分片元素视觉效果的关键属性。}}
+
+{{知识点29}}{{页面断点别名（Page Break Aliases）：为了向后兼容，旧的page-break-before、page-break-after和page-break-inside属性被作为break-before、break-after和break-inside的别名处理。映射关系中，always被映射为page而非新规范中的always值。}}
+
+{{知识点30}}{{分片在多列布局中的应用：当使用CSS多列布局（column-width或column-count）时，内容会自动分片到各列中。使用break-before: column可以在特定元素前强制列断点，使用break-inside: avoid可以防止元素被列断点分割。}}
+
+{{知识点31}}{{分片在打印样式中的应用：@media print媒体查询配合break属性可以精确控制打印输出。常见模式包括：h1, h2使用break-before: page让每个章节从新页开始；figure使用break-inside: avoid防止图表被分割；使用orphans和widows控制段落完整性。}}
+
+{{知识点32}}{{分片在CSS Regions中的应用：CSS Regions允许内容流经多个命名区域。break-before: region和break-after: region控制区域间的断点，avoid-region防止在区域内断开。注意：CSS Regions规范的浏览器支持有限。}}
+
+{{知识点33}}{{CSS Fragmentation Level 3相对于Level 1/2的主要改进包括：新增all通用断点值（穿透所有分片上下文）、新增avoid-page/avoid-column/avoid-region等特定避免值、新增recto/verso书写方向感知断点、更精确的断点冲突解决规则。}}
+
+{{知识点34}}{{Fragmentation与overflow的关系：当内容在容器中溢出时，如果容器是分片上下文的一部分，溢出的内容会流向下一个fragmentainer而非简单隐藏。理解这一关系对正确使用分片属性至关重要。}}
+
+{{知识点35}}{{Fragmentation与Flexbox/Grid的交互：当flex容器或grid容器处于分片上下文中时，flex项目和grid项目也可以被分片。break-inside: avoid可以用于防止flex或grid项目被断开。但flex容器本身不直接支持多页/多列分片，某些浏览器对这方面的支持仍在完善中。}}
+
+{{知识点36}}{{Viewport Segments API与分片的关系：现代可折叠设备（如双屏手机）引入了viewport segments的概念。CSS通过horizontal-viewport-segments和vertical-viewport-segments媒体查询描述符来适配这些设备，这与分片概念密切相关。}}
+
+{{知识点37}}{{分片属性的浏览器兼容性：break-before、break-after、break-inside在现代浏览器中获得广泛支持。orphans和widows主要在打印/分页上下文中有效，多列布局中的支持因浏览器而异。box-decoration-break需要-webkit-前缀（Chrome/Safari）以获得最佳兼容性。}}
+
+{{知识点38}}{{分片属性的计算值和动画特性：break-before、break-after、break-inside的计算值与指定值相同（as specified），动画类型为discrete（离散型，不支持平滑过渡）。orphans和widows的动画类型为by computed value type（可按计算值类型动画）。}}
+
+{{知识点39}}{{实际开发中避免分片问题的最佳实践：①对图片和图注容器使用break-inside: avoid；②对表格使用break-inside: avoid；③章节标题使用break-before: always或page；④设置orphans: 3和widows: 3获得更好的段落排版效果；⑤使用box-decoration-break: clone确保分片元素的视觉一致性。}}
+
+{{知识点40}}{{CSS Fragmentation规范的正式名称为"CSS Fragmentation Module Level 3"，由W3C CSS工作组维护。规范文档地址为https://drafts.csswg.org/css-break/。该规范定义了所有分片相关属性的形式语法、值定义和行为规则。}}

@@ -1,0 +1,93 @@
+# 2025前端前端Intersection Observer API
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{Intersection Observer API 是什么：一个浏览器原生 API，允许开发者异步观察目标元素与祖先元素或视口（viewport）之间的交叉状态变化，无需在主线程上轮询或监听滚动事件，浏览器可自行优化交叉检测的调度。}}
+
+{{知识点2}}{{核心设计动机：传统方案依赖 scroll 事件 + getBoundingClientRect() 在主线程上循环检测元素可见性，性能开销大且容易卡顿。Intersection Observer 将交叉检测移出主线程，从根本上解决了性能问题。}}
+
+{{知识点3}}{{典型应用场景：懒加载图片/内容、无限滚动（infinite scrolling）、广告可见性追踪（计算广告收益）、根据元素是否进入视口决定是否执行动画或任务、sticky 导航栏触发等。}}
+
+{{知识点4}}{{构造函数语法：new IntersectionObserver(callback, options)。callback 是当目标元素跨越指定阈值时执行的函数，options 是配置观察行为的选项对象。}}
+
+{{知识点5}}{{回调函数签名：callback(entries, observer)。entries 是 IntersectionObserverEntry 对象数组，每个 entry 描述一个目标元素的一次交叉状态变化；observer 是触发回调的 IntersectionObserver 实例。}}
+
+{{知识点6}}{{IntersectionObserverEntry 对象包含的属性：boundingClientRect（目标元素边界矩形）、intersectionRatio（交叉比例）、intersectionRect（可见区域矩形）、isIntersecting（是否正在交叉）、rootBounds（根元素矩形）、target（目标元素）、time（记录时间戳）。}}
+
+{{知识点7}}{{isIntersecting 属性：布尔值，true 表示目标元素正在与根交叉（进入状态），false 表示从交叉变为不交叉（离开状态）。threshold 为默认值 0 时，回调大约在 isIntersecting 布尔值切换时触发。}}
+
+{{知识点8}}{{intersectionRatio 属性：返回 intersectionRect 面积与 boundingClientRect 面积的比值，范围 0.0 到 1.0，表示目标元素可见的百分比。}}
+
+{{知识点9}}{{options.root 选项：用于检查目标可见性的根元素，必须是目标元素的祖先。默认为 null，表示使用浏览器视口作为根。如果指定了 root，target 必须是 root 的后代元素。}}
+
+{{知识点10}}{{options.rootMargin 选项：根元素的外边距，语法类似 CSS margin（如 "10px 20px 30px 40px"），可使用 px 或 % 单位。正值扩大根的边界框，负值缩小。默认 "0px 0px 0px 0px"。用于在元素实际可见之前/之后触发回调。}}
+
+{{知识点11}}{{rootMargin 的实用技巧：设置 rootMargin: "200px 0px" 可以让图片在进入视口前 200px 就开始预加载，实现更平滑的懒加载体验，用户感知不到加载延迟。}}
+
+{{知识点12}}{{options.threshold 选项：单个数字或数字数组，表示目标元素可见比例达到多少时触发回调。如 0.5 表示 50% 可见时触发，[0, 0.25, 0.5, 0.75, 1] 表示每跨越 25% 都触发。默认为 0。}}
+
+{{知识点13}}{{threshold 数组的用法：传入 [0, 0.5, 1] 会在元素从不可见到 50% 可见、再到完全可见时各触发一次回调，适合实现渐进式动画效果。}}
+
+{{知识点14}}{{options.trackVisibility 选项（V2 特性）：布尔值，true 时浏览器会额外检查目标是否真正可见——是否被其他元素遮挡、是否被 filter/opacity/transform 影响。默认 false，因为计算开销较大。}}
+
+{{知识点15}}{{options.delay 选项：当 trackVisibility 为 true 时，设置通知的最小延迟（毫秒）。若 trackVisibility 为 true，delay 自动设为最小 100ms。建议使用尽可能大的值以减少性能开销。}}
+
+{{知识点16}}{{options.scrollMargin 选项：应用于从交叉根到目标路径上每个滚动容器的偏移矩形，语法和默认值与 rootMargin 相同。正值让目标在实际可见之前就被认为是交叉的。}}
+
+{{知识点17}}{{observe() 方法：observer.observe(target) 开始观察一个目标元素。调用后回调会立即执行一次（即使目标当前不可见），用于初始状态检测。一个 observer 可以同时观察多个目标。}}
+
+{{知识点18}}{{unobserve() 方法：observer.unobserve(target) 停止观察特定目标元素。常用在懒加载场景中，图片加载完成后取消观察以释放资源。}}
+
+{{知识点19}}{{disconnect() 方法：observer.disconnect() 停止观察所有目标元素。用于组件卸载时清理，防止内存泄漏。}}
+
+{{知识点20}}{{takeRecords() 方法：observer.takeRecords() 返回所有已观察目标的 IntersectionObserverEntry 数组，用于同步获取当前状态而不等待回调。}}
+
+{{知识点21}}{{rootBounds 属性：返回 IntersectionObserver 的根元素的 DOMRectReadOnly。如果根是视口则为视口矩形，如果根是具体元素则为其内容区域矩形。}}
+
+{{知识点22}}{{time 属性：DOMHighResTimeStamp 类型，记录交叉被检测到的时间，相对于 IntersectionObserver 的 time origin。可用于计算交叉持续时间或排序多个 entry。}}
+
+{{知识点23}}{{intersectionRect 属性：DOMRectReadOnly 类型，表示目标元素与根元素交叉的可见区域。是两者矩形的交集。}}
+
+{{知识点24}}{{boundingClientRect 属性：目标元素的边界矩形，等同于 Element.getBoundingClientRect() 的返回值。用于计算 intersectionRatio。}}
+
+{{知识点25}}{{如何计算交叉区域：Intersection Observer 将所有区域视为矩形。不规则形状的元素使用其最小包围矩形。可见部分非矩形时，使用包含所有可见部分的最小矩形。}}
+
+{{知识点26}}{{根交叉矩形的确定规则：如果根是顶层 Document，使用视口矩形；如果根有 overflow clip，使用根元素的内容区域；否则使用 getBoundingClientRect() 返回的矩形。}}
+
+{{知识点27}}{{懒加载实现模式：创建 observer（threshold: 0），在回调中检查 isIntersecting，如果为 true 则将 data-src 赋值给 src，然后 unobserve 该元素。rootMargin 设置适当提前量以优化体验。}}
+
+{{知识点28}}{{无限滚动实现模式：观察页面底部的哨兵元素（sentinel element），当其进入视口（isIntersecting 为 true）时加载更多内容并追加到列表中。}}
+
+{{知识点29}}{{广告可见性追踪：使用 threshold: [0, 0.5, 1] 追踪广告的可见比例变化，当 intersectionRatio >= 0.5 且持续一定时间（通过 time 属性计算）时记录为"可见展示"。}}
+
+{{知识点30}}{{性能最佳实践：回调函数应尽快执行，耗时操作应使用 requestIdleCallback 委托。一个 observer 可观察多个目标，避免为每个元素创建独立 observer。trackVisibility 仅在确实需要遮挡检测时使用。}}
+
+{{知识点31}}{{与 getBoundingClientRect() 的对比：getBoundingClientRect() 是同步的、在主线程执行、需要手动轮询；Intersection Observer 是异步的、由浏览器优化调度、回调批量处理。性能差距在大量元素时尤为显著。}}
+
+{{知识点32}}{{浏览器兼容性：自 2019 年 3 月起所有主流浏览器均支持 Intersection Observer。Baseline 状态为 Widely available。trackVisibility 和 scrollMargin 等 V2 特性支持较新。}}
+
+{{知识点33}}{{与 MutationObserver、ResizeObserver、PerformanceObserver 的关系：这四个 Observer API 都是异步观察模式，分别用于交叉变化、DOM 变更、元素尺寸变化、性能事件。它们共享类似的回调机制设计哲学。}}
+
+{{知识点34}}{{组件卸载清理：在 React/Vue 等框架中，必须在 useEffect 的 cleanup 或 beforeUnmount 中调用 disconnect() 或 unobserve()，否则会导致内存泄漏和回调在已卸载组件上执行。}}
+
+{{知识点35}}{{多个 threshold 的回调行为：当目标元素快速滚动跨越多个 threshold 时，浏览器可能在单次回调中传递多个 entry（每个 threshold 对应一个），使用 entry.time 属性排序而非依赖 entries 数组顺序。}}
+
+{{知识点36}}{{scrollMargin 与嵌套滚动容器：当目标元素嵌套在多层滚动容器中时，scrollMargin 应用于每层滚动容器的裁剪矩形，可让目标在穿过所有滚动层之前就被检测为交叉状态。}}
+
+{{知识点37}}{{不能做的事情：Intersection Observer 无法精确检测重叠的像素数量，也无法告诉你是哪部分重叠。它只解决"大约交叉了 N%"这一常见用例，不适用于精确的像素级碰撞检测。}}
+
+{{知识点38}}{{交叉比例计算公式：intersectionRatio = intersectionRect 的面积 / boundingClientRect 的面积。当 threshold 为 [0, 1] 时，0 表示完全不可见，1 表示完全可见。}}
+
+{{知识点39}}{{配置不可变性：IntersectionObserver 创建后其配置（root、rootMargin、thresholds）不可更改。如需不同配置，必须创建新的 observer 实例。}}
+
+{{知识点40}}{{entries 批量处理：回调中的 entries 可能包含多个元素的变化事件，也可能包含同一元素在短时间内跨越多个 threshold 的事件。应使用 forEach 遍历处理而非假设只有一个 entry。}}
+
+{{知识点41}}{{CSS transform 对交叉检测的影响：默认情况下（trackVisibility: false），即使元素被 CSS transform 移出视口，只要其在 DOM 中的逻辑位置与根交叉，仍可能被报告为交叉。开启 trackVisibility 可检测此类情况。}}
+
+{{知识点42}}{{W3C 规范：Intersection Observer 的正式规范为 W3C Intersection Observer 规范，定义了 intersection-observer-interface 和 intersection-observer-entry 两个核心接口。}}
+
+{{知识点43}}{{视口作为根时的特殊行为：当 root 为 null（使用视口）时，rootIntersectionRect 就是视口矩形。在 iframe 内使用时，视口指 iframe 的视口而非父页面。}}
+
+{{知识点44}}{{与 CSS scroll-snap 的配合：Intersection Observer 可用于检测 snap 对齐后的元素位置，配合 scroll-snap-type/scroll-snap-align 实现页面导航指示器等交互。}}
+
+{{知识点45}}{{初始回调触发：observe() 调用后，即使目标当前完全不可见，回调也会被触发一次。这是设计行为，用于让开发者知道元素的初始状态，应在回调中检查 isIntersecting 再决定是否执行操作。}}

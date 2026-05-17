@@ -1,0 +1,101 @@
+# 2025前端状态管理Signals
+# 领域: 计算机IT
+# 学科: 前端框架
+# 来源: 2025前端状态管理Signals
+# 描述: Signals响应式原语核心知识点
+
+{{知识点1}}{{Signals定义：Signals是一种响应式原语(reactive primitive)，用于管理应用状态。它是一个包装值的容器，当值变化时自动通知所有订阅者，无需手动订阅/取消订阅}}
+
+{{知识点2}}{{Signals核心特征：值可变但信号引用不变(signal本身始终是同一个对象)、自动依赖追踪(读取时自动建立依赖关系)、惰性求值(无人监听时不计算)、细粒度更新(仅更新受影响的部分)}}
+
+{{知识点3}}{{Signals vs 传统状态管理：传统方式(如Redux)需要reducer/action/dispatch样板代码，Signals直接读写值即可；传统方式需要手动选择器(selector)优化渲染，Signals自动追踪依赖实现最优更新}}
+
+{{知识点4}}{{TC39 Signals提案(Stage 1)：由Daniel Ehrenberg、Yehuda Katz等人推动，目标是将Signals标准化为JavaScript语言特性。类似Promises/A+对Promise标准化的推动方式，聚焦于底层信号图(signal graph)语义而非开发者API}}
+
+{{知识点5}}{{TC39 Signals提案参与者：Angular、Preact、Qwik、Solid、Svelte、Vue、Ember、MobX、RxJS、Starbeam等框架/库的作者共同参与设计，旨在实现跨框架互操作性}}
+
+{{知识点6}}{{TC39 Signals提案API核心：Signal.State(可写状态信号)、Signal.Computed(派生计算信号)、Signal.subtle.Watcher(观察信号变化的底层API)、untrack(读取时不追踪依赖)}}
+
+{{知识点7}}{{Solid.js createSignal：返回[getter, setter]元组，getter是函数调用而非属性访问。const [count, setCount] = createSignal(0)，读取用count()，更新用setCount(prev => prev + 1)}}
+
+{{知识点8}}{{Solid.js Signal特点：组件只执行一次(无重新渲染)，模板中的表达式自动追踪依赖；更新是同步的；getter函数形式确保读取时一定经过追踪系统}}
+
+{{知识点9}}{{Solid.js createEffect：在追踪范围内执行副作用函数，自动订阅其中读取的所有signal。当任一依赖signal变化时重新执行。是Solid中响应式副作用的核心原语}}
+
+{{知识点10}}{{Solid.js createMemo：计算派生信号，缓存结果，依赖变化时自动重算。类似computed，但有缓存优化。适合昂贵计算的派生状态}}
+
+{{知识点11}}{{Solid.js createStore：用于管理嵌套对象/数组的深度响应式状态。基于Proxy实现，支持路径级别的细粒度更新(如setStore('todos', 0, 'done', true))}}
+
+{{知识点12}}{{Angular signal()函数：创建可写信号，通过getter函数读取(count())，通过.set()或.update()修改。signal(0)创建初始值为0的信号}}
+
+{{知识点13}}{{Angular computed()：创建只读派生信号，惰性求值+缓存。computed(() => count() * 2)自动追踪count，count变化时doubleCount缓存失效，下次读取时重算}}
+
+{{知识点14}}{{Angular computed动态依赖：只有实际读取的signal才会被追踪。if分支中未执行的signal读取不会建立依赖，依赖可动态增减}}
+
+{{知识点15}}{{Angular effect()：响应式副作用函数，追踪其中读取的signal，变化时重新执行。用于日志、DOM操作等非渲染副作用}}
+
+{{知识点16}}{{Angular WritableSignal与readonly：WritableSignal有.set()和.update()方法，.asReadonly()返回只读版本。适合在服务中暴露只读状态给组件}}
+
+{{知识点17}}{{Angular untracked()：在响应式上下文中读取signal但不建立依赖。effect(() => log(user(), untracked(counter)))只在user变化时触发}}
+
+{{知识点18}}{{Angular reactive context(响应式上下文)：effect回调、computed求值、linkedSignal求值、resource的params/loader、组件模板渲染时自动进入，读取signal即建立依赖}}
+
+{{知识点19}}{{Preact Signals核心API：signal(initialValue)创建信号、computed(fn)创建派生信号、effect(fn)创建副作用、batch(fn)批量更新、untracked(fn)不追踪读取}}
+
+{{知识点20}}{{Preact signal.value访问：通过.value属性读写，而非函数调用。const count = signal(0)，count.value++即可更新。在JSX中可直接使用信号对象，Preact自动处理}}
+
+{{知识点21}}{{Preact Signals性能优化：信号传递的是引用而非值，更新signal不触发组件重新渲染；只有实际读取.value的组件才会更新；跳过中间组件直达消费端}}
+
+{{知识点22}}{{Preact signal.peek()：读取signal值但不建立订阅关系。在effect中需要基于旧值写入另一个signal时使用，避免循环依赖}}
+
+{{知识点23}}{{Preact Signals跨框架：@preact/signals-core是框架无关的核心包，@preact/signals-react提供React集成，@preact/signals提供Preact集成}}
+
+{{知识点24}}{{Preact batch(fn)：将多个signal更新合并为一次同步更新，避免中间状态触发effect/computed。所有更新完成后才通知订阅者}}
+
+{{知识点25}}{{Preact Signals的watched/unwatched回调：signal(0, { watched() {...}, unwatched() {...} })，当signal获得第一个/失去最后一个订阅者时触发，用于按需启停资源}}
+
+{{知识点26}}{{Vue ref()响应式：const count = ref(0)，通过.value读写。底层使用getter/setter拦截，读取时track()收集依赖，设置时trigger()通知订阅者}}
+
+{{知识点27}}{{Vue reactive()响应式：基于Proxy拦截对象属性访问。const state = reactive({ count: 0 })，直接state.count读写。递归代理整个对象树}}
+
+{{知识点28}}{{Vue computed()：const double = computed(() => count.value * 2)，惰性求值+缓存。内部使用reactive effect管理失效和重计算}}
+
+{{知识点29}}{{Vue watchEffect()：自动追踪回调中读取的所有响应式依赖，变化时重新执行。类似Solid的createEffect和Angular的effect}}
+
+{{知识点30}}{{Vue响应式原理：track(target, key)在读取时收集activeEffect到订阅者集合(Set)中，trigger(target, key)在设置时通知所有订阅者重新执行。数据结构为WeakMap<target, Map<key, Set<effect>>>}}
+
+{{知识点31}}{{Svelte 5 $state rune：let count = $state(0)，直接赋值count++即可触发更新。无需.value或setter函数，编译器在编译时转换为响应式代码}}
+
+{{知识点32}}{{Svelte $state深度代理：对数组和简单对象自动创建Proxy，支持深层属性变更追踪。todos[0].done = true自动触发UI更新}}
+
+{{知识点33}}{{Svelte $state.raw：非深度代理版本，只能整体替换不能修改属性。适合大数组/对象避免Proxy开销，let data = $state.raw([...])}}
+
+{{知识点34}}{{Svelte $derived rune：派生状态，类似computed。let double = $derived(count * 2)，自动追踪依赖，依赖变化时更新}}
+
+{{知识点35}}{{Svelte $effect rune：响应式副作用，在依赖变化时执行。类似watchEffect，用于DOM操作、日志、数据同步等非渲染场景}}
+
+{{知识点36}}{{Knockout.js的历史地位：2010年首次引入observable概念，是JavaScript前端Signals类响应式的鼻祖。ko.observable(0)创建可观察值，ko.computed()创建派生值}}
+
+{{知识点37}}{{信号图(Signal Graph)概念：由Producer(信号)、Consumer(computed/effect)和边(依赖关系)组成的有向无环图(DAG)。更新从Producer传播到Consumer，跳过无关节点}}
+
+{{知识点38}}{{惰性求值(Lazy Evaluation)：Signals默认惰性，computed信号在首次被读取前不执行计算函数。依赖变化时标记为脏(dirty)，下次读取时才重算，避免不必要的计算}}
+
+{{知识点39}}{{自动依赖追踪(Auto-tracking)：在响应式上下文中读取signal时自动建立依赖，无需手动subscribe。依赖是动态的——条件分支中未执行的读取不产生依赖}}
+
+{{知识点40}}{{Glitch-free更新：Signals系统保证不会出现中间不一致状态。通过拓扑排序或同步批量处理，确保computed值的更新顺序正确，避免"闪烁"问题}}
+
+{{知识点41}}{{Signals vs Redux/Zustand：Redux需要action/reducer/store样板代码，Signals声明式读写即可；Redux基于不可变更新，Signals基于可变值+通知；Redux全局store，Signals可细粒度局部状态}}
+
+{{知识点42}}{{Signals vs MobX：MobX使用observable对象+autorun/reaction，基于Proxy拦截；Signals更轻量，专注于值包装+计算派生；TC39提案受MobX影响但API更底层}}
+
+{{知识点43}}{{Signals在Qwik中的应用：Qwik使用Signal作为序列化友好的状态原语，支持SSR到客户端的状态恢复(rehydration)。signal值可直接序列化为HTML属性}}
+
+{{知识点44}}{{Signals在Svelte Runes中的演变：Svelte 5从编译时魔法(2.x-4.x的$:语法)转向显式rune API($state/$derived/$effect)，更接近Signals范式，同时保持编译时优化优势}}
+
+{{知识点45}}{{Signals性能优势：细粒度更新(仅变化的部分重新计算/渲染)、无虚拟DOM diff开销、自动跳过未使用的computed、内存占用低(无需存储旧状态快照)}}
+
+{{知识点46}}{{Signals的局限性：调试困难(隐式依赖链难以追踪)、循环依赖风险(computed A依赖B，B依赖A)、服务端渲染(SSR)需要特殊处理序列化/反序列化}}
+
+{{知识点47}}{{Signals与微前端：基于@preact/signals-core的框架无关信号可用于微前端间共享状态，不同框架的子应用通过共同的信号图实现状态同步}}
+
+{{知识点48}}{{Signals最佳实践：将signal定义在使用处附近(就近原则)；computed用于派生状态而非手动同步；effect用于副作用而非状态更新；使用batch合并多个相关更新}}

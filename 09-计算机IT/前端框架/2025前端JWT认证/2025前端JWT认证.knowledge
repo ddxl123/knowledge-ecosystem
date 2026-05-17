@@ -1,0 +1,123 @@
+# 2025前端JWT认证
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}
+JWT（JSON Web Token）是一种开放标准（RFC 7519），定义了一种紧凑、URL安全的方式，用于在各方之间以JSON对象的形式安全传输信息。JWT可以使用密钥（HMAC算法）或公私钥对（RSA/ECDSA）进行数字签名，从而确保信息可验证且可信。JWT广泛用于授权和信息交换场景。
+
+{{知识点2}}
+JWT的结构由三部分组成，以点号（.）分隔：Header（头部）、Payload（负载）、Signature（签名）。典型形式为xxxxx.yyyyy.zzzzz。Header和Payload分别经过Base64Url编码，Signature是基于Header和Payload的加密摘要。这种紧凑格式使其非常适合在HTTP环境和HTML中传递。
+
+{{知识点3}}
+JWT的Header通常包含两个字段：typ（令牌类型，值为"JWT"）和alg（签名算法，如HS256、RS256、ES256）。Header JSON对象经Base64Url编码后形成JWT的第一部分。支持的算法包括HMAC SHA256/384/512、RSA、ECDSA等。明确指定算法是防止"alg:none"攻击的关键。
+
+{{知识点4}}
+JWT的Payload包含声明（Claims），即关于实体（通常是用户）和附加数据的声明。Payload经Base64Url编码后形成JWT的第二部分。重要提示：对于签名令牌，Payload虽然受防篡改保护，但任何人可读取，不应在其中存放敏感信息，除非使用JWE加密。
+
+{{知识点5}}
+JWT的Signature部分用于验证消息在传输过程中未被篡改。以HMAC SHA256为例，签名计算方式为：HMACSHA256(base64UrlEncode(header) + "." + base64UrlEncode(payload), secret)。对于RSA/ECDSA签名，使用私钥签名、公钥验证，还可验证发送者身份。
+
+{{知识点6}}
+JWT的注册声明（Registered Claims）是预定义的标准化字段，虽非强制但推荐使用。主要字段包括：iss（签发者）、sub（主题）、aud（受众）、exp（过期时间）、nbf（生效时间）、iat（签发时间）、jti（JWT唯一标识）。声明名称限三个字符，体现JWT的紧凑设计。
+
+{{知识点7}}
+JWT的公共声明（Public Claims）可由使用者自行定义，但为避免冲突，应在IANA JSON Web Token注册表中注册，或使用包含防冲突命名空间的URI定义。私有声明（Private Claims）是各方协商使用的自定义声明，既非注册也非公共声明。
+
+{{知识点8}}
+JWT中的exp（Expiration Time）声明标识令牌过期时间，值为Unix时间戳。nbf（Not Before）声明标识令牌生效时间，iat（Issued At）声明标识签发时间。验证时应检查exp和nbf，确保令牌在有效期内。exp是JWT安全性的核心保障。
+
+{{知识点9}}
+JWT的典型使用流程：1）用户使用凭据登录；2）授权服务器验证后返回JWT；3）客户端存储JWT并在后续请求的Authorization头中携带：Authorization: Bearer <token>；4）服务器验证JWT并允许访问受保护资源。这是一个无状态的授权机制。
+
+{{知识点10}}
+JWT vs Session Cookie：JWT是无状态的，服务器无需存储会话信息，适合分布式系统和微服务架构。Session是有状态的，需要服务器端存储。JWT可通过Authorization头传递，不受CORS限制；Session依赖Cookie传递，受同源策略约束。选择取决于应用需求。
+
+{{知识点11}}
+Access Token（访问令牌）是用于访问受保护资源的凭证，持有者可使用它调用API。它是Bearer令牌，谁持有谁使用。OAuth 2.0未定义Access Token格式，但通常采用JWT格式。Access Token应设置较短的有效期（通常15分钟至几小时）以降低泄露风险。
+
+{{知识点12}}
+Refresh Token（刷新令牌）用于在Access Token过期后获取新的Access Token，无需用户重新登录。Refresh Token有效期较长，安全要求更高。使用流程：Access Token过期 → 携带Refresh Token请求新AT → 授权服务器验证RT后签发新AT（可能同时签发新RT）。
+
+{{知识点13}}
+ID Token是OpenID Connect（OIDC）协议的产物，用于向客户端应用传达用户身份信息（如姓名、邮箱、头像等）。ID Token的消费者是客户端应用（SPA、移动应用），用于构建用户档案和个性化体验。ID Token与Access Token的区别：ID Token用于认证，Access Token用于授权。
+
+{{知识点14}}
+JWT存储方案对比：localStorage - 简单但易受XSS攻击；sessionStorage - 关闭标签页即清除；Cookie（HttpOnly+Secure）- 防XSS但防CSRF需额外措施；内存变量 - 最安全但刷新即丢失。2025年最佳实践：Access Token存内存，Refresh Token存HttpOnly Secure Cookie。
+
+{{知识点15}}
+"alg:none"攻击：攻击者将JWT的Header中alg改为"none"，修改Payload中的角色声明（如role:user改为role:admin），并移除签名部分。如果服务器实现不验证算法类型，就会接受无签名的令牌。防御：验证时明确指定允许的算法，拒绝none算法。
+
+{{知识点16}}
+Token Sidejacking（令牌劫持）：攻击者通过网络嗅探或XSS窃取JWT后冒充用户。防御方案：在JWT中添加用户上下文（指纹），将随机字符串以HttpOnly+Secure+SameSite的Cookie发送，将SHA256哈希存入JWT，验证时比对。避免使用IP地址（变化频繁且涉及GDPR）。
+
+{{知识点17}}
+JWT密钥混淆攻击：当服务器使用RSA公钥验证签名时，攻击者可能将alg改为HS256，然后用RSA公钥作为HMAC密钥签名，服务器会误以为是HMAC签名并用公钥验证成功。防御：严格验证alg字段与预期算法一致，不接受未明确允许的算法。
+
+{{知识点18}}
+JWT Key Injection攻击：攻击者在JWT Header中注入jwk（JSON Web Key）或jku（JWK Set URL）字段，指向自己控制的密钥。如果服务器不验证密钥来源，会使用攻击者的密钥验证签名。防御：限制允许的jwk/jku来源，使用白名单机制。
+
+{{知识点19}}
+JWT最佳实践（RFC 7519/IETF OAuth工作组）：1）始终验证签名；2）验证alg字段与预期算法一致；3）验证iss、aud、exp等标准声明；4）使用强密钥（RSA 2048位以上）；5）Access Token有效期尽量短；6）不存储敏感信息在Payload中；7）使用HTTPS传输。
+
+{{知识点20}}
+CORS与JWT：当JWT通过Authorization头传递时，不会触发CORS预检请求中的Cookie相关问题。这是因为CORS只关注Cookie的同源策略，而Authorization头不受此限制。但需确保服务器正确配置CORS头（Access-Control-Allow-Headers包含Authorization）。
+
+{{知识点21}}
+前端拦截器实现JWT认证：使用Axios/Fetch拦截器在每个请求中自动添加Authorization头，在响应拦截器中处理401错误（Token过期）。典型模式：请求拦截器从内存读取Access Token → 添加到请求头 → 响应拦截器捕获401 → 调用刷新接口 → 重试原请求。
+
+{{知识点22}}
+JWT刷新Token的前端实现模式：1）队列模式 - Token刷新时将后续请求排队，刷新完成后重发；2）重试模式 - 401时自动刷新并重试；3）主动刷新 - 在Token即将过期前主动刷新（如过期前5分钟）。需要防止并发刷新导致的竞态条件。
+
+{{知识点23}}
+JWT与OAuth 2.0授权码流程：1）客户端将用户重定向到授权服务器；2）用户授权后获得授权码；3）客户端用授权码换取Access Token和Refresh Token；4）使用Access Token访问资源。现代SPA推荐使用PKCE（Proof Key for Code Exchange）增强安全性。
+
+{{知识点24}}
+PKCE（Proof Key for Code Exchange）：为公共客户端（如SPA、移动应用）增强OAuth 2.0安全性的扩展。流程：生成code_verifier → 计算code_challenge = SHA256(code_verifier) → 发送code_challenge到授权服务器 → 获得授权码后发送code_verifier → 服务器验证。防止授权码拦截攻击。
+
+{{知识点25}}
+JWT的jti（JWT ID）声明为每个令牌提供唯一标识，可用于防止重放攻击。服务器可维护已使用jti的列表，拒绝重复使用的令牌。结合较短的exp有效期，可有效降低令牌被盗后的攻击窗口。jti在一次性操作（如密码重置）中尤为重要。
+
+{{知识点26}}
+JWT与RBAC（基于角色的访问控制）：JWT的Payload中可包含用户角色和权限信息（如roles: ["admin", "user"]、permissions: ["read", "write"]）。前端根据这些信息控制UI显示和路由访问。但不应仅依赖前端判断，后端API必须独立验证权限。
+
+{{知识点27}}
+JWT黑名单/撤销机制：虽然JWT是无状态的，但有时需要撤销已签发的令牌（如用户登出、密码修改）。方案：1）维护Token黑名单（存Redis等）；2）使用短有效期+Refresh Token；3）修改Token版本号；4）依赖Token过期。方案2是2025年主流做法。
+
+{{知识点28}}
+JWT的aud（Audience）声明标识令牌的目标受众（通常是API标识符）。验证时必须检查aud是否匹配当前服务，防止令牌被用于非预期的API。在微服务架构中，aud可用于限制令牌仅在特定服务间传递，增强安全性。
+
+{{知识点29}}
+JWT的iss（Issuer）声明标识令牌签发者（通常是授权服务器URL）。验证时必须检查iss是否为预期值，防止伪造令牌。典型值如"https://auth.example.com"。结合jwks_uri（JWK Set端点），服务器可动态获取签发者的公钥进行验证。
+
+{{知识点30}}
+JWT大小限制：HTTP头通常限制在8KB左右，JWT过大会导致请求失败。避免在JWT中嵌入过多信息（如所有用户权限）。替代方案：JWT仅包含用户标识，权限信息通过API查询；或使用Fine-Grained Authorization（FGA）服务管理复杂权限。
+
+{{知识点31}}
+JWT与SameSite Cookie：现代浏览器默认SameSite=Lax，限制跨站请求携带Cookie。对于SPA+API分离架构（不同域名），需设置SameSite=None; Secure以允许跨站Cookie传递。但需注意CSRF防护，建议配合CSRF Token或自定义请求头验证。
+
+{{知识点32}}
+JWT的Base64Url编码：JWT使用Base64Url编码（而非标准Base64），将"+"替换为"-"，"/"替换为"_"，并去除填充"="。这确保JWT在URL、Cookie等环境中安全传递。前端解码JWT时，可使用atob()配合替换字符，或使用专用库（如jwt-decode）。
+
+{{知识点33}}
+JWT与WebSocket认证：WebSocket连接建立时可通过URL参数或首个消息传递JWT。但URL参数可能被日志记录泄露，更安全的方式是在握手请求的Header中传递，或建立连接后通过认证消息发送。服务器在每次消息处理时验证JWT有效性。
+
+{{知识点34}}
+JWT与SSO（单点登录）：JWT是实现SSO的理想选择。用户在身份提供者（IdP）登录后获得JWT，可访问所有信任该IdP的应用。SP（服务提供者）验证JWT签名和声明即可确认用户身份。跨域SSO通过JWT+公钥验证实现，无需共享Session。
+
+{{知识点35}}
+JWT多租户实现：在Payload中包含tenant_id或org_id声明，标识用户所属租户。前端根据租户信息加载对应配置和主题，后端在数据查询中强制注入租户过滤条件。确保不同租户数据严格隔离，JWT中的租户信息不可篡改（受签名保护）。
+
+{{知识点36}}
+JWT与GraphQL认证：GraphQL请求通常使用单一端点，JWT通过Authorization头传递。在GraphQL Resolver中验证JWT并提取用户信息。可使用GraphQL Directive（如@auth）声明式控制访问。注意：GraphQL的批量查询可能放大攻击面，需配合查询深度限制和速率控制。
+
+{{知识点37}}
+JWT性能优化：1）避免过度验证 - 缓存公钥（JWKS）并设置合理TTL；2）减少JWT大小 - 仅包含必要声明；3）使用对称算法（HMAC）在内部服务间通信（比RSA快）；4）前置验证 - 在API网关统一验证JWT，后端服务信任网关传递的用户信息。
+
+{{知识点38}}
+JWT与Serverless/Edge认证：在Serverless和Edge Computing场景中，JWT的无状态特性天然适配。Edge函数可使用公钥本地验证JWT，无需回源到授权服务器。Cloudflare Workers、Vercel Edge Functions等平台支持JWT验证，实现就近认证，降低延迟。
+
+{{知识点39}}
+JWT调试工具：jwt.io是官方交互式调试器，支持编码、解码和验证JWT。前端开发中常用jwt-decode库解码JWT（仅解码不验证签名）。Postman、curl等API测试工具支持JWT认证。浏览器DevTools的Network面板可查看请求中的Authorization头。
+
+{{知识点40}}
+JWT常见错误与排查：1）"Invalid Token" - 检查签名算法和密钥是否匹配；2）"Token Expired" - 确认exp声明和服务器时钟同步；3）"Audience Mismatch" - 检查aud声明与API标识符；4）"CORS Error" - 确认服务器CORS配置包含Authorization头；5）"Token Too Large" - 检查JWT大小是否超过HTTP头限制。

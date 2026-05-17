@@ -1,0 +1,93 @@
+# 2025前端前端View Transitions
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{View Transitions API 概述：View Transitions API 是浏览器原生提供的页面过渡动画解决方案，能够为 SPA（单页应用）和 MPA（多页应用）创建流畅的视图切换动画。它通过自动捕获旧页面和新页面的快照，然后在它们之间执行动画过渡，大大简化了以往需要大量 CSS 和 JavaScript 才能实现的页面过渡效果。}}
+
+{{知识点2}}{{规范级别：View Transitions API 分为两个规范级别——CSS View Transitions Module Level 1（定义同文档/SPA 过渡）和 CSS View Transitions Module Level 2（定义跨文档/MPA 过渡）。Level 1 提供基础的 startViewTransition() 方法和伪元素树，Level 2 新增 @view-transition at-rule、pageswap/pagereveal 事件和过渡类型支持。}}
+
+{{知识点3}}{{浏览器兼容性：截至 2025 年 10 月，View Transitions API 已成为 Baseline 特性，在最新浏览器中得到广泛支持。Chrome 111+ 支持 SPA 过渡，Chrome 126+ 支持 MPA 过渡。Safari 18+ 和 Firefox 133+ 也已支持。开发者仍应提供降级方案以兼容旧浏览器。}}
+
+{{知识点4}}{{同文档过渡（SPA）基本用法：使用 document.startViewTransition(callback) 方法启动同文档视图过渡。callback 函数负责执行 DOM 更新。该方法返回一个 ViewTransition 对象，可用于监听过渡状态和自定义行为。代码示例：const transition = document.startViewTransition(() => { updateDOM(); });}}
+
+{{知识点5}}{{跨文档过渡（MPA）基本用法：通过在 CSS 中使用 @view-transition at-rule 并设置 navigation: auto 来启用跨文档过渡。需要在源页面和目标页面的 CSS 中同时声明此规则，且两个文档必须同源。无需 JavaScript 即可实现基本的跨页面过渡动画。}}
+
+{{知识点6}}{{@view-transition at-rule 语法：@view-transition { navigation: auto | none; types: none | <custom-ident>#; }。navigation 描述符控制是否启用过渡（auto 为启用，none 为禁用）。types 描述符指定过渡类型标识符，用于在 CSS 中选择性地应用不同动画样式。}}
+
+{{知识点7}}{{ViewTransition 接口：document.startViewTransition() 返回 ViewTransition 对象，包含四个只读 Promise 属性——updateCallbackDone（DOM 更新完成时 fulfill）、ready（伪元素树创建完成、动画即将开始时 fulfill）、finished（过渡动画结束时 fulfill）、types（ViewTransitionTypeSet 类型集合）。}}
+
+{{知识点8}}{{ViewTransition.updateCallbackDone Promise：当传入 startViewTransition() 的回调函数返回的 Promise 兑现时，updateCallbackDone 随之兑现。此时 DOM 已更新完毕，可以在此处执行需要在新 DOM 上进行的操作，如更新标题或发送分析事件。}}
+
+{{知识点9}}{{ViewTransition.ready Promise：当伪元素树已创建且过渡动画即将开始时，ready Promise 兑现。这是使用 Web Animations API 执行自定义 JavaScript 动画的最佳时机。例如可以实现从点击位置出发的圆形揭示动画效果。}}
+
+{{知识点10}}{{ViewTransition.finished Promise：当过渡动画完全结束、新页面视图对用户可见且可交互时，finished Promise 兑现。快照被销毁，页面恢复到正常状态。可用于清理临时状态或触发后续操作。}}
+
+{{知识点11}}{{ViewTransition.skipTransition() 方法：调用 skipTransition() 可跳过过渡动画部分，但不会跳过 startViewTransition() 的回调执行（DOM 更新仍会进行）。适用于需要根据条件中止动画但仍然需要更新页面内容的场景。}}
+
+{{知识点12}}{{ViewTransition.waitUntil() 方法：传入一个 Promise 到 waitUntil() 可以延迟过渡的完成和伪元素树的销毁，直到该 Promise 兑现。适用于需要等待图片加载或数据获取完成后才结束过渡的场景。}}
+
+{{知识点13}}{{view-transition-name CSS 属性：为元素指定一个唯一的 <custom-ident> 名称，使其参与独立的快照捕获，从而可以对该元素应用独立于其他元素的过渡动画。例如 view-transition-name: header;。名称在同一时间必须唯一，否则过渡将被跳过。}}
+
+{{知识点14}}{{view-transition-name: none 值：默认值。元素不会参与独立的快照捕获（除非其父元素设置了 view-transition-name）。用于排除某些元素不参与独立过渡动画。}}
+
+{{知识点15}}{{view-transition-name: match-element 值：浏览器自动为每个匹配元素分配唯一的内部名称，无需手动为每个元素命名。特别适合列表项等大量相似元素各自独立动画的场景。注意：仅适用于同文档过渡，自动生成的名称不可跨文档传递。}}
+
+{{知识点16}}{{view-transition-class CSS 属性：提供一种额外的方式来为设置了 view-transition-name 的元素添加样式分类，使得可以使用类选择器而非逐个名称来统一样式。}}
+
+{{知识点17}}{{伪元素树结构：View Transitions API 构建如下伪元素层级——::view-transition（覆盖层根节点）→ ::view-transition-group(name)（每个快照的容器）→ ::view-transition-image-pair(name)（包含新旧视图）→ ::view-transition-old(name)（旧视图静态快照）和 ::view-transition-new(name)（新视图实时快照）。}}
+
+{{知识点18}}{{::view-transition 伪元素：视图过渡覆盖层的根元素，包含所有过渡组，位于所有页面内容之上。可以通过 CSS 对其进行样式定制。}}
+
+{{知识点19}}{{::view-transition-group(name) 伪元素：每个视图过渡快照的根容器。name 参数对应 view-transition-name 的值。默认情况下，:root 元素的 view-transition-name 为 root。该伪元素会自动应用尺寸和位置动画以实现平滑过渡。}}
+
+{{知识点20}}{{::view-transition-image-pair(name) 伪元素：包含旧视图和新视图快照的容器。默认使用 isolation: isolate 混合模式。可以通过修改 isolation: auto 来改变新旧视图的混合行为。}}
+
+{{知识点21}}{{::view-transition-old(name) 伪元素：旧页面元素的静态快照。渲染为替换内容（类似 img 或 video），支持 object-fit 和 object-position 属性。默认应用 opacity 从 1 到 0 的淡出动画。用户无法与旧快照交互。}}
+
+{{知识点22}}{{::view-transition-new(name) 伪元素：新页面元素的实时快照（可交互的 DOM 区域）。默认应用 opacity 从 0 到 1 的淡入动画。在动画进行过程中，用户已可以与新内容进行交互。}}
+
+{{知识点23}}{{默认过渡动画行为：大多数外观变化使用平滑交叉淡入淡出（cross-fade）动画；height 和 width 变化使用平滑缩放动画；position 和 transform 变化使用平滑位移动画。这些默认动画由浏览器自动应用，开发者可以完全自定义覆盖。}}
+
+{{知识点24}}{{自定义过渡动画：通过 CSS 选择器定位 ::view-transition-old() 和 ::view-transition-new() 伪元素来自定义动画。推荐在 ::view-transition-group() 上设置通用样式（如 animation-duration），因为样式会被子伪元素继承。例如：::view-transition-group(root) { animation-duration: 0.5s; }。}}
+
+{{知识点25}}{{为不同元素应用不同动画：通过为不同元素设置不同的 view-transition-name 值，可以为每个元素创建独立的过渡组。例如将 figcaption 设置为 view-transition-name: figure-caption，然后单独为其定义动画：::view-transition-old(figure-caption) { animation: ...; }。}}
+
+{{知识点26}}{{自定义动画示例——滑动效果：使用 @keyframes 定义 move-out（translateY(0%) → translateY(-100%)）和 move-in（translateY(100%) → translateY(0%)）动画，分别应用到 ::view-transition-old(root) 和 ::view-transition-new(root)，可实现页面滑入滑出效果，替代默认的交叉淡入淡出。}}
+
+{{知识点27}}{{自定义动画示例——圆形揭示效果：结合 Web Animations API，在 transition.ready 兑现后对 ::view-transition-new(root) 应用 clip-path 圆形动画（从 radius 0 到覆盖全屏），同时设置 isolation: auto 和 animation: none 禁用默认混合行为，实现从点击位置出发的圆形揭示过渡效果。}}
+
+{{知识点28}}{{View Transition Types（过渡类型）：允许为视图过渡指定类型标识符，以便在 CSS 中通过 :active-view-transition-type() 伪类选择性地应用不同动画。SPA 中通过 startViewTransition({ update, types: ["backwards"] }) 传入类型；MPA 中通过 @view-transition { types: slide; } 设置。}}
+
+{{知识点29}}{{ViewTransitionTypeSet 接口：ViewTransition.types 属性返回的类 Set 对象，允许在过渡进行中动态查询和修改类型。支持 add()、delete()、clear() 等方法。例如可以在 pageswap 事件中根据导航方向动态添加不同类型的类型。}}
+
+{{知识点30}}{{:active-view-transition 伪类：当视图过渡正在进行时匹配元素。用于在过渡期间应用特定样式，例如禁用根元素的默认快照并为特定元素启用独立快照：html:active-view-transition { :root { view-transition-name: none; } .target { view-transition-name: image; } }。}}
+
+{{知识点31}}{{:active-view-transition-type() 伪类：当具有特定类型的视图过渡正在进行时匹配元素。例如 :active-view-transition-type(forwards) 仅在类型为 forwards 的过渡激活时应用样式，:active-view-transition-type(backwards) 仅在类型为 backwards 时应用。}}
+
+{{知识点32}}{{pageswap 事件：在跨文档导航即将发生、当前文档即将卸载时触发。通过 PageSwapEvent.viewTransition 属性可访问关联的 ViewTransition 对象。在源页面中使用，适用于在页面离开前修改过渡类型或执行清理操作。}}
+
+{{知识点33}}{{pagereveal 事件：在文档首次渲染时触发，无论是从网络加载新文档还是从 bfcache/prerender 激活文档。通过 PageRevealEvent.viewTransition 属性可访问关联的 ViewTransition 对象。在目标页面中使用，适用于在页面进入时定制过渡行为。}}
+
+{{知识点34}}{{Document.activeViewTransition 属性：提供一致的方式来访问当前活跃的视图过渡，无需保存 startViewTransition() 的返回值。在任何上下文（SPA 或 MPA）中都可使用。}}
+
+{{知识点35}}{{页面可见性与过渡跳过：如果文档的页面可见性状态为隐藏（例如浏览器被最小化、其他标签页处于活动状态），调用 startViewTransition() 时过渡会被完全跳过。这是浏览器的性能优化行为，开发者无需额外处理。}}
+
+{{知识点36}}{{同源限制：跨文档视图过渡目前仅支持同源文档之间的导航，不能有跨源重定向。如果导航类型为 push 或 replace，还必须由用户与页面内容的交互触发（不能由浏览器 UI 功能触发）。未来版本可能放宽此限制。}}
+
+{{知识点37}}{{过渡快照的本质：旧状态快照是静态图像（用户无法与之交互），新状态快照是可交互的 DOM 区域（用户可以在动画进行中与新内容交互）。这种设计既保证了过渡的视觉流畅性，又不影响用户操作的及时响应。}}
+
+{{知识点38}}{{rel="expect" HTML 属性：标识关联文档中对用户初始视图最关键的内容。浏览器会阻止文档渲染直到关键内容解析完成，确保一致的首次绘制和视图过渡效果。这对跨文档过渡的视觉一致性至关重要。}}
+
+{{知识点39}}{{渐进增强策略：使用 if (!document.startViewTransition) 进行特性检测，在不支持的浏览器中直接执行 DOM 更新而不报错。支持的浏览器会显示平滑过渡，不支持的浏览器仍能正常工作，只是没有动画效果。这是推荐的最佳实践。}}
+
+{{知识点40}}{{CSSViewTransitionRule 接口：表示 @view-transition at-rule 的 CSS 对象模型接口，允许通过 JavaScript 读取和操作 CSS 中声明的 @view-transition 规则。}}
+
+{{知识点41}}{{与 SPA 框架的集成：View Transitions API 可以与 React、Vue、Svelte 等框架无缝集成。Astro 框架已内置 View Transitions 支持。在框架中使用时，通常将 startViewTransition() 包裹在路由变更或状态更新逻辑中。}}
+
+{{知识点42}}{{与 Web Animations API 的协同：在 transition.ready 兑现后，可以使用 Web Animations API 的 document.documentElement.animate() 方法对伪元素执行更复杂的动画。需要通过 pseudoElement 选项指定目标伪元素，例如 pseudoElement: "::view-transition-new(root)"。}}
+
+{{知识点43}}{{CSSViewTransitionRule.types 属性与 ViewTransitionTypeSet 的关系：在 MPA 中通过 @view-transition 的 types 描述符设置的类型是静态的；而在 pageswap/pagereveal 事件中通过 ViewTransitionTypeSet 的 add()/delete() 方法可以动态修改类型，实现根据导航方向等条件动态切换动画类型。}}
+
+{{知识点44}}{{性能优势：View Transitions API 由浏览器底层优化，相比手动使用 JavaScript 和 CSS 实现的过渡方案，性能更好。浏览器可以利用 GPU 加速、合成层优化等技术来渲染过渡动画，减少主线程负担。}}
+
+{{知识点45}}{{可访问性考虑：View Transitions API 在设计时考虑了可访问性问题。相比手动实现的过渡（可能导致焦点丢失、阅读位置混乱、live region 行为异常等问题），原生 API 能更好地处理这些场景，但开发者仍需测试并确保过渡不会对辅助技术用户造成困扰。}}

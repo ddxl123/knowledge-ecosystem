@@ -1,0 +1,109 @@
+# 2025前端构建工具Vite
+# 领域: 计算机IT
+# 学科: 前端框架
+# 来源: 2025前端构建工具Vite
+# 描述: Vite构建工具核心知识点，涵盖开发服务器、HMR、构建优化、插件系统、配置选项等
+
+{{Vite定义与核心理念}}{{Vite（法语"快速"，发音/viːt/）是一个面向现代Web项目的前端构建工具，旨在提供更快、更精简的开发体验。它由两大部分组成：一是基于原生ES模块的开发服务器，提供丰富的特性增强和极快的HMR；二是使用Rolldown进行代码打包的构建命令，输出高度优化的生产静态资源。Vite每周下载量达6500万次。}}
+
+{{Vite 8重大更新}}{{2026年3月发布Vite 8，这是自Vite 2以来最重大的架构变更。Vite 8采用Rolldown作为统一的Rust打包器，取代了之前esbuild（开发环境）+ Rollup（生产环境）的双打包器架构，构建速度提升10-30倍，同时保持完整的插件兼容性。}}
+
+{{Rolldown打包器}}{{Rolldown是由VoidZero团队用Rust编写的打包器，为Vite 8设计，具有三大目标：性能（原生速度，比Rollup快10-30倍）、兼容性（支持与Rollup和Vite相同的插件API）、高级特性（完整打包模式、灵活的代码分割、模块级持久缓存、Module Federation支持）。}}
+
+{{Vite 8实际性能提升}}{企业在Vite 8预览和测试阶段报告了显著的构建时间缩减：Linear从46秒降至6秒；Ramp构建时间减少57%；Mercedes-Benz.io减少38%；Beehiiv减少64%。}}
+
+{{Vite开发服务器原理}}{{Vite的开发服务器基于原生ES模块（ESM）工作。与传统的打包式开发服务器不同，Vite不需要在启动时打包整个应用，而是按需提供模块。浏览器请求模块时，Vite即时转换并提供，实现毫秒级的冷启动。}}
+
+{{依赖预构建Dep Pre-bundling}}{{Vite使用Rolldown对npm依赖进行预构建（pre-bundling），解决两个问题：一是将CommonJS/UMD模块转换为ESM；二是将含有大量内部模块的包合并为单个模块，减少HTTP请求数。预构建显著提升了冷启动速度和页面加载性能。}}
+
+{{HMR热模块替换}}{{Vite提供基于原生ESM的HMR API，框架可利用该API实现即时、精确的更新，无需重载页面或丢失应用状态。Vite为Vue SFC和React Fast Refresh提供一阶HMR集成，HMR更新可在50ms内反映到浏览器。}}
+
+{{TypeScript支持}}{{Vite开箱即用支持导入.ts文件，但仅执行转译（transpilation），不进行类型检查。Vite使用Oxc Transformer转译TypeScript，速度比原生tsc更快。类型检查推荐由IDE和构建流程处理，可使用tsc --noEmit或vite-plugin-checker。}}
+
+{{TypeScript配置注意事项}}{{Vite在tsconfig.json中需关注的配置：isolatedModules应设为true（因Oxc仅做转译不支持const enum等特性）；target选项被Vite忽略，开发时用oxc.target（默认esnext），构建时用build.target；paths路径解析可通过resolve.tsconfigPaths: true启用。}}
+
+{{JSX支持}}{{Vite开箱即用支持.jsx和.tsx文件，JSX转译由Oxc Transformer处理。可通过oxc.jsx配置自定义jsxFactory和jsxFragment，使用oxc.jsxInject自动注入JSX辅助函数（如import React from 'react'）。}}
+
+{{CSS处理能力}}{{Vite对CSS提供强大支持：导入.css文件通过style标签注入页面并支持HMR；自动内联和重写CSS @import；支持CSS Modules（.module.css）；支持CSS预处理器（需安装对应依赖）；支持PostCSS（自动读取postcss.config.js）。}}
+
+{{静态资源处理}}{{Vite支持在JS/TS中导入静态资源（图片、字体等），返回解析后的公共URL。支持glob导入（import.meta.glob）批量导入资源。public目录下的文件会被原样复制到构建输出，可通过绝对路径/public/xxx引用。}}
+
+{{环境变量与模式}}{{Vite通过import.meta.env暴露环境变量，以VITE_为前缀的变量才会暴露给客户端代码。支持.env、.env.local、.env.[mode]、.env.[mode].local文件。支持通过--mode参数指定模式，如vite build --mode staging。}}
+
+{{配置文件vite.config.js}}{{Vite配置文件位于项目根目录，支持.js、.ts、.mjs、.cjs等扩展名。使用ES模块语法，即使项目未使用Node原生ESM。提供defineConfig辅助函数获得TypeScript智能提示。支持条件配置（根据command、mode等动态返回配置）和异步配置。}}
+
+{{条件配置与异步配置}}{{配置可导出函数接收{command, mode, isSsrBuild, isPreview}参数，根据开发/构建等不同场景返回不同配置。command在开发时为'serve'，构建时为'build'。也支持异步函数配置，可在配置中调用异步函数。}}
+
+{{服务器配置server}}{{Vite开发服务器可通过server选项配置：server.port设置端口（默认5173）；server.host设置监听地址；server.open自动打开浏览器；server.proxy配置代理；server.https启用HTTPS；server.forwardConsole转发浏览器控制台日志到终端（Vite 8新增，对编码代理特别有用）。}}
+
+{{构建配置build}}{{生产构建通过build选项配置：build.target指定目标浏览器（默认Baseline Widely Available，如Chrome>=111）；build.outDir输出目录（默认dist）；build.sourcemap是否生成source map；build.minify压缩方式；build.cssMinifyCSS压缩；build.lib库模式构建。}}
+
+{{库模式Library Mode}}{{Vite支持库模式构建（build.lib），用于打包面向浏览器的库。可输出ES和UMD格式，自动处理CSS提取。支持单入口和多入口配置，需手动externalize不应打包的依赖（如vue、react）。高级场景推荐使用tsdown或Rolldown。}}
+
+{{多页面应用MPA}}{{Vite支持多页面应用，在build.rolldownOptions.input中指定多个HTML入口文件。开发时直接访问对应路径即可，构建时所有HTML文件及引用的资源都会被处理和打包。}}
+
+{{插件系统Plugin System}}{{Vite插件基于Rollup的插件接口设计，额外提供Vite特有的选项。这意味着Vite用户可以使用Rollup成熟的插件生态系统，同时扩展开发服务器和SSR功能。插件通过vite.config.js的plugins数组添加。}}
+
+{{插件排序与条件应用}}{{插件可通过enforce属性控制执行顺序：'pre'在Vite核心插件之前、'default'在核心插件之后、'post'在构建插件之后。通过apply属性可限制插件仅在'serve'或'build'时生效。Falsy值的插件会被忽略，便于条件启用/禁用。}}
+
+{{官方框架集成插件}}{{Vite官方维护的框架插件：@vitejs/plugin-vue（Vue SFC支持）、@vitejs/plugin-vue-jsx（Vue JSX支持）、@vitejs/plugin-react（React支持，使用Oxc）、@vitejs/plugin-react-swc（React SWC支持）、@vitejs/plugin-rsc（React Server Components支持）。}}
+
+{{@vitejs/plugin-react v6}}{{与Vite 8同步发布的@vitejs/plugin-react v6使用Oxc进行React Refresh转换，不再依赖Babel，安装体积更小。对需要React Compiler的项目，提供reactCompilerPreset辅助函数配合@rolldown/plugin-babel使用。}}
+
+{{插件API开发自定义插件}}{{Vite插件是返回插件对象的函数，可使用Rollup插件钩子和Vite特有钩子。Vite特有钩子包括：configureServer（配置开发服务器）、transformIndexHtml（转换HTML）、handleHotUpdate（处理HMR更新）等。支持对象和函数式两种写法。}}
+
+{{Vite Devtools集成}}{{Vite 8内置devtools选项，启用Vite Devtools（devtools.vite.dev），提供调试和分析功能，直接从开发服务器获取Vite项目的深度洞察。}}
+
+{{浏览器兼容性}}{{开发阶段Vite假设使用现代浏览器，以esnext作为转译目标避免语法降级。生产构建默认目标为Baseline Widely Available浏览器（Chrome>=111、Edge>=111、Firefox>=114、Safari>=16.4）。可通过build.target自定义，最低es2015。旧浏览器可通过@vitejs/plugin-legacy支持。}}
+
+{{WebAssembly支持}}{{Vite支持WebAssembly，.wasm文件可通过ES模块导入。Vite 8新增SSR环境下的.wasm?init导入支持，将WebAssembly功能扩展到服务端渲染场景。}}
+
+{{SSR服务端渲染支持}}{{Vite提供内置的SSR支持，可直接SSR应用。通过vite build --ssr命令进行SSR构建。Vite的SSR功能是实验性的，通过Environment API提供更灵活的环境隔离能力。}}
+
+{{Environment API}}{{Vite提供Environment API，允许为不同运行环境（客户端、服务端、自定义环境）配置独立的构建管道。每个环境有自己的模块图和解析规则，支持更灵活的SSR和边缘计算场景。Vite 8正在推进该API的稳定化。}}
+
+{{代码分割策略}}{{Vite通过build.rolldownOptions.output.codeSplitting配置代码分割策略。Rolldown支持更灵活的分割方式。框架用户应参考框架文档配置分割策略。支持动态导入（dynamic import）实现按需加载。}}
+
+{{加载错误处理vite:preloadError}}{{Vite在动态导入失败时发出vite:preloadError事件。可通过window.addEventListener('vite:preloadError', handler)监听，调用event.preventDefault()阻止错误抛出，常用于新部署后旧资源失效时自动刷新页面。}}
+
+{{基础路径base配置}}{{通过base配置项设置公共基础路径，默认'/'。支持相对路径'./'或''使所有URL相对于文件自身。支持命令行参数如vite build --base=/my/public/path/。高级场景可通过experimental.renderBuiltUrl分别控制不同资源类型的路径。}}
+
+{{Node.js版本要求}}{{Vite 8要求Node.js 20.19+或22.12+，与Vite 7相同。这些版本确保Node.js支持无需flag的require(esm)，使Vite可以纯ESM方式分发。}}
+
+{{命令行工具CLI}}{{Vite提供三个主要CLI命令：vite（或vite dev/vite serve）启动开发服务器；vite build执行生产构建；vite preview本地预览生产构建。支持--port、--open、--config等选项。}}
+
+{{Oxc Transformer集成}}{{Vite 8使用Oxc（Rust编写的高性能JavaScript/TypeScript编译器）替代esbuild进行代码转译。Oxc由VoidZero团队开发，与Rolldown深度集成，支持TypeScript、JSX等的转译，性能优异。}}
+
+{{插件生态与Registry}}{{Vite拥有丰富的插件生态系统。Vite 8发布时同步推出registry.vite.dev，可搜索的插件目录，每日从npm收集Vite、Rolldown和Rollup插件数据，帮助开发者在不断扩展的插件生态中导航。}}
+
+{{Vite统一工具链}}{{Vite 8形成了端到端的统一工具链：构建工具（Vite）、打包器（Rolldown）、编译器（Oxc），三者紧密协作确保从解析、解析、转换到压缩的整个流程行为一致，可快速采纳JavaScript新规范，并实现跨层优化。}}
+
+{{项目脚手架create-vite}}{{使用npm create vite@latest快速创建Vite项目，支持模板选择。支持的框架模板包括vanilla、vue、react、preact、lit、svelte、solid、qwik等，均有JS和TS版本。支持--template参数直接指定模板，--no-interactive跳过交互提示。}}
+
+{{配置加载方式}}{{Vite 8默认使用Rolldown打包配置文件。可通过--configLoader runner使用模块运行器（不创建临时文件，支持monorepo），或--configLoader native使用环境原生运行时（需支持TypeScript的环境）。}}
+
+{{CSS Modules支持}}{{Vite原生支持CSS Modules，将.module.css后缀的文件自动识别为CSS Modules。导入后返回一个类名映射对象，实现样式局部作用域，避免全局样式冲突。}}
+
+{{PostCSS集成}}{{Vite自动检测并应用项目中的postcss.config.js配置。许多CSS框架和插件（如Tailwind CSS、Autoprefixer）通过PostCSS与Vite集成，无需额外配置即可使用。}}
+
+{{静态资源导入方式}}{{Vite支持多种资源导入：ES模块导入（import logo from './logo.png'返回URL）；URL导入（import imgUrl from './img.png?url'获取原始URL）；Raw导入（import svgContent from './icon.svg?raw'获取字符串内容）；Web Worker导入等。}}
+
+{{glob导入模式}}{{Vite提供import.meta.glob和import.meta.globEager用于批量导入文件。glob支持字符串模式匹配，自动进行代码分割。globEager同步导入所有匹配模块（已废弃，推荐使用glob的eager选项替代）。}}
+
+{{构建监视模式}}{{通过vite build --watch启用构建监视模式，文件变更时自动触发重建。可通过build.watch配置Rolldown的监视选项。注意配置文件及其依赖的变更需要重启构建命令。}}
+
+{{性能优化最佳实践}}{{Vite性能优化包括：合理使用动态导入实现代码分割；优化依赖预构建（optimizeDeps配置）；使用build.target精确指定目标减少转译；合理配置CSS提取和压缩；利用缓存机制减少重复构建；大型项目考虑启用Full Bundle Mode（实验性，可使开发服务器启动快3倍）。}}
+
+{{部署静态站点}}{{Vite构建产物为纯静态文件，可部署到任何静态托管服务。常见部署平台包括Vercel、Netlify、GitHub Pages、Cloudflare Pages等。需注意设置正确的base路径和HTML文件的Cache-Control头。}}
+
+{{Vite与Monorepo}}{{Vite天然支持monorepo场景。通过配置root选项可改变项目根目录，Vite能处理解析到root外部的依赖。预构建依赖在.vite缓存目录中管理，多包共享。}}
+
+{{TypeScript客户端类型}}{{通过在tsconfig.json的compilerOptions.types中添加"vite/client"获取Vite客户端类型支持，包括：资源导入类型、import.meta.env类型、import.meta.hot的HMR API类型。也可使用三斜线指令/// <reference types="vite/client" />。}}
+
+{{vite:preloadError事件与部署策略}}{{当新部署删除旧资源时，用户可能因加载已删除的chunk而报错。通过监听vite:preloadError事件可优雅处理：刷新页面获取最新资源。配合Cache-Control: no-cache的HTML头确保获取最新入口。}}
+
+{{配置IntelliSense智能提示}}{{Vite提供TypeScript类型定义，可通过JSDoc注释（@type {import('vite').UserConfig}）或defineConfig辅助函数获得配置智能提示。也支持.ts配置文件配合satisfies操作符使用。}}
+
+{{Vite迁移指南}}{{从旧版Vite升级到Vite 8，大多数项目无需修改配置即可工作（Vite 8内置兼容层自动转换esbuild和rollupOptions配置）。大型项目建议渐进迁移：先在Vite 7上切换到rolldown-vite包隔离问题，再升级到Vite 8。}}
+
+{{Vite核心概念总结}}{{Vite的核心概念包括：原生ESM开发服务器、依赖预构建、HMR热模块替换、Rolldown生产打包、Oxc代码转译、插件系统、Environment API、环境变量与模式、库模式、SSR支持。这些共同构成了Vite高效、灵活的前端构建体系。}}

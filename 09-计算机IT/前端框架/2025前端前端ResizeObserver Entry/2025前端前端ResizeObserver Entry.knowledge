@@ -1,0 +1,83 @@
+# 2025前端前端ResizeObserver Entry
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{ResizeObserverEntry 是 Resize Observer API 的核心接口，表示传递给 ResizeObserver 构造函数回调函数的对象，允许你访问被观察 Element 或 SVGElement 的新尺寸。它在布局之后、绘制之前被调用，提供了精确的尺寸变化通知。}}
+
+{{知识点2}}{{ResizeObserverEntry 的所有实例属性均为只读（Read only），包括 borderBoxSize、contentBoxSize、devicePixelContentBoxSize、contentRect 和 target，保证了数据的安全性和一致性。}}
+
+{{知识点3}}{{ResizeObserverEntry.borderBoxSize 返回一个数组，包含被观察元素的新边框盒（border box）尺寸对象。数组形式是为了支持多列布局中元素被分割成多个片段的场景，每个片段对应数组中的一个元素。}}
+
+{{知识点4}}{{borderBoxSize 数组中每个对象包含两个属性：blockSize 和 inlineSize。blockSize 是边框盒在块方向上的长度，inlineSize 是边框盒在内联方向上的长度。对于水平书写模式，blockSize 对应高度，inlineSize 对应宽度。}}
+
+{{知识点5}}{{ResizeObserverEntry.contentBoxSize 返回一个数组，包含被观察元素的新内容盒（content box）尺寸对象。内容盒是内容放置的区域，即边框盒减去内边距和边框宽度。}}
+
+{{知识点6}}{{contentBoxSize 同样使用 blockSize 和 inlineSize 描述尺寸，而非传统的 width/height。这种写入模式感知（writing-mode aware）的属性命名使得 API 在不同书写方向下都能正确工作。}}
+
+{{知识点7}}{{ResizeObserverEntry.devicePixelContentBoxSize 返回一个数组，包含以设备像素（device pixels）为单位的内容盒尺寸。这对于 Canvas 等需要像素精确渲染的场景至关重要，可以实现物理像素与 Canvas 像素的一一映射。}}
+
+{{知识点8}}{{devicePixelContentBoxSize 是在 CSS 变换（transforms）应用之前测量的，因此它反映的是元素在设备像素层面的原始内容尺寸，不受缩放或旋转等变换影响。}}
+
+{{知识点9}}{{使用 devicePixelContentBoxSize 需要在 observe() 调用时指定 { box: 'device-pixel-content-box' } 选项，否则该属性不会被填充。这是与其他两个尺寸属性的关键区别。}}
+
+{{知识点10}}{{ResizeObserverEntry.contentRect 是一个 DOMRectReadOnly 对象，返回被观察元素的新尺寸。这是一个遗留属性（legacy property），保留在规范中仅出于向后兼容原因，未来可能被弃用。}}
+
+{{知识点11}}{{contentRect 对于 HTML Element 返回的是元素的内容盒尺寸，对于 SVGElement 返回的是 SVG 的边界框（bounding box）。它使用传统的 width/height/top/left 属性命名。}}
+
+{{知识点12}}{{ResizeObserverEntry.target 是对被观察的 Element 或 SVGElement 的引用，通过它可以在回调中直接操作触发尺寸变化的元素，无需额外的闭包或映射。}}
+
+{{知识点13}}{{ResizeObserver 构造函数接收一个回调函数，该回调接收 ResizeObserverEntry 数组作为参数。每次触发通知时可能包含多个 entry，因此需要遍历 entries 数组来处理每个被观察元素的变化。}}
+
+{{知识点14}}{{ResizeObserver 的 observe() 方法开始观察指定的 Element 或 SVGElement。可以接受一个可选的 options 对象，其中 box 属性指定观察的盒模型类型：'content-box'（默认）、'border-box' 或 'device-pixel-content-box'。}}
+
+{{知识点15}}{{ResizeObserver 的 unobserve() 方法停止观察指定元素，disconnect() 方法取消所有被观察元素的观察。合理使用这些方法可以避免内存泄漏和不必要的回调触发。}}
+
+{{知识点16}}{{ResizeObserver 的回调在浏览器绘制之前（before paint）触发，这意味着你有机会在同一帧内修改布局而不产生视觉闪烁。这是它优于基于轮询的尺寸检测方案的关键优势。}}
+
+{{知识点17}}{{当 ResizeObserver 回调中的操作导致新的尺寸变化时，浏览器会重新评估样式和布局，可能触发更多 resize 事件。为防止无限循环，规范要求只处理 DOM 中更深层次的元素，不满足条件的事件被推迟到下一次绘制。}}
+
+{{知识点18}}{{当 resize 循环无法在单帧内完成时，浏览器会在 Window 对象上触发一个 error 事件，消息为 'ResizeObserver loop completed with undelivered notifications.'。这不会导致用户代理锁定，但用户可能看到布局闪烁。}}
+
+{{知识点19}}{{要避免 ResizeObserver 循环错误，可以将调整大小的代码包装在 requestAnimationFrame 回调中，使其在浏览器重绘之后执行，从而打断同步循环链。}}
+
+{{知识点20}}{{另一种避免循环的方法是使用 WeakMap 维护"期望尺寸"状态，当检测到元素尺寸已达到期望值时跳过调整操作，从而防止回调再次触发。}}
+
+{{知识点21}}{{borderBoxSize、contentBoxSize 和 devicePixelContentBoxSize 返回数组是为了支持多列布局（multi-column layout）等分片上下文。在这种场景下，一个元素可能被分割成多个片段，每个片段的尺寸可能不同。}}
+
+{{知识点22}}{{在多列布局的分片上下文中，ResizeObserverSize 返回的尺寸是第一个片段（第一列）的尺寸，而非所有片段的总和。这一点在处理多列布局时需要特别注意。}}
+
+{{知识点23}}{{ResizeObserverSize 接口有两个只读属性：blockSize 和 inlineSize。这种基于逻辑属性的命名方式与 CSS 的逻辑属性规范一致，支持国际化场景下的不同书写方向。}}
+
+{{知识点24}}{{inlineSize 在水平书写模式（horizontal writing-mode）下对应宽度（width），在垂直书写模式下对应高度（height）。blockSize 则相反，水平模式下对应高度，垂直模式下对应宽度。}}
+
+{{知识点25}}{{ResizeObserver 可以观察 SVG 元素。对于 SVG 元素，contentRect 返回的是 SVG 的边界框，而 box size 属性则遵循 SVG 的盒模型定义。}}
+
+{{知识点26}}{{ResizeObserver 是一个强大的响应式设计工具，可以替代基于窗口 resize 事件的尺寸检测。它能感知任何元素的尺寸变化，不仅限于视口变化，包括内容变化、CSS 动画、Flexbox/Grid 布局调整等引起的尺寸变化。}}
+
+{{知识点27}}{{与 IntersectionObserver 和 PerformanceObserver 类似，ResizeObserver 采用了观察者模式（Observer pattern），这是 Web 平台的一种设计范式，将事件监听与回调处理解耦，提供更高效的异步通知机制。}}
+
+{{知识点28}}{{ResizeObserver 的回调通常在 requestIdleCallback 之前、requestAnimationFrame 之后的微任务阶段执行，这保证了在浏览器计算布局后、绘制前提供精确的尺寸信息。}}
+
+{{知识点29}}{{在 Canvas 高 DPI 渲染场景中，devicePixelContentBoxSize 非常有用。通过在 ResizeObserver 回调中设置 canvas.width 和 canvas.height 为设备像素尺寸，可以实现像素完美（pixel-perfect）渲染，避免模糊问题。}}
+
+{{知识点30}}{{ResizeObserver 的浏览器兼容性良好，自 2020 年 7 月起在所有主流浏览器中可用（Baseline: Widely available）。contentRect 属性兼容性最好，borderBoxSize 和 contentBoxSize 自 2022 年 3 月起广泛可用，devicePixelContentBoxSize 可用性较有限。}}
+
+{{知识点31}}{{编写兼容性代码时，推荐优先使用 contentBoxSize，降级到 contentRect。旧版 Firefox 曾错误地将 contentBoxSize 实现为单个对象而非数组，因此需要同时检查 entry.contentBoxSize[0] 和 entry.contentBoxSize.inlineSize 两种访问方式。}}
+
+{{知识点32}}{{ResizeObserver 不能观察 display: none 的元素，因为这些元素没有布局盒（layout box），无法计算尺寸。但可以观察 visibility: hidden 的元素，因为它们仍然参与布局。}}
+
+{{知识点33}}{{每个 ResizeObserver 实例独立维护其观察列表。创建多个 ResizeObserver 可以用不同的 box 选项观察同一个元素，获取不同盒模型下的尺寸信息，互不干扰。}}
+
+{{知识点34}}{{ResizeObserver 回调中的 entries 数组按观察顺序排列。如果多个被观察元素在同一帧内发生尺寸变化，它们会合并到同一次回调中处理，减少了回调次数和性能开销。}}
+
+{{知识点35}}{{在 React 等框架中使用 ResizeObserver 时，通常在 useEffect 或 useLayoutEffect 中创建观察者并在清理函数中调用 disconnect()。useLayoutEffect 更合适，因为它在浏览器绘制前同步执行，与 ResizeObserver 的时机一致。}}
+
+{{知识点36}}{{ResizeObserver 可以作为实现容器查询（Container Queries）的 JavaScript 方案。在 CSS 容器查询得到全面支持之前，ResizeObserver 配合 CSS 自定义属性是实现组件级响应式设计的常用模式。}}
+
+{{知识点37}}{{ResizeObserver Entry 的 contentBoxSize 与 DOMRect 的区别在于：contentBoxSize 使用逻辑属性名（blockSize/inlineSize），返回数组支持分片，且是专门为 Resize Observer 设计的；而 contentRect 使用物理属性名（width/height），是遗留 API。}}
+
+{{知识点38}}{{性能最佳实践：避免在 ResizeObserver 回调中进行昂贵的 DOM 读写操作导致强制同步布局（forced synchronous layout）。应尽量在回调中只读取尺寸信息，将写操作推迟到 requestAnimationFrame 中。}}
+
+{{知识点39}}{{ResizeObserver 的规范由 CSS 工作组（CSS Working Group）维护，规范文档位于 drafts.csswg.org/resize-observer。该规范定义了 ResizeObserverEntry 接口、ResizeObserverSize 接口以及观察算法的详细步骤。}}
+
+{{知识点40}}{{一个元素可以被多个 ResizeObserver 同时观察，每个观察者独立触发回调。这允许不同的模块或组件各自注册自己的尺寸监听逻辑，实现关注点分离（separation of concerns）。}}

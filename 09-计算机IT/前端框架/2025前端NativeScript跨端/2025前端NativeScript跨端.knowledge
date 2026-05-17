@@ -1,0 +1,79 @@
+# 2025前端NativeScript跨端
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{NativeScript是一个开源的跨平台移动应用开发框架，允许开发者使用JavaScript或TypeScript直接调用原生平台API来构建iOS和Android应用。它由OpenJS基金会托管，是OpenJS基金会的正式项目。}}
+
+{{知识点2}}{{NativeScript的核心理念是"Write Native with TypeScript"，通过将平台原生API直接暴露给JavaScript运行时，实现无需WebView桥接的原生性能体验。与React Native等框架不同，NativeScript不使用WebView渲染UI，而是直接操作原生UI组件。}}
+
+{{知识点3}}{{NativeScript的运行时架构包括三个核心运行时：@nativescript/android（Android运行时，用C++/Java/Kotlin编写）、@nativescript/ios（iOS运行时，用C++/Objective-C/Swift编写）以及@nativescript/visionos（visionOS运行时）。这些运行时负责在JavaScript和原生平台之间建立桥梁。}}
+
+{{知识点4}}{{NativeScript 9.0于2025年11月发布，引入了原生ESM（ECMAScript Modules）运行时支持、Vite构建工具支持、多窗口iOS应用等重大特性，标志着框架进入现代化的新阶段。}}
+
+{{知识点5}}{{NativeScript支持多种前端框架"风味"（flavors），开发者可以选择自己熟悉的框架：纯JavaScript/TypeScript（XML声明UI+JS类数据绑定）、Angular（@nativescript/angular）、Vue（nativescript-vue）、React（react-nativescript）、Solid（@nativescript-community/solid-js）、Svelte（@nativescript-community/svelte-native）等。}}
+
+{{知识点6}}{{NativeScript的UI布局采用XML声明方式定义界面结构，类似Web开发中的HTML。每个XML页面文件对应一个可选的CSS样式文件和一个TypeScript/JavaScript逻辑文件，形成经典的页面三件套结构。}}
+
+{{知识点7}}{{数据绑定是NativeScript的核心特性之一，支持三种绑定模式：单向绑定（Model→UI）、单向绑定（UI→Model，如tap事件）和双向绑定（Model↔UI）。通过Observable类和mustache语法{{ }}实现响应式数据流。}}
+
+{{知识点8}}{{NativeScript的Observable类是数据绑定的基础，ViewModel类需要继承Observable才能实现与UI的绑定。当Observable对象的属性发生变化时，绑定的UI组件会自动更新，实现响应式编程。}}
+
+{{知识点9}}{{NativeScript支持CSS样式系统，提供四种层级的应用方式：应用级CSS（app.css，全局生效）、页面级CSS（同名CSS文件自动加载）、内联CSS（最高优先级）和平台特定CSS。支持Tailwind CSS和SASS等CSS工具。}}
+
+{{知识点10}}{{NativeScript通过$parent和$parents关键字解决父子组件间bindingContext的继承问题。$parent表示直接父级的bindingContext，$parents可作为数组通过层级或组件类型访问祖先组件的bindingContext。}}
+
+{{知识点11}}{{NativeScript支持丰富的手势识别系统，包括tap（点击）、doubleTap（双击）、longPress（长按）、swipe（滑动）、pan（拖拽）、pinch（缩放）、rotation（旋转）等原生手势，与iOS/Android原生手势系统完全一致。}}
+
+{{知识点12}}{{NativeScript的导航系统基于Frame和Page的概念。应用通过Frame管理页面栈，支持页面推送（push）、弹出（pop）和模态（modal）三种导航模式，与原生导航体验一致。}}
+
+{{知识点13}}{{NativeScript 9.0支持Vite作为构建工具，取代了之前默认的Webpack。Vite提供更快的开发启动速度和热模块替换（HMR）体验，同时也保留了Webpack的支持（@nativescript/webpack）。}}
+
+{{知识点14}}{{NativeScript支持visionOS（Apple Vision Pro）开发，允许开发者使用同一套代码库构建iOS、Android和visionOS应用。通过@nativescript/visionos运行时，可直接访问RealityKit等visionOS特有API。}}
+
+{{知识点15}}{{NativeScript的CLI工具（nativescript-cli）提供完整的项目开发工作流支持：ns create创建项目、ns run运行应用、ns build构建发布包、ns debug调试应用、ns preview在线预览等命令。}}
+
+{{知识点16}}{{NativeScript支持在线预览功能（NativeScript Preview），开发者可以通过preview.nativescript.org在浏览器中直接预览应用效果，无需本地安装Xcode或Android Studio，适合快速原型验证和学习。}}
+
+{{知识点17}}{{NativeScript的插件生态系统包含官方维护的插件仓库（NativeScript/plugins）和社区插件市场（market.nativescript.org）。官方插件包括Firebase集成、ML Kit机器学习、支付（In-App Purchase、Apple Pay、Google Pay）等。}}
+
+{{知识点18}}{{NativeScript支持TypeScript强类型开发，通过@nativescript/types提供iOS和Android原生API的完整类型定义。开发者可获得类型检查、自动补全和重构支持，极大提升开发效率和代码质量。}}
+
+{{知识点19}}{{NativeScript的构建系统支持多平台目标：Windows上只能构建Android应用，macOS上可构建iOS和Android应用，Linux上只能构建Android应用。iOS构建必须在Mac上完成（或使用NativeScript Preview在线预览）。}}
+
+{{知识点20}}{{NativeScript的样式系统支持CSS媒体查询（从8.8版本开始），允许开发者根据不同屏幕尺寸和设备特性应用不同的样式规则，实现响应式布局设计。}}
+
+{{知识点21}}{{NativeScript支持WinterTC合规性，从8.8版本开始实现了crypto、btoa和atob等Web标准API，使JavaScript代码在原生环境中也能使用熟悉的Web API。}}
+
+{{知识点22}}{{NativeScript应用的项目结构遵循标准约定：App_Resources/存放原生资源、src/fonts/存放字体、app.css或app.scss为全局样式、main.js/ts为入口文件、nativescript.config.ts为核心配置、vite.config.ts为构建配置。}}
+
+{{知识点23}}{{NativeScript支持原生SwiftUI集成，开发者可以在NativeScript项目中使用SwiftUI创建原生UI组件。这使得团队中的Swift开发者和JavaScript开发者可以协作开发，发挥各自优势。}}
+
+{{知识点24}}{{NativeScript支持Android Edge-to-Edge沉浸式开发，允许应用内容延伸到系统栏（状态栏和导航栏）区域，实现全屏沉浸式体验，与Android平台的最新设计规范保持一致。}}
+
+{{知识点25}}{{NativeScript 9.0支持多窗口iOS应用开发，允许应用在iPad等设备上同时显示多个窗口，充分利用大屏幕空间，提升多任务处理体验。}}
+
+{{知识点26}}{{NativeScript提供NativeScript Playground和NativeScript Snacks在线学习工具，开发者可以在浏览器中直接编写和运行NativeScript代码，无需配置本地开发环境。}}
+
+{{知识点27}}{{NativeScript的应用发布流程与原生应用一致：构建生成标准的.xcarchive（iOS）或.apk/.aab（Android）文件，通过App Store Connect或Google Play Console提交审核。CLI提供ns publish命令简化发布流程。}}
+
+{{知识点28}}{{NativeScript支持CSS的关键帧动画和过渡效果，通过animation和transition属性实现与Web CSS相似的动画体验。同时也支持通过JavaScript/TypeScript代码以编程方式控制原生动画。}}
+
+{{知识点29}}{{NativeScript的可观测性工具包括FPS Meter（帧率监测）和Trace模块，帮助开发者监控应用性能、调试运行时问题。支持使用Sentry进行崩溃报告收集和分析。}}
+
+{{知识点30}}{{NativeScript支持与Flutter的兼容性，开发者可以在项目中结合使用NativeScript和Flutter的能力，实现更灵活的跨平台开发方案。GitHub描述中明确提到了Flutter兼容支持。}}
+
+{{知识点31}}{{NativeScript的属性系统（Property System）允许开发者自定义可绑定的UI属性。通过Property和CssProperty等类，可以为自定义组件声明可绑定、可样式化的属性，扩展框架的能力。}}
+
+{{知识点32}}{{NativeScript的无障碍访问（Accessibility）支持包括对原生无障碍API的完整访问，开发者可以为应用添加VoiceOver（iOS）和TalkBack（Android）支持，确保应用对残障用户友好。}}
+
+{{知识点33}}{{NativeScript的测试支持包括单元测试和端到端测试。社区项目nativescript-vue展示了使用Vitest进行单元测试的方案。原生测试框架可直接访问，如iOS的XCTest和Android的JUnit/Espresso。}}
+
+{{知识点34}}{{NativeScript 8.9版本引入了Node-API引擎预览，这是将NativeScript运行时迁移到Node-API标准的重要举措，有望提供更好的性能和更广泛的API兼容性。}}
+
+{{知识点35}}{{NativeScript社区活跃度持续增长，2025年5月庆祝了框架10周年。框架由Technical Steering Committee（TSC）管理，采用开放治理模式，欢迎社区贡献。社区通过Discord、Stack Overflow和GitHub进行交流。}}
+
+{{知识点36}}{{NativeScript支持iOS输入附件视图（inputAccessoryView），开发者可以自定义键盘上方的工具栏，实现类似Apple Messages应用的输入体验。这展示了NativeScript对原生UI细节的精细控制能力。}}
+
+{{知识点37}}{{NativeScript支持iOS Home Screen Widget（主屏幕小组件）开发，允许应用在iOS主屏幕上显示实时信息，通过NativeScript与原生Widget Extension的集成实现。}}
+
+{{知识点38}}{{NativeScript支持Metal着色器（Metal Shaders）在iOS上的使用，开发者可以通过NativeScript访问Apple的Metal图形API，实现高性能的图形渲染和GPU计算。}}

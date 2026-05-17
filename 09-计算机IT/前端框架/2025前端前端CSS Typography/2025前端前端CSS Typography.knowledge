@@ -1,0 +1,93 @@
+# 2025前端前端CSS Typography
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{CSS Typography 是指使用 CSS 控制网页文本排版的技术体系，涵盖字体选择、字号设置、行高控制、字间距调整、文本对齐等核心能力。Typography 一词源自希腊语 typos（印记）和 graphia（书写），在 Web 开发中主要关注如何让文本内容具有良好的可读性、美观性和可访问性。}}
+
+{{知识点2}}{{font-family 属性用于指定字体族，接受一个由逗号分隔的字体列表，浏览器按优先级依次尝试。列表末尾应始终包含一个通用字体族（如 serif、sans-serif、monospace）作为兜底。例如：font-family: "Helvetica Neue", Arial, sans-serif; 字体名含空格时必须用引号包裹。}}
+
+{{知识点3}}{{通用字体族（Generic Font Families）是 CSS 预定义的字体分类关键字，包括：serif（衬线体，如 Times New Roman）、sans-serif（无衬线体，如 Arial）、monospace（等宽体，如 Courier）、cursive（手写体）、fantasy（装饰体）、system-ui（系统 UI 字体）、ui-serif、ui-sans-serif、ui-monospace、ui-rounded、math、fangsong 等。这些关键字不可加引号。}}
+
+{{知识点4}}{{font-size 属性控制字体大小，支持多种值类型：绝对关键字（xx-small 到 xxx-large）、相对关键字（larger/smaller）、长度单位（px、em、rem、vw 等）、百分比值。推荐使用相对单位（如 rem）以确保用户可访问性，避免使用固定 px 值导致部分浏览器无法缩放文字。}}
+
+{{知识点5}}{{em 与 rem 的区别：em 相对于父元素的 font-size 计算，存在复合嵌套效应（父 1.2em，子 1.2em 则子实际为 1.44em）；rem 相对于根元素（html）的 font-size 计算，无嵌套问题，更适合做全局字体大小基准。现代开发中 rem 是首选的字体大小单位。}}
+
+{{知识点6}}{{font-weight 属性控制字体粗细，取值范围 100-900（100 步进）或关键字 normal（400）、bold（700）、lighter、bolder。并非所有字体都支持全部粗细级别，浏览器会匹配最接近的可用值。可变字体（Variable Fonts）支持任意数值的 font-weight，不再受限于固定的 100 步进。}}
+
+{{知识点7}}{{font-style 属性用于设置字体样式：normal（正常）、italic（斜体，使用字体的真正斜体字形）、oblique（倾斜，对正常字形进行机械倾斜）。italic 和 oblique 的区别在于 italic 使用字体设计师专门设计的斜体字形，而 oblique 仅对正体字形做倾斜处理。oblique 可指定倾斜角度，如 oblique 14deg。}}
+
+{{知识点8}}{{font 属性是字体相关属性的简写形式，可同时设置 font-style、font-variant、font-weight、font-stretch、font-size、line-height 和 font-family。其中 font-size 和 font-family 是必需的，其余可选。语法示例：font: italic bold 16px/1.5 "Helvetica", sans-serif; line-height 用 / 紧跟在 font-size 后面。}}
+
+{{知识点9}}{{@font-face 规则用于自定义 Web 字体，必须包含 font-family（字体名称）和 src（字体资源路径）两个描述符。支持 local() 优先使用本地安装字体，url() 指定远程字体文件。现代最佳实践是使用 WOFF2 格式，压缩效率最高且浏览器支持广泛。}}
+
+{{知识点10}}{{font-display 描述符控制字体加载期间的显示策略，是 Web 性能优化的关键属性。取值包括：auto（浏览器默认策略）、block（短暂隐藏，最多 3 秒）、swap（先用后备字体，加载完成后替换）、fallback（极短隐藏期约 100ms，短暂 swap 期约 3 秒）、optional（仅在字体几乎立即可用时使用）。}}
+
+{{知识点11}}{{可变字体（Variable Fonts）是 OpenType 规范的一部分，将多种字体样式（粗细、宽度、倾斜度等）集成在单个文件中。通过 font-variation-settings 属性可精确控制可变字体的各个变化轴，如 wght（粗细）、wdth（宽度）、ital（斜体）、slnt（倾斜）、opsz（光学尺寸）等。相比传统多文件方案，可变字体显著减少 HTTP 请求和文件总大小。}}
+
+{{知识点12}}{{font-variation-settings 属性提供对 OpenType/TrueType 字体变化轴的底层控制，语法为指定四字母轴名和对应值。标准轴包括：wght（权重）、wdth（宽度）、ital（斜体）、slnt（倾斜）、opsz（光学尺寸）。自定义轴由字体设计师定义，通常使用大写字母命名（如 ASCD、VOLM）。}}
+
+{{知识点13}}{{font-feature-settings 属性控制 OpenType 字体的高级排版特性，通过特性标签（如 liga、kern、smcp、onum 等）精确开关。例如：font-feature-settings: "liga" 1, "kern" 1 启用连字和字距调整。优先使用高级属性（如 font-kerning、font-variant-ligatures）替代此属性，font-feature-settings 应作为最后手段。}}
+
+{{知识点14}}{{font-variant 系列属性提供对 OpenType 字体特性的语义化控制，包括：font-variant-caps（大写字母变体）、font-variant-numeric（数字样式，如等宽数字 oldstyle-nums）、font-variant-ligatures（连字控制）、font-variant-east-asian（东亚文字变体）、font-variant-alternates（替代字形）、font-variant-position（上标/下标位置）。}}
+
+{{知识点15}}{{font-kerning 属性控制字距调整（Kerning），即调整特定字符对之间的间距以改善视觉效果。取值：auto（浏览器默认）、normal（启用字距调整）、none（禁用）。字距调整依赖字体中嵌入的 kern 表数据，良好的字距调整对专业排版至关重要。}}
+
+{{知识点16}}{{font-optical-sizing 属性控制光学尺寸调整，使字体在不同大小下自动调整笔画粗细等细节以获得最佳可读性。取值：auto（启用，浏览器默认）和 none（禁用）。配合可变字体的 opsz 轴使用效果最佳，例如大标题字体会自动增加笔画对比度，小号正文字体会适当加粗笔画。}}
+
+{{知识点17}}{{font-size-adjust 属性用于微调字体大小，当首选字体不可用而使用后备字体时，保持 x 字高（x-height）的比例一致，避免字体替换导致的视觉跳变。值为 x 字高与字体大小的比率。例如 font-size-adjust: 0.545 确保后备字体的 x 字高与首选字体匹配。}}
+
+{{知识点18}}{{line-height 属性定义行框的高度，是排版可读性的关键因素。接受无单位数值（推荐，相对于 font-size 计算）、长度值或百分比。正文推荐 line-height: 1.5-1.8，标题推荐 1.1-1.3。无单位数值的优势是子元素会继承比率而非计算后的绝对值，避免意外的行高叠加。}}
+
+{{知识点19}}{{letter-spacing 属性控制字符之间的间距。正值增加间距，负值减少间距。常用于标题排版中增加大写字母的间距（如 letter-spacing: 0.05em）以提升可读性。使用 em 单位确保间距随字体大小缩放。该属性不会在文本的开头和末尾添加额外空间。}}
+
+{{知识点20}}{{word-spacing 属性控制单词之间的间距，仅影响空格字符的宽度。默认值为 normal（浏览器默认间距）。可使用正值（增加间距）或负值（减少间距）。在中英文混排场景下，可配合 letter-spacing 微调整体文本节奏。}}
+
+{{知识点21}}{{text-align 属性控制文本的水平对齐方式。取值包括：left（左对齐）、right（右对齐）、center（居中）、justify（两端对齐）、start（逻辑属性，跟随书写方向）、end（逻辑属性）、match-parent、justify-all。justify 对齐时可配合 text-align-last 控制最后一行的对齐方式。}}
+
+{{知识点22}}{{text-transform 属性用于转换文本的大小写形式：none（无转换）、capitalize（首字母大写）、uppercase（全部大写）、uppercase（全部大写）、lowercase（全部小写）、full-width（全角字符）、full-size-kana（假名转全尺寸）。此属性不影响实际文本内容，仅改变渲染效果。}}
+
+{{知识点23}}{{text-decoration 属性是简写属性，可同时设置 text-decoration-line（underline/overline/line-through）、text-decoration-style（solid/double/dotted/dashed/wavy）、text-decoration-color 和 text-decoration-thickness。现代 CSS 中可精确控制下划线的样式和颜色，不再需要依赖 border-bottom 模拟。}}
+
+{{知识点24}}{{text-overflow 属性控制文本溢出容器时的显示方式。取值：clip（直接裁切）或 ellipsis（显示省略号 ...）。单行文本溢出省略号的经典写法需要三个属性配合：white-space: nowrap; overflow: hidden; text-overflow: ellipsis;。多行省略需借助 -webkit-line-clamp（非标准但广泛支持）。}}
+
+{{知识点25}}{{white-space 属性控制空白字符（空格、制表符、换行符）的处理方式。取值：normal（合并空白、自动换行）、nowrap（合并空白、不换行）、pre（保留空白、不换行）、pre-wrap（保留空白、自动换行）、pre-line（合并空白、保留换行、自动换行）、break-spaces（类似 pre-wrap 但在换行符后也可断行）。}}
+
+{{知识点26}}{{word-break 属性控制文本的断行规则。取值：normal（默认断行规则）、break-all（允许在任意字符间断行，适用于 CJK 文本）、keep-all（禁止 CJK 文本在字符间断行）、break-word（在单词内断行，已废弃，建议使用 overflow-wrap: anywhere）。}}
+
+{{知识点27}}{{overflow-wrap（原名 word-wrap）属性控制长单词是否可以断行。取值：normal（仅在允许的断行点断行）、anywhere（在任意位置断行以防止溢出，断行点参与宽度计算）、break-word（在任意位置断行，断行点不参与宽度计算）。break-word 仅在必要时断行。}}
+
+{{知识点28}}{{hyphens 属性控制自动连字符断行。取值：none（不自动添加连字符）、manual（仅在文本中已有连字符机会处断行）、auto（浏览器根据语言规则自动添加连字符）。自动断词需要正确设置 HTML lang 属性以确保浏览器知道使用哪种语言的断词规则。}}
+
+{{知识点29}}{{writing-mode 属性定义文本的书写方向。取值：horizontal-tb（水平从左到右，从上到下，默认）、vertical-rl（垂直从右到左）、vertical-lr（垂直从左到右）。配合 text-orientation 属性（mixed/upright/sideways）可进一步控制垂直文本中字符的朝向，对 CJK 文本排版尤其重要。}}
+
+{{知识点30}}{{text-indent 属性定义文本块首行的缩进量。常见用法是 p { text-indent: 2em; } 实现中文段落首行缩进两个字符。支持负值实现悬挂缩进效果。该属性可被子元素继承，使用百分比值时相对于包含块的宽度计算。}}
+
+{{知识点31}}{{CSS 模块化字体大小（Modular Scale）是一种排版设计方法，基于固定比率（如 1.25、1.333、1.618 黄金比例）递增生成字体大小序列。例如比率 1.25 下，基准 16px 生成：16、20、25、31.25、39.06...px 的序列。现代 CSS 中可使用 clamp() 函数结合 min/max 实现流式响应式字体大小。}}
+
+{{知识点32}}{{clamp() 函数实现响应式字体大小：font-size: clamp(1rem, 2.5vw, 2rem) 表示最小 1rem，首选 2.5vw，最大 2rem。这避免了传统媒体查询断点的字体大小跳跃，实现平滑的流式排版缩放（Fluid Typography）。结合 CSS 自定义属性可构建灵活的排版系统。}}
+
+{{知识点33}}{{font-palette 属性配合 @font-palette-values 规则可为彩色字体（COLRv1 格式）定义自定义调色板。base-palette 描述符选择字体预设的调色板，override-colors 描述符可覆盖特定调色板条目的颜色。这为彩色图标字体和装饰性字体提供了灵活的颜色控制。}}
+
+{{知识点34}}{{unicode-range 描述符是 @font-face 的重要优化手段，指定字体文件覆盖的 Unicode 码点范围。浏览器仅在页面文本命中该范围时才下载字体文件。典型用法是将中文字体按 Unicode 范围拆分为多个子集文件（如 unicode-range: U+4E00-9FFF 覆盖基本汉字），显著减少首次加载的字体文件大小。}}
+
+{{知识点35}}{{font-display 策略选择指南：正文内容推荐 swap（确保文本始终可读），避免 FOIT（Flash of Invisible Text）；标题和品牌字体推荐 fallback（短暂隐藏后使用后备字体，减少 FOUT 闪烁）；对加载速度要求极高的场景推荐 optional（允许浏览器在弱网环境下完全跳过自定义字体加载）。}}
+
+{{知识点36}}{{@font-face 中的 src 描述符支持 format() 和 tech() 函数指定字体格式和技术。常见格式包括：woff2、woff、opentype、truetype。tech() 指定字体技术支持，如 tech(color-COLRv1)、tech(variations)。浏览器按声明顺序尝试加载，更具体的 format/tech 值应排在前面。}}
+
+{{知识点37}}{{CSS 文本渲染优化相关属性：text-rendering 属性（SVG 属性但某些浏览器支持）可选 optimizeSpeed（优化速度）、optimizeLegibility（优化可读性，启用连字和字距）、geometricPrecision（几何精度）。font-smoothing（非标准）和 -webkit-font-smoothing: antialiased 可控制字体抗锯齿方式。}}
+
+{{知识点38}}{{text-spacing-trim 属性（CSS Text Module Level 4）用于控制 CJK 标点符号的间距修剪。取值包括：space-all（不修剪）、space-first（仅修剪行首标点）、normal（浏览器默认修剪策略）、trim-start 等。配合 text-autospace 属性可在中西文混排时自动添加适当间距，改善中文排版质量。}}
+
+{{知识点39}}{{font-synthesis 简写属性控制浏览器是否自动合成缺失的字体变体。包括 font-synthesis-weight（合成粗体）、font-synthesis-style（合成斜体）、font-synthesis-small-caps（合成小型大写字母）、font-synthesis-position（合成上标/下标）。默认情况下浏览器会合成缺失的粗体和斜体，但合成效果可能不如真正的字体文件。}}
+
+{{知识点40}}{{initial-letter 属性（CSS Inline Module Level 3）用于设置首字母下沉效果，类似杂志排版中的 drop cap。语法如 initial-letter: 3 表示首字母占据 3 行高度。该属性目前浏览器支持有限，但代表了 CSS 排版能力向传统印刷排版靠拢的趋势。}}
+
+{{知识点41}}{{font-palette 属性和 @font-palette-values 规则为彩色字体提供颜色定制能力。base-palette 选择字体的预设调色板索引，override-colors 可逐个覆盖调色板中的颜色值。典型用法是为彩色表情符号或装饰性字体定义与品牌色彩一致的调色板。}}
+
+{{知识点42}}{{CSS 排版中的 vertical rhythm（垂直节奏）概念强调通过一致的 line-height 和 margin 值创建和谐的视觉韵律。通常以基础 line-height 值（如 1.5）作为垂直间距的基准单位，所有元素的 margin、padding 都是该单位的整数倍。CSS Grid 和 Flexbox 的 gap 属性也可辅助实现一致的垂直间距。}}
+
+{{知识点43}}{{hanging-punctuation 属性控制标点符号是否悬挂在文本块的起始或结束位置外。取值包括：none、first（行首标点悬挂）、last（行末标点悬挂）、force-end、allow-end。悬挂标点是专业排版的重要特征，使文本边缘视觉上更加整齐对齐，目前主要在 Safari 中获得支持。}}
+
+{{知识点44}}{{text-align-last 属性控制多行文本最后一行的对齐方式。取值与 text-align 类似：auto（跟随 text-align 设置）、left、right、center、justify、start、end。在 text-align: justify 的段落中，最后一行通常不参与两端对齐，此属性可单独控制其对齐方式。}}
+
+{{知识点45}}{{tab-size 属性定义制表符（Tab 字符）的显示宽度。默认值为 8，可设置为长度值（如 tab-size: 2em）或正整数（如 tab-size: 4）。该属性对显示代码片段特别有用，通常设置为 2 或 4 以匹配常见代码风格。}}

@@ -1,0 +1,83 @@
+# 2025前端WebSocket入门
+# 领域: 计算机IT
+# 学科: 前端框架
+# 来源: 2025前端WebSocket入门
+# 描述: WebSocket核心知识点
+
+{{知识点1}}{{WebSocket协议定义：WebSocket是一种在单个TCP连接上进行全双工通信的协议，由RFC 6455定义。它允许服务器主动向客户端推送数据，无需客户端反复轮询。连接通过HTTP升级握手建立，之后双方可以随时互发消息，实现实时双向通信。}}
+
+{{知识点2}}{{WebSocket与HTTP的区别：HTTP是请求-响应模式，通信是单向的；WebSocket建立连接后客户端和服务器可以随时互相发送数据，是真正的全双工通信。WebSocket头部开销仅2-14字节，相比HTTP轮询大幅减少网络流量和延迟。}}
+
+{{知识点3}}{{WebSocket握手过程：客户端发送带有Upgrade: websocket和Connection: Upgrade头部的HTTP请求，服务器返回101状态码表示协议切换成功。握手期间交换Sec-WebSocket-Key和Sec-WebSocket-Accept用于验证，以及可选的Sec-WebSocket-Protocol和Sec-WebSocket-Extensions头部。}}
+
+{{知识点4}}{{ws与wss协议：ws://是明文WebSocket连接，wss://是加密连接。生产环境应始终使用wss://确保安全。HTTPS页面中会阻止ws://连接，必须使用wss://。wss默认端口为443。}}
+
+{{知识点5}}{{WebSocket构造函数：通过new WebSocket(url, protocols)创建实例。第一个参数是服务器URL，第二个可选参数为子协议字符串或数组。创建实例后即自动开始连接，无需显式调用连接方法。构造函数可能抛出SecurityError。}}
+
+{{知识点6}}{{readyState连接状态：0（CONNECTING）正在连接；1（OPEN）连接已建立可通信；2（CLOSING）正在关闭；3（CLOSED）已关闭或建立失败。发送数据前应检查readyState是否为OPEN。}}
+
+{{知识点7}}{{open事件：WebSocket连接成功建立时触发，通过socket.addEventListener('open', callback)监听。连接建立后才能调用send()发送数据，是最常用的初始化时机。}}
+
+{{知识点8}}{{message事件：从服务器接收到数据时触发，通过event.data获取数据内容。数据类型为字符串或Blob/ArrayBuffer（取决于binaryType属性）。服务器发送的JSON字符串需用JSON.parse()解析。}}
+
+{{知识点9}}{{close事件：连接关闭时触发。event对象包含code（关闭码）、reason（关闭原因）和wasClean（是否正常关闭）属性。常见关闭码：1000正常关闭，1001离开，1006异常关闭，1008策略违规，1011服务器错误。}}
+
+{{知识点10}}{{error事件：连接发生错误时触发。错误发生后连接会自动关闭，随后触发close事件。error事件的event对象通常不包含详细错误信息（出于安全原因），需在服务器端查看具体错误。}}
+
+{{知识点11}}{{send方法：socket.send(data)用于向服务器发送数据，支持字符串、Blob、ArrayBuffer、TypedArray或DataView。send()是异步方法，数据先加入发送缓冲区不会阻塞。通过socket.bufferedAmount可查看待发送字节数。发送JSON需先JSON.stringify()序列化。}}
+
+{{知识点12}}{{close方法：socket.close(code, reason)主动关闭连接。code为可选的关闭状态码（1000或3000-4999），reason为可选的关闭原因字符串（不超过123字节）。调用后readyState变为CLOSING，关闭完成后触发close事件。}}
+
+{{知识点13}}{{binaryType属性：指定接收二进制数据的类型，默认为'blob'。可设置为'arraybuffer'以接收ArrayBuffer格式。处理文件用blob，处理音频/图像像素用arraybuffer。}}
+
+{{知识点14}}{{bufferedAmount属性：只读属性，返回send()队列中等待发送的字节数。可用于实现流量控制：当bufferedAmount过大时暂停发送，避免内存溢出。在网络拥堵或大量消息场景下特别有用。}}
+
+{{知识点15}}{{WebSocket协议帧格式：数据以帧（frame）传输，每帧包含操作码、掩码位、负载长度和负载数据。操作码定义帧类型：0x1文本帧，0x2二进制帧，0x8关闭帧，0x9 Ping帧，0xA Pong帧。客户端发送的帧必须使用掩码。}}
+
+{{知识点16}}{{Ping-Pong心跳机制：WebSocket协议内置Ping（0x9）和Pong（0xA）帧用于心跳检测。服务器定期发送Ping帧，客户端自动回复Pong帧。心跳机制检测连接是否存活、防止代理/防火墙因空闲超时断开连接。浏览器API无法直接发送Ping帧，需在应用层实现。}}
+
+{{知识点17}}{{应用层心跳实现：浏览器WebSocket API不暴露Ping/Pong帧，前端通常在应用层实现心跳。客户端定时发送JSON心跳消息如{type:"ping"}，服务器回复{type:"pong"}。超时未收到pong则判定连接断开并触发重连。建议心跳间隔30-60秒，超时时间10-15秒。}}
+
+{{知识点18}}{{断线重连策略：WebSocket连接可能因网络波动、服务器重启等原因断开，需实现自动重连。在close事件中检查wasClean属性，非正常关闭时启动重连。断开后延迟一段时间重新创建WebSocket实例，连接失败则再次延迟重试。}}
+
+{{知识点19}}{{指数退避重连：推荐的重连策略——第1次重连等1秒，第2次等2秒，第3次等4秒，直到达到最大间隔（如30秒）。加入随机抖动（jitter）防止大量客户端同时重连造成服务器压力。每次成功连接后重置等待时间。}}
+
+{{知识点20}}{{重连代码模式：封装ReconnectingWebSocket类，在onclose中判断wasClean，使用指数退避计算delay = Math.min(1000 * Math.pow(2, retryCount), 30000)，setTimeout后重新connect()，成功后重置retryCount为0。}}
+
+{{知识点21}}{{WebSocket与长轮询对比：长轮询是客户端发送请求后服务器保持连接直到有新数据再返回，每次请求都有HTTP开销，延迟更高，无法实现真正的服务器主动推送。WebSocket在实时性、性能和资源消耗方面全面优于长轮询。}}
+
+{{知识点22}}{{WebSocket与SSE对比：Server-Sent Events是服务器到客户端的单向通信，基于HTTP长连接，使用text/event-stream格式，自动重连，实现简单。WebSocket是双向通信功能更强。只需服务器推送用SSE（如通知、股价），需要双向通信用WebSocket（如聊天、协作编辑）。}}
+
+{{知识点23}}{{Socket.IO简介：基于WebSocket的实时通信库，提供更高级的抽象。不是原生WebSocket实现，在WebSocket之上添加额外元数据和功能。自动选择最佳传输方式：WebSocket → HTTP长轮询 → WebTransport。Socket.IO客户端不能直接连接原生WebSocket服务器，反之亦然。}}
+
+{{知识点24}}{{Socket.IO自动降级：优先使用WebSocket，当WebSocket被防火墙或代理阻止时自动降级为HTTP长轮询，使得Socket.IO在各种网络环境下都能工作。v4还支持WebTransport作为新的传输方式。}}
+
+{{知识点25}}{{Socket.IO房间机制：提供Room（房间）概念，允许将连接分组。通过socket.join('roomName')加入房间，io.to('roomName').emit()向房间内所有客户端广播。非常适合实现频道、群聊等功能，无需手动维护连接列表。}}
+
+{{知识点26}}{{Socket.IO命名空间：命名空间（Namespace）是URL路径分隔机制，允许在同一个连接上隔离不同的通信通道。如/chat和/news可以有不同的事件处理逻辑。命名空间复用同一个底层连接，减少资源消耗。}}
+
+{{知识点27}}{{Socket.IO事件机制：使用自定义事件机制而非原生WebSocket的消息事件。通过socket.emit('eventName', data)发送，socket.on('eventName', callback)监听。内置事件包括connect、disconnect、connect_error等。事件驱动模型比单一message事件更灵活。}}
+
+{{知识点28}}{{WebSocket安全最佳实践：生产环境必须使用wss://加密连接；实施输入验证和消息大小限制防止DoS攻击；使用Origin头部验证防止跨站WebSocket劫持；敏感操作需身份认证（握手阶段通过token或cookie）；限制连接速率。}}
+
+{{知识点29}}{{WebSocket身份认证：通常在握手阶段完成——通过URL参数传递token、Cookie中携带session、或首个消息中发送认证信息。URL中的token可能出现在服务器日志中，Cookie方式更安全。握手后可通过消息级别的token验证。}}
+
+{{知识点30}}{{WebSocket消息格式设计：推荐使用JSON格式定义消息协议，包含type字段标识消息类型和payload字段携带数据。如{type:"chat", payload:{text:"hello"}}。统一的消息格式便于前后端处理和协议扩展。}}
+
+{{知识点31}}{{WebSocket内存与背压：原生WebSocket API没有背压（backpressure）机制，当消息到达速度快于应用处理速度时可能导致内存溢出或CPU过高。2025年新推出的WebSocketStream API通过Streams API提供自动背压支持。短期内可通过检查bufferedAmount手动管理。}}
+
+{{知识点32}}{{WebSocketStream API：基于Promise和Streams API的新接口，提供自动背压能力。通过new WebSocketStream(url)创建，使用socket.opened Promise获取连接信息，通过ReadableStream和WritableStream读写数据。目前仅Chromium系浏览器支持，尚未成为标准。}}
+
+{{知识点33}}{{WebTransport简介：新一代实时传输API，支持多路复用单向流、不可靠数据报和有序字节流。相比WebSocket支持多流避免队头阻塞、支持不可靠传输适合实时游戏/视频、提供原生背压。基于HTTP/3和QUIC协议，目前浏览器支持度有限，是WebSocket的未来替代方案。}}
+
+{{知识点34}}{{WebSocket在React中的使用：在useEffect中创建连接并在清理函数中关闭。消息处理应使用useRef存储最新状态避免闭包陷阱。推荐将WebSocket逻辑封装为自定义Hook（如useWebSocket）以便复用。组件卸载时务必关闭连接防止内存泄漏。}}
+
+{{知识点35}}{{WebSocket在Vue中的使用：Vue 3的Composition API中，连接应在onMounted中创建，onUnmounted中关闭。使用ref存储连接状态和消息列表。可封装为composable函数（如useWebSocket）实现复用。注意避免重复触发导致的性能问题。}}
+
+{{知识点36}}{{WebSocket负载均衡与粘性会话：多服务器部署时需要粘性会话（Sticky Session），确保同一客户端始终连接同一服务器，因为WebSocket是有状态连接。解决方案包括IP哈希、Cookie粘性、或使用Redis等共享存储实现跨服务器消息转发。}}
+
+{{知识点37}}{{WebSocket代理配置：Nginx反向代理需设置proxy_set_header Upgrade $http_upgrade和proxy_set_header Connection "upgrade"头部转发。设置proxy_read_timeout防止空闲连接被代理超时关闭。使用proxy_http_version 1.1确保支持HTTP/1.1协议升级。}}
+
+{{知识点38}}{{WebSocket调试方法：Chrome DevTools的Network面板可查看WebSocket连接的Frames（帧），实时查看发送和接收的消息。Console中可直接操作WebSocket实例。第三方工具如wscat可作为命令行WebSocket客户端测试。Wireshark可抓包分析协议帧。}}
+
+{{知识点39}}{{前端实时通信方案选择：简单推送场景用SSE（实现简单、自动重连）；标准双向通信用原生WebSocket（轻量、无依赖）；复杂应用需房间/命名空间等高级功能用Socket.IO（生态丰富、自动降级）；超低延迟/游戏场景关注WebTransport（多流、不可靠传输）。}}

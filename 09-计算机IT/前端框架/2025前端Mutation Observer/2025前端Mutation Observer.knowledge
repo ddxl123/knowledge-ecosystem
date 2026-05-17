@@ -1,0 +1,83 @@
+# 2025前端Mutation Observer
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{MutationObserver 是什么：MutationObserver 是 Web API 中的一个接口，提供监视 DOM 树变化的能力。它是旧版 DOM Mutation Events 的替代方案，设计初衷是解决 Mutation Events 带来的性能和稳定性问题。自 2015 年 7 月起，所有主流浏览器均支持该 API，属于 Baseline "Widely available" 级别。}}
+
+{{知识点2}}{{MutationObserver 的诞生背景：DOM Mutation Events 虽然提供了监听 DOM 变化的功能，但在实际使用中存在严重的性能问题。每次 DOM 变化都会同步触发事件，导致浏览器性能下降。2011 年，Google 和 Mozilla 的工程师联合提出了 MutationObserver 方案，以异步批量通知的方式替代同步逐个触发的方式。}}
+
+{{知识点3}}{{MutationObserver 的核心优势——异步批量回调：与 Mutation Events 每次变化同步触发不同，MutationObserver 会在 DOM 完成所有变化后，一次性将所有变化以 MutationRecord 数组的形式传递给回调函数。这种设计大幅减少了回调次数，提升了性能。}}
+
+{{知识点4}}{{构造函数 new MutationObserver(callback)：创建 MutationObserver 实例时需要传入一个回调函数。该回调接收两个参数：mutations（MutationRecord 数组，描述每次变化）和 observer（触发回调的 MutationObserver 实例本身，常用于在回调中调用 disconnect()）。}}
+
+{{知识点5}}{{observe() 方法的基本用法：observer.observe(target, options) 用于配置并开始观察。target 是要观察的 DOM 节点，options 是描述观察哪些变化的配置对象。调用后，匹配配置的 DOM 变化将通过回调通知。}}
+
+{{知识点6}}{{observe() 的 options——childList：设置为 true 时，监视目标节点的子节点添加或移除。当 subtree 也为 true 时，扩展到整个子树。默认值为 false。这是三种基本监视类型之一。}}
+
+{{知识点7}}{{observe() 的 options——attributes：设置为 true 时，监视目标节点属性值的变化。如果设置了 attributeFilter 或 attributeOldValue，默认值自动变为 true，否则默认为 false。这是三种基本监视类型之一。}}
+
+{{知识点8}}{{observe() 的 options——characterData：设置为 true 时，监视目标节点（及其子树节点，如果 subtree 为 true）的字符数据变化。如果设置了 characterDataOldValue，默认值自动变为 true，否则默认为 false。这是三种基本监视类型之一。}}
+
+{{知识点9}}{{observe() 的 options——subtree：设置为 true 时，将监视范围从目标节点扩展到其整个子树。所有其他选项也会应用到子树中的所有节点。默认值为 false。注意：当子树的某部分被移除后，在移除通知送达之前，对该被移除子树的变化仍会被观察。}}
+
+{{知识点10}}{{observe() 的 options——attributeFilter：一个字符串数组，指定要监视的特定属性名。如果未设置此属性，所有属性变化都会触发通知。设置后可以减少不必要的回调，提升性能。}}
+
+{{知识点11}}{{observe() 的 options——attributeOldValue：设置为 true 时，会在属性变化时记录变化前的旧值。可通过 MutationRecord.oldValue 读取。默认值为 false。设置此选项会自动隐含 attributes: true。}}
+
+{{知识点12}}{{observe() 的 options——characterDataOldValue：设置为 true 时，会在字符数据变化时记录变化前的旧值。可通过 MutationRecord.oldValue 读取。默认值为 false。设置此选项会自动隐含 characterData: true。}}
+
+{{知识点13}}{{observe() 的必要条件：调用 observe() 时，childList、attributes、characterData 三者至少有一个为 true，否则会抛出 TypeError 异常。这是一个常见的配置错误。}}
+
+{{知识点14}}{{observe() 的 TypeError 场景：除了三者全为 false 会抛错外，当 attributes 为 false 但 attributeOldValue 为 true 或 attributeFilter 存在时也会抛错；当 characterData 为 false 但 characterDataOldValue 为 true 时也会抛错。}}
+
+{{知识点15}}{{disconnect() 方法：调用 observer.disconnect() 停止 MutationObserver 接收进一步通知。已检测但尚未报告给回调的变化通知会被丢弃。如果需要处理这些待处理通知，应先调用 takeRecords()。disconnect 后可再次调用 observe() 重新开始观察。}}
+
+{{知识点16}}{{takeRecords() 方法：返回所有已检测但尚未被回调处理的 MutationRecord 数组，并清空通知队列。最常见的用法是在 disconnect() 之前调用，确保不遗漏任何待处理的变化。调用模式：let records = observer.takeRecords(); observer.disconnect(); if (records.length > 0) callback(records);}}
+
+{{知识点17}}{{MutationRecord 接口概述：MutationRecord 是只读接口，表示 MutationObserver 观察到的单个 DOM 变化。每个回调中收到的数组包含一个或多个 MutationRecord 对象。自 2015 年 7 月起所有主流浏览器支持。}}
+
+{{知识点18}}{{MutationRecord.type 属性：返回表示变化类型的字符串。值为 "attributes"（属性变化）、"characterData"（字符数据变化）或 "childList"（节点树变化）。这是在回调中区分不同类型变化的关键属性。}}
+
+{{知识点19}}{{MutationRecord.target 属性：返回受影响的节点。对于 attributes 类型，是属性发生变化的元素；对于 characterData 类型，是 CharacterData 节点；对于 childList 类型，是子节点发生变化的父节点。}}
+
+{{知识点20}}{{MutationRecord.addedNodes 和 removedNodes：addedNodes 返回被添加的节点 NodeList；removedNodes 返回被移除的节点 NodeList。如果没有添加/移除操作，对应列表为空。这是 childList 类型变化的核心信息。}}
+
+{{知识点21}}{{MutationRecord.oldValue 属性：根据 type 不同含义不同。对于 attributes，是变化前的属性值；对于 characterData，是变化前的文本数据；对于 childList，始终为 null。需要在 observe() 中设置 attributeOldValue 或 characterDataOldValue 为 true 才能获取。}}
+
+{{知识点22}}{{MutationRecord 的 siblings 属性：previousSibling 返回被添加或移除节点的前一个兄弟节点；nextSibling 返回后一个兄弟节点。两者在不适用时为 null。可用于确定节点插入或移除的精确位置。}}
+
+{{知识点23}}{{MutationRecord.attributeName 和 attributeNamespace：attributeName 返回发生变化的属性名字符串（仅 attributes 类型）；attributeNamespace 返回属性的命名空间字符串。在属性变化类型中用于识别具体哪个属性发生了变化。}}
+
+{{知识点24}}{{回调触发时机——微任务机制：MutationObserver 的回调在当前 JavaScript 执行栈清空后、作为微任务（Microtask）执行。这意味着在同一个同步代码块中的多次 DOM 修改会被合并到一个回调调用中，而不是每次修改都触发一次回调。}}
+
+{{知识点25}}{{回调触发时机——子树移除后的观察：当使用 subtree: true 观察节点时，如果子树的某部分被移除，在移除通知送达之前，对该被移除子树的修改仍会触发回调。但一旦移除通知送达，后续对已断开连接的子树的修改不再触发观察者。这确保了不会遗漏任何变化。}}
+
+{{知识点26}}{{observe() 可被多次调用：对同一个 MutationObserver 实例可以多次调用 observe()，但每次调用会替换之前的配置。即一个 observer 实例同时只能观察一个目标节点。如果需要观察多个节点，需要创建多个 observer 实例。}}
+
+{{知识点27}}{{与 Mutation Events 的对比：Mutation Events（如 DOMSubtreeModified、DOMNodeInserted）是同步逐个触发的，每次 DOM 变化都会立即触发事件，导致严重的性能问题。MutationObserver 是异步批量通知的，性能远优于 Mutation Events。Mutation Events 已被废弃。}}
+
+{{知识点28}}{{性能最佳实践——使用 attributeFilter 限制范围：当只需要监视特定属性时，使用 attributeFilter 数组指定属性名，而不是监视所有属性变化。这可以显著减少不必要的回调，提升性能。例如：{ attributes: true, attributeFilter: ['class', 'style'] }。}}
+
+{{知识点29}}{{性能最佳实践——及时 disconnect：当不再需要观察时，应及时调用 disconnect() 释放资源。长期运行的观察者会持续消耗资源。特别是在 SPA 路由切换或组件卸载时，务必断开观察者以避免内存泄漏。}}
+
+{{知识点30}}{{性能最佳实践——避免在回调中修改 DOM：MutationObserver 的回调中再次修改 DOM 可能触发新的变化，导致循环触发。虽然浏览器有机制防止无限循环，但最好避免在回调中进行不必要的 DOM 操作。如必须修改，应设置标志位防止重入。}}
+
+{{知识点31}}{{实际应用场景——动态内容加载检测：在无限滚动、懒加载等场景中，使用 MutationObserver 监视容器节点的子节点变化（childList + subtree），当新内容被插入 DOM 时自动执行初始化逻辑（如图片懒加载、事件绑定等）。}}
+
+{{知识点32}}{{实际应用场景——第三方库/框架 DOM 变化监听：当使用不提供回调接口的第三方库操作 DOM 时，可用 MutationObserver 监视相关节点的变化，从而在不修改源码的情况下响应 DOM 更新。}}
+
+{{知识点33}}{{实际应用场景——可编辑内容区域监控：在 contenteditable 元素中，用户的输入（如回车、删除、粘贴）会直接修改 DOM 而非触发传统 input 事件。MutationObserver 是监听这些变化的最佳方式。}}
+
+{{知识点34}}{{实际应用场景——浏览器扩展/插件开发：浏览器扩展经常需要响应页面 DOM 的变化。MutationObserver 是扩展开发中监视网页内容变化的标准工具，用于在页面动态更新时注入功能或调整 UI。}}
+
+{{知识点35}}{{实际应用场景——样式/类名变化响应：通过 attributes: true + attributeFilter: ['class'] 监视元素类名变化，可以实现样式变化的响应式处理，例如在 class 切换时更新关联的组件状态或触发动画。}}
+
+{{知识点36}}{{与 ResizeObserver/IntersectionObserver 的关系：MutationObserver、ResizeObserver、IntersectionObserver、PerformanceObserver 是浏览器提供的四大 Observer API。MutationObserver 监视 DOM 结构变化；ResizeObserver 监视元素尺寸变化；IntersectionObserver 监视元素可见性；PerformanceObserver 监视性能指标。它们共享"观察者模式"的设计理念。}}
+
+{{知识点37}}{{TypeScript 中的类型定义：在 TypeScript 中，MutationObserver 和 MutationRecord 有完整的类型定义。回调类型为 (mutations: MutationRecord[], observer: MutationObserver) => void。MutationRecord 的各属性（type、target、addedNodes 等）均有明确类型。}}
+
+{{知识点38}}{{Shadow DOM 中的 MutationObserver：MutationObserver 可以观察 Shadow DOM 内部的节点变化，但需要在 Shadow Root 内部创建观察者。外部的观察者无法穿透 Shadow Boundary 监视内部变化，这体现了 Shadow DOM 的封装性。}}
+
+{{知识点39}}{{MutationObserver 与 requestAnimationFrame 配合：如果需要在 DOM 变化后进行视觉更新（如触发布局计算），可以将 MutationObserver 回调与 requestAnimationFrame 结合，在回调中记录变化，在下一帧中统一处理视觉更新，避免布局抖动（layout thrashing）。}}
+
+{{知识点40}}{{MutationObserver 的内存管理：MutationObserver 实例本身不会自动垃圾回收。即使被观察的节点被移除 DOM 并被 GC，observer 实例仍需手动 disconnect 或失去所有引用才能被回收。在组件生命周期管理中应注意这一点。}}

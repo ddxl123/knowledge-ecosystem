@@ -1,0 +1,153 @@
+# 2025前端前端CSS Scroll Styling
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{CSS Scroll Styling 概述
+CSS Scroll Styling 是一组用于控制滚动行为和外观的CSS规范集合，涵盖滚动条样式、滚动吸附（Scroll Snap）、滚动驱动动画（Scroll-Driven Animations）等模块。2025年，这些特性已在主流浏览器中获得广泛支持，成为前端开发中提升用户体验的重要工具。}}
+
+{{知识点2}}{{overflow 属性基础
+overflow 属性控制元素溢出内容的显示方式。可选值包括：visible（默认，溢出可见）、hidden（裁剪且不可滚动）、clip（裁剪且禁止编程滚动）、scroll（始终显示滚动条）、auto（溢出时显示滚动条）。设置除 visible 和 clip 以外的值会创建新的块格式化上下文（BFC）。}}
+
+{{知识点3}}{{overflow-x 与 overflow-y
+overflow-x 和 overflow-y 分别控制水平和垂直方向的溢出行为。当一个方向设为 hidden/scroll/auto 而另一方向为 visible 时，visible 会被计算为 auto。clip 与 hidden 的区别在于 clip 还禁止所有滚动（包括编程滚动），且不创建新的格式化上下文。}}
+
+{{知识点4}}{{scrollbar-width 属性（Baseline 2024）
+scrollbar-width 允许设置滚动条的宽度。可选值：auto（平台默认宽度）、thin（细滚动条）、none（隐藏滚动条但仍可滚动）。2024年12月起成为 Baseline 特性。注意：使用 thin 或 none 会影响无障碍访问，需确保有替代滚动机制。}}
+
+{{知识点5}}{{scrollbar-color 属性（Baseline 2025）
+scrollbar-color 设置滚动条轨道（track）和滑块（thumb）的颜色。语法为 scrollbar-color: thumb-color track-color。2025年12月起成为 Baseline 特性。设置在文档根元素时会应用于视口滚动条。需确保两种颜色间有足够的对比度（WCAG建议至少3:1）。}}
+
+{{知识点6}}{{scrollbar-gutter 属性（Baseline 2024）
+scrollbar-gutter 预留滚动条空间，防止内容增减导致布局跳动。auto（默认）仅在需要时创建槽位；stable 始终预留空间（即使内容未溢出）；stable both-edges 在两侧对称预留空间以保持内容居中。对经典滚动条生效，覆盖滚动条不受影响。}}
+
+{{知识点7}}{{scrollbar-width: none 的替代方案
+对于仅通过编程方式滚动的元素，建议使用 overflow: hidden 而非 scrollbar-width: none。因为 overflow: hidden 不会创建滚动容器（除非内容溢出时通过JS编程滚动），而 scrollbar-width: none 仍会创建滚动容器。}}
+
+{{知识点8}}{{scroll-behavior 属性
+scroll-behavior 控制滚动容器的滚动行为。auto（默认）为即时滚动，smooth 为平滑滚动（使用UA定义的缓动函数和时长）。设置在根元素时应用于视口，但设置在 body 元素不会传播到视口。注意：用户手动滚动不受此属性影响。}}
+
+{{知识点9}}{{scroll-snap-type 属性
+scroll-snap-type 定义滚动容器的吸附行为。语法：scroll-snap-type: x|y|block|inline|both [mandatory|proximity]。mandatory 表示必须吸附到吸附点；proximity 表示UA可自行决定是否吸附（默认）。设置为 none 表示禁用吸附。当内容变化时，容器会重新吸附到之前吸附的内容。}}
+
+{{知识点10}}{{scroll-snap-align 属性
+scroll-snap-align 在子元素上定义吸附对齐方式。可选值：none、start、end、center。可设置一个或两个值，单值应用于两个轴，双值分别控制块轴和内联轴。该属性应用于所有元素，初始值为 none，不继承。}}
+
+{{知识点11}}{{scroll-snap-stop 属性
+scroll-snap-stop 控制滚动时是否可以跳过吸附点。normal（默认）允许快速滚动时跳过吸附点；always 强制在每个吸附点停留。在 mandatory 模式下效果最明显。可对奇数/偶数子元素选择性设置，实现更精细的滚动控制。}}
+
+{{知识点12}}{{scroll-margin 属性
+scroll-margin 定义滚动吸附区域的外边距。作为简写属性，控制 scroll-margin-top/right/bottom/left。接受 <length> 值，不可继承。效果是扩展元素的吸附区域边界，使吸附时元素周围保留更多可见空间。}}
+
+{{知识点13}}{{scroll-padding 属性
+scroll-padding 定义滚动视口（scrollport）的内边距偏移。简写 scroll-padding-top/right/bottom/left。接受 auto、<length> 或 <percentage>。用于在滚动视口中为固定工具栏、侧边栏等预留空间。适用于所有滚动容器，不仅限于 scroll-snap 场景。}}
+
+{{知识点14}}{{scroll-margin 与 scroll-padding 的区别
+scroll-margin 作用于子元素（滚动吸附区域向外扩展），scroll-padding 作用于滚动容器（滚动视口向内收缩）。两者配合使用可在吸附时精确控制元素在视口中的位置，常用于实现带固定头部的页面滚动效果。}}
+
+{{知识点15}}{{overscroll-behavior 属性
+overscroll-behavior 控制滚动链（scroll chaining）行为。auto（默认）允许滚动传播到父容器；contain 阻止滚动传播但保留元素内部的弹性效果；none 阻止所有滚动溢出行为。可分别设置 x/y 方向。常用于弹窗/对话框中阻止底层页面跟随滚动。}}
+
+{{知识点16}}{{overscroll-behavior 的实际应用
+在移动端，overscroll-behavior: contain 可禁用"下拉刷新"和水平滑动导航手势。设置在 overflow: hidden 的元素上可阻止背景滚动（用于弹窗场景）。注意：该属性不直接适用于 iframe，需在 iframe 的 html 和 body 元素上设置。}}
+
+{{知识点17}}{{CSS Scroll-Driven Animations 模块概述
+CSS滚动驱动动画模块（CSS Scroll-Driven Animations）扩展了CSS动画模块，允许动画沿滚动时间线而非默认的基于时间的时间线驱动。可基于元素自身滚动、其滚动容器滚动或根元素滚动来触发动画，无需JavaScript。}}
+
+{{知识点18}}{{Scroll Timeline（滚动时间线）
+滚动时间线（Scroll Progress Timeline）的进度由滚动容器的滚动位置决定（0%在顶部/左侧，100%在底部/右侧）。可通过命名时间线（scroll-timeline-name）或匿名时间线（scroll()函数）两种方式定义。}}
+
+{{知识点19}}{{scroll-timeline 属性
+scroll-timeline 是简写属性，包含 scroll-timeline-name 和 scroll-timeline-axis。设置在滚动容器上。name 必须是 <dashed-ident>（以 -- 开头），axis 可选 block（默认）、inline、x、y。如果容器没有溢出或溢出被裁剪，不会创建时间线。}}
+
+{{知识点20}}{{scroll-timeline-name 属性
+scroll-timeline-name 为命名滚动进度时间线定义名称。在滚动容器上设置，然后通过 animation-timeline 引用该名称来驱动动画。值为 none（无名称）或 <dashed-ident>（自定义标识符，必须以 -- 开头以避免与CSS关键字冲突）。}}
+
+{{知识点21}}{{animation-timeline 属性
+animation-timeline 指定动画使用的时间线。可选值：none（无时间线）、auto（默认文档时间线）、<dashed-ident>（命名时间线）、scroll()（匿名滚动时间线）、view()（匿名视图时间线）。支持逗号分隔的多值语法，每个值对应一个动画。}}
+
+{{知识点22}}{{scroll() 函数
+scroll() 函数定义匿名滚动进度时间线。语法：scroll([scroller] [axis])。scroller 可选 nearest（默认）、root、self；axis 可选 block（默认）、inline、x、y。例如 animation-timeline: scroll(root) 表示基于根元素滚动驱动动画。}}
+
+{{知识点23}}{{View Timeline（视图时间线）
+视图进度时间线（View Progress Timeline）基于元素在滚动容器中的可见性变化来驱动动画。0%对应元素刚进入可视区域，100%对应元素完全离开可视区域的另一侧。用于实现滚动进入/离开动画效果。}}
+
+{{知识点24}}{{view-timeline 属性
+view-timeline 是简写属性，包含 view-timeline-name、view-timeline-axis 和 view-timeline-inset。设置在被观察的元素（subject）上。name 为 <dashed-ident>，axis 默认为 block，inset 调整可见范围的起止偏移。}}
+
+{{知识点25}}{{view() 函数
+view() 函数定义匿名视图进度时间线。语法：view([axis] [inset])。axis 默认 block，inset 默认 auto。例如 animation-timeline: view(inline) 表示基于元素在内联方向上的可见性驱动动画。}}
+
+{{知识点26}}{{animation-range 属性
+animation-range 设置动画在时间线上的起止范围。简写 animation-range-start 和 animation-range-end。支持 <length-percentage>、<timeline-range-name>（如 cover、contain、entry、exit 等）和 normal 关键字。例如 animation-range: entry 10% exit 90% 控制动画在元素进入10%时开始，离开90%时结束。}}
+
+{{知识点27}}{{timeline-scope 属性
+timeline-scope 修改命名时间线的作用域。默认情况下，命名时间线只能被直接子元素引用。通过 timeline-scope 可将时间线扩展到祖先元素及其所有后代。值为 none（默认）、all（扩展所有后代时间线）或具体 <dashed-ident> 名称。}}
+
+{{知识点28}}{{scroll-timeline-axis 属性
+scroll-timeline-axis 定义滚动时间线使用的滚动轴。可选值：block（块轴，默认）、inline（内联轴）、x（水平轴）、y（垂直轴）。必须与实际滚动方向匹配，否则不会创建时间线。}}
+
+{{知识点29}}{{view-timeline-inset 属性
+view-timeline-inset 调整视图时间线的可见范围起止偏移。接受 auto（默认）或 <length-percentage> 值，可设两个值分别控制起止偏移。用于扩展或收缩元素被视为"可见"的区域范围。}}
+
+{{知识点30}}{{滚动驱动动画的 JS API
+CSS 滚动驱动动画对应两个 JS 接口：ScrollTimeline 和 ViewTimeline。ScrollTimeline 构造函数接受 source（滚动容器）、axis（滚动轴）参数；ViewTimeline 额外接受 subject（被观察元素）和 inset 参数。可编程方式创建和控制时间线。}}
+
+{{知识点31}}{{CSS Scroll Snap 完整实践
+完整的滚动吸附需要在容器上设置 scroll-snap-type，在子元素上设置 scroll-snap-align。配合 scroll-padding 为固定头部预留空间，scroll-margin 调整吸附区域。典型的全屏滚动页面示例：容器设 scroll-snap-type: y mandatory，子页面设 scroll-snap-align: start。}}
+
+{{知识点32}}{{::-webkit-scrollbar 伪元素
+在Chromium和Safari浏览器中，可使用 ::-webkit-scrollbar 系列伪元素自定义滚动条外观。包括 ::-webkit-scrollbar（整体）、::-webkit-scrollbar-thumb（滑块）、::-webkit-scrollbar-track（轨道）等。这是非标准方案，标准方案应使用 scrollbar-color 和 scrollbar-width。}}
+
+{{知识点33}}{{Firefox 的 scrollbar-color 支持
+Firefox 从64版本开始支持 scrollbar-color 和 scrollbar-width 标准属性，是最早支持标准滚动条样式属性的浏览器。Chromium浏览器从121版本开始支持 scrollbar-color，Safari从18版本开始支持，使得该特性在2025年达到全面Baseline状态。}}
+
+{{知识点34}}{{滚动容器的创建条件
+元素成为滚动容器的条件：overflow 值为 scroll、auto 或 hidden（当内容实际溢出时）。overflow: visible 和 clip 不创建滚动容器。覆盖滚动条（overlay scrollbar）绘制在内容上方，不占用空间；经典滚动条（classic scrollbar）占用布局空间。}}
+
+{{知识点35}}{{Scroll Snap 的 mandatory 与 proximity 选择
+mandatory 吸附确保滚动总是停在吸附点，适合轮播图、全屏页面等场景；proximity 吸附只在接近吸附点时触发，体验更自然，适合长列表、文章目录等场景。mandatory 使用不当可能导致内容无法完整查看。}}
+
+{{知识点36}}{{滚动驱动动画的 animation-fill-mode
+默认情况下，动画样式仅在动画活跃期间应用。通过 animation-fill-mode 设置 backwards 可在动画开始前应用第一帧样式，forwards 在动画结束后保留最后一帧样式，both 同时应用两者。对于滚动驱动动画，这决定了元素在进入/离开滚动区域前后的样式。}}
+
+{{知识点37}}{{CSS Overflow Module Level 3-4 新特性
+CSS Overflow Level 3 引入了 scrollbar-gutter 和 overflow: clip。Level 4 引入了 overflow-clip-margin 属性，允许控制 clip 裁剪边缘距padding box的偏移。overflow: clip 是 hidden 的增强版，禁止所有滚动且不创建格式化上下文。}}
+
+{{知识点38}}{{滚动驱动动画的 performance 优化
+滚动驱动动画在主线程之外运行，利用合成器线程（compositor thread）处理，性能优于基于 scroll 事件的JS动画实现。仅支持 transform 和 opacity 等可合成属性时可获得最佳性能。避免在滚动动画中使用触发布局（layout）或绘制（paint）的属性。}}
+
+{{知识点39}}{{timeline-range-name 值类型
+animation-range 支持的 <timeline-range-name> 包括：cover（覆盖范围，从元素进入视口到完全离开）、contain（包含范围，元素完全在视口内）、entry（进入范围）、exit（离开范围）、entry-crossing 和 exit-crossing。每个范围名可搭配 <length-percentage> 进一步细化。}}
+
+{{知识点40}}{{CSS Scroll Styling 浏览器兼容性策略
+2025年主流浏览器对CSS Scroll Styling的支持情况：scroll-snap 全面支持；scrollbar-color/width 在Chromium 121+、Firefox 64+、Safari 18+支持；scroll-driven animations 在Chromium 115+、Firefox 110+支持，Safari尚在跟进。建议使用 @supports 进行渐进增强。}}
+
+{{知识点41}}{{scroll-snap 事件
+Scroll Snap 规范定义了 scrollsnapchange 和 scrollsnapchanging 两个事件。scrollsnapchange 在吸附目标改变时触发，scrollsnapchanging 在吸附目标正在改变时触发（如用户正在滚动过程中）。可用于实现与吸附位置联动的UI更新。}}
+
+{{知识点42}}{{Scroll Initial Target 属性
+scroll-initial-target 属性指定页面加载时应自动吸附到的子元素。值为 none（默认，不自动吸附）或一个选择器匹配的元素。适用于多屏页面希望默认显示特定区域的场景，如打开页面时自动定位到某个章节。}}
+
+{{知识点43}}{{CSS 嵌套滚动容器
+滚动容器可以嵌套。内层容器的滚动不会传播到外层（默认行为可通过 overscroll-behavior 控制）。每个滚动容器可独立设置 scroll-snap、scrollbar 样式和滚动驱动动画。嵌套场景常见于侧边栏+主内容区的布局模式。}}
+
+{{知识点44}}{{scroll-timeline 与 view-timeline 的选择
+scroll-timeline 适用于需要根据滚动进度驱动的场景（如进度条、滚动时的颜色变化）；view-timeline 适用于需要根据元素可见性驱动的场景（如滚动进入/离开时的淡入淡出、视差效果）。两者可组合使用，也可在同一页面混合使用多个时间线。}}
+
+{{知识点45}}{{CSS Scroll Styling 与 JavaScript 的协作
+虽然CSS滚动驱动动画减少了对JS的依赖，但某些场景仍需JS配合：Intersection Observer API 用于更精确的可见性检测；scroll 事件用于自定义滚动逻辑；Element.scrollTo() 和 Element.scrollTop 用于编程滚动。CSS和JS的滚动控制可以共存但需注意冲突。}}
+
+{{知识点46}}{{移动端滚动优化要点
+移动端滚动优化涉及多个CSS属性：overscroll-behavior: contain 阻止下拉刷新；scroll-snap-type 实现整屏滚动；-webkit-overflow-scrolling: touch（已废弃）已被原生平滑滚动替代；scroll-behavior: smooth 实现平滑锚点跳转。需注意触摸事件与滚动的交互关系。}}
+
+{{知识点47}}{{scrollbar-gutter 与布局稳定性
+scrollbar-gutter: stable 解决了经典滚动条导致的布局跳动问题（Layout Shift）。当内容从不溢出变为溢出时，滚动条出现会导致内容区域宽度变化。通过预留滚动条空间，可保持布局稳定。both-edges 在对称布局中保持视觉平衡。}}
+
+{{知识点48}}{{CSS Scroll-Driven Animations 常见用例
+常见用例包括：1）页面滚动进度条；2）滚动时元素淡入/淡出；3）视差滚动效果；4）滚动时固定导航栏样式变化；5）图片/文字的滚动触发动画；6）Scroll-linked 数据可视化。这些效果以前需要JS的 scroll 事件监听，现在纯CSS即可实现。}}
+
+{{知识点49}}{{@supports 特性检测
+使用 @supports 可检测浏览器对滚动样式特性的支持：@supports (scrollbar-color: auto) {} 检测 scrollbar-color；@supports (animation-timeline: scroll()) {} 检测滚动驱动动画。建议对新特性进行渐进增强，确保基础功能在不支持的浏览器中仍可用。}}
+
+{{知识点50}}{{CSS Scroll Styling 最佳实践总结
+1）优先使用标准属性 scrollbar-color/width 而非 ::-webkit-scrollbar；2）scroll-snap 选择 proximity 更安全，mandatory 仅在确认适合时使用；3）滚动驱动动画优先使用合成器友好的属性；4）始终考虑无障碍：避免隐藏滚动条无替代方案；5）使用 @supports 做渐进增强。}}

@@ -1,0 +1,123 @@
+# 2025PWA入门
+# 领域: 计算机IT
+# 学科: 前端框架
+# 来源: 2025PWA入门
+# 描述: PWA核心知识点
+
+{{什么是PWA}}{{Progressive Web App（渐进式Web应用）是一种使用标准Web技术构建的应用程序，结合了传统网站和原生应用的最佳特性。PWA可以通过单一代码库跨平台运行，同时拥有安装到设备、离线运行、推送通知等原生应用能力。PWA的核心理念是"渐进增强"——在任何浏览器中都能工作，在支持的浏览器中提供更丰富的体验。}}
+
+{{PWA的核心特征}}{{PWA具有三大核心特征：1）可靠性——即使在网络不稳定或离线状态下也能加载和展示内容；2）可安装性——可以被添加到设备主屏幕，像原生应用一样启动；3）可交互性——能够响应用户操作，提供流畅的交互体验。这些特征使PWA弥合了Web应用和原生应用之间的差距。}}
+
+{{PWA的技术栈构成}}{{PWA基于标准Web技术构建，核心包括三部分：1）Web App Manifest（JSON配置文件，定义应用元数据）；2）Service Worker（后台脚本，处理离线缓存和后台任务）；3）HTTPS（安全上下文，Service Worker的必要条件）。此外还需要标准的HTML、CSS和JavaScript。}}
+
+{{Web App Manifest概述}}{{Web App Manifest是一个JSON格式的配置文件（通常命名为manifest.webmanifest或manifest.json），它向浏览器提供关于Web应用的信息，使浏览器能够将PWA安装到设备上。Manifest文件通过HTML中的<link rel="manifest" href="manifest.webmanifest">标签引入。规范要求Content-Type为application/manifest+json。}}
+
+{{manifest.name字段}}{{name字段定义了PWA的完整名称，在安装提示、启动画面和应用列表中显示。它是PWA安装的必要字段之一。name应清晰描述应用功能，长度适中。浏览器会使用name作为应用标题，也可作为无障碍访问的标签。}}
+
+{{manifest.short_name字段}}{{short_name字段是PWA的简短名称，用于在设备主屏幕图标下方显示，以及在其他空间有限的地方使用。当name过长时，浏览器会使用short_name作为替代。建议控制在12个字符以内以确保在各种设备上正常显示。}}
+
+{{manifest.icons字段}}{{icons字段是一个数组，定义了PWA在不同场景下使用的图标。每个图标对象包含src（图标路径）、sizes（尺寸如"192x192"）和type（MIME类型如"image/png"）属性。建议提供多种尺寸的图标（至少包含192x192和512x512），以确保在各种设备和场景中都能正确显示。}}
+
+{{manifest.start_url字段}}{{start_url字段指定PWA启动时加载的URL路径。通常是"/"或"."。当用户从主屏幕打开PWA时，浏览器会导航到此URL。该路径相对于manifest文件的位置进行解析。可以包含查询参数用于追踪安装来源。}}
+
+{{manifest.display字段}}{{display字段控制PWA的显示模式。可选值包括：fullscreen（全屏显示，隐藏所有浏览器UI）、standalone（独立窗口，类似原生应用，隐藏地址栏等）、minimal-ui（最小化浏览器UI，保留基本导航控件）、browser（传统浏览器标签页模式）。standalone是最常用的PWA显示模式。}}
+
+{{manifest.display_override字段}}{{display_override字段允许开发者定义display模式的优先级列表。当某个display模式不被支持时，浏览器会按顺序尝试下一个。这对于在不同平台上提供差异化的显示体验非常有用，例如在支持的平台上优先使用window-controls-overlay模式。}}
+
+{{manifest.theme_color字段}}{{theme_color字段定义PWA的主题颜色，影响浏览器UI元素的颜色，如地址栏、状态栏等。在standalone模式下，theme_color用于定制应用的标题栏颜色。它接受任何有效的CSS颜色值。}}
+
+{{manifest.background_color字段}}{{background_color字段定义PWA启动画面的背景颜色。在应用加载完成之前，浏览器会使用此颜色和应用图标生成启动画面。它接受任何有效的CSS颜色值，通常与应用的实际背景色保持一致以实现平滑过渡。}}
+
+{{manifest.scope字段}}{{scope字段定义PWA的导航范围。浏览器在此范围内加载的URL被视为PWA的一部分，超出此范围的URL将在常规浏览器标签页中打开。scope的默认值是manifest文件所在目录。合理设置scope可以确保PWA的行为符合预期。}}
+
+{{manifest.screenshots字段}}{{screenshots字段允许提供应用截图，在安装提示中向用户展示PWA的界面预览。每个截图对象包含src、sizes和type属性，还可以指定form_factor（"wide"或"narrow"）来区分桌面和移动端截图。丰富的截图可以提高用户的安装意愿。}}
+
+{{manifest.shortcuts字段}}{{shortcuts字段定义PWA的快捷操作，类似于原生应用的3D Touch或长按菜单。每个快捷方式包含name、short_name、url和icons。用户可以通过右键点击或长按PWA图标来访问这些快捷操作，直接跳转到应用的特定功能页面。}}
+
+{{manifest.share_target字段}}{{share_target字段使PWA能够注册为系统共享目标，接收来自其他应用分享的内容。定义了share_target后，用户可以在其他应用（如相册、浏览器）中选择"分享"时看到你的PWA选项。支持接收URL、文本、图片和文件等内容。}}
+
+{{manifest.id字段}}{{id字段为PWA提供唯一标识符，用于在浏览器内部唯一标识该应用。设置id可以确保即使start_url发生变化，浏览器仍能正确识别这是同一个PWA，避免重复安装。建议使用URL格式作为id值。}}
+
+{{manifest.orientation字段}}{{orientation字段指定PWA的默认屏幕方向。可选值包括any、natural、landscape、portrait、portrait-primary、portrait-secondary、landscape-primary、landscape-secondary等。对于游戏或视频类PWA，通常设置为landscape；对于阅读类PWA，通常设置为portrait。}}
+
+{{manifest.categories字段}}{{categories字段声明PWA所属的应用类别，用于应用商店分类和系统搜索。值为字符串数组，可选值包括business、education、entertainment、finance、games、health、kids、lifestyle、magazines、medical、news、personalization、productivity、shopping、social、sports、travel、utilities等。}}
+
+{{manifest.file_handlers字段}}{{file_handlers字段允许PWA注册为特定文件类型的处理器。当用户在操作系统中打开这些类型的文件时，PWA可以作为可选的应用出现。每个handler包含action URL和accept对象（指定MIME类型和文件扩展名的映射）。}}
+
+{{manifest.protocol_handlers字段}}{{protocol_handlers字段允许PWA注册处理特定的URL协议。当用户点击使用该协议的链接时，PWA可以被启动来处理。例如注册处理web+myapp://协议，使PWA能够响应自定义协议链接。}}
+
+{{manifest.launch_handler字段}}{{launch_handler字段控制PWA在已运行时再次被启动的行为。通过client_mode属性可以指定：navigate-existing（在现有窗口中导航）、focus-existing（聚焦现有窗口）、open-new（总是打开新窗口）。这有助于优化多窗口场景下的用户体验。}}
+
+{{manifest.related_applications字段}}{{related_applications字段声明与PWA关联的原生应用，包含平台（如"play"、"itunes"）、URL和id。配合prefer_related_applications字段使用：设为true时浏览器会优先推荐原生应用安装；设为false时优先显示PWA安装选项。这为已发布原生应用的团队提供了渐进迁移策略。}}
+
+{{Service Worker概述}}{{Service Worker是一种特殊的Web Worker，运行在浏览器后台的独立线程中，与主JavaScript代码分离。它是PWA实现离线功能、后台同步、推送通知等高级特性的核心。Service Worker无法直接访问DOM，通过postMessage与主线程通信。它只能运行在安全上下文（HTTPS）中，localhost被视为安全上下文用于本地开发。}}
+
+{{Service Worker生命周期}}{{Service Worker遵循三个生命周期阶段：1）下载（Download）——浏览器下载SW脚本文件；2）安装（Install）——首次安装或检测到文件变化时触发install事件，通常在此阶段预缓存关键资源；3）激活（Activate）——新SW变为活跃状态，触发activate事件，通常在此阶段清理旧缓存。新SW在所有旧页面关闭后才会激活，除非调用skipWaiting()。}}
+
+{{Service Worker注册}}{{Service Worker通过navigator.serviceWorker.register()方法注册，传入SW脚本的URL路径。注册成功后，浏览器会下载并尝试安装SW。注册通常在主应用代码中进行，需要在页面加载时调用。注册的URL路径决定了SW的控制范围（scope），默认为SW文件所在目录及其子目录。}}
+
+{{Service Worker的fetch事件拦截}}{{Service Worker通过监听fetch事件来拦截网络请求。当页面发起请求时，浏览器触发FetchEvent，SW可以通过event.respondWith()方法返回自定义响应。这使得SW可以实现缓存策略、请求修改、离线回退等功能。fetch事件的拦截对主应用代码完全透明。}}
+
+{{Service Worker的skipWaiting与Clients.claim}}{{skipWaiting()方法让新SW立即激活而不等待旧页面关闭；Clients.claim()让激活后的SW立即接管scope内所有页面。两者配合使用可实现PWA即时更新。但可能导致新旧SW并存的问题，需要在activate事件中正确清理旧缓存。}}
+
+{{Service Worker中的模块导入限制}}{{Service Worker支持使用import语句进行静态导入JavaScript模块，但不支持动态import()调用——在SW全局作用域中调用import()会抛出错误。这是因为SW需要在启动时就确定其依赖关系。使用Workbox等工具可以通过模块化方式组织SW代码。}}
+
+{{Cache-First缓存策略}}{{Cache-First（缓存优先）策略是最常用的离线缓存策略：先检查缓存中是否有匹配的资源，如果有则直接返回缓存内容；如果没有则发起网络请求，获取成功后将响应存入缓存并返回。这种策略适用于不经常变化的静态资源（如CSS、JS、图片），能提供最快的响应速度。}}
+
+{{Network-First缓存策略}}{{Network-First（网络优先）策略：先尝试从网络获取资源，如果成功则返回网络响应；如果网络请求失败则回退到缓存。这种策略适用于需要最新内容但又需要离线支持的场景，如API数据请求。可以设置超时时间，超过后自动回退到缓存。}}
+
+{{Stale-While-Revalidate缓存策略}}{{Stale-While-Revalidate策略：先返回缓存中的旧版本（保证速度），同时在后台发起网络请求更新缓存。下次访问时就能获取到最新内容。这种策略在响应速度和内容新鲜度之间取得平衡，适用于频繁变化但不要求实时性的资源。}}
+
+{{Cache API详解}}{{Cache API是浏览器提供的持久化存储机制，用于存储Request/Response对象对。Cache Storage可以有多个命名的Cache实例。核心方法包括：caches.open(name)打开缓存、cache.put(request, response)存入缓存、cache.match(request)查找匹配、cache.addAll(urls)批量缓存、cache.delete(request)删除缓存项。缓存不过期，需要开发者手动管理。}}
+
+{{缓存版本管理}}{{Service Worker需要有效的缓存版本管理策略。常见做法是使用版本号命名缓存（如"app-cache-v1"），在activate事件中删除旧版本缓存。每次SW更新时增加版本号，确保用户获取最新资源。未管理的缓存可能导致用户看到过时内容或占用过多存储空间。}}
+
+{{静态路由（Static Routing）}}{{Service Worker的InstallEvent.addRoutes()方法允许开发者预先声明资源的获取方式，无需等待SW启动即可决定资源来源。这解决了SW启动带来的性能开销问题——对于已知来源的资源，浏览器可以直接获取而不需要等SW运行。这是较新的API特性，优化了首次加载性能。}}
+
+{{推送通知（Push Notifications）}}{{PWA的推送通知通过Push API和Notifications API实现。Push API允许服务器向PWA发送消息，即使PWA未在前台运行。Notifications API负责在系统层面展示通知。推送通知基于Service Worker，SW被唤醒后处理push事件并调用showNotification()展示通知。Push API自2023年3月起已广泛可用。}}
+
+{{PushSubscription订阅机制}}{{PWA接收推送通知需要先创建PushSubscription。通过PushManager.subscribe()方法订阅，返回的PushSubscription对象包含endpoint（推送服务URL）和加密密钥。endpoint是一个能力URL，知道它就能发送推送消息，因此需要保密。每个订阅与特定的SW实例绑定。}}
+
+{{Notification API}}{{Notification API用于在操作系统层面显示通知。通过Notification.requestNotificationPermission()请求权限，然后通过new Notification()或ServiceWorkerRegistration.showNotification()创建通知。通知支持标题、内容、图标、操作按钮、标签等多种配置。在Service Worker中展示的通知可以响应用户点击和操作事件。}}
+
+{{VAPID密钥与推送安全}}{{VAPID（Voluntary Application Server Identification）是Web推送的安全机制。服务器使用VAPID密钥对向推送服务证明身份，防止未授权的第三方发送推送消息。生成VAPID密钥对后，公钥用于PushManager.subscribe()订阅，私钥保存在服务器端用于签名推送请求。每次推送都必须用VAPID密钥签名。}}
+
+{{PWA的安装机制}}{{PWA的安装由浏览器自动管理。当浏览器检测到页面符合PWA安装条件（有有效的manifest和service worker），会触发beforeinstallprompt事件，开发者可以捕获此事件来自定义安装提示的时机和UI。用户确认安装后，PWA图标会添加到设备主屏幕。不同平台的安装体验可能有所不同。}}
+
+{{beforeinstallprompt事件}}{{beforeinstallprompt事件在浏览器认为PWA可以被安装时触发。开发者可以preventDefault()阻止默认安装提示，在适当的时机（如用户点击"安装"按钮）再调用event.prompt()显示安装提示。event.userChoice返回Promise，解析为用户的选择结果（accepted或dismissed）。这是自定义安装体验的关键API。}}
+
+{{appinstalled事件}}{{当PWA成功安装到设备后，window对象会触发appinstalled事件。开发者可以监听此事件来执行安装后的逻辑，如显示感谢信息、记录安装统计数据等。结合beforeinstallprompt事件，可以完整地跟踪PWA的安装流程。}}
+
+{{后台同步（Background Sync）}}{{后台同步API允许Service Worker在网络恢复时自动同步数据。通过SyncManager.register()注册同步任务，即使用户关闭了页面，浏览器也会在网络可用时唤醒SW并触发sync事件。这对于表单提交、数据上传等需要可靠性的操作非常有用，确保用户操作不会因网络问题而丢失。}}
+
+{{Periodic Background Sync}}{{周期性后台同步允许PWA在后台定期获取新内容，即使应用未打开。浏览器会定期唤醒Service Worker触发periodicsync事件。需要注意的是，浏览器对此API有严格的频率限制，且需要用户明确授权。它适用于新闻类、社交媒体类PWA定期更新内容。}}
+
+{{Web Share API集成}}{{Web Share API允许PWA调用系统的原生分享功能，将内容分享到其他应用。通过navigator.share()方法可以分享文本、URL和文件。这是一个不需要任何权限的API，在移动设备上体验尤其好。结合manifest中的share_target字段，PWA既可以作为分享来源也可以作为分享目标。}}
+
+{{PWA的安全要求}}{{PWA必须在安全上下文（Secure Context）中运行，即通过HTTPS提供服务。这是因为Service Worker拥有强大的能力（如拦截请求、接收推送），如果在不安全的连接中运行可能被中间人攻击利用。localhost被视为安全上下文以便本地开发。Service Worker中的同步XHR和Web Storage API不可用。}}
+
+{{PWA在各平台的支持}}{{PWA在不同平台上的支持程度不同。Android Chrome对PWA支持最完善，包括安装、推送通知、后台同步等。iOS Safari从iOS 16.4开始支持Web Push Notifications，但仍有诸多限制。桌面端Chrome、Edge、Firefox都良好支持PWA。Windows通过Microsoft Store支持PWA分发。开发者需要注意各平台的差异并做相应适配。}}
+
+{{Workbox工具库}}{{Workbox是Google维护的Service Worker工具库，简化了SW的开发。它提供了预缓存和运行时缓存的高级封装、多种内置缓存策略（CacheFirst、NetworkFirst、StaleWhileRevalidate等）、路由匹配、过期管理和后台同步支持。Workbox可以作为构建工具的插件使用（如webpack、Vite），大幅降低PWA开发复杂度。}}
+
+{{PWA与原生应用的对比优势}}{{PWA相比原生应用的优势包括：1）跨平台——单一代码库覆盖所有平台；2）即时更新——无需应用商店审核，用户始终使用最新版本；3）低分发门槛——通过URL即可访问，无需下载安装包；4）可发现性——可被搜索引擎索引；5）轻量——无需安装大体积应用包；6）链接分享——可以像网页一样通过链接分享。}}
+
+{{PWA的局限性}}{{PWA的局限性包括：1）iOS支持有限——iOS上不支持完整的后台执行、蓝牙等硬件访问受限；2）没有统一的应用商店分发（虽然可通过Microsoft Store等分发）；3）无法访问所有原生API（如NFC、部分传感器）；4）用户认知度低——很多用户不知道如何安装PWA；5）浏览器兼容性差异——不同浏览器对某些API的支持程度不同。}}
+
+{{PWA的Lighthouse审计}}{{Google Lighthouse可以审计PWA的各项指标。Lighthouse PWA检查项包括：是否通过HTTPS提供、是否有有效的manifest（name、icons、start_url等）、是否注册了Service Worker、SW是否控制页面、离线时是否能加载、是否重定向到HTTPS等。持续使用Lighthouse监控可以确保PWA满足最佳实践。}}
+
+{{PWA的性能优化}}{{PWA性能优化策略包括：1）利用Service Worker预缓存关键资源实现秒开；2）使用Stale-While-Revalidate策略平衡速度和新鲜度；3）通过静态路由（addRoutes）减少SW启动开销；4）合理设置缓存大小和过期策略；5）使用流式响应优化大资源加载；6）利用后台预加载提升导航体验。}}
+
+{{Splash Screen（启动画面）}}{{PWA启动时会显示一个启动画面，由浏览器根据manifest自动生成。启动画面由manifest中的name（应用名称）、background_color（背景颜色）和icons（图标）共同定义。启动画面在应用加载完成前展示，提供原生应用般的启动体验。确保background_color与应用实际背景一致可以实现无缝过渡。}}
+
+{{PWA的调试技巧}}{{PWA调试技巧：1）Chrome DevTools的Application面板可以查看manifest、Service Worker状态和缓存内容；2）使用"Update on reload"选项在每次刷新时更新SW；3）通过"Offline"模拟离线状态；4）使用Storage面板查看和管理缓存数据；5）在Application > Service Workers中查看SW生命周期状态；6）使用chrome://inspect/#service-workers深入调试SW。}}
+
+{{PWA中的离线页面设计}}{{设计良好的PWA应提供有意义的离线体验，而非简单地显示错误页面。策略包括：1）预缓存核心页面和UI骨架；2）展示已缓存的最后内容并标注"离线"状态；3）提供离线可用的功能入口；4）排队离线时的用户操作，网络恢复后自动同步。离线体验的质量是区分优秀PWA和平庸PWA的关键因素。}}
+
+{{IndexedDB在PWA中的应用}}{{虽然Cache API适合缓存网络请求/响应对，但IndexedDB是PWA中存储结构化数据的主要方案。它支持大容量存储、索引查询和事务操作，适合存储用户数据、配置信息、离线操作队列等。与Cache API配合使用，Cache负责资源缓存，IndexedDB负责数据持久化。}}
+
+{{StorageManager存储估算}}{{StorageManager.estimate()方法用于查询当前源的存储使用情况，返回usage（已使用字节数）和quota（配额字节数）。这对于PWA的缓存管理非常重要——在缓存大量资源前检查剩余空间，避免超出浏览器的存储限制。浏览器在存储紧张时可能清除整个源的缓存数据。}}
+
+{{PWA与响应式设计结合}}{{PWA应当结合响应式设计以适配不同设备。manifest中的orientation和display_override字段控制应用的显示方式，CSS媒体查询和容器查询负责布局适配。PWA可以在手机、平板、桌面甚至可折叠设备上运行，响应式设计确保在所有这些设备上提供优秀的用户体验。}}
+
+{{PWA在企业场景中的应用}}{{PWA在企业场景中越来越受欢迎。优势包括：无需通过应用商店分发（可内部部署）、即时更新无需用户手动操作、跨平台一致体验降低开发成本、离线工作能力适合弱网环境。许多企业使用PWA替代或补充内部工具的原生应用，如CRM、ERP、报表系统等。}}

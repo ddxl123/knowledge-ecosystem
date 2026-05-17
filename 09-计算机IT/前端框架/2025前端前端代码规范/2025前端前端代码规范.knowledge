@@ -1,0 +1,163 @@
+# 2025前端前端代码规范
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}
+{{ESLint 是什么}}
+ESLint 是一个用于识别和报告 ECMAScript/JavaScript 代码模式的工具，目标是使代码更加一致并避免 bug。它完全可插拔，每个规则都是一个插件，可以在运行时添加更多规则、社区插件、配置和解析器来扩展功能。2025 年 ESLint 最新版本要求 Node.js ^20.19.0、^22.13.0 或 >=24，并推荐使用 Flat Config 格式（eslint.config.js）。
+
+{{知识点2}}
+{{ESLint Flat Config 配置格式}}
+ESLint 9+ 推荐使用 Flat Config 格式（eslint.config.js 或 eslint.config.mjs），取代传统的 .eslintrc 格式。使用 defineConfig() 辅助函数进行配置，支持按文件模式（files）匹配规则，可通过 extends 继承推荐配置如 @eslint/js 的 js.configs.recommended。
+
+{{知识点3}}
+{{ESLint 规则级别}}
+ESLint 规则有三个错误级别：off（0）关闭规则、warn（1）开启为警告不影响退出码、error（2）开启为错误退出码为 1。这允许对规则应用进行细粒度控制，例如 "no-unused-vars": "warn" 将未使用变量设为警告而非错误。
+
+{{知识点4}}
+{{Prettier 代码格式化器}}
+Prettier 是一个固执己见的代码格式化器，支持 JavaScript、JSX、TypeScript、CSS/SCSS/Less、HTML、JSON、GraphQL、Markdown、YAML 等语言。它解析代码后忽略原始格式，根据最大行宽重新打印代码，确保整个代码库输出一致的风格。
+
+{{知识点5}}
+{{Prettier 与 ESLint 的区别与配合}}
+Prettier 专注于代码格式化（空格、缩进、换行等），ESLint 专注于代码质量规则（未使用变量、潜在 bug 等）。两者通常配合使用：ESLint 处理逻辑规则，Prettier 处理格式化。可通过 eslint-config-prettier 禁用 ESLint 中与 Prettier 冲突的格式规则。
+
+{{知识点6}}
+{{Biome — 新一代前端工具链}}
+Biome 是用 Rust 编写的高性能 Web 工具链，集格式化和 lint 于一体。格式化器与 Prettier 有 97% 兼容性，速度快约 35 倍。内置 502 条 lint 规则，来自 ESLint、TypeScript ESLint 等来源。支持 JavaScript、TypeScript、JSX、TSX、JSON、HTML、CSS 和 GraphQL，零配置即可开始使用。
+
+{{知识点7}}
+{{TypeScript ESLint 集成}}
+typescript-eslint 是为 ESLint 提供 TypeScript 支持的工具。安装 eslint、@eslint/js、typescript、typescript-eslint 后，在 eslint.config.mjs 中引入 tseslint.configs.recommended 即可启用 TypeScript 推荐规则。还提供 strict（更严格的规则）和 stylistic（风格一致性规则）等额外配置。
+
+{{知识点8}}
+{{TypeScript 类型感知 Lint}}
+typescript-eslint 提供利用 TypeScript 类型信息的强大规则，能够检测仅通过静态分析无法发现的问题。需要在 ESLint 配置中启用 typed linting，配置 parserOptions.project 指向 tsconfig.json，以启用类型感知的 lint 规则。
+
+{{知识点9}}
+{{JavaScript Standard Style 规范}}
+JavaScript Standard Style 是一套无需配置的 JavaScript 代码规范，核心规则包括：使用 2 个空格缩进、字符串使用单引号、不使用分号（除特殊需要外）、关键字后加空格、函数名和括号间不留空格。它基于 ESLint 实现，可通过 standard 包直接使用。
+
+{{知识点10}}
+{{变量声明规范}}
+每个 var/let/const 关键字应单独声明一个变量，避免一行声明多个变量。推荐优先使用 const，需要重新赋值时使用 let，避免使用 var。const 声明的变量不可重新赋值但对象属性可修改，let 具有块级作用域。
+
+{{知识点11}}
+{{驼峰命名法（camelCase）}}
+变量名和函数名统一使用驼峰命名法（camelCase），如 myFunction、userName。避免使用下划线命名（my_function）或混合命名方式。构造函数和类名使用帕斯卡命名法（PascalCase），如 UserAccount、HttpClient。
+
+{{知识点12}}
+{{相等比较规范}}
+始终使用严格相等运算符 === 和 !== 而非宽松相等 == 和 !=。== 会进行类型强制转换导致意外行为，=== 则同时比较值和类型。例如 0 == '' 为 true，但 0 === '' 为 false。
+
+{{知识点13}}
+{{条件语句赋值规范}}
+条件语句中的赋值语句必须使用括号包裹，以区分赋值（=）和全等比较（===）。例如 while ((m = text.match(expr))) 是正确写法，而 while (m = text.match(expr)) 应避免，因为可能是将 === 误写为 =。
+
+{{知识点14}}
+{{对象和数组字面量规范}}
+使用数组字面量 [] 而非 new Array() 构造器创建数组。使用对象字面量 {} 而非 new Object() 创建对象。使用正则字面量 /pattern/ 而非 new RegExp()（当模式为常量时）。这使代码更简洁且不易出错。
+
+{{知识点15}}
+{{字符串处理规范}}
+使用模板字符串（反引号 ``）代替字符串拼接。避免使用多行字符串（用 \ 连接），改用模板字符串的多行能力。使用字符串模板时注意 ${} 只在反引号内有效，单引号中的 ${name} 不会解析变量。
+
+{{知识点16}}
+{{代码缩进规范}}
+统一使用空格缩进（推荐 2 个空格），不要使用制表符（Tab），不要混合使用空格与制表符。编辑器中应配置将 Tab 键转换为空格，可通过 .editorconfig 文件统一团队的缩进配置。
+
+{{知识点17}}
+{{空格与空白规范}}
+单行代码块两边加空格：{ return true } 而非 {return true}。键值对冒号与值之间留空格：{ key: 'value' }。函数调用时标识符与括号间不留间隔：console.log('hello') 而非 console.log ('hello')。除了缩进不要使用多个空格。
+
+{{知识点18}}
+{{逗号使用规范}}
+关于尾逗号（trailing comma）存在两种风格：Standard Style 不允许多余的行末逗号，而 Airbnb 风格鼓励多行结构使用尾逗号（便于 git diff）。逗号始终置于行末而非行首。选择一种风格后团队统一执行。
+
+{{知识点19}}
+{{分号使用规范}}
+关于分号存在两大流派：Standard Style 和 Prettier 默认不加分号（依赖 ASI 自动插入），Airbnb 风格要求始终加分号。2025 年趋势是多数团队选择不加分号，配合 Prettier 自动处理。关键是团队统一选择一种风格。
+
+{{知识点20}}
+{{构造函数规范}}
+构造函数和类名必须以大写字母开头（PascalCase），如 new Animal()。无参构造函数调用时必须带上括号：new Animal() 而非 new Animal。ES6 class 子类构造器中必须调用 super()，且在使用 this 之前必须先调用 super()。
+
+{{知识点21}}
+{{函数设计规范}}
+避免使用 arguments 对象，使用剩余参数 ...args 代替。避免使用 Function 构造器创建函数。函数应保持短小，单一职责。优先使用箭头函数作为回调，但对象方法和构造函数使用普通函数声明。避免嵌套过深的回调。
+
+{{知识点22}}
+{{ES6+ 现代语法规范}}
+优先使用 const/let 代替 var。使用解构赋值简化对象和数组操作。使用展开运算符 ... 代替 Object.assign 和 Array.concat。使用可选链 ?. 和空值合并 ?? 简化空值处理。使用 for...of 代替 for...in 遍历数组。
+
+{{知识点23}}
+{{.editorconfig 配置文件}}
+EditorConfig 帮助跨编辑器和 IDE 统一编码风格。在项目根目录创建 .editorconfig 文件，定义缩进风格（indent_style）、缩进大小（indent_size）、字符集（charset）、换行符（end_of_line）、尾部换行（insert_final_newline）等。大多数编辑器原生支持或通过插件支持。
+
+{{知识点24}}
+{{Git Hooks 与代码质量保障}}
+使用 Husky 管理 Git hooks，在 commit 前自动运行 lint 检查。配合 lint-staged 只对暂存区文件运行检查，提高效率。典型配置：pre-commit 运行 eslint --fix 和 prettier --write，commit-msg 检查提交信息格式。确保不规范代码无法提交到仓库。
+
+{{知识点25}}
+{{提交信息规范（Conventional Commits）}}
+遵循 Conventional Commits 规范编写提交信息：格式为 type(scope): description。type 包括 feat（新功能）、fix（修复）、docs（文档）、style（格式）、refactor（重构）、test（测试）、chore（构建/工具）。使用 commitlint 工具自动验证提交信息格式。
+
+{{知识点26}}
+{{CSS 命名规范 — BEM 方法论}}
+BEM（Block-Element-Modifier）是 CSS 类名命名方法论。Block 是独立实体（如 .card），Element 是 Block 的组成部分（如 .card__title），Modifier 是变体状态（如 .card--featured）。BEM 通过命名约定避免样式冲突，无需依赖 CSS Modules 或 CSS-in-JS。
+
+{{知识点27}}
+{{组件命名规范}}
+React/Vue 组件文件使用帕斯卡命名法（PascalCase），如 UserProfile.vue 或 ButtonGroup.tsx。组件名应由多个单词组成（避免与 HTML 元素冲突），如 TodoItem 而非 Todo。Props 命名使用 camelCase，事件名使用 kebab-case（Vue）或 camelCase（React）。
+
+{{知识点28}}
+{{文件与目录结构规范}}
+按功能或模块组织文件而非按类型。组件文件名与组件名一致（PascalCase）。工具函数放在 utils/ 目录，类型定义放在 types/ 目录。每个模块有自己的 index 文件作为入口。避免过深的目录嵌套（建议不超过 3-4 层）。
+
+{{知识点29}}
+{{TypeScript 类型规范}}
+优先使用 interface 定义对象类型，type 用于联合类型和工具类型。避免使用 any，使用 unknown 代替需要动态类型的场景。函数参数和返回值应显式声明类型。使用泛型提高代码复用性。导出类型时使用 export type 明确标记。
+
+{{知识点30}}
+{{代码注释规范}}
+使用 JSDoc 标注函数的功能、参数和返回值。复杂逻辑添加行内注释说明 why 而非 what。TODO 注释标注待完成事项并关联 issue 编号。避免无意义的注释如 // 设置名称 name = 'xxx'。公共 API 必须有完整的文档注释。
+
+{{知识点31}}
+{{Import 导入规范}}
+导入顺序应分组：内置模块 → 第三方库 → 本地模块，组间空行分隔。避免使用相对路径过深的导入（如 ../../../），使用路径别名（如 @/components）。避免循环依赖。使用 import type 导入仅用于类型的模块，帮助打包工具 tree-shaking。
+
+{{知识点32}}
+{{错误处理规范}}
+使用 try...catch 捕获可能出错的异步操作。避免空的 catch 块，至少记录错误信息。使用自定义错误类继承 Error 提供更具体的错误类型。Promise 链使用 .catch() 或 async/await 的 try/catch。全局配置未捕获异常处理器作为最后防线。
+
+{{知识点33}}
+{{Lint-Staged 配置实践}}
+lint-staged 只对 Git 暂存区的文件运行 lint 和格式化命令，避免对整个项目运行耗时检查。在 package.json 中配置 lint-staged 字段，例如对 JS/TS 文件运行 eslint --fix，对所有文件运行 prettier --write。配合 Husky 的 pre-commit hook 使用。
+
+{{知识点34}}
+{{Prettier 配置文件}}
+Prettier 通过 .prettierrc 文件配置（支持 JSON、YAML、JS 格式），常用选项包括：printWidth（行宽，默认 80）、tabWidth（缩进宽度，默认 2）、semi（是否加分号）、singleQuote（是否用单引号）、trailingComma（尾逗号策略）。.prettierignore 文件指定不格式化的文件。
+
+{{知识点35}}
+{{ESLint 忽略文件配置}}
+使用 .eslintignore 文件（传统格式）或在 eslint.config.js 中配置 ignores 数组来排除不需要 lint 的文件。常见忽略项包括 node_modules/、dist/、build/、coverage/ 等构建输出目录。Flat Config 中 ignores 支持 glob 模式匹配。
+
+{{知识点36}}
+{{代码审查（Code Review）流程}}
+代码审查是保障代码质量的关键环节。审查重点包括：代码逻辑正确性、是否遵循团队规范、是否有潜在性能问题、安全性考虑、可维护性。使用 GitHub PR 或 GitLab MR 的 Review 功能，结合 CI 自动化检查（lint、测试、构建）减少人工审查负担。
+
+{{知识点37}}
+{{Monorepo 代码规范管理}}
+Monorepo 项目中，使用根目录的 ESLint 和 Prettier 配置统一所有子包的代码规范。通过 workspace 级别的共享配置包（如 eslint-config-workspace）避免重复配置。Turborepo 或 Nx 的缓存机制可加速 lint 检查。每个子包可继承并覆盖共享配置。
+
+{{知识点38}}
+{{CI/CD 中的代码规范检查}}
+在 CI/CD 流水线中集成代码规范检查作为质量门禁。典型流程：lint 检查 → 单元测试 → 构建 → 部署。使用 GitHub Actions 或 GitLab CI 配置在 PR 阶段自动运行 ESLint、Prettier 检查和 TypeScript 类型检查。不通过检查的 PR 不允许合并。
+
+{{知识点39}}
+{{代码复杂度控制}}
+使用 ESLint 的 complexity 规则限制函数圈复杂度（建议不超过 10）。限制函数行数（建议不超过 50 行）。限制嵌套深度（建议不超过 4 层）。使用 SonarQube 等工具进行更深入的代码质量分析，包括认知复杂度和代码重复率检测。
+
+{{知识点40}}
+{{无障碍（A11y）代码规范}}
+前端代码应遵循无障碍规范（WCAG 2.1）。使用 ESLint 插件 eslint-plugin-jsx-a11y 检查 React 中的无障碍问题。确保图片有 alt 属性、按钮有可访问名称、表单有 label 关联、颜色对比度足够。使用语义化 HTML 标签（nav、main、article 等）代替纯 div。

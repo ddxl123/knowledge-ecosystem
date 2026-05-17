@@ -1,0 +1,77 @@
+# 2025前端Expo React Native
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{Expo是什么：Expo是一个基于React Native的开源框架和工具链集合，提供了一整套工具和服务来简化跨平台移动应用开发。Expo包含Expo SDK（原生模块库）、Expo CLI（命令行工具）、Expo Go（开发预览应用）和EAS（Expo Application Services云服务）。开发者可以用纯JavaScript/TypeScript编写代码，无需直接操作原生项目即可构建Android、iOS和Web应用。}}
+
+{{知识点2}}{{React Native 2025版本里程碑：2025年React Native经历了0.80至0.82三个重要版本。0.80（2025年6月）引入React 19.1、JS API变更并冻结Legacy Architecture；0.81（2025年8月）支持Android 16、加速iOS构建；0.82（2025年10月）成为第一个完全运行在New Architecture上的版本，标志着"新纪元"的开始。}}
+
+{{知识点3}}{{React Native New Architecture（新架构）：从0.82版本开始，React Native完全移除了Legacy Architecture（旧架构）的支持。新架构基于Fabric渲染器和TurboModules，提供了更好的性能和更现代的互操作机制。Fabric取代了旧的UI管理器，使用同步渲染路径，支持并发特性；TurboModules取代了旧的Native Modules，采用懒加载和类型安全的JSI绑定。}}
+
+{{知识点4}}{{Hermes JavaScript引擎：Hermes是Meta为React Native开发的专用JavaScript引擎。2025年推出的实验性Hermes V1带来了编译器和VM层面的性能提升，在Expensify应用测试中Bundle加载速度提升3-9%，总TTI（Time to Interactive）提升2.5-7.6%。到2026年初的React Native 0.84，Hermes V1已成为默认引擎。}}
+
+{{知识点5}}{{Expo SDK版本演进：Expo SDK与React Native版本紧密对应。SDK 54对应React Native 0.81（最后支持Legacy Architecture的版本），SDK 55（2026年2月发布）对应React Native 0.83。每个SDK版本都会带来新的原生模块、API改进和开发体验优化。}}
+
+{{知识点6}}{{Expo Router（文件系统路由）：Expo Router是基于文件系统的通用路由库，将Web框架（如Next.js）的文件路由概念引入React Native。在app目录下创建的文件自动成为路由，支持Android、iOS和Web三端统一的导航结构。它基于React Native Screens构建，提供原生导航体验，支持深度链接、离线优先、静态渲染等特性。}}
+
+{{知识点7}}{{Expo Router核心特性：(1)原生导航：基于React Native Screens，平台优化的原生导航；(2)可分享：每个屏幕自动支持深度链接；(3)离线优先：应用缓存后可离线运行，自动更新；(4)优化：生产环境自动延迟加载路由；(5)通用：Android、iOS和Web共享统一导航结构；(6)可发现：Web端支持构建时静态渲染。}}
+
+{{知识点8}}{{Expo Go与Development Builds：Expo Go是面向学习者的预构建预览应用，包含固定的一组原生库，适合快速入门。Development Build（开发构建）是包含expo-dev-client库的Debug版应用，是生产级应用开发的标准方式。开发构建支持自定义原生模块、网络请求检查、切换开发服务器等高级功能。}}
+
+{{知识点9}}{{EAS Build（云构建服务）：EAS Build是Expo Application Services提供的托管构建服务，可在云端为Android和iOS构建应用二进制文件。主要特性：一致的云构建环境、自动管理应用签名凭证、内部分享构建（ad hoc分发）、构建配置文件（eas.json中的build profiles）、自动提交到应用商店、与expo-updates的深度集成。2026年还支持构建缓存，可加速后续构建达30%。}}
+
+{{知识点10}}{{EAS Update（OTA更新服务）：EAS Update是Expo的OTA（Over-The-Air）更新云服务，允许应用在不经过应用商店审核的情况下更新JavaScript代码、样式和图片等非原生内容。使用expo-updates库的应用可以接收更新，支持useUpdates() React Hook进行更新管理、洞察追踪仪表板、版本回滚等功能。}}
+
+{{知识点11}}{{EAS Submit（应用提交服务）：EAS Submit是自动将构建好的应用提交到Apple App Store和Google Play Store的服务。与EAS Build集成，支持--auto-submit标志在构建成功后自动提交。配合EAS Workflows可以实现完整的CI/CD自动化流程。}}
+
+{{知识点12}}{{EAS Workflows（工作流自动化）：EAS Workflows提供CI/CD自动化能力，支持定时任务（cron jobs）、TestFlight分发、GitHub评论集成等功能。2025年新增了工作流洞察（Insights）仪表板，可监控成功率、活跃运行和失败计数等关键指标。}}
+
+{{知识点13}}{{Expo Modules API：Expo Modules API是创建原生模块的现代方式，允许开发者用Swift（iOS）和Kotlin（Android）编写原生模块，而无需深入了解Objective-C++或Java互操作细节。它提供了类型安全的API定义、简化的样板代码和与Expo生态的深度集成。}}
+
+{{知识点14}}{{Metro打包器：Metro是React Native默认的JavaScript打包器。2025-2026年的改进包括TLS支持（可在开发时启用HTTPS/WSS）、更好的缓存机制、以及与Expo工具链的深度集成。Metro支持热模块替换（HMR）和Fast Refresh，提供快速的开发迭代体验。}}
+
+{{知识点15}}{{app.json / app.config.js配置：Expo项目通过app.json（或app.config.js/app.config.ts）进行核心配置。配置项包括应用名称、版本、图标、启动画面、权限声明、原生模块配置等。动态配置（app.config.js）支持条件逻辑和环境变量，适合复杂项目需求。}}
+
+{{知识点16}}{{Expo SDK原生模块：Expo SDK提供了大量预构建的原生模块，涵盖常见功能：expo-camera（相机）、expo-location（定位）、expo-notifications（推送通知）、expo-file-system（文件系统）、expo-secure-store（安全存储）、expo-image-picker（图片选择）、expo-av（音视频播放）、expo-sensors（传感器）、expo-haptics（触觉反馈）等。}}
+
+{{知识点17}}{{React Native组件基础：React Native使用<View>替代HTML的div，<Text>替代p/span，<Image>替代img，<ScrollView>替代滚动容器，<FlatList>和<SectionList>处理长列表。所有组件默认使用Flexbox布局，flexDirection默认为column（与Web的row不同）。样式通过StyleSheet.create()定义，不支持CSS继承。}}
+
+{{知识点18}}{{React Native样式系统：React Native使用JavaScript对象定义样式，基于Flexbox布局模型。关键差异：flexDirection默认column、尺寸无单位（dp/pt）、不支持CSS选择器和继承、支持平台特定样式（Platform.select）。StyleSheet.create()提供编译时优化和类型检查。2025年的0.85版本移除了StyleSheet.absoluteFillObject。}}
+
+{{知识点19}}{{React Native导航方案演进：从早期的NavigatorIOS/Navigator到React Navigation，再到Expo Router。React Navigation是社区主导的导航库，支持Stack、Tab、Drawer等导航模式。Expo Router在此基础上引入文件系统路由，提供更Web化的开发体验。两者都基于React Native Screens实现原生导航。}}
+
+{{知识点20}}{{React Native状态管理：React Native应用的状态管理方案与Web React一致。核心方案包括：React Context + useReducer（轻量级）、Redux/Zustand/Jotai/Recoil（全局状态）、React Query/SWR（服务端状态）、MobX（响应式状态）。2025年React 19引入的use() hook和Server Components进一步丰富了状态管理模式。}}
+
+{{知识点21}}{{React Native网络请求：React Native内置fetch API，与Web标准一致。常用方案还包括axios（拦截器和错误处理更灵活）、React Query/TanStack Query（数据获取和缓存管理）。需要注意的是React Native不支持cookies的自动管理，需要手动处理认证token。expo-secure-store适合存储敏感认证信息。}}
+
+{{知识点22}}{{React Native动画系统：React Native提供Animated API和新架构下的Shared Animation Backend。Animated API支持声明式动画，可使用原生驱动（useNativeDriver: true）在UI线程执行动画以避免JS线程阻塞。Reanimated（react-native-reanimated）是社区流行的高性能动画库，0.85版本中其动画逻辑被集成到React Native核心，可原生驱动layout属性动画。}}
+
+{{知识点23}}{{React Native手势处理：React Native Gesture Handler是处理复杂手势的标准库，提供比PanResponder更原生、更流畅的手势识别。支持平移、缩放、旋转、长按等手势，可与Reanimated配合实现高性能的交互式动画。2025年这些库已成为大多数生产应用的标配。}}
+
+{{知识点24}}{{React Native性能优化：关键优化策略包括：(1)使用React.memo避免不必要的重渲染；(2)FlatList使用getItemLayout避免动态测量；(3)使用useNativeDriver进行原生动画；(4)图片使用expo-image替代Image组件（支持缓存和渐进加载）；(5)避免在渲染中创建新对象/函数；(6)使用Hermes引擎的字节码预编译。}}
+
+{{知识点25}}{{React Native调试工具：(1)React Native DevTools：基于Chrome DevTools Protocol，支持组件检查、性能分析、网络监控；(2)Flipper：Meta的桌面调试平台，支持插件扩展；(3)Reactotron：社区调试工具；(4)Console.log和断点调试。0.85版本支持多CDP连接，允许DevTools、VS Code和AI代理同时连接。}}
+
+{{知识点26}}{{React Native测试策略：(1)Jest：单元测试和快照测试，0.85版本将Jest preset移至独立包@react-native/jest-preset；(2)React Native Testing Library：组件测试；(3)Detox/ Maestro：端到端测试框架；(4)Expo提供的expo-testing-library集成。2025年测试工具链趋于成熟，CI/CD集成更加便捷。}}
+
+{{知识点27}}{{Expo Web支持：Expo支持将React Native应用编译为Web应用，使用react-native-web将React Native组件映射到Web DOM。Expo Router提供三端统一的路由方案。Web端支持静态渲染（Static Rendering）和服务器端渲染（SSR），提升SEO和首屏加载性能。Metro打包器负责Web端的代码打包。}}
+
+{{知识点28}}{{React Native多平台愿景：React Native已从移动端扩展到多个平台：Android、iOS、Apple TV、Windows、macOS、Web（react-native-web）、Meta Quest VR（2026年宣布官方支持）。react-strict-dom项目致力于提供跨平台的DOM兼容API，进一步统一各平台的开发体验。}}
+
+{{知识点29}}{{Expo推送通知：Expo Notifications服务提供跨平台推送通知能力，支持iOS和Android。expo-notifications库处理通知的接收、展示和交互。配合EAS服务可以管理推送证书和密钥。支持本地通知和远程推送通知，提供丰富的通知配置选项（标题、正文、图标、声音、数据负载等）。}}
+
+{{知识点30}}{{Expo项目结构：典型Expo Router项目结构：app/目录包含路由文件（_layout.tsx为布局组件，index.tsx为首页）；components/存放可复用组件；constants/存放常量；hooks/存放自定义Hook；assets/存放静态资源。文件即路由，支持嵌套路由、动态路由（[id].tsx）、路由分组（(group)/）和模态路由。}}
+
+{{知识点31}}{{Continuous Native Generation（持续原生生成）：Expo的理念是不手动编辑android/和ios/目录，而是通过配置和Expo工具链自动生成原生项目。这通过expo prebuild命令实现，根据app.json配置和已安装的Expo模块自动生成原生代码。当需要自定义原生代码时，使用Expo Config Plugins进行配置。}}
+
+{{知识点32}}{{Expo Config Plugins：Config Plugins是在prebuild过程中修改原生项目的机制。它们是Node.js脚本，可以修改Android的gradle配置、AndroidManifest.xml、iOS的Info.plist、Podfile等原生文件。社区库通常自带Config Plugin，开发者也可以编写自定义Plugin。这是Expo "managed workflow"和"bare workflow"之间的桥梁。}}
+
+{{知识点33}}{{React 19在React Native中的应用：React Native 0.82+搭载React 19.1.1，带来了多项新特性：(1)use() hook用于在渲染中读取Promise和Context；(2)Server Components支持（实验性）；(3)Actions（useActionState、useFormStatus）简化表单处理；(4)ref作为prop传递，无需forwardRef；(5)use() hook替代部分useEffect场景。}}
+
+{{知识点34}}{{TypeScript在Expo/React Native中的使用：Expo和React Native对TypeScript提供一流支持。create-expo-app默认创建TypeScript项目。React Native核心组件和API都有完善的类型定义。Expo SDK模块同样提供TypeScript类型。推荐在项目中使用TypeScript以获得更好的IDE支持、类型安全和重构能力。}}
+
+{{知识点35}}{{React Native与原生代码互操作：当需要调用平台特定API或集成原生SDK时，有三种方式：(1)Expo Modules API（推荐，Swift/Kotlin编写）；(2)Turbo Native Modules（新架构的原生模块系统）；(3)传统Native Modules（兼容性方案）。新架构的JSI（JavaScript Interface）允许JS直接调用原生代码，无需JSON序列化的Bridge。}}
+
+{{知识点36}}{{Expo安全存储与认证：expo-secure-store提供安全的键值存储，底层使用iOS Keychain和Android Keystore，适合存储认证token、API密钥等敏感信息。expo-auth-session提供OAuth认证流程支持，内置多个Provider（Google、Facebook、Apple等）的配置。配合expo-crypto可进行加密操作。}}
+
+{{知识点37}}{{React Native发布与分发：应用发布流程包括：(1)使用EAS Build构建生产版本；(2)使用EAS Submit提交到应用商店；(3)使用EAS Update推送OTA更新。支持构建配置文件（production、preview、development）管理不同环境。内部测试可通过ad hoc分发或TestFlight（iOS）进行。EAS Workflows可自动化整个流程。}}

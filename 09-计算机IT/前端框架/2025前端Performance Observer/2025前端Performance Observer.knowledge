@@ -1,0 +1,123 @@
+# 2025前端Performance Observer
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{Performance Observer 是什么}}
+Performance Observer 是浏览器提供的 Web API，用于异步观察性能测量事件。当浏览器性能时间线中记录新的 PerformanceEntry 时，它会通过回调函数通知开发者。与 performance.getEntries() 等同步方法不同，Performance Observer 采用事件驱动模式，不会遗漏在脚本执行前已产生的性能条目（配合 buffered 选项）。该 API 自 2020 年 1 月起在所有主流浏览器中广泛可用，也支持 Web Workers。
+
+{{知识点2}}{{Performance Observer 构造函数}}
+通过 new PerformanceObserver(callback) 创建实例。callback 接收两个参数：list（PerformanceObserverEntryList 对象）和 observer（观察者自身实例）。回调会在观察到的性能条目被记录时异步触发。构造函数不会立即开始观察，必须调用 observe() 方法才会激活。
+
+{{知识点3}}{{observe() 方法 — entryTypes 模式}}
+observer.observe({ entryTypes: ["mark", "measure"] }) 同时观察多种类型的性能条目。entryTypes 是一个字符串数组，包含要观察的 entryType 值。使用 entryTypes 模式时不能同时使用 type、buffered 或 durationThreshold 选项。未识别的类型会被忽略，浏览器可能在控制台输出警告。
+
+{{知识点4}}{{observe() 方法 — type 模式}}
+observer.observe({ type: "resource", buffered: true }) 观察单一类型的性能条目。type 模式允许使用 buffered 和 durationThreshold 选项，而 entryTypes 模式不允许。当需要获取缓冲区中已有的历史条目或设置持续时间阈值时，必须使用 type 模式。
+
+{{知识点5}}{{buffered 选项的作用}}
+buffered 是一个布尔值选项，设为 true 时会将观察者创建之前已存在于缓冲区中的条目排队到观察者的缓冲区中。这对于页面加载早期就产生的性能条目（如 navigation、paint）至关重要，因为这些条目在脚本执行前就已记录。只能与 type 选项配合使用。
+
+{{知识点6}}{{durationThreshold 选项}}
+durationThreshold 是一个 DOMHighResTimeStamp 值，用于设置 PerformanceEventTiming 条目的持续时间阈值。默认值为 104ms，会被四舍五入到最接近的 8ms 倍数，最低可设为 16ms。只能与 type 选项配合使用，不能与 entryTypes 同时使用。用于过滤出较长的事件交互。
+
+{{知识点7}}{{disconnect() 方法}}
+observer.disconnect() 停止观察者回调接收新的性能条目。调用后观察者不再活跃，但已缓存的条目不会丢失。如果需要重新开始观察，可以再次调用 observe()。这是资源清理的重要方法，避免不必要的回调触发。
+
+{{知识点8}}{{takeRecords() 方法}}
+observer.takeRecords() 返回当前存储在观察者缓冲区中的性能条目列表，并清空缓冲区。通常在 disconnect() 前调用，以确保不遗漏任何已缓冲但尚未通过回调处理的条目。返回值是 PerformanceEntry 对象的数组。
+
+{{知识点9}}{{PerformanceObserver.supportedEntryTypes 静态属性}}
+这是一个只读静态属性，返回当前浏览器支持的所有 entryType 值的数组。在 Chrome 129 主线程中返回 ["element", "event", "first-input", "largest-contentful-paint", "layout-shift", "long-animation-frame", "longtask", "mark", "measure", "navigation", "paint", "resource", "visibility-state"]。Worker 线程中仅返回 ["mark", "measure", "resource"]。用于功能检测。
+
+{{知识点10}}{{PerformanceEntry 基础接口}}
+所有性能条目都继承自 PerformanceEntry，提供四个核心只读属性：name（条目名称字符串）、entryType（性能指标类型如 "mark"、"resource"）、startTime（DOMHighResTimeStamp 格式的起始时间）、duration（DOMHighResTimeStamp 格式的持续时间）。还提供 toJSON() 方法返回 JSON 表示。
+
+{{知识点11}}{{navigation 类型 — 页面导航性能}}
+entryType 为 "navigation" 时对应 PerformanceNavigationTiming，提供页面导航的完整时间线。包含 domContentLoadedEventStart/End、loadEventStart/End、domInteractive、domComplete 等关键时间节点。还有 redirectCount、type（navigate/reload/back_forward）和 activationStart（预渲染激活时间）等属性。
+
+{{知识点12}}{{navigation 类型 — 关键时间节点}}
+PerformanceNavigationTiming 提供的时间点按顺序为：redirectStart → redirectEnd → workerStart → fetchStart → domainLookupStart → domainLookupEnd → connectStart → secureConnectionStart → connectEnd → requestStart → responseStart → domInteractive → domContentLoadedEventStart → domContentLoadedEventEnd → domComplete → loadEventStart → loadEventEnd。
+
+{{知识点13}}{{resource 类型 — 资源加载性能}}
+entryType 为 "resource" 时对应 PerformanceResourceTiming，记录每个资源（CSS、JS、图片、字体等）的加载时间。包含 DNS 查询时间（domainLookupEnd - domainLookupStart）、TCP 握手时间（connectEnd - connectStart）、TLS 协商时间、请求/响应时间等。默认缓冲区最多 250 条。
+
+{{知识点14}}{{resource 类型 — 资源大小信息}}
+PerformanceResourceTiming 提供 transferSize（传输大小字节数）、encodedBodySize（编码后响应体大小）、decodedBodySize（解码后响应体大小）。可通过 decodedBodySize !== encodedBodySize 判断内容是否被压缩，transferSize === 0 表示命中本地缓存。nextHopProtocol 可检查是否使用了 HTTP/2 或 HTTP/3。
+
+{{知识点15}}{{resource 类型 — 跨域时间信息限制}}
+跨域资源的 timing 属性默认返回 0（包括 redirectStart、redirectEnd、domainLookupStart、domainLookupEnd、connectStart、connectEnd、secureConnectionStart、requestStart、responseStart）。需要服务器设置 Timing-Allow-Origin 响应头才能暴露跨域计时信息。
+
+{{知识点16}}{{paint 类型 — 绘制性能}}
+entryType 为 "paint" 时对应 PerformancePaintTiming，记录两种绘制事件：first-paint（FP，首次绘制，任何内容渲染到屏幕）和 first-contentful-paint（FCP，首次内容绘制，第一个 DOM 文本或图像渲染）。duration 始终返回 0。paintTime 和 presentationTime 是更精细的绘制时间属性。
+
+{{知识点17}}{{largest-contentful-paint 类型 — LCP}}
+entryType 为 "largest-contentful-paint" 对应 LargestContentfulPaint 接口，记录视口中最大的图像或文本块的渲染时间。LCP 是 Google Core Web Vitals 的三大指标之一，理想值应在 2.5 秒以内。元素通过 element 属性获取，加载时间通过 startTime 获取。
+
+{{知识点18}}{{layout-shift 类型 — 布局偏移/CLS}}
+entryType 为 "layout-shift" 对应 LayoutShift 接口，记录页面元素在两帧之间的意外位置变化。value 属性是影响分数（impact fraction）乘以距离分数（distance fraction）的结果。hadRecentInput 为 true 表示 500ms 内有用户输入，此时的布局偏移不计入 CLS 分数。CLS 是 Core Web Vitals 指标之一，理想值应低于 0.1。
+
+{{知识点19}}{{layout-shift — sources 归因}}
+LayoutShift 的 sources 属性返回 LayoutShiftAttribution 对象数组，包含发生偏移的元素信息。每个归因对象提供 node（DOM 节点引用）、currentRect（当前位置）和 previousRect（之前位置），帮助开发者定位导致布局不稳定的具体元素。
+
+{{知识点20}}{{first-input 类型 — FID/INP}}
+entryType 为 "first-input" 对应 PerformanceEventTiming 的子集，记录用户首次与页面交互（如点击、按键）的延迟。processingStart - startTime 即为输入延迟。First Input Delay (FID) 替代指标 INP（Interaction to Next Paint）已正式成为 Core Web Vitals，衡量所有交互的响应性。
+
+{{知识点21}}{{event 类型 — 事件交互时序}}
+entryType 为 "event" 对应 PerformanceEventTiming，记录所有事件的交互时序，包括事件处理开始时间（processingStart）、处理结束时间（processingEnd）和下一帧渲染时间（renderStart）。通过 durationThreshold 可过滤出长事件。INP 指标从中取最差的交互延迟。
+
+{{知识点22}}{{longtask 类型 — 长任务检测}}
+entryType 为 "longtask" 对应 PerformanceLongTaskTiming，记录主线程持续 50ms 或更长时间的不间断任务。长任务会阻塞主线程，导致 TTI 延迟、输入延迟增大、动画卡顿。name 属性标识任务来源上下文（如 "self"、"same-origin"、"cross-origin-descendant" 等），attribution 属性提供 TaskAttributionTiming 归因信息。
+
+{{知识点23}}{{long-animation-frame 类型 — LoAF}}
+entryType 为 "long-animation-frame" 是较新的 API（Chrome 129+ 支持），比 longtask 更详细地记录超过 50ms 的动画帧。它将主线程工作与渲染帧关联，提供更准确的交互延迟归因。每个条目包含 blockingDuration（阻塞时长）、firstUIEventTimestamp 等属性，有助于诊断 INP 问题。
+
+{{知识点24}}{{element 类型 — 元素计时}}
+entryType 为 "element" 对应 PerformanceElementTiming，用于观察特定 HTML 元素（如 img、p 等）的渲染时间。元素需要添加 elementtiming HTML 属性才能被观察。提供 renderTime 和 loadTime，帮助追踪关键元素的可见时间。
+
+{{知识点25}}{{visibility-state 类型}}
+entryType 为 "visibility-state" 记录页面可见性状态变化的时间戳，如页面何时变为 hidden 或 visible。与 Page Visibility API 配合，可以精确了解用户何时离开或返回页面。对于计算 INP 等需要考虑页面可见性的指标很有用。
+
+{{知识点26}}{{mark 和 measure 类型 — 自定义计时}}
+entryType 为 "mark" 对应 PerformanceMark，通过 performance.mark("name") 创建自定义时间戳。entryType 为 "measure" 对应 PerformanceMeasure，通过 performance.measure("name", "startMark", "endMark") 计算两个时间点之间的持续时间。用于自定义业务性能指标的精确测量。
+
+{{知识点27}}{{Web Vitals 三大核心指标概览}}
+Core Web Vitals 包含三个指标：LCP（Largest Contentful Paint，最大内容绘制，≤2.5s 为优）、INP（Interaction to Next Paint，交互到下一帧绘制，≤200ms 为优）、CLS（Cumulative Layout Shift，累积布局偏移，≤0.1 为优）。这三个指标可通过 Performance Observer 的 largest-contentful-paint、event/first-input、layout-shift 类型分别采集。
+
+{{知识点28}}{{PerformanceObserverEntryList 接口}}
+observe() 回调的第一个参数是 PerformanceObserverEntryList，提供 getEntries()、getEntriesByType(type)、getEntriesByName(name, type) 方法。这些方法与 performance 对象上的同名方法类似，但只包含当前回调批次的条目，而非全局性能时间线中的所有条目。
+
+{{知识点29}}{{buffered 与 type 组合的典型用法}}
+获取页面加载早期产生的性能条目（如 navigation、paint、LCP、CLS）的最佳实践是使用 { type: "xxx", buffered: true }。示例：observer.observe({ type: "largest-contentful-paint", buffered: true }) 可以获取观察者创建前就已记录的 LCP 条目，不会遗漏数据。
+
+{{知识点30}}{{多个 Observer 实例的使用模式}}
+可以创建多个 PerformanceObserver 实例分别观察不同类型的性能条目，每个实例使用独立的回调函数。这样可以将不同指标的处理逻辑解耦。推荐为每种 entryType 创建独立的观察者，便于模块化管理和错误隔离。
+
+{{知识点31}}{{资源缓冲区大小管理}}
+默认情况下，浏览器最多缓冲 250 条 resource 类型的性能条目。可以通过 performance.setResourceTimingBufferSize() 增大缓冲区，或在 "resourcetimingbufferfull" 事件触发时进行处理。缓冲区满后新的资源条目会被丢弃，因此在单页应用中需要特别注意。
+
+{{知识点32}}{{PerformanceObserver 与 sendBeacon 结合上报}}
+典型的性能监控方案是将 Performance Observer 收集的数据通过 navigator.sendBeacon() 上报到分析服务。sendBeacon 在页面卸载时也能可靠发送数据。也可以使用 fetch 的 keepalive 选项作为替代方案。这确保了性能数据在页面关闭前被成功发送。
+
+{{知识点33}}{{Performance Observer 的错误处理}}
+observe() 调用时如果传入不支持的 entryType，浏览器会忽略该类型并可能在控制台输出警告，但不会抛出异常。建议使用 PerformanceObserver.supportedEntryTypes 进行功能检测后再创建观察者。回调函数中的异常会被吞掉，不会影响其他观察者。
+
+{{知识点34}}{{与 performance.getEntries() 的对比优势}}
+Performance.getEntries() 是同步调用，返回调用时刻已有的所有条目，可能遗漏在脚本加载前就产生的条目。Performance Observer 是异步的事件驱动模式，配合 buffered 选项可以完整捕获所有条目。且 Observer 不需要轮询，性能开销更低。MDN 和 W3C 规范都推荐使用 Performance Observer。
+
+{{知识点35}}{{Google web-vitals 库集成}}
+Google 官方的 web-vitals JavaScript 库（npm: web-vitals）封装了 Performance Observer 的使用，提供 onLCP()、onINP()、onCLS()、onFCP()、onTTFB() 等简洁的 API。它自动处理 buffered 条目、浏览器兼容性和指标计算逻辑。适合快速集成 Core Web Vitals 监控。
+
+{{知识点36}}{{PerformanceObserver 在 Chrome DevTools 中的应用}}
+Chrome DevTools 的 Performance 面板和 Lighthouse 工具底层依赖 Performance Observer API 采集性能数据。Lighthouse 的各项性能审计（如 FCP、LCP、TBT、CLS）均基于该 API。开发者也可以在 Console 中直接调用 PerformanceObserver.supportedEntryTypes 检查浏览器支持。
+
+{{知识点37}}{{renderBlockingStatus 属性}}
+PerformanceResourceTiming 的 renderBlockingStatus 属性返回 "blocking" 或 "non-blocking"，标识该资源是否阻塞了页面渲染。这对于优化关键渲染路径非常有价值——可以帮助开发者识别哪些资源需要被标记为 async/defer 或预加载。
+
+{{知识点38}}{{activationStart 与预渲染（Prerender）}}
+PerformanceNavigationTiming 的 activationStart 属性记录文档开始预渲染到被激活之间的时间差。当页面通过 Speculation Rules API 进行预渲染时，LCP 等指标可以减去预渲染阶段的时间，更准确地反映用户实际感知的加载性能。
+
+{{知识点39}}{{notRestoredReasons 与 bfcache}}
+PerformanceNavigationTiming 的 notRestoredReasons 属性提供报告数据，说明当前文档为何无法使用返回/前进缓存（bfcache）。这对优化 bfcache 兼容性非常有用，帮助开发者找出阻止页面被缓存的原因（如使用了 unload 事件监听器等）。
+
+{{知识点40}}{{Performance Observer 在生产环境的监控实践}}
+生产环境推荐：(1) 使用 web-vitals 库采集 Core Web Vitals；(2) 创建独立 Observer 采集 longtask 和 long-animation-frame；(3) 配合 PerformanceNavigationTiming 分析页面加载各阶段耗时；(4) 通过 sendBeacon 或 fetch keepalive 上报数据到后端；(5) 使用 buffered: true 确保不遗漏早期条目；(6) 按 P75 阈值设定告警。

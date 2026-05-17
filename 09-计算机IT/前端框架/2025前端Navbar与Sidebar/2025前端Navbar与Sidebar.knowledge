@@ -1,0 +1,93 @@
+# 2025前端Navbar与Sidebar
+# 领域: 计算机IT
+# 学科: 前端框架
+# 来源: 2025前端Navbar与Sidebar
+# 描述: 前端Navbar与Sidebar核心知识点
+
+{{Navbar基本语义结构}}{{HTML5 <nav>元素是定义导航栏的语义化标签，浏览器自动赋予其navigation的ARIA landmark角色。每个页面可包含多个<nav>元素，但每个必须通过aria-label提供唯一标签以区分用途，如aria-label="主导航"、aria-label="页脚导航"。优先使用<nav>语义元素而非div role="navigation"。来源: MDN ARIA navigation_role}}
+
+{{ARIA navigation landmark角色}}{{navigation角色是WAI-ARIA的landmark角色之一，屏幕阅读器使用landmark角色为键盘用户提供页面重要区域的快速导航。landmark角色应谨慎使用，过多会产生噪音干扰屏幕阅读器用户理解页面结构。如果页面有两个以上导航landmark，每个必须有唯一标签。来源: MDN ARIA navigation_role}}
+
+{{多个导航landmark的标签规则}}{{当页面有多个导航区域时：1）不同内容的导航使用不同标签（如aria-label="主导航"、aria-label="客户服务"）；2）内容完全相同的重复导航（如页头页脚重复的主链接）应使用相同标签；3）标签中无需包含"导航"一词，因为屏幕阅读器会自动读出角色名，避免冗余播报。来源: MDN ARIA navigation_role}}
+
+{{Navbar响应式设计断点策略}}{{2025年Navbar响应式设计采用Mobile-First策略。Tailwind CSS提供sm(640px)、md(768px)、lg(1024px)、xl(1280px)、2xl(1536px)五个默认断点。实现方式：移动端默认隐藏菜单项，使用汉堡按钮触发抽屉式导航；md断点以上显示完整水平导航栏。使用无前缀类定义移动端样式，断点前缀类定义桌面端样式。来源: Tailwind CSS Responsive Design}}
+
+{{汉堡菜单按钮实现}}{{汉堡菜单（Hamburger Menu）是移动端Navbar的标准交互模式。实现要点：1）使用<button>元素而非<a>确保可访问性；2）添加aria-expanded="true/false"指示菜单状态；3）使用aria-controls关联菜单面板id；4）图标用三根横线CSS动画过渡为X形（transform旋转45度）；5）点击外部区域关闭菜单。来源: WAI-ARIA APG}}
+
+{{Navbar粘性定位}}{{sticky定位的Navbar在滚动时固定在页面顶部，提升导航可达性。CSS实现：position: sticky; top: 0; z-index: 50。需注意：1）父元素不能有overflow:hidden；2）设置合适的z-index避免被内容覆盖；3）考虑滚动方向隐藏（scroll-down隐藏、scroll-up显示）的进阶交互模式；4）添加backdrop-filter: blur()实现毛玻璃效果。}}
+
+{{Navbar滚动方向感知隐藏}}{{高级Navbar交互模式：向下滚动时隐藏导航栏释放内容空间，向上滚动时重新显示。实现方式：1）JavaScript监听scroll事件比较scrollY变化方向；2）使用IntersectionObserver API更高效地检测；3）CSS transition控制显示/隐藏动画（transform: translateY(-100%)）；4）设置scroll阈值避免微小滚动触发。这是2025年Landing Page的流行设计模式。}}
+
+{{Mega Menu大型导航菜单}}{{Mega Menu是Navbar中展示大量分类链接的下拉面板。实现要点：1）触发器使用aria-haspopup="true"和aria-expanded；2）面板使用role="menu"或普通div结构；3）鼠标悬停和键盘焦点均可触发；4）添加延迟关闭（hoverIntent）避免误触；5）移动端Mega Menu通常转为嵌套Accordion；6）使用CSS Grid布局面板内容。}}
+
+{{Navbar中的下拉菜单}}{{Navbar下拉菜单基于WAI-ARIA Menu模式构建。Headless UI的Menu组件提供完整实现：MenuButton触发、MenuItems容器、MenuItem菜单项。自动处理键盘导航（箭头键、Home/End、Escape关闭）、焦点管理和ARIA属性。样式化使用data-active（按钮激活状态）和data-focus（菜单项聚焦状态）属性。来源: Headless UI Dropdown Menu}}
+
+{{Headless UI Menu组件架构}}{{Headless UI Menu由Menu、MenuButton、MenuItems、MenuItem四个组件构成。MenuButton自动管理aria-expanded和aria-controls。MenuItems通过anchor prop控制定位（如anchor="bottom"）。MenuItem支持disabled状态自动跳过焦点。支持data-focus和data-active数据属性以及render props两种样式化方式。来源: headlessui.com/react/menu}}
+
+{{Navbar Logo与品牌区域}}{{Navbar左侧通常放置Logo和品牌名称。实现要点：1）Logo使用<a href="/">链接回首页；2）Logo图片必须有alt文本；3）品牌区域可包含组织名称的<span>或<h1>（仅首页）；4）响应式设计中Logo在移动端可缩小或仅显示图标；5）确保Logo有足够的点击区域（最小44x44px触摸目标）。}}
+
+{{Navbar操作区域布局}}{{Navbar右侧通常放置搜索、通知、用户头像等操作元素。布局策略：1）使用flex布局justify-between或justify-end；2）搜索框在桌面端显示完整输入框，移动端折叠为图标；3）用户头像使用DropdownMenu提供账户选项；4）操作图标需有aria-label描述；5）使用Badge组件显示未读计数。}}
+
+{{双层Navbar设计}}{{复杂应用常使用双层Navbar：上层为全局导航（品牌、搜索、用户），下层为上下文导航（当前模块的子页面链接）。实现要点：1）两层分别使用不同的aria-label；2）下层可随页面变化；3）移动端通常合并为单层或使用Tab Bar替代下层；4）确保两层在sticky时的z-index层级正确。}}
+
+{{Sidebar基础语义结构}}{{Sidebar应使用<aside>元素或role="complementary"标识为补充内容区域。导航型Sidebar使用<nav>包裹链接列表。Sidebar通常位于页面左侧，包含主导航链接、过滤器或辅助信息。结构：SidebarProvider > Sidebar > SidebarHeader + SidebarContent + SidebarFooter。来源: shadcn/ui Sidebar文档}}
+
+{{shadcn/ui Sidebar组件架构}}{{shadcn/ui提供完整的Sidebar组件系统。核心组件：SidebarProvider（状态管理）、Sidebar（主面板）、SidebarHeader（顶部固定区）、SidebarContent（可滚动内容区）、SidebarFooter（底部固定区）、SidebarGroup（分组）、SidebarMenu/SidebarMenuItem（菜单）、SidebarRail（拖拽调整宽度手柄）、SidebarTrigger（切换按钮）。来源: ui.shadcn.com/docs/components/sidebar}}
+
+{{SidebarProvider状态管理}}{{SidebarProvider是Sidebar的状态管理核心。Props包括：defaultOpen（默认展开状态）、open（受控展开状态）、onOpenChange（状态变更回调）。内部通过Context提供state（expanded/collapsed）、open、setOpen、openMobile、setOpenMobile、isMobile、toggleSidebar等状态和方法。默认键盘快捷键Cmd/Ctrl+B切换。来源: shadcn/ui Sidebar}}
+
+{{Sidebar折叠模式}}{{Sidebar支持三种折叠模式（collapsible prop）：1）offcanvas：完全滑出视口，覆盖在内容上方；2）icon：折叠到仅显示图标模式，保留图标宽度的窄栏；3）none：不可折叠，始终展开。icon模式是最常见的折叠方式，hover时可临时展开显示完整文本。来源: shadcn/ui Sidebar}}
+
+{{Sidebar三种变体}}{{Sidebar提供三种视觉变体（variant prop）：1）sidebar：默认样式，与主内容并排；2）floating：浮动样式，Sidebar有圆角和阴影，与内容有间距；3）inset：嵌入样式，Sidebar和主内容都在一个圆角容器内，需用SidebarInset包裹主内容。来源: shadcn/ui Sidebar}}
+
+{{Sidebar宽度控制}}{{Sidebar宽度通过CSS变量控制。单Sidebar场景使用SIDEBAR_WIDTH（默认16rem）和SIDEBAR_WIDTH_MOBILE（默认18rem）常量。多Sidebar场景通过style prop设置--sidebar-width和--sidebar-width-mobile自定义变量。SidebarRail组件允许用户拖拽调整宽度。来源: shadcn/ui Sidebar}}
+
+{{Sidebar Header与Footer设计}}{{SidebarHeader固定在顶部，适合放置品牌Logo、工作区切换器（Workspace Switcher）或标题。SidebarFooter固定在底部，适合放置用户信息、设置入口或退出按钮。两者使用sticky定位确保SidebarContent滚动时它们保持可见。Header常用DropdownMenu实现工作区切换。来源: shadcn/ui Sidebar}}
+
+{{Sidebar Group分组与折叠}}{{SidebarGroup用于将相关导航链接分组。每组包含SidebarGroupLabel（标签）、可选的SidebarGroupAction（操作按钮）和SidebarGroupContent（内容区域）。分组可通过Collapsible组件实现折叠功能，配合ChevronDown图标旋转180度的动画指示展开/折叠状态。来源: shadcn/ui Sidebar}}
+
+{{Sidebar Menu层级结构}}{{SidebarMenu构建菜单层级：SidebarMenuItem > SidebarMenuButton（主链接）+ SidebarMenuAction（操作按钮）+ SidebarMenuBadge（徽章）。子菜单使用SidebarMenuSub > SidebarMenuSubItem。菜单按钮支持asChild prop渲染为<a>链接。支持图标+文字+徽章的组合布局。来源: shadcn/ui Sidebar}}
+
+{{Sidebar移动端适配}}{{移动端Sidebar使用Sheet（抽屉）组件从侧边滑入。shadcn/ui的useSidebar hook提供isMobile和openMobile状态自动处理移动端。移动端Sidebar宽度使用SIDEBAR_WIDTH_MOBILE变量（默认18rem）。点击遮罩层或导航链接后自动关闭。确保移动端有明显的关闭按钮。来源: shadcn/ui Sidebar}}
+
+{{响应式Navbar与Sidebar切换模式}}{{2025年流行的响应式模式：桌面端使用左侧固定Sidebar导航，移动端切换为顶部Navbar+汉堡菜单或底部Tab Bar。实现策略：1）useMediaQuery或matchMedia检测屏幕宽度；2）CSS容器查询(@container)实现组件级响应式；3）共享导航数据源，不同断点渲染不同布局组件。}}
+
+{{Sidebar与主内容区域的布局协调}}{{Sidebar展开/折叠时主内容区域需相应调整。方案：1）CSS Grid使用grid-template-columns动态调整（如250px 1fr → 60px 1fr）；2）margin-left配合transition实现平滑过渡；3）shadcn/ui的SidebarInset组件自动处理inset变体的布局；4）使用CSS变量--sidebar-width驱动布局变化，避免直接操作DOM。}}
+
+{{CSS过渡动画的Sidebar展开折叠}}{{Sidebar展开/折叠的动画实现：1）width过渡配合overflow:hidden防止内容溢出；2）使用CSS变量过渡（如--sidebar-width从16rem到4rem）；3）icon折叠模式下文字使用opacity:0过渡淡出；4）SidebarRail组件的拖拽调整使用CSS transition；5）移动端Sheet使用transform: translateX滑入动画。}}
+
+{{Sidebar搜索集成}}{{Sidebar底部或顶部常集成搜索功能。实现方案：1）使用Command组件（shadcn/ui的CommandDialog）提供Cmd+K全局搜索；2）Sidebar内嵌搜索输入框；3）搜索结果可显示在Sidebar内或弹出模态框；4）移动端搜索通常转为全屏搜索体验。搜索框需有role="search"或aria-label。}}
+
+{{Navbar与Sidebar中的图标使用}}{{导航中图标提升识别效率。最佳实践：1）使用一致的图标库（Lucide、Heroicons、Phosphor）；2）图标必须有文本标签或aria-label（纯图标模式下）；3）图标尺寸推荐16-24px；4）折叠Sidebar中仅显示图标时，使用Tooltip显示完整文本；5）确保图标颜色与背景有足够对比度（WCAG AA 4.5:1）。}}
+
+{{Sidebar面包屑集成}}{{Breadcrumb通常位于主内容区域顶部而非Sidebar内，但与Sidebar导航深度关联。当Sidebar展开到某个子菜单时，Breadcrumb应反映当前导航路径。实现：1）基于路由自动生成Breadcrumb；2）Breadcrumb使用nav>ol>li语义结构；3）当前页面用aria-current="page"标识；4）使用Schema.org BreadcrumbList结构化数据。}}
+
+{{导航中的活跃状态指示}}{{当前页面的导航项需要视觉和语义双重标识。视觉：背景色、左边框、下划线、粗体文字等。语义：aria-current="page"标记当前链接。Sidebar中活跃项常用左侧彩色边框+背景色变化。Navbar中常用下划线或底部边框。确保活跃状态在高对比度模式下也可见。}}
+
+{{侧边栏拖拽调整宽度}}{{用户可拖拽Sidebar边缘调整宽度。shadcn/ui的SidebarRail组件提供此功能。实现要点：1）拖拽区域需足够宽（至少8px）以方便操作；2）设置最小/最大宽度限制；3）拖拽时使用cursor: col-resize；4）实时更新CSS变量--sidebar-width；5）可选保存用户偏好到localStorage；6）提供双击重置到默认宽度。}}
+
+{{键盘导航无障碍最佳实践}}{{2025年Navbar/Sidebar无障碍最佳实践：1）所有导航链接可通过Tab键访问；2）下拉菜单支持箭头键导航、Escape关闭；3）跳过链接（Skip to main content）作为页面第一个可聚焦元素；4）焦点指示器清晰可见（outline而非仅颜色变化）；5）aria-expanded反映所有展开/折叠状态；6）使用role="menu"仅用于真正的菜单模式，普通导航链接列表不需要menu角色。}}
+
+{{Skip Navigation跳过链接}}{{页面顶部应提供"跳转到主内容"链接，允许键盘和屏幕阅读器用户跳过重复的Navbar导航。实现：<a href="#main-content" class="sr-only focus:not-sr-only focus:absolute">跳到主内容</a>。默认视觉隐藏，获得焦点时显示。目标元素需添加tabindex="-1"确保可被锚点定位。这是WCAG 2.4.1的要求。}}
+
+{{Navbar/Sidebar的暗色模式适配}}{{暗色模式下导航组件的颜色适配要点：1）使用CSS变量或Tailwind的dark:前缀定义颜色方案；2）背景避免纯黑（使用#1a1a2e或gray-900等深色）；3）文字避免纯白（使用gray-300减少刺眼）；4）图标和分隔线需调整透明度；5）hover/active状态在暗色下需单独调整；6）Logo可能需要暗色版本。}}
+
+{{导航栏中的用户头像与菜单}}{{用户头像+下拉菜单是Navbar右侧的标准模式。Headless UI Menu或Radix DropdownMenu实现。菜单通常包含：个人信息、设置、主题切换、语言选择、帮助、退出登录。头像使用img元素需有alt文本，或使用首字母占位符。菜单项使用MenuItem组件自动处理键盘导航。}}
+
+{{Sidebar中的工作区切换器}}{{SaaS应用Sidebar顶部常有工作区/组织切换器。实现：SidebarHeader中放置DropdownMenu触发器显示当前工作区名称和图标，下拉列表显示所有可切换的工作区。支持搜索过滤、创建新工作区选项。切换时更新URL和全局状态。使用Avatar组件显示工作区图标。}}
+
+{{导航数据结构设计}}{{2025年推荐将导航配置数据化：定义统一的导航数据结构（数组/树形），包含label、icon、href、children、badge、disabled等字段。Navbar和Sidebar共享同一数据源，根据路由和权限动态过滤。这种模式支持：1）动态菜单生成；2）权限控制；3）国际化；4）导航状态持久化。}}
+
+{{Next.js App Router中的导航实现}}{{Next.js 15的App Router使用Link组件实现客户端导航。Sidebar中使用usePathname()获取当前路径高亮活跃项。导航链接使用next/link的prefetch优化。并行路由(Parallel Routes)和拦截路由(Intercepting Routes)可实现Sidebar+内容的复杂布局。useSelectedLayoutSegment()用于判断子路由活跃状态。}}
+
+{{Vue Router中的Sidebar导航}}{{Vue 3 + Vue Router实现Sidebar导航：使用router-link组件渲染导航项，active-class或自定义isActive判断高亮当前路由。嵌套路由配合嵌套SidebarMenu自动展开对应父级分组。useRoute()组合式API获取当前路由信息。Vue的Transition组件可实现Sidebar展开/折叠动画。}}
+
+{{导航栏性能优化}}{{Navbar/Sidebar性能优化策略：1）使用React.memo避免导航组件不必要的重渲染；2）大量菜单项使用虚拟滚动（react-virtual）；3）懒加载不在首屏的Sidebar分组内容；4）图标使用SVG sprite或动态import减少包体积；5）CSS动画优先使用transform和opacity（GPU加速）；6）避免在scroll事件中直接操作DOM，使用IntersectionObserver。}}
+
+{{导航中的微交互设计}}{{2025年Navbar/Sidebar微交互趋势：1）菜单项hover时微妙的背景色渐变（transition: 150ms ease）；2）展开/折叠图标的旋转动画（transform: rotate(180deg)）；3）Sidebar折叠时图标保持可见，文字淡出；4）活跃项的指示条滑入动画（transform: scaleY从0到1）；5）汉堡菜单到X的形变动画；6）通知Badge的弹入动画（scale从0到1）。}}
+
+{{导航栏中的通知与徽章}}{{Navbar/Sidebar中的Badge用于显示未读消息数、待处理任务等计数。实现要点：1）Badge使用aria-label如"3条未读消息"确保可访问性；2）数字超过阈值显示"99+"；3）Badge使用绝对定位在图标右上角；4）动画：新通知到达时Badge可添加pulse动画吸引注意；5）使用WebSocket实时更新计数。}}
+
+{{Context Menu右键菜单与导航集成}}{{Sidebar项目可支持右键上下文菜单提供快捷操作（重命名、删除、移动、收藏等）。Headless UI Menu或Radix ContextMenu实现。触发方式：1）右键点击（onContextMenu事件）；2）长按（移动端）；3）SidebarMenuAction按钮点击。菜单项根据项目类型动态生成。}}
+
+{{AI驱动的自适应导航}}{{2025年前端趋势：基于用户行为的AI自适应导航。系统分析用户的页面访问频率、停留时间，动态调整Sidebar中菜单项的排序，将高频访问项置顶。实现需要：1）用户行为数据采集（匿名化）；2）排序算法（基于访问频率和最近访问时间）；3）平滑的菜单项重排动画；4）用户可手动固定/取消固定项。}}

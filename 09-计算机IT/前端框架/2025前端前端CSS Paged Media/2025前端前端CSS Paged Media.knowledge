@@ -1,0 +1,83 @@
+# 2025前端前端CSS Paged Media
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{CSS Paged Media 是 CSS 的一个模块，定义了控制分页呈现内容的属性，主要用于打印或任何将内容分割为离散页面的媒体。它允许设置页面分页、控制可打印区域，以及为左右页面设置不同样式。规范定义了页面的生成和布局方式，包括页面边距、尺寸、方向以及页眉页脚的控制。}}
+
+{{知识点2}}{{@page 是 CSS Paged Media 的核心 at-rule，用于定义页面框（page box）的属性。它可以包含页面描述符（descriptors）和边距 at-rules（margin at-rules）。语法为 @page <page-selector-list> { <declaration-rule-list> }。通过 CSSOM 接口 CSSPageRule 可以访问 @page 规则。}}
+
+{{知识点3}}{{size 描述符用于设置页面框的目标尺寸和方向。可使用关键字值如 auto、portrait、landscape，也可使用绝对尺寸值如 A4、A3、B5、letter、legal、ledger 等。例如 size: A4 landscape; 设置 A4 纸横向打印。也可使用长度值自定义，如 size: 4in 6in;。一个值时宽高相等，两个值分别对应宽和高。}}
+
+{{知识点4}}{{page-orientation 描述符指定页面方向，不影响页面布局，旋转在输出介质的布局之后应用。与 size 中的方向关键字不同，page-orientation 是独立控制旋转的描述符。}}
+
+{{知识点5}}{{@page 支持边距描述符，可分别设置 margin-top、margin-right、margin-bottom、margin-left，也可使用简写 margin。这些描述符定义页面框的边距区域。}}
+
+{{知识点6}}{{margin at-rules（边距 at-rules）在 @page 内部使用，用于定位和样式化打印页面的不同区域。共16个边距 at-rules：@top-left-corner、@top-left、@top-center、@top-right、@top-right-corner、@bottom-left-corner、@bottom-left、@bottom-center、@bottom-right、@bottom-right-corner、@left-top、@left-middle、@left-bottom、@right-top、@right-middle、@right-bottom。}}
+
+{{知识点7}}{{在 margin at-rules 中可以使用 page-margin properties，包括：direction（书写方向）、background 相关属性、border 相关属性、counter-reset/counter-increment、content、color、font 相关属性、height 相关属性、line-height、margin 相关属性、outline 相关属性、padding 相关属性、quotes、text 相关属性（letter-spacing、text-align、text-decoration 等）、visibility、width 相关属性。}}
+
+{{知识点8}}{{页面选择器伪类（pseudo-classes）是 @page 的重要组成部分，包括 :first（匹配第一页）、:left（匹配所有左页）、:right（匹配所有右页）、:blank（匹配空白页）。这些伪类用于为不同页面类型设置不同样式。}}
+
+{{知识点9}}{{:first 伪类用于选择打印文档的第一页。例如 @page :first { margin-left: 50%; margin-top: 50%; } 可以为首页设置不同的边距。注意：使用 :first 时只能修改 margins、orphans、widows 和 page breaks，且边距只能使用绝对长度单位。自2023年8月起广泛可用。}}
+
+{{知识点10}}{{:left 伪类匹配所有左页（书籍装订线左侧或双面打印的背面），:right 伪类匹配所有右页（书籍装订线右侧或双面打印的正面）。可以为左右页设置不同的边距和样式，实现类似书籍排版的效果。}}
+
+{{知识点11}}{{:blank 伪类用于匹配空白页，通常与 forced page breaks 结合使用，可以为强制分页产生的空白页设置不同样式。}}
+
+{{知识点12}}{{page 属性是 CSS 属性（非 at-rule 描述符），用于将元素关联到命名页面。元素可以设置 page: <custom-ident> 来使用 @page 中定义的命名页面样式。默认值为 auto，使用最近祖先的非 auto 值。该属性适用于块级元素，不继承。}}
+
+{{知识点13}}{{命名页面（Named Pages）允许通过 @page <name> 定义具名页面样式，然后通过 page 属性将元素与之关联。例如 @page wide { size: A4 landscape; } 定义名为 wide 的页面样式，使用 .chapter { page: wide; } 将章节元素关联到该样式。这使得不同内容可以使用不同的页面布局。}}
+
+{{知识点14}}{{break-before 属性控制元素之前是否插入分页符。值包括：auto（允许但不强制）、avoid（避免分页）、always（强制分页，类型取决于上下文）、page（强制页面分页）、left（强制到左页）、right（强制到右页）、recto（强制到 recto 页）、verso（强制到 verso 页）。还有 column 相关值和 region 相关值。}}
+
+{{知识点15}}{{break-after 属性控制元素之后是否插入分页符。其值与 break-before 对称：auto、avoid、always、all、avoid-page、page、left、right、recto、verso、avoid-column、column、avoid-region、region。all 值会穿过所有分片上下文强制分页。}}
+
+{{知识点16}}{{break-inside 属性控制元素内部是否允许分页。值包括：auto（允许）、avoid（避免任何分页）、avoid-page（避免页面分页）、avoid-column（避免列分页）、avoid-region（避免区域分页）。break-inside 不支持强制分页值，只支持避免值。}}
+
+{{知识点17}}{{分页断点（break points）的优先级规则：每个断点受三个属性影响——前一个元素的 break-after、下一个元素的 break-before、包含元素的 break-inside。强制分页值（always、left、right、page、column、region）优先；如有多个强制值，取流中最后出现的元素的值（break-before > break-after > break-inside）。避免值（avoid 等）会在该断点阻止分页。}}
+
+{{知识点18}}{{orphans 属性设置块容器底部（页面、区域或列）必须显示的最小行数。排版中，orphan 是段落第一行单独出现在页面底部的情况。默认值为 2，必须为正整数。该属性可继承。例如 orphans: 3; 确保底部至少有 3 行。}}
+
+{{知识点19}}{{widows 属性设置块容器顶部（页面、区域或列）必须显示的最小行数。排版中，widow 是段落最后一行单独出现在页面顶部的情况。默认值为 2，必须为正整数。该属性可继承。orphans 和 widows 配合使用可避免孤行现象。}}
+
+{{知识点20}}{{page-break-before、page-break-after、page-break-inside 是旧版页面分页属性，现已废弃。为了兼容性，浏览器将其作为 break-before、break-after、break-inside 的别名处理。映射关系：auto→auto、left→left、right→right、avoid→avoid、always→page。新代码应使用 break-* 系列属性。}}
+
+{{知识点21}}{{CSS Paged Media 模块属于 CSS Paged Media Module Level 3 规范，由 W3C CSS 工作组维护。相关模块包括 CSS Fragmentation Module（控制内容分片）和 CSS Generated Content for Paged Media Module（生成页面内容）。实际打印输出中，内容的分页控制由 CSS Fragmentation 模块负责。}}
+
+{{知识点22}}{{@page 中可以使用 counter-reset 和 counter-increment 配合 counter() 函数实现页码生成。例如 @page { @bottom-center { content: counter(page); } } 在页面底部中央显示页码。pageNumber 是内置计数器名称，也可自定义计数器。}}
+
+{{知识点23}}{{@page 规则中可以使用 content 属性在边距区域插入生成内容，包括字符串、计数器、attr()、url() 等。这是实现页眉页脚的关键机制。例如 @top-right { content: "Chapter " counter(chapter); } 在右上角显示章节信息。}}
+
+{{知识点24}}{{@page 规则中的 size 描述符支持预定义纸张尺寸关键字：A5（148mm×210mm）、A4（210mm×297mm）、A3（297mm×420mm）、B5（176mm×250mm）、B4（250mm×353mm）、JIS-B5（182mm×257mm）、JIS-B4（257mm×364mm）、letter（8.5in×11in）、legal（8.5in×14in）、ledger（11in×17in）。2024年12月起跨浏览器可用（Baseline）。}}
+
+{{知识点25}}{{CSS 打印样式通常结合 @media print 媒体查询使用。@media print { @page { size: A4; } body { font-size: 12pt; } } 只在打印时应用页面尺寸和字体设置。这是 Web 打印最常见的实践方式。}}
+
+{{知识点26}}{{CSS Paged Media 规范中提到了 bleeds 和 marks 描述符，用于控制打印出血（bleed）和裁切标记（marks），但截至2025年浏览器均不支持这些特性。这些功能主要用于专业印刷场景。}}
+
+{{知识点27}}{{在 @page 中使用 viewport 相关长度单位（vh、vw、vmin、vmax）时需注意：W3C 正在讨论如何处理这些单位，在此之前不建议在 @page at-rule 中使用它们。推荐使用绝对长度单位（mm、in、pt、cm）或纸张尺寸关键字。}}
+
+{{知识点28}}{{page-margin properties 中的 background 相关属性（background-color、background-image、background-repeat、background-attachment、background-position、background）可用于为页面边距区域设置背景。例如 @page { @top-left { background-color: #f0f0f0; } } 为左上角区域添加灰色背景。}}
+
+{{知识点29}}{{page-margin properties 中的 border 相关属性可用于为边距区域添加边框。支持 border-top-width、border-right-width 等所有方向，以及 border-color、border-style 的各方向变体和简写形式。这可以实现页面边距区域的视觉分隔效果。}}
+
+{{知识点30}}{{page-margin properties 中的 font 相关属性（font-family、font-size、font-style、font-variant、font-weight、font）允许为页眉页脚等边距区域设置独立的字体样式。例如 @page { @bottom-center { font-family: serif; font-size: 10pt; } }。}}
+
+{{知识点31}}{{page-margin properties 中的 text 相关属性包括 letter-spacing、text-align、text-decoration、text-indent、text-transform、white-space、word-spacing。这些属性可用于控制边距区域中文本的排版行为，如 text-align: center 实现居中对齐。}}
+
+{{知识点32}}{{page-margin properties 中的 padding 相关属性（padding-top、padding-right、padding-bottom、padding-left、padding）和 margin 相关属性可用于控制边距区域内部和外部的间距。这些属性为页眉页脚布局提供了灵活的间距控制。}}
+
+{{知识点33}}{{recto 和 verso 是面向印刷的分页方向值。recto 在从左到右排版中指右页，在从右到左排版中指左页；verso 则相反。这对多语言出版物（如同时支持英文和阿拉伯文）特别有用。使用 break-before: recto 可确保章节从 recto 页开始。}}
+
+{{知识点34}}{{CSSFragmentation 相关的 column-span 属性可以与 Paged Media 结合使用。当元素设置 column-span: all 时，它会跨越所有列，同时配合 break-before/break-after 可实现复杂的打印布局控制。}}
+
+{{知识点35}}{{CSSPageRule 是 CSSOM 中对应的接口，可以通过 JavaScript 访问和操作 @page 规则。例如 document.styleSheets[0].cssRules 可以遍历样式表中的规则，找到 CSSPageRule 类型的实例并修改其属性。}}
+
+{{知识点36}}{{页面计数器 counter(page) 是 CSS Paged Media 的内置计数器，自动为每一页递增。可以在 @page 的边距 at-rules 中使用 counter(page) 显示当前页码，使用 counter(pages) 显示总页数（浏览器支持有限）。}}
+
+{{知识点37}}{{在实际项目中，CSS Paged Media 常用于：自动生成目录和报告的打印版本、书籍和电子书的页面布局、发票和收据的格式化打印、学术论文的排版、法律文档的标准化输出等场景。配合 @media print 查询可以实现屏幕和打印的差异化展示。}}
+
+{{知识点38}}{{浏览器兼容性方面：@page、size 描述符、page 属性、break-before/after/inside、orphans/widows 在主流浏览器中均有良好支持。:first、:left、:right 伪类自2023年8月起广泛可用。size 描述符自2024年12月起跨浏览器可用。但 bleeds、marks 等高级功能尚无浏览器支持。}}
+
+{{知识点39}}{{打印最佳实践：使用 @media print 包裹打印样式；用 @page 设置纸张尺寸和方向；用 break-before/break-after 控制章节分页；用 orphans/widows 防止孤行；用 @page 的边距 at-rules 添加页眉页脚和页码；用 page 属性为不同内容区域应用不同的页面样式。}}
+
+{{知识点40}}{{@page 规则的简写形式不支持，每个 @page 必须显式写出选择器和声明块。多个选择器可以组合使用，如 @page :first, @page :left { margin: 2in; }。命名页面和伪类可以组合，如 @page chapter:first { } 表示名为 chapter 的页面的第一页。}}

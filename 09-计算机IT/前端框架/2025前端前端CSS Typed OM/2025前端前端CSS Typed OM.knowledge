@@ -1,0 +1,83 @@
+# 2025前端前端CSS Typed OM
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{CSS Typed Object Model（CSS Typed OM）是 CSS Houdini 规范的一部分，属于 CSS Typed OM Level 1 标准。它提供了一种新的方式来操作 CSS 属性值，将 CSS 值暴露为类型化的 JavaScript 对象，而不是传统的字符串形式。这一 API 简化了 CSS 属性操作，同时比 HTMLElement.style 方式具有更好的性能。}}
+
+{{知识点2}}{{CSS Typed OM 的核心优势在于性能提升。传统方式读写 CSS 值需要字符串解析和拼接，而 Typed OM 允许直接操作底层值，无需构建和解析 CSS 字符串。这使得值可以被廉价地转换回底层值，大幅减少了字符串处理开销。}}
+
+{{知识点3}}{{CSSTypedOM 使代码更具可维护性。数值类型使用实际的 JS 数字表示，并定义了带单位感知的数学运算，开发者无需手动解析字符串中的数值和单位，降低了出错概率。}}
+
+{{知识点4}}{{CSSStyleValue 是 CSS Typed OM API 中所有 CSS 值的基类。它继承自 CSSStyleValue 的子类可用于任何需要字符串的地方。CSSStyleValue 提供了 parse() 和 parseAll() 两个静态方法，分别用于从 CSS 字符串解析单个值和多个值。}}
+
+{{知识点5}}{{CSSStyleValue.parse() 是一个静态方法，允许从 CSS 字符串构造 CSSNumericValue。它将特定 CSS 属性设置为指定值，并返回第一个值作为 CSSStyleValue 对象。例如 CSSStyleValue.parse('width', '100px') 会返回一个表示 100px 的对象。}}
+
+{{知识点6}}{{CSSStyleValue.parseAll() 是静态方法，将特定 CSS 属性的所有出现设置为指定值，并返回一个 CSSStyleValue 对象数组，每个对象包含一个提供的值。适用于处理可接受多个值的 CSS 属性，如 transform、background 等。}}
+
+{{知识点7}}{{StylePropertyMap 接口提供了 CSS 声明块的表示，是 CSSStyleDeclaration 的替代方案。它可以通过 Element.computedStyleMap() 或 HTMLElement.attributeStyleMap 获取，分别对应计算样式和内联样式。}}
+
+{{知识点8}}{{StylePropertyMap.set() 方法用于更改给定属性的 CSS 声明为指定值。StylePropertyMap.append() 方法用于向 StylePropertyMap 添加新的 CSS 声明。这两个方法用于修改元素的样式。}}
+
+{{知识点9}}{{StylePropertyMap.delete() 方法用于从 StylePropertyMap 中移除给定属性的 CSS 声明。StylePropertyMap.clear() 方法用于移除 StylePropertyMap 中的所有声明。这些方法提供了一种声明式的样式管理方式。}}
+
+{{知识点10}}{{StylePropertyMapReadOnly 是 StylePropertyMap 的只读版本，继承了 get()、getAll()、has()、size、entries()、forEach()、keys()、values() 等方法和属性。通过 computedStyleMap() 获取的就是 StylePropertyMapReadOnly 对象。}}
+
+{{知识点11}}{{StylePropertyMapReadOnly.get() 方法返回指定属性的值。getAll() 方法返回包含提供属性所有值的 CSSStyleValue 对象数组，适用于可接受多值的属性。has() 方法指示指定属性是否存在于 StylePropertyMapReadOnly 中。}}
+
+{{知识点12}}{{Element.computedStyleMap() 方法返回一个 StylePropertyMapReadOnly 对象，包含影响元素的所有 CSS 属性和值，包括自定义属性。它返回的是计算值（computed values），而非 Window.getComputedStyle() 返回的解析值（resolved values）。}}
+
+{{知识点13}}{{computedStyleMap() 与 getComputedStyle() 的关键区别：computedStyleMap() 返回计算值，getComputedStyle() 返回解析值。对于大多数属性两者相同，但某些布局相关属性（如 width 百分比值）不同——计算值保留百分比，解析值转换为像素。此外 computedStyleMap() 返回类型化对象而 getComputedStyle() 返回字符串。}}
+
+{{知识点14}}{{CSSNumericValue 接口代表所有数值类型可以执行的操作。它是 CSSUnitValue 和所有 CSSMath* 类型的基类，提供了 add()、sub()、mul()、div()、min()、max()、equals()、to()、toSum()、type 等方法和属性。}}
+
+{{知识点15}}{{CSSNumericValue.add() 方法将提供的数字加到 CSSNumericValue 上，sub() 方法减去提供的数字，mul() 方法乘以提供的值，div() 方法除以提供的值（除以 0 会抛出错误）。这些方法支持链式调用，可进行复杂的数值运算。}}
+
+{{知识点16}}{{CSSNumericValue.min() 方法返回传入的最小值，max() 方法返回传入的最大值。这两个方法分别对应 CSS 的 min() 和 max() 函数，可以在 JavaScript 中进行类似的值计算。}}
+
+{{知识点17}}{{CSSNumericValue.equals() 方法返回布尔值，表示所有值是否具有完全相同的类型和值，且顺序相同。to() 方法将值转换为具有指定单位的另一个值，例如从 px 转换为 em。toSum() 方法将现有的 CSSNumericValue 转换为 CSSMathSum 对象。}}
+
+{{知识点18}}{{CSSNumericValue.type() 属性返回 CSSNumericValue 的类型，可以是 angle、flex、frequency、length、resolution、percent、percentHint 或 time 中的一种。这使得开发者可以在运行时检查 CSS 值的类型。}}
+
+{{知识点19}}{{CSSNumericValue.parse() 是一个静态方法，允许直接从包含 CSS 的字符串构造 CSSNumericValue。这提供了一种便捷的方式来从传统 CSS 字符串创建类型化数值对象，如 CSSNumericValue.parse('42px')。}}
+
+{{知识点20}}{{CSSUnitValue 接口表示可以用单个单位或命名数字和百分比表示的数值。它通过构造函数 new CSSUnitValue(value, unit) 创建，例如 new CSSUnitValue(10, 'px') 表示 10px。}}
+
+{{知识点21}}{{CSSUnitValue 有两个实例属性：value 属性返回表示单位数量的双精度浮点数（如 42px 返回 42），unit 属性返回表示单位类型的字符串（如 42px 返回 'px'）。它继承了 CSSNumericValue 的所有数学运算方法。}}
+
+{{知识点22}}{{CSSKeywordValue 接口用于创建表示 CSS 关键字和其他标识符的对象。它定义了关键字如 inherit、initial、unset 以及其他不加引号的字符串如 auto、grid、bold 等。当在需要字符串的地方使用时，返回 CSSKeywordValue.value 的值。}}
+
+{{知识点23}}{{CSSKeywordValue 通过构造函数 new CSSKeywordValue(value) 创建，例如 new CSSKeywordValue('inherit')。其 value 属性用于读取或设置 CSSKeywordValue 的值。在 computedStyleMap() 中，关键字属性值（如 font-weight: bold）返回 CSSKeywordValue 对象。}}
+
+{{知识点24}}{{CSSMathValue 是复杂数值的基类，代表比单个值和单位更复杂的数值。它有一个 operator 属性，指示当前子类型代表的运算符。例如，calc(30% - 20px) 返回的 CSSMathSum 对象的 operator 值为 'sum'。}}
+
+{{知识点25}}{{CSSMathValue 的子类包括：CSSMathSum（表示加法，对应 calc()）、CSSMathProduct（表示乘法，对应 mul()/div()）、CSSMathMin（对应 min() 函数）、CSSMathMax（对应 max() 函数）、CSSMathClamp（对应 clamp() 函数）、CSSMathNegate（取负值）、CSSMathInvert（取倒数）。}}
+
+{{知识点26}}{{CSSUnparsedValue 接口表示引用自定义属性（CSS 变量）的属性值。它由字符串片段和变量引用组成的列表构成。通过 CSSUnparsedValue 构造函数创建，支持 entries()、forEach()、keys() 等迭代方法。}}
+
+{{知识点27}}{{CSSTransformValue 接口表示 transform 属性值的列表。它包含一个或多个 CSSTransformComponent 对象，每个代表一个单独的变换函数值。length 属性返回变换组件的数量，is2D 属性指示变换是 2D 还是 3D，toMatrix() 方法返回 DOMMatrix 对象。}}
+
+{{知识点28}}{{CSSTransformComponent 是单个变换函数值的基类接口。它有 is2D 只读属性（指示 2D/3D）、toMatrix() 方法（返回 DOMMatrix）和 toString() 方法（返回 CSS 变换函数字符串形式）。is2D 的值会影响 toString() 输出的函数形式，如 rotate() vs rotate3d()。}}
+
+{{知识点29}}{{CSSTransformValue 的子类包括：CSSTranslate（平移）、CSSRotate（旋转）、CSSScale（缩放）、CSSSkew（倾斜）、CSSSkewX（X 轴倾斜）、CSSSkewY（Y 轴倾斜）、CSSPerspective（透视）、CSSMatrixComponent（矩阵变换）。每个都对应一个 CSS 变换函数。}}
+
+{{知识点30}}{{CSSPositionValue 接口表示接受位置值的属性的值，如 object-position。它有 x 和 y 两个属性，分别返回水平和垂直轴上的位置。通过构造函数 new CSSPositionValue(xValue, yValue) 创建，例如 new CSSPositionValue(CSS.px(5), CSS.px(10))。}}
+
+{{知识点31}}{{CSSImageValue 接口表示接受图像值的属性的值，如 background-image、list-style-image 或 border-image-source。它是 CSSStyleValue 的子类，专门用于处理 CSS 图像值。}}
+
+{{知识点32}}{{CSS Houdini 是一组底层 CSS API，允许开发者通过 JavaScript 扩展 CSS 引擎。CSS Typed OM 是 Houdini 的核心组成部分，与 CSS Painting API、CSS Layout API、CSS Properties and Values API 等共同构成了 Houdini 规范体系。}}
+
+{{知识点33}}{{使用 attributeStyleMap 可以读写元素的内联样式。与 element.style 返回 CSSStyleDeclaration 不同，element.attributeStyleMap 返回 StylePropertyMap，提供类型化的样式操作。例如 element.attributeStyleMap.set('width', new CSSUnitValue(100, 'px'))。}}
+
+{{知识点34}}{{CSS Typed OM 中数值类型的单位类型包括：length（如 px、em、rem）、percent（百分比）、time（如 s、ms）、angle（如 deg、rad、turn）、frequency（如 Hz、kHz）、resolution（如 dpi、dpcm）、flex（fr）等。这些类型可以在 CSSNumericValue.type() 中获取。}}
+
+{{知识点35}}{{在 CSS Typed OM 中，自定义属性（CSS 变量）通过 computedStyleMap().get('--custom-prop') 获取时，返回的是 CSSUnparsedValue 对象而非解析后的值。这是因为自定义属性在计算时保留原始值形式，其解析延迟到实际使用时。}}
+
+{{知识点36}}{{CSS Typed OM 的浏览器兼容性方面，Chrome 和 Edge 提供了较好的支持（通过 Blink 引擎），Safari 的支持在逐步完善中，Firefox 的支持相对有限。在生产环境使用前应检查具体 API 的兼容性，可通过 computedStyleMap 是否存在来特性检测。}}
+
+{{知识点37}}{{CSS Typed OM Level 1 规范由 W3C CSS Houdini 工作组制定，规范草案位于 drafts.css-houdini.org/css-typed-om/。它定义了 StyleValue 对象、StylePropertyMap、关键字值、数值类型、变换值、位置值等核心接口。}}
+
+{{知识点38}}{{在实际开发中，CSS Typed OM 常用于高性能动画。由于直接操作类型化对象避免了字符串解析，对需要频繁读写 CSS 值的动画场景（如滚动驱动动画、交互式 UI 效果），Typed OM 可以显著减少 JavaScript 层面的性能开销。}}
+
+{{知识点39}}{{CSSNumericArray 接口是 CSSMathSum、CSSMathProduct 等复杂数学值中存储子值列表的接口。它是一个类数组对象，可以通过索引访问其中的 CSSNumericValue 项，例如 styleMap.get('width').values[0] 可以获取 calc() 表达式中的第一个值。}}
+
+{{知识点40}}{{CSS Typed OM 与 Web Animations API 的结合使用：Typed OM 返回的类型化值可以直接用于 Web Animations API 的 keyframes 中，无需手动字符串拼接。这使得在 JavaScript 中创建复杂的动画序列更加直观和高效。}}

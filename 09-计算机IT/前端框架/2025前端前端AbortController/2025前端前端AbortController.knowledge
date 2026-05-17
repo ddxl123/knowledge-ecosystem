@@ -1,0 +1,83 @@
+# 2025前端前端AbortController
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{AbortController 是什么：AbortController 是 Web API 中的控制器对象，允许你在需要时中止一个或多个 Web 请求。通过 new AbortController() 构造函数创建实例，配合 AbortSignal 对象与异步操作进行通信。自 2019 年 3 月起在所有主流浏览器中可用，也可在 Web Worker 中使用。规范来源：DOM Living Standard。}}
+
+{{知识点2}}{{AbortController 构造函数：通过 new AbortController() 创建一个新的 AbortController 实例。无参数，返回一个包含 signal 属性和 abort() 方法的控制器对象。这是使用 AbortController 的第一步。}}
+
+{{知识点3}}{{AbortController.signal 属性：signal 是 AbortController 实例的只读属性，返回一个 AbortSignal 对象。该信号对象可以传递给 fetch() 等异步 API，用于监听和触发中止操作。每个 AbortController 实例对应一个唯一的 AbortSignal。}}
+
+{{知识点4}}{{AbortController.abort() 方法：abort() 方法用于中止尚未完成的异步操作。可以中止 fetch 请求、响应体的消费以及流操作。语法：abort() 或 abort(reason)，reason 可以是任意 JavaScript 值，用于描述中止原因。未指定 reason 时默认为 "AbortError" DOMException。}}
+
+{{知识点5}}{{AbortSignal.aborted 属性：只读布尔值，表示信号关联的请求是否已被中止。true 表示已中止，false 表示未中止。可通过此属性检查当前中止状态。继承自 EventTarget 接口。}}
+
+{{知识点6}}{{AbortSignal.reason 属性：只读属性，返回表示中止原因的 JavaScript 值。信号未中止时为 undefined。可通过 abort(reason) 或 AbortSignal.abort(reason) 设置具体原因值，未显式设置时默认为 "AbortError" DOMException。自 2022 年 3 月起广泛可用。}}
+
+{{知识点7}}{{AbortSignal.abort() 静态方法：返回一个已经处于中止状态的 AbortSignal 实例，且不会触发 abort 事件。等价于先创建 AbortController 再立即调用 abort()。用途：在需要执行中止逻辑但实际请求尚未发起时使用。类似 Promise.reject() 的设计理念。自 2021 年 9 月起广泛可用。}}
+
+{{知识点8}}{{AbortSignal.timeout() 静态方法：返回一个在指定毫秒数后自动中止的 AbortSignal。超时后以 TimeoutError DOMException 中止，区别于用户手动中止的 AbortError。超时基于活跃时间计算，Worker 挂起或页面进入 bfcache 时会暂停计时。参数范围：0 到 Number.MAX_SAFE_INTEGER。自 2024 年 4 月起可用。}}
+
+{{知识点9}}{{AbortSignal.any() 静态方法：接收一个 AbortSignal 可迭代对象，返回一个新的 AbortSignal，当输入的任何一个信号中止时该信号也会中止。中止原因设置为第一个中止信号的原因。如果输入中已有中止的信号，返回的信号也会立即中止。自 2024 年 3 月起可用。}}
+
+{{知识点10}}{{AbortSignal.throwIfAborted() 方法：如果信号已中止则抛出中止原因，否则不执行任何操作。适用于在代码的特定位置检查中止状态，而非传递给接受信号的函数。常用于轮询操作中，在每次循环迭代时检查是否应中止。自 2022 年 4 月起广泛可用。}}
+
+{{知识点11}}{{AbortSignal 的 abort 事件：当异步操作被中止时触发。可通过 addEventListener('abort', handler) 监听，也可通过 onabort 属性赋值。使用 { once: true } 选项确保事件监听器只触发一次，有利于垃圾回收。}}
+
+{{知识点12}}{{AbortSignal 只能使用一次：一个 AbortSignal 被中止后，任何使用该信号的 fetch 调用都会立即被拒绝。不能复用已中止的信号，需要发起新请求时必须创建新的 AbortController 实例。这是 AbortSignal 的核心设计约束。}}
+
+{{知识点13}}{{使用 AbortController 中止 fetch 请求：创建 AbortController 实例，将其 signal 属性作为 fetch 的第二个参数的 signal 选项传入。调用 controller.abort() 即可中止请求。fetch 的 Promise 会以 AbortError DOMException 拒绝。这是 AbortController 最常见的使用场景。}}
+
+{{知识点14}}{{中止 fetch 请求的完整模式：let controller; async function fetchVideo() { controller = new AbortController(); try { const response = await fetch(url, { signal: controller.signal }); } catch (err) { console.error(err.message); } }。按钮点击时调用 controller.abort() 即可中止下载。}}
+
+{{知识点15}}{{中止后读取响应体也会报错：即使 fetch 请求已完成（Promise resolved），如果在读取响应体之前调用 abort()，尝试读取响应体（如 response.text()）仍会抛出 AbortError。这意味着 abort 不仅能中止正在进行的请求，还能阻止已完成请求的数据消费。}}
+
+{{知识点16}}{{使用 AbortSignal.timeout() 设置请求超时：const res = await fetch(url, { signal: AbortSignal.timeout(5000) })。超时后 Promise 以 TimeoutError 拒绝。通过捕获错误并检查 err.name === "TimeoutError" 可以区分超时和用户主动中止。比手动 setTimeout + abort 更简洁优雅。}}
+
+{{知识点17}}{{使用 AbortSignal.any() 组合多个中止信号：AbortSignal.any([controller.signal, timeoutSignal]) 返回一个组合信号，任一输入信号中止时组合信号也中止。适用于同时支持用户手动取消和超时自动取消的场景。注意：使用 any() 时无法直接区分是超时还是用户取消导致的中止。}}
+
+{{知识点18}}{{区别 TimeoutError 和 AbortError：使用 AbortSignal.timeout() 时，超时产生的错误名称为 TimeoutError；用户手动中止（如浏览器停止按钮、关闭标签页）产生 AbortError。在 catch 块中通过 err.name 进行区分，以便给用户不同的提示信息。}}
+
+{{知识点19}}{{在 addEventListener 中使用 signal 自动移除监听器：addEventListener 的第三个参数支持 signal 选项。传入 AbortSignal 后，当对应的 AbortController 调用 abort() 时，事件监听器会被自动移除。这是比手动 removeEventListener 更优雅的清理方式，特别适合组件卸载时的批量清理。}}
+
+{{知识点20}}{{React useEffect 中使用 AbortController 清理副作用：在 useEffect 中创建 AbortController，将 signal 传给 fetch，返回清理函数中调用 controller.abort()。这能有效防止组件卸载后的内存泄漏和状态更新错误。模式：const controller = new AbortController(); fetch(url, { signal: controller.signal }); return () => controller.abort();。}}
+
+{{知识点21}}{{用一个 AbortController 清理多个事件监听器：在 useEffect 中创建一个 AbortController，将同一个 signal 传给多个 addEventListener 调用。清理时只需调用一次 controller.abort()，所有关联的事件监听器都会被自动移除。大幅简化清理代码，避免遗漏 removeEventListener。}}
+
+{{知识点22}}{{实现可中止的 Promise API：函数接受 { signal } 参数，内部检查 signal.throwIfAborted()，监听 signal 的 abort 事件用 { once: true }，在事件回调中 reject(signal.reason)。Promise 完成后无需清理监听器（因为 once: true）。这是向自定义异步 API 添加中止支持的标准模式。}}
+
+{{知识点23}}{{中止原因的自定义：abort() 方法接受可选的 reason 参数，可以是任意 JavaScript 值（字符串、Error 对象、自定义对象等）。例如：controller.abort(new Error('用户取消')) 或 controller.abort({ code: 'USER_CANCEL', message: '用户主动取消' })。通过 signal.reason 获取该值。}}
+
+{{知识点24}}{{AbortController 与流（Streams）的配合：AbortController 不仅能中止 fetch 请求，还能中止 ReadableStream、WritableStream 和 TransformStream 的消费。调用 abort() 时，正在进行的流读取或写入操作会被中断。}}
+
+{{知识点25}}{{AbortController 在 Node.js 中的支持：从 Node.js v15.0.0 开始，AbortController 作为全局 API 可用。在 v14.x 中需要通过 require('abort-controller') 引入。Node.js 的 fetch（undici）原生支持 signal 选项。使得前后端使用统一的中止模式。}}
+
+{{知识点26}}{{AbortController 的内存管理优势：使用 signal 选项的 addEventListener 会在中止时自动清理监听器，避免内存泄漏。相比手动存储函数引用再 removeEventListener，这种方式更安全且代码更简洁。特别是处理多个事件监听器时优势明显。}}
+
+{{知识点27}}{{防止竞态条件（Race Condition）：在搜索框等场景中，每次输入新字符时中止上一次请求，只保留最新请求的结果。模式：每次创建新 AbortController，中止上一个 controller，用新 signal 发起请求。防止旧请求的响应覆盖新请求的结果。}}
+
+{{知识点28}}{{在 fetch 请求的 Request 对象中使用 signal：可以创建 Request 对象时传入 signal：const request = new Request(url, { signal: controller.signal })，然后传递给 fetch(request)。效果与直接在 fetch 的 options 中传 signal 相同。适用于需要复用请求配置的场景。}}
+
+{{知识点29}}{{AbortController 的浏览器兼容性：AbortController 核心 API（构造函数、signal、abort()）自 2019 年 3 月起在所有主流浏览器中可用。AbortSignal.timeout() 和 AbortSignal.any() 自 2024 年起可用，属于较新特性。AbortSignal.abort() 自 2021 年 9 月起可用。在使用新特性前应检查目标浏览器的兼容性。}}
+
+{{知识点30}}{{AbortController 与 async/await 的配合模式：在 try/catch 块中使用 await fetch(url, { signal })，catch 中根据 err.name 区分 AbortError、TimeoutError 和网络错误。这是处理异步请求中止的标准 async/await 模式，代码清晰且错误处理完整。}}
+
+{{知识点31}}{{在轮询操作中使用 throwIfAborted()：在 while(true) 轮询循环中，每次迭代开始时调用 signal.throwIfAborted()。如果信号已中止则抛出异常终止轮询。比在循环中检查 signal.aborted 再 break 更简洁，且能正确传播中止原因。}}
+
+{{知识点32}}{{AbortController 在取消长时间运行的任务中的应用：对于文件上传、大文件下载、批量数据处理等长时间任务，AbortController 提供统一的取消机制。用户点击取消按钮时调用 abort()，所有关联的异步操作（fetch、流、自定义 Promise）都能收到中止信号。}}
+
+{{知识点33}}{{AbortController 与 Promise.race 的对比：虽然 Promise.race 也能实现超时控制，但 AbortController 方案更优：1）能真正中止底层网络请求而非仅忽略结果；2）节省带宽和服务器资源；3）错误类型更精确（TimeoutError vs AbortError）；4）是浏览器原生标准方案。}}
+
+{{知识点34}}{{在 Vue 组件中使用 AbortController：在 onMounted 或 setup 中创建 AbortController，在 onUnmounted 中调用 abort() 清理。与 React useEffect 模式类似，但使用 Vue 的生命周期钩子。可结合 ref 存储 controller 实例以便在模板事件中手动取消。}}
+
+{{知识点35}}{{多个请求共享一个 AbortController：一个 AbortController 可以同时关联多个 fetch 请求，调用一次 abort() 即可中止所有关联请求。适用于页面中有多条并发请求需要同时取消的场景（如页面导航时中止所有正在进行的数据加载）。}}
+
+{{知识点36}}{{AbortSignal 的事件监听回调中使用 once: true：在实现可中止 API 时，addEventListener('abort', handler, { once: true }) 确保回调只执行一次。这避免了重复回调的问题，同时允许回调函数和相关闭包被垃圾回收，防止内存泄漏。}}
+
+{{知识点37}}{{使用 AbortSignal.abort() 创建已中止的信号：AbortSignal.abort(reason) 直接返回已中止状态的信号，无需创建 AbortController。适用于条件判断后需要立即执行中止逻辑的场景。例如：某些条件下直接返回已中止信号，触发 fetch 的中止处理流程。}}
+
+{{知识点38}}{{AbortController 在 Service Worker 中的使用：Service Worker 可以使用 AbortController 来中止 fetch 事件中的请求。在 fetch handler 中创建 AbortController 并传给 event.respondWith()，当需要取消时调用 abort()。适用于复杂的缓存策略和请求拦截场景。}}
+
+{{知识点39}}{{错误处理最佳实践：catch 块中应按 err.name 分类处理：AbortError 表示用户主动取消（通常静默处理或简单提示）；TimeoutError 表示超时（提示用户重试或检查网络）；TypeError 可能表示 API 不支持（降级处理）；其他错误按常规网络错误处理。}}
+
+{{知识点40}}{{AbortController 的设计哲学：AbortController 采用了关注点分离的设计——控制器（AbortController）负责触发中止，信号（AbortSignal）负责传递中止状态。这种分离使得信号可以安全地传递给第三方代码而不暴露中止能力，是良好 API 设计的典范。}}

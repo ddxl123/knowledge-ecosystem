@@ -1,0 +1,83 @@
+# 2025前端前端CSS Blend Modes
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{CSS Blend Modes（混合模式）是Compositing and Blending Level 2规范定义的特性，允许开发者控制前景色与背景色如何混合计算出最终颜色值。混合模式按像素对前景和背景颜色进行数学运算，返回新的颜色值。支持两个核心属性：mix-blend-mode（元素间混合）和background-blend-mode（背景层混合）。}}
+
+{{知识点2}}{{background-blend-mode属性定义元素的背景图片（background-image）之间以及与背景颜色（background-color）之间的混合方式。语法为background-blend-mode: <blend-mode>，可接受逗号分隔的多个值，对应多个背景层。当混合模式数量与背景图片数量不匹配时，会循环重复或截断直到匹配。}}
+
+{{知识点3}}{{mix-blend-mode属性定义元素与其下方元素（包括父元素背景和兄弟元素）之间的混合方式。语法为mix-blend-mode: <blend-mode>。该属性适用于所有元素，在SVG中适用于容器元素、图形元素和图形引用元素。混合模式的变化是即时的，不可插值动画。}}
+
+{{知识点4}}{{normal模式是默认值，最终颜色为顶层颜色，完全不透明覆盖。效果类似于两张不透明纸张重叠，底层颜色完全被遮挡。设置background-blend-mode: normal时背景颜色不会透过背景图片显示。}}
+
+{{知识点5}}{{multiply（正片叠底）模式将上下层颜色值相乘得到最终颜色。黑色层导致最终为黑色，白色层则无变化。效果类似两张透明胶片叠加印刷。这是最常用的暗化混合模式，适合创建阴影和深色叠加效果。}}
+
+{{知识点6}}{{screen（滤色）模式先将颜色反转，相乘后再反转。黑色层无变化，白色层导致最终为白色。效果类似两束光投射到屏幕上。与multiply相反，screen产生亮化效果，适合创建发光和光晕效果。}}
+
+{{知识点7}}{{overlay（叠加）模式根据底层颜色深浅自动选择：底层暗则使用multiply，底层亮则使用screen。等价于hard-light但上下层互换。它保留底层的高光和阴影，同时叠加顶层的色调信息。}}
+
+{{知识点8}}{{darken（变暗）模式取每个颜色通道中较暗的值作为最终颜色。如果背景图片比背景颜色暗则替换，否则保持不变。适合创建选择性暗化效果。}}
+
+{{知识点9}}{{lighten（变亮）模式取每个颜色通道中较亮的值作为最终颜色。如果背景图片比背景颜色亮则替换，否则保持不变。适合创建选择性亮化效果。}}
+
+{{知识点10}}{{color-dodge（颜色减淡）模式将底层颜色除以顶层颜色的反转值。黑色前景无变化，前景为底层反转色时产生完全亮化的颜色。类似screen但更强烈，前景只需达到底层反转色的亮度即可产生全亮效果。}}
+
+{{知识点11}}{{color-burn（颜色加深）模式先反转底层颜色，除以顶层颜色后再反转。白色前景无变化，前景为底层反转色时最终为黑色。类似multiply但更强烈，前景只需达到底层反转色的暗度即可产生全黑效果。}}
+
+{{知识点12}}{{hard-light（强光）模式根据顶层颜色深浅选择：顶层暗则multiply，顶层亮则screen。等价于overlay但上下层互换。效果类似在背景上照射强聚光灯。}}
+
+{{知识点13}}{{soft-light（柔光）模式与hard-light类似但效果更柔和。效果类似在背景上照射漫射聚光灯。不会像hard-light那样产生极端的明暗对比，更适合自然的光照效果。}}
+
+{{知识点14}}{{difference（差值）模式从较亮的颜色中减去较暗的颜色得到最终值。黑色层无效果，白色层反转另一层的颜色。通常产生高对比度效果，适合创建负片和反转视觉效果。}}
+
+{{知识点15}}{{exclusion（排除）模式与difference类似但对比度更低。黑色层无效果，白色层反转另一层的颜色。产生比difference更柔和的反差效果，适合创建微妙的色彩变化。}}
+
+{{知识点16}}{{hue（色相）模式取顶层的色相值，结合底层的饱和度和亮度。即保留底层的明暗和饱和度信息，只改变色相。适合对图像进行色调调整而不改变亮度分布。}}
+
+{{知识点17}}{{saturation（饱和度）模式取顶层的饱和度值，结合底层的色相和亮度。纯灰色背景（无饱和度）将不产生任何效果。适合精确控制颜色的鲜艳程度。}}
+
+{{知识点18}}{{color（颜色）模式取顶层的色相和饱和度，结合底层的亮度。保留灰度层级，可用于对前景进行着色。效果类似于在灰度图上叠加颜色信息。}}
+
+{{知识点19}}{{luminosity（明度）模式取顶层的亮度值，结合底层的色相和饱和度。等价于color模式但上下层互换。适合在保持颜色不变的情况下调整图像亮度。}}
+
+{{知识点20}}{{plus-darker和plus-lighter是mix-blend-mode特有的混合模式（不在background-blend-mode中）。plus-lighter使用Porter-Duff plus-lighter合成运算符，常用于交叉淡入淡出效果，防止两个元素在相反方向动画透明度时出现闪烁。}}
+
+{{知识点21}}{{isolation属性控制元素是否创建新的层叠上下文，直接影响混合模式的作用范围。值为auto时仅在需要时创建层叠上下文，值为isolate时强制创建新的层叠上下文。使用isolation: isolate可以限制mix-blend-mode只作用于元素的直接子元素，防止混合效果穿透到更外层。}}
+
+{{知识点22}}{{创建CSS等边三角形的经典方法：设置宽高为0，使用border-width控制大小，border-color设置三条边颜色，其中左右border-color设为transparent隐藏斜边。另一种方式是使用clip-path: polygon(50% 0%, 0% 100%, 100% 100%)裁剪矩形元素。}}
+
+{{知识点23}}{{background-blend-mode的链式混合：每个背景层可有独立的混合模式，通过逗号分隔多个值分别对应多个background-image层。例如background-blend-mode: screen, difference, lighten分别作用于第一、二、三个背景层。适合创建复杂的渐变叠加效果。}}
+
+{{知识点24}}{{mix-blend-mode在SVG中的应用：可以直接应用于SVG的circle、rect等图形元素，混合效果在SVG渲染上下文中计算。需要配合isolation: isolate来限制混合范围，否则SVG元素会与页面背景混合。}}
+
+{{知识点25}}{{mix-blend-mode作用于文本元素：可以将文本颜色与父元素背景色混合，创建文字特效。例如在蓝色背景上使用multiply混合橙色文字，产生独特的文字颜色效果。注意文字的可读性可能受影响，需测试对比度。}}
+
+{{知识点26}}{{混合模式与opacity的关系：当元素设置opacity时，浏览器会创建新的合成层。混合模式在透明度合成之前计算。opacity: 1时混合效果最明显，降低opacity会减弱混合效果。某些情况下需要同时调整两者来达到预期效果。}}
+
+{{知识点27}}{{混合模式的浏览器兼容性：mix-blend-mode和background-blend-mode自2020年1月起被所有主流浏览器广泛支持（Baseline）。支持Chrome、Firefox、Safari、Edge等。plus-darker和plus-lighter是较新的值，支持度略低。}}
+
+{{知识点28}}{{混合模式的性能考量：混合模式会触发GPU加速的合成操作。大量元素使用混合模式可能增加GPU内存和合成开销。mix-blend-mode会创建新的层叠上下文（stacking context），影响z-index行为。在移动端需注意性能影响。}}
+
+{{知识点29}}{{使用mix-blend-mode创建彩色圆环效果：将三个不同颜色的圆形（红、绿、蓝）设置mix-blend-mode: screen并重叠，可产生类似RGB色彩混合的视觉效果。需在父容器设置isolation: isolate来限制混合范围。}}
+
+{{知识点30}}{{混合模式在暗色模式设计中的应用：使用multiply可以将彩色图片与深色背景自然融合，luminosity模式可调整亮度适配暗色主题，color模式可为灰度图标着色。这些技巧可减少为暗色模式准备单独图片资源的需求。}}
+
+{{知识点31}}{{混合模式的动画限制：blend-mode属性不支持CSS transition或animation插值，变化是即时的。如需混合模式的渐变效果，可通过对opacity进行动画来间接实现平滑过渡，或使用JavaScript逐帧更新。}}
+
+{{知识点32}}{{CSS Houdini与混合模式：虽然CSS Paint API可以自定义绘制，但混合模式的计算发生在合成阶段而非绘制阶段，因此不能通过Houdini自定义混合模式。自定义混合模式需要等待Compositing and Blending规范的扩展。}}
+
+{{知识点33}}{{background-blend-mode与多个background-image的实际应用：使用background: url('photo.jpg'), linear-gradient(...)设置多层背景，再用background-blend-mode: multiply将照片与渐变色混合，可以快速为照片添加色调滤镜效果，无需额外的图像处理。}}
+
+{{知识点34}}{{HSL颜色模型与混合模式的关系：hue、saturation、color、luminosity四个混合模式直接操作HSL色彩空间的三个分量。hue操作色相环角度，saturation操作颜色纯度，color同时操作色相和饱和度，luminosity操作明度。理解HSL有助于正确选择这些模式。}}
+
+{{知识点35}}{{混合模式的调试技巧：可以在浏览器DevTools中实时切换blend-mode值来预览效果。使用background-blend-mode: normal作为基准对比。使用isolation: isolate逐步排查混合穿透问题。Chrome和Firefox的DevTools都支持blend-mode的可视化检查。}}
+
+{{知识点36}}{{Canvas 2D中的globalCompositeOperation与CSS Blend Modes的对应关系：Canvas的'multiply'、'screen'等合成操作与CSS混合模式名称相同但实现上下文不同。CSS作用于DOM元素层，Canvas作用于像素缓冲区。两者产生的视觉效果一致，但应用场景和性能特征不同。}}
+
+{{知识点37}}{{混合模式在响应式设计中的注意事项：混合模式的视觉效果可能因屏幕色彩配置文件（如sRGB vs Display P3）而有差异。高DPI屏幕上混合效果可能更细腻。在不同设备上测试混合模式效果是必要的，尤其对色彩敏感的设计。}}
+
+{{知识点38}}{{使用mix-blend-mode实现双色调（Duotone）效果：将彩色图片设置为grayscale()滤镜，然后用mix-blend-mode: multiply与一个彩色背景层混合，可以实现流行的双色调效果。这种方法纯CSS实现，无需SVG滤镜或图片编辑。}}
+
+{{知识点39}}{{混合模式的层级与堆叠：在多个元素都使用mix-blend-mode时，混合按照文档流和层叠顺序依次进行。每个元素与其直接下方的合成结果混合。理解这个链式混合过程对于预测最终视觉效果至关重要。}}
+
+{{知识点40}}{{Compositing（合成）与Blending（混合）的区别：混合模式（Blending）决定前景和背景颜色如何计算；合成操作（Compositing）决定结果如何写入目标缓冲区，处理透明度和遮罩。CSS同时支持两者，但混合模式是最常用的层面。规范名称为Compositing and Blending Level 2。}}

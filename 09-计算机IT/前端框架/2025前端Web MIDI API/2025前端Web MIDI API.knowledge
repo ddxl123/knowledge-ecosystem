@@ -1,0 +1,153 @@
+# 2025前端Web MIDI API
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}
+{{Web MIDI API概述：Web MIDI API是W3C标准API，允许网页JavaScript代码连接和交互MIDI（Musical Instrument Digital Interface，乐器数字接口）设备。它能够枚举MIDI输入/输出端口、发送和接收MIDI消息，适用于音乐制作、演出控制和任何MIDI设备交互场景。规范地址：https://webaudio.github.io/web-midi-api/}}
+
+{{知识点2}}
+{{安全上下文要求：Web MIDI API只能在安全上下文（Secure Context，即HTTPS）中使用。非安全HTTP页面无法调用navigator.requestMIDIAccess()。这是浏览器强制执行的安全策略，防止恶意网页未经授权访问用户的硬件设备。}}
+
+{{知识点3}}
+{{navigator.requestMIDIAccess()方法：这是Web MIDI API的入口方法，返回一个Promise，解析为MIDIAccess对象。调用签名：navigator.requestMIDIAccess(options?)。options对象可包含sysex（布尔值，是否启用System Exclusive消息）和software（布尔值，是否使用软件合成器）两个属性，默认均为false。}}
+
+{{知识点4}}
+{{MIDIOptions参数：requestMIDIAccess()接受MIDIOptions对象，包含两个可选布尔属性。sysex: true表示允许发送和接收系统独占(System Exclusive)消息，需要更高权限。software: true表示允许系统使用已安装的软件合成器。这些选项会影响权限请求和可用功能。}}
+
+{{知识点5}}
+{{MIDIAccess接口：MIDIAccess是Web MIDI API的核心接口，提供枚举MIDI设备和访问单个设备的方法。它是一个Transferable对象，可在Web Worker之间传递。主要属性包括inputs（MIDIInputMap）、outputs（MIDIOutputMap）和sysexEnabled（布尔值，指示是否启用了sysex支持）。}}
+
+{{知识点6}}
+{{MIDIAccess.inputs属性：只读属性，返回MIDIInputMap实例，表示当前所有可用的MIDI输入端口。MIDIInputMap是一个类Map只读对象，键是MIDI输入端口的ID字符串，值是对应的MIDIInput对象。可以使用forEach、entries()、values()等方法遍历。}}
+
+{{知识点7}}
+{{MIDIAccess.outputs属性：只读属性，返回MIDIOutputMap实例，表示当前所有可用的MIDI输出端口。MIDIOutputMap是一个类Map只读对象，键是MIDI输出端口的ID字符串，值是对应的MIDIOutput对象。使用方式与MIDIInputMap类似。}}
+
+{{知识点8}}
+{{MIDIAccess.sysexEnabled属性：只读布尔值，指示当前MIDIAccess实例是否启用了System Exclusive (sysex)消息支持。只有在调用requestMIDIAccess({ sysex: true })且用户授权后才为true。sysex消息用于传输制造商特定数据、补丁信息等。}}
+
+{{知识点9}}
+{{MIDIAccess.statechange事件：当新的MIDI端口可用或已有端口状态发生变化时触发。事件处理函数接收MIDIConnectionEvent对象，通过event.port可获取发生变化的端口信息（名称、制造商、状态等）。这是实现热插拔设备检测的关键事件。}}
+
+{{知识点10}}
+{{MIDIPort接口：MIDIPort是MIDIInput和MIDIOutput的基接口，表示单个MIDI端口。它继承自EventTarget，提供了端口的元数据信息和连接管理方法。每个端口都有唯一标识符、制造商信息、类型、版本号等属性。}}
+
+{{知识点11}}
+{{MIDIPort.id属性：只读字符串，返回MIDI端口的唯一标识符。该ID在浏览器会话中保持稳定，可用于持久化用户对特定设备的选择。不同浏览器可能生成不同格式的ID。}}
+
+{{知识点12}}
+{{MIDIPort.manufacturer属性：只读字符串，返回MIDI端口的制造商名称。例如"YAMAHA"、"Roland"等。该信息由MIDI设备自身提供，可能为空字符串（取决于设备和驱动程序）。}}
+
+{{知识点13}}
+{{MIDIPort.name属性：只读字符串，返回MIDI端口的系统名称。例如"USB MIDI Keyboard"、"Scarlett 2i2 USB"等。这是用户识别设备的主要方式，通常在UI中显示给用户选择。}}
+
+{{知识点14}}
+{{MIDIPort.type属性：只读字符串，表示端口类型。值为"input"表示这是一个MIDI输入端口（接收数据），值为"output"表示这是一个MIDI输出端口（发送数据）。用于区分端口的功能方向。}}
+
+{{知识点15}}
+{{MIDIPort.version属性：只读字符串，返回MIDI端口的版本信息。该版本号由设备或驱动程序提供，可用于标识固件版本或驱动版本。可能为空字符串。}}
+
+{{知识点16}}
+{{MIDIPort.state属性：只读字符串，表示端口的物理连接状态。"connected"表示设备当前已连接，"disconnected"表示设备已断开。该状态反映的是物理层面的连接情况，与逻辑层面的connection属性不同。}}
+
+{{知识点17}}
+{{MIDIPort.connection属性：只读字符串，表示端口的逻辑连接状态。"open"表示端口已打开且可用，"closed"表示端口未打开或已关闭，"pending"表示端口已打开但随后设备断开连接。这是判断端口是否可以收发数据的关键属性。}}
+
+{{知识点18}}
+{{MIDIPort.open()方法：显式打开MIDI端口使其可用，返回一个Promise，在端口成功打开后解析。通常不需要手动调用，因为访问input.onmidimessage或调用output.send()时会自动打开端口。但在需要明确控制端口生命周期时很有用。}}
+
+{{知识点19}}
+{{MIDIPort.close()方法：关闭MIDI端口使其不可用，将状态从"open"变为"closed"，返回一个Promise。关闭后停止接收消息（对输入端口）或停止发送消息（对输出端口）。释放端口后其他应用可能可以使用该设备。}}
+
+{{知识点20}}
+{{MIDIPort.statechange事件：当端口的状态或连接状态发生变化时触发。事件对象是MIDIConnectionEvent类型，通过event.port可获取端口引用。用于监听特定端口的连接/断开事件，实现精细的设备管理。}}
+
+{{知识点21}}
+{{MIDIInput接口：MIDIInput继承自MIDIPort，表示MIDI输入端口，用于接收来自MIDI设备的消息。它不添加额外的属性或方法，主要通过midimessage事件来接收数据。当MIDI键盘按键、旋钮转动或滑块移动时会触发该事件。}}
+
+{{知识点22}}
+{{MIDIInput.midimessage事件：当MIDI输入端口接收到MIDI消息时触发。事件对象是MIDIMessageEvent类型，包含data属性（Uint8Array），存储原始MIDI消息字节。这是获取MIDI设备输入数据的核心事件，每个按键、控制变化等都会触发。}}
+
+{{知识点23}}
+{{MIDIOutput接口：MIDIOutput继承自MIDIPort，表示MIDI输出端口，用于向MIDI设备发送消息。提供send()和clear()两个方法。可以向硬件合成器、鼓机或其他MIDI设备发送指令。}}
+
+{{知识点24}}
+{{MIDIOutput.send()方法：向MIDI端口排队发送消息。语法：output.send(data, timestamp?)。data参数是包含MIDI消息字节的数组或Uint8Array。timestamp参数（可选）是DOMHighResTimeStamp，指定消息应在何时发送，省略或为0则立即发送。用于延迟调度精确时序的消息。}}
+
+{{知识点25}}
+{{MIDIOutput.clear()方法：清除MIDI输出端口中所有待发送的排队消息。在需要停止所有待发送音符或取消已调度消息时使用。例如用户按下停止按钮时调用以避免过期消息继续播放。}}
+
+{{知识点26}}
+{{MIDIMessageEvent接口：表示传递给MIDIInput的midimessage事件的事件对象。构造函数：new MIDIMessageEvent(type, options?)。核心属性data是一个Uint8Array，包含单条MIDI消息的数据字节。数据格式遵循MIDI 1.0规范。}}
+
+{{知识点27}}
+{{MIDIConnectionEvent接口：表示MIDI设备连接/断开时的事件对象，传递给MIDIAccess和MIDIPort的statechange事件。构造函数：new MIDIConnectionEvent(type, options?)。核心属性port返回发生变化的MIDIPort实例引用。}}
+
+{{知识点28}}
+{{MIDIInputMap接口：只读的类Map对象，提供当前可用MIDI输入端口的集合。键是端口ID字符串，值是MIDIInput对象。支持Map-like操作：entries()、forEach()、get()、has()、keys()、values()和size属性。不可修改（只读）。}}
+
+{{知识点29}}
+{{MIDIOutputMap接口：只读的类Map对象，提供当前可用MIDI输出端口的集合。键是端口ID字符串，值是MIDIOutput对象。操作方式与MIDIInputMap相同，支持标准的Map-like遍历方法。用于枚举和选择MIDI输出设备。}}
+
+{{知识点30}}
+{{MIDI消息格式基础：MIDI消息由状态字节和数据字节组成。状态字节的高4位表示消息类型（如0x80=Note Off，0x90=Note On），低4位表示MIDI通道（0-15）。数据字节通常是7位值（0-127），如音符号和力度值。例如[0x90, 60, 0x7f]表示通道1上以最大力度演奏中央C。}}
+
+{{知识点31}}
+{{Note On/Off消息：Note On（0x90-0x9F）消息表示按下琴键，包含音符号(0-127)和力度(0-127)。Note Off（0x80-0x8F）消息表示释放琴键。音符60对应中央C(Middle C)。力度0的Note On通常被视为Note Off。每个MIDI通道可同时演奏多个音符。}}
+
+{{知识点32}}
+{{Control Change (CC)消息：状态字节0xB0-0xBF，用于控制合成器参数。包含控制器编号(0-127)和值(0-127)。常见控制器：CC#1=调制轮、CC#7=音量、CC#10=声像、CC#64=延音踏板。MIDI CC是最灵活的控制手段之一。}}
+
+{{知识点33}}
+{{Program Change消息：状态字节0xC0-0xCF，用于切换乐器/音色程序。只包含一个数据字节(0-127)，表示程序编号。例如发送[0xC0, 0]切换到三角钢琴音色。不同的音源/合成器对程序编号的映射不同（General MIDI标准定义了128种标准乐器）。}}
+
+{{知识点34}}
+{{Pitch Bend消息：状态字节0xE0-0xEF，包含两个数据字节（LSB和MSB），共同组成14位(0-16383)的弯音值。中心值8192表示无弯音。用于实时控制音高变化，是MIDI表演表现力的重要组成部分。}}
+
+{{知识点35}}
+{{System Exclusive (Sysex)消息：以0xF0开头、0xF7结尾的特殊消息，用于传输制造商特定数据。可以包含任意数量的字节。需要调用requestMIDIAccess({ sysex: true })并获得用户授权才能使用。常见用途：传输音色补丁、固件更新、设备配置等。}}
+
+{{知识点36}}
+{{权限模型与Permissions-Policy：Web MIDI API受HTTP Permissions-Policy头中的midi指令控制。页面可通过Permissions-Policy: midi=()拒绝该功能。权限状态可通过navigator.permissions.query({ name: "midi", sysex: true })查询，返回"granted"、"prompt"或"denied"三种状态。}}
+
+{{知识点37}}
+{{错误处理：requestMIDIAccess()可能抛出多种异常。AbortError：页面因导航关闭。InvalidStateError：底层系统错误。NotSupportedError：功能或选项不支持。NotAllowedError：用户或系统拒绝权限，或Permission Policy阻止。开发者应妥善处理这些错误。}}
+
+{{知识点38}}
+{{设备热插拔检测：通过监听MIDIAccess的statechange事件可实现MIDI设备的热插拔检测。当用户插入或拔出MIDI设备时，浏览器会触发该事件，event.port提供设备信息。建议在应用启动时注册监听器，动态更新设备列表UI。}}
+
+{{知识点39}}
+{{发送MIDI消息示例：发送中央C（Middle C）的完整流程：const noteOn = [0x90, 60, 0x7f]; output.send(noteOn); // 立即发送。延迟发送：output.send([0x80, 60, 0x40], performance.now() + 1000); // 1秒后发送Note Off。send()方法支持时间戳参数实现精确调度。}}
+
+{{知识点40}}
+{{接收MIDI消息示例：遍历所有输入端口并监听消息：midiAccess.inputs.forEach((input) => { input.onmidimessage = (event) => { const [status, note, velocity] = event.data; const command = status >> 4; const channel = status & 0xF; console.log(`通道${channel}: 命令${command}, 音符${note}, 力度${velocity}`); }; });}}
+
+{{知识点41}}
+{{Web MIDI API浏览器兼容性：截至2025年，Web MIDI API在Chrome、Edge、Opera等Chromium内核浏览器中得到良好支持。Firefox和Safari的支持情况有限或需要手动启用。在使用前应检测：if (navigator.requestMIDIAccess) { ... } else { console.warn('浏览器不支持Web MIDI API'); }。}}
+
+{{知识点42}}
+{{MIDIAccess作为Transferable对象：MIDIAccess实现了Transferable接口，可以在主线程和Web Worker之间通过postMessage传递。这对于在Worker中处理MIDI数据、避免主线程阻塞非常有用。传递时使用transfer参数：worker.postMessage(midiAccess, [midiAccess])。}}
+
+{{知识点43}}
+{{与Web Audio API结合使用：Web MIDI API常与Web Audio API配合使用，实现完整的Web音频处理管道。MIDI消息可控制Web Audio API的振荡器、增益节点、滤波器等参数。例如将MIDI音符号转换为频率：const freq = 440 * Math.pow(2, (note - 69) / 12);}}
+
+{{知识点44}}
+{{General MIDI标准：General MIDI (GM)定义了128种标准乐器音色映射（程序编号0-127），以及打击乐通道（通常为通道10）。GM确保不同设备间的音色一致性。GM Level 2和GM Level 1兼容性对于Web MIDI应用的跨设备一致性很重要。}}
+
+{{知识点45}}
+{{MIDI通道概念：MIDI支持16个通道（0-15），状态字节的低4位指定通道。每个通道可以独立控制不同的乐器或声部。通道9（从0计数）通常保留给打击乐。在Web MIDI中，可通过状态字节与0x0F进行位与运算获取通道号。}}
+
+{{知识点46}}
+{{MIDI时间精度：Web MIDI API使用DOMHighResTimeStamp提供高精度时间戳。MIDIMessageEvent.timeStamp表示消息到达时间，MIDIOutput.send()的timestamp参数用于精确调度发送。精度通常在毫秒级别，对于音乐应用的时序控制至关重要。}}
+
+{{知识点47}}
+{{虚拟MIDI端口：Web MIDI API中的software选项（requestMIDIAccess({ software: true })）允许使用系统安装的软件合成器作为MIDI端口。这在没有物理MIDI硬件时仍可进行开发和测试。Windows的Microsoft GS Wavetable Synth是常见的软件合成器示例。}}
+
+{{知识点48}}
+{{MIDI消息解析最佳实践：解析MIDI消息时应先提取状态字节的高4位（命令类型）和低4位（通道号）。使用位移操作：const command = event.data[0] >> 4; const channel = event.data[0] & 0x0F;。注意Running Status：连续相同状态字节的消息可以省略后续的状态字节，但Web MIDI API通常已处理此情况。}}
+
+{{知识点49}}
+{{实时MIDI消息与系统消息：MIDI消息分为通道消息（Note On/Off、CC、Program Change、Pitch Bend等，作用于特定通道）和系统消息（System Exclusive、System Common、System Real-Time）。实时消息（如时钟0xF8、开始0xFA、停止0xFC）可以在任何其他消息中间插入，不遵循Running Status规则。}}
+
+{{知识点50}}
+{{Web MIDI API应用场景：(1)浏览器音乐制作工具/DAW。(2)在线MIDI键盘/控制器。(3)音乐教育应用（互动练习、即时反馈）。(4)灯光/舞台控制系统。(5)游戏输入设备。(6)数据可视化（将MIDI数据映射到视觉效果）。(7)无障碍辅助工具（用MIDI设备替代传统输入）。}}

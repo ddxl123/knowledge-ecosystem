@@ -1,0 +1,123 @@
+# 2025前端前端Trusted Types
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{Trusted Types API 是什么}}
+Trusted Types API 是 W3C 提出的 Web 安全 API，旨在从根源上防止 DOM 型 XSS（跨站脚本攻击）。它通过要求开发者使用类型化的安全对象（而非原始字符串）传入危险的 DOM 注入点（injection sinks），从而消除基于字符串拼接的 XSS 攻击面。2026 年 2 月起，该 API 已成为 Baseline 特性，所有主流浏览器均已支持。
+
+{{知识点2}}{{DOM 型 XSS 的根本原因}}
+DOM 型 XSS 的根本原因是攻击者构造的数据被直接传给浏览器中会将输入当作代码执行的 API（即 injection sinks）。例如将用户输入的字符串直接赋值给 element.innerHTML，如果其中包含 <script> 标签或事件处理器属性，就会执行恶意脚本。
+
+{{知识点3}}{{三大类 Injection Sinks}}
+Trusted Types API 区分三类注入点：① HTML sinks：将输入解释为 HTML 的 API（如 innerHTML、document.write）；② JavaScript sinks：将输入解释为 JavaScript 代码的 API（如 eval()、script.text）；③ JavaScript URL sinks：将输入解释为脚本 URL 的 API（如 script.src）。
+
+{{知识点4}}{{TrustedHTML 类型}}
+TrustedHTML 是 Trusted Types 的三种受信类型之一，专门用于传入会将数据渲染为 HTML 的注入点。它代表一段已经过策略（Policy）清洗处理的 HTML 字符串，不能直接用字符串构造，只能通过 TrustedTypePolicy.createHTML() 创建。
+
+{{知识点5}}{{TrustedScript 类型}}
+TrustedScript 是受信类型之一，用于传入会将数据作为 JavaScript 执行的注入点。代表一段经过策略处理的脚本代码，只能通过 TrustedTypePolicy.createScript() 创建。典型注入点包括 eval()、Function() 构造函数、setTimeout 的代码参数等。
+
+{{知识点6}}{{TrustedScriptURL 类型}}
+TrustedScriptURL 是受信类型之一，用于传入会将数据解析为脚本 URL 的注入点。代表一个经过策略验证的安全脚本 URL，只能通过 TrustedTypePolicy.createScriptURL() 创建。典型注入点包括 script.src、Worker 构造函数、importScripts() 等。
+
+{{知识点7}}{{TrustedTypePolicyFactory 接口}}
+TrustedTypePolicyFactory 是全局对象，通过 window.trustedTypes（Window 和 Worker 上下文中均可访问）暴露。它用于创建 TrustedTypePolicy 对象，并提供验证方法（isHTML、isScript、isScriptURL）来检查值是否为有效的受信类型实例。自 2026 年 2 月起为 Baseline 特性。
+
+{{知识点8}}{{TrustedTypePolicyFactory.createPolicy() 方法}}
+createPolicy(name, policyOptions) 方法用于创建一个命名的 TrustedTypePolicy 对象。name 参数是策略名称，policyOptions 是包含 createHTML、createScript、createScriptURL 等转换函数的对象。当 CSP 的 trusted-types 指令限定了允许的策略名时，传入未列出的名称会抛出异常。
+
+{{知识点9}}{{TrustedTypePolicyFactory.isHTML() 方法}}
+isHTML(value) 方法用于验证一个值是否为有效的 TrustedHTML 对象。它返回布尔值，帮助开发者确认某个值确实是由可信策略创建的 TrustedHTML 实例，而非普通字符串或伪造对象。
+
+{{知识点10}}{{TrustedTypePolicyFactory.isScript() 和 isScriptURL() 方法}}
+isScript(value) 和 isScriptURL(value) 分别用于验证值是否为有效的 TrustedScript 和 TrustedScriptURL 对象。这些验证方法帮助开发者在需要时检查传入值的类型安全性。
+
+{{知识点11}}{{TrustedTypePolicyFactory.emptyHTML 和 emptyScript 属性}}
+emptyHTML 属性返回一个包含空字符串的 TrustedHTML 对象，emptyScript 返回一个包含空字符串的 TrustedScript 对象。这些常量在需要传入空内容但又必须满足类型要求的场景下非常有用。
+
+{{知识点12}}{{TrustedTypePolicyFactory.defaultPolicy 属性}}
+defaultPolicy 只读属性返回默认的 TrustedTypePolicy（即名为 "default" 的策略），如果没有定义默认策略则返回 null。默认策略用于过渡期，自动处理仍以字符串形式传入注入点的遗留代码。
+
+{{知识点13}}{{TrustedTypePolicyFactory.getAttributeType() 方法}}
+getAttributeType(tagName, attribute, elementNS, attrNS) 方法允许开发者检查某个元素的特定属性是否需要 Trusted Type，如果需要则返回所需的类型名称（如 "TrustedHTML"）。这对于理解 DOM 属性的安全需求非常有帮助。
+
+{{知识点14}}{{TrustedTypePolicyFactory.getPropertyType() 方法}}
+getPropertyType(tagName, property, elementNS) 方法类似于 getAttributeType，但用于检查 DOM 属性（property）而非 HTML 属性（attribute）所需的 Trusted Type 类型。
+
+{{知识点15}}{{TrustedTypePolicy 接口}}
+TrustedTypePolicy 接口定义了一组创建受信类型对象的函数。它通过 TrustedTypePolicyFactory.createPolicy() 创建，没有公开构造函数。每个策略对象都有一个 name 只读属性和 createHTML()、createScript()、createScriptURL() 方法。
+
+{{知识点16}}{{TrustedTypePolicy.createHTML() 方法}}
+createHTML(input) 方法将输入字符串通过策略中定义的转换函数处理，返回一个 TrustedHTML 对象。如果策略未定义 createHTML 函数，调用此方法会抛出 TypeError。典型用法是调用 DOMPurify 等库对 HTML 进行消毒处理。
+
+{{知识点17}}{{TrustedTypePolicy.createScript() 方法}}
+createScript(input) 方法将输入通过策略转换函数处理，返回一个 TrustedScript 对象。策略中通常对脚本进行严格校验或完全禁用，只允许特定的预定义输入。
+
+{{知识点18}}{{TrustedTypePolicy.createScriptURL() 方法}}
+createScriptURL(input) 方法将输入通过策略转换函数处理，返回一个 TrustedScriptURL 对象。策略中通常验证 URL 是否属于可信来源（如应用自身的 CDN 域名），拒绝不受信的外部 URL。
+
+{{知识点19}}{{TrustedTypePolicy.name 属性}}
+name 只读属性返回策略的名称字符串。策略名称在 CSP 的 trusted-types 指令中声明，用于审计和控制哪些策略被允许创建。
+
+{{知识点20}}{{CSP trusted-types 指令}}
+HTTP Content-Security-Policy 头中的 trusted-types 指令用于指定允许创建的 Trusted Type 策略名称白名单。语法为 Content-Security-Policy: trusted-types <policyName1> <policyName2>。使用 'none' 禁止创建任何策略，使用 * 允许任意唯一策略名，使用 'allow-duplicates' 允许重复创建同名策略。
+
+{{知识点21}}{{CSP require-trusted-types-for 指令}}
+require-trusted-types-for 指令用于强制要求使用 Trusted Types。设置 Content-Security-Policy: require-trusted-types-for 'script' 后，向注入点传入原始字符串将抛出 TypeError 异常，强制所有数据必须通过策略处理。
+
+{{知识点22}}{{策略名称规范}}
+有效的策略名称只能包含字母数字字符或 -#=_/@.% 中的特殊字符。通配符 * 作为策略名表示允许使用任意唯一的策略名称。该限制确保策略名称的安全性和可审计性。
+
+{{知识点23}}{{创建策略的基本用法}}
+使用 trustedTypes.createPolicy() 创建策略的基本模式：先定义策略对象包含 createHTML/createScript/createScriptURL 转换函数，然后使用策略的创建方法生成受信类型对象。示例：const policy = trustedTypes.createPolicy("my-policy", { createHTML: (input) => DOMPurify.sanitize(input) })。
+
+{{知识点24}}{{使用受信类型的典型流程}}
+典型使用流程：① 通过 trustedTypes.createPolicy 创建策略；② 使用策略的 createHTML 等方法处理用户输入，得到受信类型对象；③ 将受信类型对象传给 innerHTML 等注入点。例如：const trusted = policy.createHTML(userInput); element.innerHTML = trusted。
+
+{{知识点25}}{{默认策略（Default Policy）}}
+创建名为 "default" 的策略即可成为默认策略。当 CSP 强制 Trusted Types 时，任何以原始字符串传入注入点的数据都会自动经过默认策略的转换函数处理。如果默认策略返回 null/undefined，则抛出 TypeError。默认策略仅建议在从遗留代码过渡时使用，不应作为长期方案。
+
+{{知识点26}}{{默认策略的过渡用途}}
+默认策略的主要价值在于迁移期间发现遗留代码中的不安全字符串用法。通过在 createHTML 中添加 console.log，开发者可以定位所有仍直接传入字符串的代码位置，然后逐步重构为显式使用受信类型。
+
+{{知识点27}}{{直接注入点（Direct Injection Sinks）}}
+直接注入点是在求值时立即运行 Trusted Type 检查的 API 属性和方法。TrustedHTML 相关的直接注入点包括：Element.innerHTML、Element.outerHTML、Element.insertAdjacentHTML、Document.write()、Document.writeln()、Document.parseHTMLUnsafe()、DOMParser.parseFromString()、Range.createContextualFragment()、HTMLIFrameElement.srcdoc、ShadowRoot.innerHTML、Element.setHTMLUnsafe() 等。
+
+{{知识点28}}{{间接注入点（Indirect Injection Sinks）}}
+间接注入点是通过中间机制将不受信字符串注入 DOM 的场景。例如先用字符串创建文本节点，再将其 append 到 script 元素中，最后将 script 插入文档。浏览器在 script 元素变为可执行状态时（即 appendChild 时）才检查内容是否受信。这要求开发者理解 DOM 操作链中的安全检查时机。
+
+{{知识点29}}{{TrustedHTML 的全部直接注入点}}
+接受 TrustedHTML 的直接注入点包括：Document.execCommand("insertHTML")、Document.parseHTMLUnsafe()、Document.write()、Document.writeln()、DOMParser.parseFromString()、Element.innerHTML、Element.insertAdjacentHTML()、Element.outerHTML、Element.setHTMLUnsafe()、HTMLIFrameElement.srcdoc、Range.createContextualFragment()、ShadowRoot.innerHTML、ShadowRoot.setHTMLUnsafe()。
+
+{{知识点30}}{{TrustedScript 的全部直接注入点}}
+接受 TrustedScript 的直接注入点包括：eval()、Function() 构造函数、AsyncFunction()、GeneratorFunction()、AsyncGeneratorFunction() 构造函数、Element.setAttribute() 的 value 参数、HTMLScriptElement.text/innerText/textContent、window.setTimeout() 和 setInterval() 的 code 参数。
+
+{{知识点31}}{{TrustedScriptURL 的全部直接注入点}}
+接受 TrustedScriptURL 的直接注入点包括：HTMLScriptElement.src、ServiceWorkerContainer.register()、SVGAnimatedString.baseVal、WorkerGlobalScope.importScripts()、Worker() 构造函数的 url 参数、SharedWorker() 构造函数的 url 参数。
+
+{{知识点32}}{{Tinyfill 兼容方案}}
+对于不支持 Trusted Types API 的浏览器，可使用 tinyfill：if (typeof trustedTypes === "undefined") trustedTypes = { createPolicy: (n, rules) => rules }。这会返回 policyOptions 对象本身，其转换函数返回字符串，使代码在不支持的浏览器上也能运行（但没有实际的类型安全保护）。
+
+{{知识点33}}{{与 DOMPurify 的配合}}
+Trusted Types 常与 DOMPurify 等 HTML 消毒库配合使用。在 createHTML 转换函数中调用 DOMPurify.sanitize(input)，将消毒后的安全 HTML 包装为 TrustedHTML 对象，既利用了 DOMPurify 的消毒能力，又通过 Trusted Types 确保所有 HTML 注入点都经过消毒。
+
+{{知识点34}}{{Policy 的安全设计原则}}
+策略的设计应遵循最小权限原则：① 只定义必要的转换函数；② 转换函数应做严格的输入校验和消毒；③ 尽量使用少量命名策略以便审计；④ 避免使用 default 策略作为长期方案；⑤ CSP 中明确列出允许的策略名，不随意使用通配符。
+
+{{知识点35}}{{与 CSP 的协同工作}}
+Trusted Types 与 CSP 是互补的防御机制。CSP 的 trusted-types 指令控制策略白名单，require-trusted-types-for 指令强制执行类型检查。两者配合使用才能实现完整的防护：前者控制"谁能创建策略"，后者控制"必须使用策略"。
+
+{{知识点36}}{{浏览器兼容性现状}}
+截至 2026 年 2 月，Trusted Types API 已成为 Baseline 特性，Chrome、Edge、Firefox、Safari 等主流浏览器均已支持。对于旧版浏览器，可通过 tinyfill 进行降级处理。在 Worker 上下文中同样可用。
+
+{{知识点37}}{{迁移策略：渐进式采用}}
+推荐的迁移步骤：① 先部署 CSP 报告模式（不强制），通过报告收集潜在问题；② 创建 default 策略作为兜底，记录未处理的字符串传入；③ 逐步将代码重构为显式使用策略；④ 最终移除 default 策略，启用强制模式。
+
+{{知识点38}}{{SecurityPolicyViolationEvent 事件}}
+当违反 Trusted Types CSP 策略时（如创建未在白名单中的策略），浏览器会触发 SecurityPolicyViolationEvent 事件。开发者可监听此事件进行违规日志记录和安全监控。这为安全审计提供了运行时反馈机制。
+
+{{知识点39}}{{Web Workers 中的 Trusted Types}}
+Trusted Types API 在 Web Workers 中同样可用。WorkerGlobalScope 上的 trustedTypes 全局属性与 Window 上的完全相同，支持创建策略和生成受信类型对象。这意味着 Worker 中的动态代码执行也能受到类型安全保护。
+
+{{知识点40}}{{与其他 XSS 防御的关系}}
+Trusted Types 不替代其他 XSS 防御措施（如输入验证、输出编码、CSP script-src），而是作为额外的深层防御层。它的独特价值在于从类型系统层面消除注入攻击面，而非依赖运行时检测或过滤。与 CSP nonce/hash 配合使用可实现更全面的脚本安全策略。

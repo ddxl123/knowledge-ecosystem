@@ -1,0 +1,123 @@
+# 2025前端CI/CD流水线
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{CI/CD基本概念}}
+CI/CD是持续集成(Continuous Integration)和持续交付/部署(Continuous Delivery/Deployment)的缩写。CI指开发人员频繁将代码合并到共享仓库，每次合并后自动触发构建和测试。CD(交付)指自动将通过测试的代码部署到类生产环境，CD(部署)则进一步自动部署到生产环境。CI/CD流水线是将代码从提交到上线的自动化工作流，是现代前端工程化的核心实践。参考来源：GitLab CI/CD官方文档、Atlassian CI/CD指南。
+
+{{知识点2}}{{持续集成(CI)核心实践}}
+持续集成要求团队成员每天至少集成一次代码到主干分支。每次集成都通过自动化构建(包括编译、测试、代码检查)来验证。核心实践包括：维护单一代码仓库、自动化构建、自测试构建、每人每天至少提交一次、每次提交都应在集成机器上构建、构建必须快速完成、在类生产环境中测试、使任何人都能获得最新可执行文件、部署自动化。CI能及早发现集成错误，降低修复成本。
+
+{{知识点3}}{{持续交付(Continuous Delivery)}}
+持续交付是CI的延伸，确保代码始终处于可部署状态。代码通过所有测试后，自动部署到预发布(Staging)环境，但生产环境的部署需要手动批准。这给了团队在部署前进行最终验证的灵活性。持续交付的关键是确保每个通过测试的构建都是可发布的。与持续部署的区别在于：交付需要手动触发生产部署，部署则完全自动化。
+
+{{知识点4}}{{持续部署(Continuous Deployment)}}
+持续部署是CI/CD的最高成熟度，代码变更从提交到上线完全自动化，无需人工干预。适合成熟的团队和完善的测试覆盖。要求：全面的自动化测试(单元、集成、E2E)、完善的监控和告警、快速回滚机制、特性开关(Feature Flags)控制功能发布。2025年随着AI辅助测试和监控技术的成熟，越来越多前端团队开始采用持续部署模式。
+
+{{知识点5}}{{GitHub Actions概述}}
+GitHub Actions是GitHub内置的CI/CD平台，通过YAML文件定义工作流。支持在GitHub事件(push、PR、issue等)触发时自动运行任务。核心概念包括：Workflow(工作流)、Job(作业)、Step(步骤)、Action(动作)、Runner(运行器)。支持GitHub托管运行器(Linux/Windows/macOS)和自托管运行器。2025年GitHub Actions已成为前端项目最主流的CI/CD选择之一，与GitHub生态深度集成。参考来源：docs.github.com/en/actions。
+
+{{知识点6}}{{GitHub Actions Workflow配置}}
+Workflow通过.github/workflows/目录下的YAML文件定义。关键配置项包括：name(工作流名称)、on(触发条件，如push、pull_request、schedule等)、jobs(作业定义)、steps(每个作业的步骤)。支持矩阵构建(matrix strategy)实现多版本/多环境并行测试。示例触发条件：on: push: branches: [main]。支持workflow_dispatch实现手动触发。支持reusable workflows实现跨仓库复用。
+
+{{知识点7}}{{GitLab CI/CD概述}}
+GitLab CI/CD通过.gitlab-ci.yml配置文件定义流水线。核心概念：Pipeline(流水线)、Stage(阶段)、Job(作业)、Runner(运行器)。典型阶段包括build→test→deploy。GitLab.com提供Linux/Windows/macOS托管Runner，也支持自托管Runner。支持CI/CD变量(包括保护变量和掩码变量)用于安全管理敏感信息。支持CI/CD组件(CI/CD Components)实现可复用的流水线配置。参考来源：docs.gitlab.com/ci/。
+
+{{知识点8}}{{GitLab CI/CD高级特性}}
+GitLab CI/CD支持多项高级特性：1)CI/CD表达式使用$[[ ]]语法实现动态配置；2)inputs上下文允许传递参数到配置文件；3)matrix上下文实现矩阵作业的1:1映射；4)CI/CD Catalog提供可复用组件市场；5)include:component语法引入组件；6)Pipeline触发支持commit、merge、schedule等多种事件。这些特性使GitLab CI/CD在复杂企业场景中具有强大灵活性。
+
+{{知识点9}}{{CircleCI概述}}
+CircleCI是独立的CI/CD平台，支持云托管和自托管部署。核心特性包括：Orbs(可复用的配置包，类似npm包)、Pipelines(流水线编排)、支持Docker/VM/macOS多种执行环境。与GitHub/GitLab/Bitbucket集成。2025年CircleCI提供Deploys功能，可从单一仪表板查看和管理组织范围的部署。支持通过outbound webhooks集成第三方工具。参考来源：circleci.com/docs。
+
+{{知识点10}}{{Jenkins在前端CI/CD中的应用}}
+Jenkins是最老牌的开源CI/CD工具，通过Pipeline as Code(Jenkinsfile)定义流水线。优势：插件生态极其丰富(1800+插件)、高度可定制、支持分布式构建。劣势：UI较老旧、配置复杂、维护成本高。2025年虽然新项目更倾向GitHub Actions/GitLab CI，但Jenkins在大型企业中仍有广泛使用。前端团队常用Jenkins构建Docker镜像、运行测试、部署静态资源到CDN。
+
+{{知识点11}}{{Vercel部署平台}}
+Vercel是Next.js母公司打造的前端部署平台，提供零配置部署体验。核心特性：Git集成(push即部署)、Preview Deployments(PR预览)、Serverless Functions、Edge Functions、全球CDN。支持GitHub/GitLab/Bitbucket/Azure DevOps集成。提供Vercel CLI命令行部署和REST API编程部署。2025年Vercel已发展为全栈部署平台，支持数据库、AI功能等。三种部署方式：Git自动触发、CLI手动部署、Deploy Hooks触发。参考来源：vercel.com/docs/deployments。
+
+{{知识点12}}{{Netlify部署平台}}
+Netlify专注于静态站点和JAMstack应用部署。核心特性：Git-based部署、Deploy Previews(预览部署)、Serverless Functions、表单处理、身份认证。2025年Netlify新增Agent Runners(AI代理运行器)、AI Gateway等AI相关功能。支持一键回滚、分支部署、环境变量管理。与Vercel竞争激烈，两者都是前端部署的首选平台。Netlify的Build Plugins生态允许自定义构建流程。
+
+{{知识点13}}{{前端流水线标准阶段}}
+典型前端CI/CD流水线包含以下阶段：1)Install(安装依赖)：npm ci/yarn install/pnpm install；2)Lint(代码检查)：ESLint、Stylelint、Prettier检查；3)Test(测试)：单元测试(Vitest/Jest)、组件测试(Testing Library)、E2E测试(Playwright/Cypress)；4)Build(构建)：Vite/Webpack构建生产包；5)Deploy(部署)：部署到Vercel/Netlify/CDN/服务器；6)Notify(通知)：构建结果通知(Slack/钉钉/飞书)。每个阶段可并行或串行执行。
+
+{{知识点14}}{{缓存优化策略}}
+CI/CD缓存是提升流水线速度的关键。常见缓存策略：1)依赖缓存：缓存node_modules或包管理器缓存目录(如~/.npm、~/.cache/yarn)；2)构建缓存：缓存.next/cache、.vite等构建产物缓存；3)Docker层缓存：利用Docker BuildKit缓存构建层。GitHub Actions使用actions/cache或内置缓存；GitLab CI使用cache关键字配置。缓存键(cache key)通常基于package-lock.json的哈希值。合理缓存可将流水线时间缩短50-80%。
+
+{{知识点15}}{{并行化与矩阵构建}}
+矩阵构建(Matrix Strategy)允许在多个配置组合上并行运行作业。例如：在Node.js 18/20/22三个版本上分别运行测试，在Chrome/Firefox/Safari三个浏览器上运行E2E测试。GitHub Actions使用strategy.matrix配置；GitLab CI使用parallel:matrix配置。并行化还包括：将测试用例分片(test sharding)分配到多个Runner执行、Monorepo中只构建变更的包(affected packages)。这些策略可大幅缩短流水线总执行时间。
+
+{{知识点16}}{{Monorepo CI/CD策略}}
+Monorepo(单一仓库)需要特殊的CI/CD策略：1)变更检测：只对有变更的包执行构建和测试(Turborepo、Nx的affected命令)；2)依赖拓扑：按依赖顺序构建，避免构建失败的包影响下游；3)缓存共享：Turborepo的Remote Cache或Nx Cloud实现团队级缓存共享；4)独立部署：各包独立部署，互不影响。工具推荐：Turborepo(轻量)、Nx(功能全面)、Lerna(传统)。Monorepo CI/CD的核心是"只做必要的事"。
+
+{{知识点17}}{{自动化测试集成}}
+前端CI/CD中的自动化测试层次：1)单元测试(Vitest/Jest)：测试工具函数、hooks、业务逻辑，速度最快；2)组件测试(Testing Library)：测试React/Vue组件的渲染和交互；3)集成测试：测试模块间的协作；4)E2E测试(Playwright/Cypress)：模拟用户操作测试完整流程，速度最慢但最接近真实场景。CI中通常单元测试和组件测试在每次PR运行，E2E测试在合并到主干后运行。Playwright支持sharding实现E2E并行化。
+
+{{知识点18}}{{代码质量门禁}}
+代码质量门禁(Quality Gates)是在CI/CD中设置的质量阈值，不满足则阻断流水线。前端常见门禁：1)ESLint零错误：代码规范检查通过；2)TypeScript类型检查：tsc --noEmit无错误；3)测试覆盖率阈值：如行覆盖率≥80%；4)Bundle大小限制：PR评论显示包大小变化；5)Lighthouse性能评分：性能分≥90；6)依赖安全审计：npm audit/yarn audit无高危漏洞。门禁可在PR阶段阻止合并，也可在部署阶段阻止上线。
+
+{{知识点19}}{{环境变量与密钥管理}}
+CI/CD中的敏感信息(如API密钥、部署凭证)需要安全管理。最佳实践：1)使用平台提供的Secrets功能(GitHub Secrets、GitLab CI/CD Variables)存储敏感信息；2)区分环境：开发/预发布/生产使用不同密钥；3)最小权限原则：Runner只拥有必要权限；4)掩码输出：防止日志中泄露敏感值；5)定期轮换密钥；6)不要在代码中硬编码密钥。GitLab CI/CD支持保护变量(仅在保护分支可用)和掩码变量(日志中隐藏)。
+
+{{知识点20}}{{Docker在前端CI/CD中的应用}}
+Docker在前端CI/CD中有多种用途：1)一致性构建环境：使用Docker镜像作为Runner环境，确保本地和CI环境一致；2)多阶段构建：Multi-stage Build减小生产镜像大小；3)Nginx部署：将前端静态资源打包到Nginx镜像部署；4)Docker Compose：编排前端+后端+数据库的集成测试环境。常见模式：build阶段在Node镜像中构建，产出的dist通过COPY放入Nginx镜像。Docker BuildKit缓存可加速重复构建。
+
+{{知识点21}}{{前端构建工具与CI/CD集成}}
+2025年前端主流构建工具在CI/CD中的使用：1)Vite：极快的开发构建，生产构建基于Rollup，CI中运行vite build；2)Webpack：成熟稳定，CI中运行webpack --mode production；3)Turbopack：Rust编写的超快构建器，Next.js内置；4)esbuild：Go编写的极速编译器，常用于库的构建。构建优化：Tree Shaking、Code Splitting、动态导入在CI中自动生效。构建产物通常输出到dist/或build/目录，通过CDN或静态托管部署。
+
+{{知识点22}}{{预览部署(Preview Deployments)}}
+预览部署是PR/MR自动生成的临时部署环境，供团队审查实际效果。Vercel的Preview Deployments、Netlify的Deploy Previews是典型实现。每个PR获得唯一URL，合并后自动销毁。优势：1)设计师和PM可直接预览变更；2)QA可在真实环境测试；3)减少"在我机器上能跑"的问题；4)支持评论和反馈。GitHub Actions可通过Surge/Cloudflare Pages/Vercel实现自定义预览部署。2025年预览部署已成为前端团队的标准实践。
+
+{{知识点23}}{{Lighthouse CI集成}}
+Lighthouse CI(LHCI)将Google Lighthouse性能审计集成到CI/CD中。在CI中运行Lighthouse可自动检查：性能(Performance)、可访问性(Accessibility)、最佳实践(Best Practices)、SEO、PWA五个维度的评分。配置方式：@lhci/cli run命令运行审计，设置预算阈值如performance≥0.9。结果可对比PR前后的性能变化，防止性能退化。Lighthouse CI Server可存储历史数据用于趋势分析。GitHub上可使用treosh/lighthouse-ci-action集成。
+
+{{知识点24}}{{Bundle分析与体积监控}}
+包体积监控是前端CI/CD的重要环节。工具：1)webpack-bundle-analyzer：可视化Webpack打包产物组成；2)rollup-plugin-visualizer：Rollup生态的包分析工具；3)source-map-explorer：基于Source Map分析JS文件组成；4)bundlewatch/bundlesize：CI中自动检查包大小是否超标。GitHub Actions中可使用compressed-size-action在PR评论中显示包大小变化。设置预算(Budget)：如主包≤200KB gzipped，超过则阻断合并。
+
+{{知识点25}}{{依赖安全扫描}}
+依赖安全是CI/CD中的重要环节。工具和实践：1)npm audit/yarn audit：检查已知漏洞；2)Snyk：深度安全扫描和修复建议；3)Dependabot/Renovate：自动创建依赖更新PR；4)Socket.dev：检测供应链攻击(如恶意包)。CI中集成方式：在install阶段后运行安全扫描，设置严重级别阈值(如critical/high阻断合并)。2025年供应链安全受到前所未有重视，建议使用lockfile、lockfile签名、npm provenance验证包来源。
+
+{{知识点26}}{{代码覆盖率与质量报告}}
+代码覆盖率是衡量测试完整性的重要指标。工具：1)Istanbul/c8：代码覆盖率收集；2)Codecov/Coveralls：覆盖率报告托管和PR集成。CI中配置：Vitest使用--coverage参数(c8或istanbul provider)，Jest使用--coverage参数。覆盖率类型：行覆盖率(Line)、分支覆盖率(Branch)、函数覆盖率(Function)、语句覆盖率(Statement)。建议设置最低阈值(如行覆盖率≥80%)作为质量门禁。Codecov提供PR差异覆盖率(diff coverage)，确保新增代码有测试覆盖。
+
+{{知识点27}}{{自动化发布与版本管理}}
+前端项目自动化发布流程：1)Conventional Commits规范提交信息；2)semantic-release或changesets自动确定版本号(patch/minor/major)；3)自动生成CHANGELOG；4)创建Git Tag；5)发布到npm；6)创建GitHub Release。Monorepo使用changesets管理多包版本。CI中配置：GitHub Actions监听main分支push，运行semantic-release。版本策略：feat提交→minor版本，fix提交→patch版本，BREAKING CHANGE→major版本。
+
+{{知识点28}}{{通知与告警机制}}
+CI/CD完成后需要通知相关人员。常用集成：1)Slack通知：使用slackapi/slack-github-action发送构建结果；2)钉钉/飞书通知：通过Webhook机器人发送；3)邮件通知：构建失败时发送邮件给提交者；4)GitHub PR评论：在PR上自动评论构建结果、测试覆盖率、包大小变化。通知策略：失败时立即通知，成功时可选择静默。高级：PagerDuty/Opsgenie集成实现on-call轮值告警。
+
+{{知识点29}}{{特性开关(Feature Flags)}}
+特性开关允许在不部署新代码的情况下控制功能的开启和关闭。在CI/CD中的应用：1)渐进式发布(Progressive Rollout)：先对1%用户开放新功能，逐步扩大；2)A/B测试：同时运行多个版本；3)紧急关闭：出现问题时快速关闭特定功能，无需回滚。工具：LaunchDarkly、Flagsmith(开源)、Unleash(开源)。CI/CD中可结合特性开关实现暗启动(Dark Launch)和金丝雀发布(Canary Release)。
+
+{{知识点30}}{{蓝绿部署与金丝雀发布}}
+前端部署策略：1)蓝绿部署(Blue-Green)：维护两套完全相同的生产环境，部署到非活跃环境后切换流量，回滚只需切回；2)金丝雀发布(Canary Release)：先将少量流量导向新版本，监控无问题后逐步扩大；3)滚动更新(Rolling Update)：逐步替换旧版本实例。前端静态资源常用版本化文件名(hash)实现长期缓存+即时更新。配合CDN的缓存失效(Purge)策略，可实现零停机部署。
+
+{{知识点31}}{{GitOps与基础设施即代码}}
+GitOps是以Git仓库为唯一真实来源的运维模式。前端CI/CD中的GitOps实践：1)基础设施配置(如Nginx、CDN规则)存储在Git仓库中；2)环境配置(环境变量、特性开关)通过Git管理；3)Kubernetes部署使用ArgoCD/Flux监听Git变更自动同步；4)Terraform/Pulumi管理云资源。优势：版本控制、审计追踪、可回滚、声明式管理。2025年GitOps已成为云原生前端部署的主流模式。
+
+{{知识点32}}{{自托管Runner与成本优化}}
+CI/CD成本优化策略：1)使用自托管Runner：利用自有服务器降低GitHub Actions/GitLab CI分钟消耗；2)缓存优化：减少重复下载和构建时间；3)条件执行：只在相关文件变更时运行对应作业(path filter)；4)Monorepo变更检测：Turborepo/Nx只构建受影响的包；5)选择合适的Runner规格：轻量任务使用小规格，构建任务使用大规格；6)定时清理缓存和构建产物；7)利用Spot/Preemptible实例降低云Runner成本。
+
+{{知识点33}}{{多环境部署管理}}
+前端项目通常需要管理多个部署环境：1)开发环境(Development)：本地开发服务器；2)预览环境(Preview)：PR自动部署的临时环境；3)预发布环境(Staging)：与生产环境配置一致的测试环境；4)生产环境(Production)：面向用户的正式环境。CI/CD中通过分支策略(如main→production, develop→staging)和环境变量区分各环境。Vercel/Netlify支持多环境自动识别和配置。重要原则：staging环境应尽可能与production一致。
+
+{{知识点34}}{{E2E测试的CI优化}}
+E2E测试在CI中最耗时，优化策略：1)测试分片(Sharding)：Playwright支持--shard=1/4将测试分到多个Runner；2)选择性运行：只运行受变更影响的测试(如使用--changedSince)；3)使用容器：Docker容器提供一致且隔离的测试环境；4)录制重放：Playwright的trace录制失败时自动保留调试信息；5)并行执行：多个Worker同时运行测试；6)跳过不稳定测试(Flaky Tests)：标记并单独处理；7)使用headed=false无头模式减少资源消耗。
+
+{{知识点35}}{{前端安全扫描集成}}
+CI/CD中的安全扫描集成：1)SAST(静态应用安全测试)：ESLint安全插件(eslint-plugin-security)检测代码中的安全问题；2)SCA(软件成分分析)：npm audit/Snyk/OWASP Dependency-Check检查依赖漏洞；3)密钥扫描：GitLeaks/truffleHog检测代码中泄露的密钥；4)OWASP ZAP：DAST(动态应用安全测试)扫描运行中的应用；5)CSP(内容安全策略)检查。2025年DevSecOps理念深入前端，安全左移(Shift Left)成为趋势。
+
+{{知识点36}}{{可观测性与监控集成}}
+CI/CD与可观测性(Observability)的集成：1)Sentry：前端错误监控，部署后自动上传Source Map；2)Datadog/New Relic：APM性能监控，部署事件自动标记；3)LogRocket：会话回放+错误追踪；4)Lighthouse CI：性能趋势追踪。CI/CD中部署完成后自动触发健康检查(Health Check)，失败则自动回滚。2025年OpenTelemetry在前端可观测性中的应用增长，支持分布式追踪和指标收集。部署标记(Deploy Marker)帮助关联代码变更与性能变化。
+
+{{知识点37}}{{GitHub Actions常用Action}}
+前端CI/CD常用GitHub Actions：1)actions/checkout：检出代码；2)actions/setup-node：配置Node.js环境；3)actions/cache：缓存依赖和构建产物；4)actions/upload-artifact：上传构建产物；5)actions/github-script：运行GitHub API脚本；6)codecov/codecov-action：上传覆盖率报告；7)peaceiris/actions-gh-pages：部署到GitHub Pages；8)amondnet/vercel-action：部署到Vercel；9)treosh/lighthouse-ci-action：运行Lighthouse审计；10)softprops/action-gh-release：创建GitHub Release。
+
+{{知识点38}}{{GitLab CI/CD配置最佳实践}}
+GitLab CI/CD .gitlab-ci.yml最佳实践：1)使用stages定义全局阶段顺序；2)使用cache关键字配置依赖缓存；3)使用artifacts关键字传递构建产物到后续阶段；4)使用only/except或rules控制作业触发条件；5)使用variables定义环境变量；6)使用include引入外部配置文件(支持template/remote/local/component)；7)使用extends实现作业配置继承；8)使用needs定义DAG(有向无环图)依赖实现并行优化。参考来源：docs.gitlab.com/ci/。
+
+{{知识点39}}{{PR工作流与分支策略}}
+前端团队常用的Git分支策略：1)GitHub Flow：简洁的PR工作流，main分支+功能分支，PR合并后自动部署；2)Git Flow：main+develop+feature+release+hotfix分支，适合版本化发布；3)Trunk-Based Development：所有人在主干上开发，配合特性开关，适合持续部署。CI/CD配置对应策略：PR触发构建和测试，合并到main触发生产部署(或staging部署)。2025年GitHub Flow和Trunk-Based Development更受前端团队青睐。
+
+{{知识点40}}{{AI在CI/CD中的应用(2025趋势)}}
+2025年AI在前端CI/CD中的新兴应用：1)AI代码审查：GitHub Copilot Code Review自动审查PR代码质量；2)AI测试生成：自动生成单元测试和E2E测试用例；3)智能构建优化：AI分析构建历史预测失败，优先运行可能失败的测试；4)AI辅助故障诊断：自动分析构建失败原因并建议修复；5)智能回滚：AI监控部署后指标，自动触发回滚；6)Agent Runners(Netlify)：AI代理自动化部署和运维任务。AI正在从辅助工具转变为CI/CD的核心能力。

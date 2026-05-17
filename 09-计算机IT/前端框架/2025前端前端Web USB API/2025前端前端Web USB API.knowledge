@@ -1,0 +1,153 @@
+# 2025前端前端Web USB API
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{Web USB API 概述}}
+WebUSB API 是一个浏览器标准接口，允许 Web 应用直接与 USB 设备通信。它为非标准化的 USB 设备提供了在 Web 上被访问的能力，使得硬件制造商无需提供自定义原生驱动，即可通过网页控制其设备。WebUSB 规范由 WICG（Web Incubator Community Group）维护，目前仍属于实验性技术（Experimental）。
+
+{{知识点2}}{{navigator.usb 入口对象}}
+WebUSB API 的入口点是 navigator.usb，它返回一个 USB 接口对象。通过该对象可以调用 requestDevice() 和 getDevices() 方法来发现和连接 USB 设备。USB 接口继承自 EventTarget，支持事件监听。使用前需确认浏览器支持：if ('usb' in navigator)。
+
+{{知识点3}}{{USB.requestDevice() 设备选择}}
+USB.requestDevice() 方法触发浏览器的设备配对流程，弹出用户选择对话框。调用时需要传入一个 options 对象，其中 filters 数组用于过滤设备。返回一个 Promise，解析为选中的 USBDevice 对象。该方法需要用户激活（Transient user activation），即用户必须先与页面交互才能调用。
+
+{{知识点4}}{{requestDevice 过滤器属性}}
+requestDevice 的 filters 数组中每个过滤器对象支持以下属性：vendorId（供应商 ID）、productId（产品 ID）、classCode（设备类代码）、subclassCode（子类代码）、protocolCode（协议代码）、serialNumber（序列号）。可以同时指定多个过滤器，浏览器会列出所有匹配的设备供用户选择。
+
+{{知识点5}}{{USB.getDevices() 获取已配对设备}}
+USB.getDevices() 返回一个 Promise，解析为已配对（之前用户授权过）的 USBDevice 数组。与 requestDevice 不同，它不会弹出用户选择对话框，而是直接返回之前授权过的设备列表。适合在页面重新加载后恢复已连接设备的场景。
+
+{{知识点6}}{{USB 连接和断开事件}}
+USB 接口支持两个事件：connect 事件在之前配对的设备连接到主机时触发；disconnect 事件在配对的设备断开连接时触发。事件类型为 USBConnectionEvent，包含 device 属性指向对应的 USBDevice 对象。使用 navigator.usb.addEventListener('connect', handler) 监听。
+
+{{知识点7}}{{USBDevice 接口概述}}
+USBDevice 是 WebUSB API 的核心接口，提供已配对 USB 设备的元数据访问和控制方法。所有属性均为只读，包括设备标识信息、版本信息、配置信息等。通过该接口可以打开设备、选择配置、声明接口、进行数据传输等操作。
+
+{{知识点8}}{{USBDevice 设备标识属性}}
+USBDevice 提供以下设备标识属性：vendorId（USB 官方分配的供应商 ID）、productId（制造商定义的产品 ID）、manufacturerName（制造商名称）、productName（产品名称）、serialNumber（设备序列号）。这些属性在设备配对后即可读取，用于识别具体设备。
+
+{{知识点9}}{{USBDevice 设备类属性}}
+USBDevice 的设备类相关属性包括三个：deviceClass（设备类代码）、deviceSubclass（设备子类代码）、deviceProtocol（设备协议代码）。这三个属性共同用于识别 USB 设备类型，以便加载正确的驱动程序。例如 HID 设备的 classCode 为 0x03。
+
+{{知识点10}}{{USBDevice 版本属性}}
+USBDevice 提供两组版本属性：usbVersionMajor/Minor/Subminor 表示设备支持的 USB 协议版本（如 USB 2.0 对应 2.0.0）；deviceVersionMajor/Minor/Subminor 表示设备自身的版本号，采用语义化版本方案。这些信息来自设备描述符。
+
+{{知识点11}}{{USBDevice.open() 打开设备}}
+USBDevice.open() 方法启动与 USB 设备的会话，返回一个 Promise。打开设备后才能进行配置选择和接口声明等操作。如果设备已被其他应用占用，open() 可能会失败。通常在 requestDevice 获取设备后首先调用此方法。
+
+{{知识点12}}{{USBDevice.selectConfiguration() 选择配置}}
+USBDevice.selectConfiguration(configurationValue) 方法选择 USB 设备的指定配置，返回一个 Promise。USB 设备可能有多个配置，但同一时间只能激活一个。选择配置后才能查看和使用该配置下的接口。配置值通常为 1，但某些设备可能有多个配置。
+
+{{知识点13}}{{USBDevice.claimInterface() 声明接口}}
+USBDevice.claimInterface(interfaceNumber) 方法请求对指定接口的独占访问权，返回一个 Promise。在进行数据传输之前，必须先声明接口。如果接口已被其他驱动程序占用，此方法会失败。一个设备可以同时声明多个接口。
+
+{{知识点14}}{{USBDevice.selectAlternateInterface() 选择备用接口}}
+USBDevice.selectAlternateInterface(interfaceNumber, alternateSetting) 方法选择接口的备用设置。每个接口可以有多个备用配置（alternate），提供不同的端点配置或功能。默认使用 alternateSetting 为 0 的配置。例如音频设备可能有不同采样率的备用接口。
+
+{{知识点15}}{{USBDevice 数据传输方法概述}}
+USBDevice 提供四种数据传输方法对：transferIn/transferOut 用于批量和中断传输；controlTransferIn/controlTransferOut 用于控制传输；isochronousIn/isochronousOut 用于等时传输。所有方法返回 Promise，传输方向以主机（host）为参考。
+
+{{知识点16}}{{USBDevice.transferIn() 批量/中断数据接收}}
+USBDevice.transferIn(endpointNumber, length) 方法从 USB 设备接收数据，用于批量（bulk）或中断（interrupt）端点。endpointNumber 指定端点编号，length 指定最大读取字节数。返回 Promise，解析为 USBInTransferResult 对象，包含接收到的数据和传输状态。
+
+{{知识点17}}{{USBDevice.transferOut() 批量/中断数据发送}}
+USBDevice.transferOut(endpointNumber, data) 方法向 USB 设备发送数据，用于批量或中断端点。endpointNumber 指定端点编号，data 可以是 ArrayBuffer、TypedArray 或 DataView。返回 Promise，解析为 USBOutTransferResult 对象，包含传输状态和实际发送的字节数。
+
+{{知识点18}}{{USBDevice.controlTransferIn() 控制传输接收}}
+USBDevice.controlTransferIn(setup, length) 方法执行控制传输以从设备读取数据。setup 对象包含：requestType（standard/class/vendor）、recipient（device/interface/endpoint/other）、request（命令码）、value 和 index（参数）、length（读取长度）。控制传输用于设备配置和状态查询。
+
+{{知识点19}}{{USBDevice.controlTransferOut() 控制传输发送}}
+USBDevice.controlTransferOut(setup, data) 方法执行控制传输以向设备发送数据。setup 参数与 controlTransferIn 类似。控制传输是 USB 中最基本的传输类型，所有 USB 设备都支持。常用于发送厂商自定义命令或标准设备请求。
+
+{{知识点20}}{{USBDevice.isochronousTransferIn() 等时传输接收}}
+USBDevice.isochronousTransferIn(endpointNumber, packetLengths) 方法用于从等时端点接收时间敏感数据。packetLengths 是一个数组，指定每个数据包的长度。等时传输不保证数据可靠性，适用于音频、视频等实时数据流场景。
+
+{{知识点21}}{{USBDevice.isochronousTransferOut() 等时传输发送}}
+USBDevice.isochronousTransferOut(endpointNumber, data, packetLengths) 方法用于向等时端点发送时间敏感数据。等时传输会分配专用总线时间，但如果错过截止时间数据会被丢弃。适用于需要持续稳定数据流的应用。
+
+{{知识点22}}{{USBInTransferResult 接收结果}}
+USBInTransferResult 是 transferIn() 和 controlTransferIn() 的返回结果，包含两个只读属性：data（DataView 类型，包含接收到的数据）和 status（传输状态）。status 可能的值为 ok（成功）、stall（设备产生停止条件）、babble（设备返回数据超出预期长度）。
+
+{{知识点23}}{{USBOutTransferResult 发送结果}}
+USBOutTransferResult 是 transferOut() 和 controlTransferOut() 的返回结果，包含两个只读属性：bytesWritten（实际写入的字节数）和 status（传输状态）。status 可能的值为 ok（成功）或 stall（设备产生停止条件）。
+
+{{知识点24}}{{USBDevice.clearHalt() 清除停止条件}}
+USBDevice.clearHalt(direction, endpointNumber) 方法清除端点上的停止条件，返回一个 Promise。当批量或中断传输的 status 为 stall 时，必须调用 clearHalt() 后才能再次使用该端点进行传输。direction 参数为 'in' 或 'out'。控制端点的停止条件无需手动清除。
+
+{{知识点25}}{{USBDevice.releaseInterface() 释放接口}}
+USBDevice.releaseInterface(interfaceNumber) 方法释放之前通过 claimInterface() 声明的接口，返回一个 Promise。释放后其他驱动程序或页面可以声明该接口。在设备关闭前应释放所有已声明的接口。
+
+{{知识点26}}{{USBDevice.close() 关闭设备}}
+USBDevice.close() 方法关闭与 USB 设备的会话，返回一个 Promise。它会释放所有已打开的接口并结束设备会话。关闭后需要重新 open() 才能再次操作设备。使用完毕后应及时关闭以释放资源。
+
+{{知识点27}}{{USBDevice.forget() 遗忘设备}}
+USBDevice.forget() 方法是 close() 的增强版，除了释放接口和结束会话外，还会重置设备的授权权限。调用后该设备从已配对列表中移除，下次使用需要重新通过 requestDevice() 授权。适用于需要完全撤销设备访问权限的场景。
+
+{{知识点28}}{{USBDevice.reset() 重置设备}}
+USBDevice.reset() 方法重置 USB 设备，取消所有进行中的操作并拒绝其 Promise。重置后设备恢复到初始状态，可能需要重新进行配置选择。适用于设备进入异常状态时的恢复操作。
+
+{{知识点29}}{{USBConfiguration 配置接口}}
+USBConfiguration 接口描述 USB 设备的一个配置。属性包括：configurationValue（配置值，对应描述符中的 bConfigurationValue）、configurationName（配置名称）、interfaces（USBInterface 数组，包含该配置支持的所有接口）。通过 USBDevice.configurations 可获取设备所有可用配置。
+
+{{知识点30}}{{USBInterface 接口接口}}
+USBInterface 接口描述 USB 设备的一个接口，代表设备的一个功能特性。属性包括：interfaceNumber（接口编号）、alternate（当前选中的备用配置，默认为 alternates[0]）、alternates（所有可用的备用配置数组）、claimed（是否已被当前页面声明）。
+
+{{知识点31}}{{USBAlternateInterface 备用接口}}
+USBAlternateInterface 接口描述接口的一个备用配置。属性包括：alternateSetting（备用设置编号）、interfaceClass（接口类代码）、interfaceSubclass（接口子类代码）、interfaceProtocol（接口协议代码）、interfaceName（接口名称）、endpoints（USBEndpoint 数组）。不同备用配置可提供不同的端点和功能。
+
+{{知识点32}}{{USBEndpoint 端点接口}}
+USBEndpoint 接口描述 USB 设备的一个端点，代表一个单向数据流。属性包括：endpointNumber（端点编号，1-15）、direction（方向：in 表示设备到主机，out 表示主机到设备）、type（类型：bulk 批量、interrupt 中断、isochronous 等时）、packetSize（数据包大小）。
+
+{{知识点33}}{{端点类型详解}}
+USB 端点有三种传输类型：bulk（批量）提供可靠的大数据量传输，不保证时效但保证送达；interrupt（中断）提供可靠的小数据量传输，有专用总线时间保证；isochronous（等时）提供不可靠的周期性传输，有专用总线时间但错过截止时间则丢弃数据。选择端点类型需根据应用需求。
+
+{{知识点34}}{{USBConnectionEvent 连接事件}}
+USBConnectionEvent 是 connect 和 disconnect 事件的事件对象，继承自 Event。它包含一个只读属性 device，指向触发事件的 USBDevice 对象。当用户插入或拔出之前已配对的 USB 设备时，浏览器自动触发相应事件。
+
+{{知识点35}}{{安全上下文要求}}
+WebUSB API 仅在安全上下文（Secure Context）中可用，即必须通过 HTTPS 或 localhost 访问。这是为了防止中间人攻击者拦截或篡改与 USB 设备的通信。在 HTTP 页面上 navigator.usb 将为 undefined。
+
+{{知识点36}}{{用户激活要求}}
+调用 USB.requestDevice() 需要瞬时用户激活（Transient user activation），即用户必须先与页面进行交互（如点击按钮）。这防止了页面在用户不知情的情况下请求访问 USB 设备。getDevices() 不需要用户激活。
+
+{{知识点37}}{{权限模型与用户同意}}
+WebUSB 采用用户同意的权限模型。首次访问设备时，浏览器弹出设备选择对话框，用户必须明确选择允许访问的设备。授权后设备被添加到已配对列表，后续可通过 getDevices() 静默获取。用户可以在浏览器设置中撤销已授权设备的权限。
+
+{{知识点38}}{{Web Workers 支持}}
+WebUSB API 支持在 Web Workers 中使用，包括专用 Worker（Dedicated Worker）和服务工作者（Service Worker）的某些场景。这允许将 USB 设备通信的繁重处理放到后台线程，避免阻塞主线程的 UI 渲染。
+
+{{知识点39}}{{浏览器兼容性}}
+WebUSB API 目前主要在 Chromium 内核浏览器中获得支持（Chrome 61+、Edge 79+、Opera 48+）。Firefox 和 Safari 目前不支持。在使用前应进行特性检测：if (navigator.usb) { /* 支持 */ }。由于仍属实验性技术，在生产环境使用需谨慎评估兼容性。
+
+{{知识点40}}{{与 WebHID API 的关系}}
+WebUSB API 和 WebHID API 都用于与 USB 设备通信，但适用场景不同。WebHID 专门用于人机接口设备（HID 类，如键盘、鼠标、游戏手柄），而 WebUSB 适用于非标准化设备。如果设备是 HID 类设备，优先使用 WebHID API，因为 HID 设备在 WebUSB 中可能被操作系统驱动占用。
+
+{{知识点41}}{{Arduino 与 WebUSB}}
+Arduino 是 WebUSB 最典型的应用场景之一。Arduino 官方提供了 WebUSB 库，允许微控制器通过 USB 与网页直接通信。使用时在 requestDevice 中指定 Arduino 的 vendorId（如 0x2341），即可在浏览器中读写 Arduino 的串口数据。
+
+{{知识点42}}{{典型使用流程}}
+WebUSB 的典型使用流程为：(1) 调用 requestDevice 选择设备；(2) 调用 open() 打开设备；(3) 调用 selectConfiguration() 选择配置；(4) 调用 claimInterface() 声明接口；(5) 使用 transferIn/transferOut 进行数据传输；(6) 使用完毕后调用 releaseInterface() 和 close() 释放资源。
+
+{{知识点43}}{{查找端点的运行时方法}}
+在实际使用中，端点编号通常需要在运行时发现。通过遍历 device.configuration.interfaces 获取所有接口，检查 alternates[0] 的 interfaceClass 确定目标接口类型，再遍历 endpoints 数组按 type 和 direction 筛选所需的输入/输出端点。
+
+{{知识点44}}{{错误处理最佳实践}}
+WebUSB 操作应始终包含错误处理：requestDevice 在用户取消时抛出 AbortError；open() 在设备被占用时可能失败；claimInterface 在接口已被占用时失败；传输操作可能返回 stall 或 babble 状态。使用 try-catch 包裹异步操作，并检查返回结果的 status 字段。
+
+{{知识点45}}{{设备断开处理}}
+应监听 USB disconnect 事件以处理设备意外断开的情况。断开后设备对象仍然存在但无法通信，所有进行中的传输操作会被取消。应在 disconnect 回调中清理状态、关闭连接、通知用户设备已断开。
+
+{{知识点46}}{{WebUSB 应用场景}}
+WebUSB 的典型应用场景包括：固件更新工具（通过浏览器刷新设备固件）、硬件配置工具（配置嵌入式设备参数）、数据采集（从传感器读取数据）、3D 打印机控制、物联网设备管理、开发板调试（如 Arduino、ESP32）、USB 安全密钥通信等。
+
+{{知识点47}}{{WebUSB 与 Web Serial API 对比}}
+WebUSB 和 Web Serial API 都可与串口设备通信。Web Serial API 专门针对串口通信（CDC ACM 类设备），使用更简单，自动处理波特率等串口参数。WebUSB 更底层、更灵活，但需要手动处理 USB 协议细节。对于串口设备，推荐优先使用 Web Serial API。
+
+{{知识点48}}{{DataView 在数据传输中的使用}}
+WebUSB 的数据传输结果中，数据以 DataView 形式提供（USBInTransferResult.data）。DataView 提供了对 ArrayBuffer 的灵活读取方法，如 getUint8、getUint16、getInt32 等，支持指定字节序（大端/小端）。USB 协议通常使用小端字节序。
+
+{{知识点49}}{{WebUSB 安全限制}}
+WebUSB 的安全限制包括：仅 HTTPS 可用；需要用户激活；需要用户明确授权设备；浏览器维护设备类黑名单（某些标准设备类如 HID、大容量存储等被阻止，防止安全风险）；设备授权与源绑定，不同网站不能共享设备访问权限。
+
+{{知识点50}}{{WebUSB 规范状态}}
+WebUSB API 规范由 WICG 维护，托管在 GitHub（https://wicg.github.io/webusb/）。截至 2025 年，规范仍处于草案阶段，尚未成为 W3C 正式推荐标准。API 可能在未来版本中发生变化，使用时需关注规范更新和浏览器实现变化。

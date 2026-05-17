@@ -1,0 +1,93 @@
+# 2025前端前端Container Queries
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{Container Queries 定义：CSS Container Queries 允许开发者根据父容器的尺寸、样式或滚动状态来有条件地应用样式，而不是依赖视口大小。这使得组件能够根据其所处的布局环境自适应调整，实现了真正的组件级响应式设计。}}
+
+{{知识点2}}{{核心价值与优势：Container Queries 解决了传统 Media Queries 只能根据视口大小响应的局限性。组件可以在不同布局位置（侧边栏、主内容区、卡片网格等）中自动适配样式，无需知道自身将被放置在何处，极大提升了组件的可复用性。}}
+
+{{知识点3}}{{W3C 规范状态：Container Queries 由 CSS Containment Module Level 3 和 CSS Conditional Rules Module Level 5 定义。截至 2025 年，该特性已在所有主流浏览器中获得稳定支持，属于 Baseline 2023 特性。}}
+
+{{知识点4}}{{container-type 属性：用于声明元素为查询容器。可选值包括 normal（默认，不是尺寸查询容器）、size（查询内联和块方向尺寸）、inline-size（仅查询内联方向尺寸）、scroll-state（滚动状态查询容器）和 anchored（锚点定位查询容器）。}}
+
+{{知识点5}}{{container-type: inline-size：最常用的容器类型。声明元素为内联轴尺寸查询容器，同时应用 style 和 inline-size containment。适用于大多数响应式布局场景，因为块方向尺寸通常由内容决定。}}
+
+{{知识点6}}{{container-type: size：声明元素为双向尺寸查询容器，同时查询内联和块方向尺寸。应用 style 和 size containment，元素的大小可以脱离子元素独立计算。当需要同时响应宽度和高度变化时使用。}}
+
+{{知识点7}}{{container-type: normal：默认值。元素不是任何容器尺寸查询的查询容器，但仍然是容器样式查询（style queries）的查询容器。这意味着所有元素默认都可以作为样式查询容器。}}
+
+{{知识点8}}{{container-name 属性：为容器查询上下文命名，以便在 @container 规则中精确指向特定容器。接受自定义标识符（custom-ident），不能使用 or、and、not、default 等保留字，不能加引号，支持 dashed-ident（如 --my-container）。}}
+
+{{知识点9}}{{多个容器名称：container-name 支持以空格分隔指定多个名称，如 container-name: meta card。这允许同一个容器被不同的 @container 查询以不同名称引用，增加了查询的灵活性。}}
+
+{{知识点10}}{{container 简写属性：是 container-name 和 container-type 的简写形式。语法为 container: <name> / <type>，例如 container: sidebar / inline-size。比分别声明两个属性更简洁。}}
+
+{{知识点11}}{{@container at-rule：核心查询语法。用于定义容器查询条件和满足条件时应用的样式。基本语法为 @container <name>? <query> { <styles> }。查询基于最近的具有 containment 上下文的祖先元素。}}
+
+{{知识点12}}{{@container 尺寸查询描述符：支持的尺寸描述符包括 width、height、inline-size、block-size、aspect-ratio 和 orientation。这些描述符始终基于容器的 content box 进行比较。}}
+
+{{知识点13}}{{比较运算符语法：@container 支持现代范围语法，如 (width > 700px)、(width >= 400px)、(10em <= width <= 20em) 等。也兼容传统 min-width/max-width 写法，如 (min-width: 400px)。}}
+
+{{知识点14}}{{逻辑关键字：@container 支持 and、or、not 逻辑关键字组合查询条件。and 组合多个条件需同时满足，or 组合多个条件任一满足，not 取反条件（每个查询中只能使用一个 not，且不能与 and/or 混用）。}}
+
+{{知识点15}}{{条件列表：可以使用逗号分隔多个查询条件形成条件列表，如 @container card (width > 400px), style(--responsive: true)。任一条件为真时即匹配。}}
+
+{{知识点16}}{{Container Query Length Units（容器查询长度单位）：提供相对于容器尺寸的长度单位，包括 cqw（容器宽度的 1%）、cqh（容器高度的 1%）、cqi（容器内联尺寸的 1%）、cqb（容器块尺寸的 1%）、cqmin（cqi 和 cqb 中较小值）和 cqmax（cqi 和 cqb 中较大值）。}}
+
+{{知识点17}}{{容器查询长度单位回退：当没有可用的查询容器时，容器查询长度单位默认回退到对应轴的小视口单位（sv*），如 cqw 回退到 svw，cqi 回退到 sviw。}}
+
+{{知识点18}}{{CSS Containment 机制：Container Queries 依赖 CSS containment 机制。声明 container-type 为 size 或 inline-size 时，会自动应用相应的 containment（style containment + size/inline-size containment），这是防止无限循环的性能必要措施。}}
+
+{{知识点19}}{{Size Containment 与无限循环防护：size containment 阻止元素从子元素获取尺寸信息，防止样式改变导致容器尺寸变化进而再次触发查询的无限循环。如果既没有上下文尺寸也没有显式尺寸，设置了 size containment 的元素会折叠。}}
+
+{{知识点20}}{{容器样式查询（Style Queries）：使用 style() 函数语法查询容器的计算样式。目前仅支持自定义属性（CSS 变量），如 @container style(--theme: dark)。所有元素默认都是样式查询容器，无需设置 container-type。}}
+
+{{知识点21}}{{样式查询自定义属性无值形式：@container style(--theme-color) 在自定义属性的值与 @property 的 initial-value 不同时返回 true。对于未注册的自定义属性，只要声明了该属性就始终返回 true。}}
+
+{{知识点22}}{{样式查询自定义属性有值形式：@container style(--accent-color: blue) 要求自定义属性的计算值精确匹配。如果通过 @property 注册并指定了 syntax，等价值也能匹配（如 blue 匹配 #0000ff、rgb(0 0 255)）。}}
+
+{{知识点23}}{{@property 注册与样式查询：使用 @property at-rule 注册自定义属性时，可以指定 syntax、inherits 和 initial-value。这使得样式查询能进行类型感知的值比较，支持等价值匹配，增强了样式查询的实用性。}}
+
+{{知识点24}}{{Container Scroll-State Queries（滚动状态查询）：使用 scroll-state() 函数查询容器的滚动状态。需要设置 container-type: scroll-state。支持四种描述符：scrollable（可滚动方向）、scrolled（最近滚动方向）、snapped（滚动捕捉状态）和 stuck（粘性定位状态）。}}
+
+{{知识点25}}{{scroll-state(scrollable) 查询：测试容器在指定方向是否可通过用户操作滚动。支持的方向值包括 top、right、bottom、left、x、y、block-start、block-end、inline-start、inline-end、block、inline、none。可用于实现"滚动到底部"提示等功能。}}
+
+{{知识点26}}{{scroll-state(stuck) 查询：测试 position: sticky 元素是否粘附在滚动容器的边缘。支持 top、right、bottom、left 及逻辑方向值。当粘性元素"粘住"时应用不同样式，如改变背景色或添加阴影。允许同一轴相邻方向同时匹配。}}
+
+{{知识点27}}{{scroll-state(snapped) 查询：测试元素是否即将被捕捉到滚动捕捉容器。支持 x、y、block、inline、both、none 值。评估发生在 scrollsnapchanging 事件触发时。可用于高亮显示被捕捉的元素。}}
+
+{{知识点28}}{{scroll-state(scrolled) 查询：测试容器最近一次滚动的方向。支持与 scrollable 相同的方向值。可用于实现滚动方向感知的 UI，如仅在向上滚动时显示顶部导航栏。}}
+
+{{知识点29}}{{Container-type 组合值：container-type 支持同时指定尺寸和滚动状态容器，如 container-type: inline-size scroll-state 或 container-type: size scroll-state。这允许同一个元素同时响应尺寸查询和滚动状态查询。}}
+
+{{知识点30}}{{Anchored Container Queries（锚点定位查询）：使用 container-type: anchored 声明，配合 anchored() 函数查询。当锚点定位元素触发 position-try 回退时应用样式，如检测 tooltip 是否翻转到底部并相应调整箭头方向。}}
+
+{{知识点31}}{{命名容器查询的查找机制：当 @container 规则包含容器名称时，浏览器会查找祖先链中具有匹配 container-name 的容器。未命名的 @container 查询仅匹配最近的具有 containment 上下文的祖先。命名查询可用于跳过中间容器直接定位目标。}}
+
+{{知识点32}}{{Container Queries 与 Media Queries 的区别：Media Queries 基于视口大小，适用于页面级布局调整；Container Queries 基于容器大小，适用于组件级响应式设计。两者互补而非替代，通常在组件内使用 Container Queries，页面布局使用 Media Queries。}}
+
+{{知识点33}}{{实际应用模式——卡片组件：典型的 Container Queries 应用是卡片组件。容器设置 container-type: inline-size，卡片在窄容器中单列显示，在宽容器中多列或水平布局。组件无需知道自身所在的布局上下文。}}
+
+{{知识点34}}{{回退策略：对于不支持 Container Queries 的浏览器，可以使用 CSS Grid 或 Flexbox 配合 Media Queries 作为回退。例如使用 grid-template-columns 创建列布局，用 @media 查询在小屏幕上切换为单列。也可以使用 @supports 检测支持情况。}}
+
+{{知识点35}}{{浏览器兼容性（2025 年）：Container Queries 在 Chrome 105+、Firefox 110+、Safari 16+、Edge 105+ 中均获支持。Scroll-state 查询为较新特性，Chrome 133+ 支持。Anchored 查询为实验性特性，支持范围更有限。属于 Baseline 2023 广泛可用特性。}}
+
+{{知识点36}}{{性能考虑：Container Queries 通过 containment 机制确保性能。size containment 避免了无限循环，style containment 隔离了样式计算。浏览器只需在容器尺寸或样式实际变化时重新评估查询，而非持续监控所有元素。}}
+
+{{知识点37}}{{与 Flexbox/Grid 的协同：Container Queries 与现代布局系统完美配合。例如在 Grid 布局中，同一组件在不同 grid 区域可能获得不同宽度，Container Queries 可以根据实际宽度自动调整组件内部布局。}}
+
+{{知识点38}}{{嵌套容器查询：可以在组件内部创建多层容器查询上下文。外层容器响应页面布局，内层容器响应组件内部区域。每一层通过命名容器区分，形成层次化的响应式设计体系。}}
+
+{{知识点39}}{{JavaScript 交互：可以通过 JavaScript 动态修改 container-name 或 container-type，也可以通过修改自定义属性的值来触发样式查询。结合 ResizeObserver 可以实现更复杂的响应式逻辑。}}
+
+{{知识点40}}{{无障碍性考虑：使用 Container Queries 进行布局变化时，应确保 DOM 顺序与视觉呈现保持一致，避免因布局重排导致屏幕阅读器用户体验下降。同时注意在小容器中保持足够的触摸目标尺寸和文字可读性。}}
+
+{{知识点41}}{{Container Queries 在设计系统中的应用：设计系统可以利用 Container Queries 创建真正独立的组件。组件在设计系统的不同上下文（侧边栏、模态框、全宽页面）中自动适配，无需为每种上下文编写特定样式规则。}}
+
+{{知识点42}}{{条件组合最佳实践：建议优先使用 inline-size 类型而非 size，因为大多数响应式场景只关心宽度。为常用容器使用有意义的名称。将 Container Queries 与 CSS 自定义属性结合使用可以创建更灵活的主题系统。}}
+
+{{知识点43}}{{content-visibility 属性关联：content-visibility 属性与 Container Queries 同属 CSS Containment 规范。content-visibility: auto 可以在元素不可见时跳过渲染，与 Container Queries 结合使用可以优化大型页面的渲染性能。}}
+
+{{知识点44}}{{CSS Containment 上下文类型总结：CSS containment 包含 layout containment（布局隔离）、style containment（样式隔离）、size containment（尺寸隔离）和 paint containment（绘制隔离）。Container Queries 主要依赖 style 和 size containment 来确保正确的查询行为。}}
+
+{{知识点45}}{{未来发展方向：Container Queries 规范仍在演进中。未来可能支持查询常规 CSS 属性值（不仅仅是自定义属性）的样式查询，以及更多类型的容器查询描述符。Scroll-state 和 Anchored 查询是这一方向的最新成果。}}

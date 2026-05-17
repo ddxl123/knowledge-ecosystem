@@ -1,0 +1,94 @@
+# 2025前端前端动画技术
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}
+CSS动画(CSS Animations)是通过@keyframes规则定义关键帧，配合animation属性控制动画的原生CSS技术。animation是简写属性，包含animation-name、animation-duration、animation-timing-function、animation-delay、animation-direction、animation-iteration-count、animation-fill-mode、animation-play-state、animation-timeline等子属性。CSS动画由浏览器原生支持，性能优秀，无需JavaScript即可实现复杂的动画效果。规范来源：CSS Animations Level 1/Level 2 (drafts.csswg.org/css-animations/)。
+{{知识点2}}
+@keyframes是CSS动画的核心at-rule，用于定义动画的关键帧序列。语法为@keyframes animation-name { from { ... } to { ... } }或使用百分比定义多个关键帧如0%、50%、100%。关键帧描述了动画在特定时间点的样式状态，浏览器自动在关键帧之间进行插值过渡。@keyframes支持动画所有可插值的CSS属性。
+{{知识点3}}
+animation-timing-function控制动画的加速曲线（缓动函数），决定动画在不同时间点的速度。常用值包括ease（默认，慢-快-慢）、linear（匀速）、ease-in（慢开始）、ease-out（慢结束）、ease-in-out（慢开始慢结束）。还支持cubic-bezier()自定义贝塞尔曲线和steps()步进函数。2025年CSS新增linear()函数支持更精确的线性插值。
+{{知识点4}}
+CSS Transitions提供属性值变化时的平滑过渡效果。通过transition属性设置，包含transition-property（过渡属性）、transition-duration（持续时间）、transition-timing-function（缓动函数）、transition-delay（延迟）四个子属性。与animation不同，transition是被动的，仅在属性值变化时触发。2025年新增transition-behavior属性支持离散属性（如display）的过渡。
+{{知识点5}}
+@starting-style是CSS新at-rule（2024-2025年广泛支持），用于定义元素初始渲染时的起始样式，使得新插入DOM的元素也能有过渡动画。典型用例是弹出框（popover）和对话框（dialog）的进入动画，配合:popover-open和:open伪类使用。解决了CSS Transition无法在元素首次出现时触发的痛点。
+{{知识点6}}
+CSS Transforms通过transform属性对元素进行2D/3D变换，包括translate（平移）、rotate（旋转）、scale（缩放）、skew（倾斜）、perspective（透视）等函数。可组合多个变换函数按顺序应用。transform动画触发GPU加速（合成层），性能优异。2025年规范中transform已支持独立属性（translate、rotate、scale），可单独设置无需组合。
+{{知识点7}}
+Web Animations API (WAAPI)是浏览器原生的JavaScript动画API，提供Element.animate()快捷方法和Animation、KeyframeEffect等接口。WAAPI弥合了CSS动画和JavaScript动画之间的鸿沟，提供统一的动画控制接口，支持播放控制（play、pause、reverse、cancel、finish）、时间线控制和组合效果。WAAPI底层由浏览器优化，性能接近CSS动画。
+{{知识点8}}
+requestAnimationFrame(rAF)是浏览器提供的逐帧回调API，是JavaScript动画的基础驱动。回调频率通常与显示器刷新率同步（60fps=16.67ms/帧）。相比setInterval/setTimeout，rAF在页面不可见时自动暂停，节省资源。所有JavaScript动画库底层都依赖rAF作为渲染循环驱动。
+{{知识点9}}
+CSS Scroll-driven Animations是2024-2025年最重要的CSS动画新特性，允许动画进度由滚动位置而非时间驱动。通过animation-timeline属性设置scroll()或view()函数，配合scroll-timeline、view-timeline定义滚动时间线。支持scroll-timeline-axis指定滚动轴（block/inline/x/y）。该特性纯CSS实现，无需JavaScript监听scroll事件，性能显著优于传统方案。
+{{知识点10}}
+scroll-timeline和view-timeline是CSS滚动驱动动画的两个核心时间线类型。scroll-timeline基于滚动容器的滚动进度，适用于滚动进度指示器、视差效果等。view-timeline基于元素在滚动容器中的可见性进度，适用于滚动触发动画（scroll-triggered animations）。view-timeline-inset可调整可见性判定的偏移范围。
+{{知识点11}}
+GSAP(GreenSock Animation Platform)是最流行的JavaScript动画库之一，核心包体积小且功能强大。GSAP核心包含Tween（补间动画）和Timeline（时间线）两大概念，支持TweenLite/TweenMax、TimelineLite/TimelineMax等API。插件生态丰富：ScrollTrigger（滚动触发动画）、Draggable（拖拽）、MorphSVG（SVG形变）、MotionPath（运动路径）等。GSAP性能优秀，浏览器兼容性极佳。
+{{知识点12}}
+GSAP ScrollTrigger是GSAP最强大的插件，用于创建基于滚动的动画和触发器。支持pin（固定元素）、scrub（滚动同步动画进度）、snap（滚动吸附）、toggleActions（进入/离开/回退/回入时的动作）等特性。2025年ScrollTrigger仍是生产环境中滚动动画的首选方案，兼容性和性能远超纯CSS scroll-driven animations。
+{{知识点13}}
+Motion（原Framer Motion）是2025年最流行的React/Vue/JS动画库，开源免费。核心特性包括：声明式动画API、独立transform属性（无需wrapper元素）、AnimatePresence退出动画、布局动画（Layout Animation）、手势动画（hover/press/drag）、弹簧物理、滚动动画、时间线序列编排。Motion采用混合渲染引擎，兼顾CSS和JavaScript动画优势。
+{{知识点14}}
+Motion的AnimatePresence组件解决了React/Vue中元素退出时的动画难题。当组件被卸载时，AnimatePresence会延迟DOM移除，让退出动画播放完毕后再真正移除元素。配合initial、animate、exit属性声明进入/持续/退出三种状态。这是React动画开发中最常用的模式之一。
+{{知识点15}}
+Motion的Layout Animation实现了自动布局变化动画，当元素尺寸或位置改变时自动生成平滑过渡动画。底层使用FLIP（First, Last, Invert, Play）技术：先记录元素最终位置，再计算与初始位置的差异，通过transform反转到初始位置，最后播放动画到最终位置。该技术无需知道布局变化的具体原因即可工作。
+{{知识点16}}
+Anime.js是轻量级JavaScript动画引擎（约24.5KB），API简洁直观。支持CSS属性、SVG、DOM属性、JavaScript对象的动画。核心特性包括：每个属性独立参数、灵活的关键帧系统、内置缓动函数、增强的CSS transform组合、Scroll Observer滚动同步、高级stagger（交错）效果、SVG工具集（形变/路径跟随/线条绘制）、弹簧物理和拖拽、Timeline时间线编排、Scope响应式动画。
+{{知识点17}}
+Anime.js的Timeline API允许精确编排多个动画的时序关系。通过createTimeline()创建时间线，使用.add()方法添加动画，支持高级时间位置标记（如'<','>'等）控制动画的相对起始时间。Timeline可实现复杂的序列动画、重叠动画和同步动画效果。
+{{知识点18}}
+Popmotion是Motion的底层动画引擎，提供animate函数支持关键帧、弹簧(spring)和衰减(decay)三种动画类型。支持数字、字符串（如"0px"、"#fff"）和复杂值（如box-shadow、SVG路径）的动画。提供repeat、repeatDelay、repeatType（loop/mirror/reverse）等循环控制，以及onUpdate、onPlay等生命周期回调。支持自定义driver（如XR驱动）。
+{{知识点19}}
+Spring Physics（弹簧物理）动画模拟真实弹簧运动，产生自然的弹性效果。核心参数包括stiffness（刚度，控制弹力强度）、damping（阻尼，控制摩擦衰减）、mass（质量）。与基于持续时间的缓动动画不同，弹簧动画没有固定时长，由物理模拟自然停止。Motion、Popmotion、React Spring等库都内置弹簧动画支持。
+{{知识点20}}
+React Spring是React生态中基于弹簧物理的动画库，核心理念是"动画跟随数据"。通过useSpring、useSprings、useTrail、useTransition、useChain等hooks驱动动画。React Spring直接动画DOM属性而非React state，避免了频繁的re-render。适合数据驱动的动态UI动画场景。
+{{知识点21}}
+Lottie是Airbnb开源的动画库，可将After Effects导出的JSON动画文件在Web/iOS/Android上高质量渲染。Lottie-web是Web端实现，通过SVG、Canvas或HTML渲染动画。设计师用After Effects制作动画，开发者直接使用JSON文件，极大提升了设计到开发的工作流效率。Lottie广泛用于加载动画、微交互、品牌动画等场景。
+{{知识点22}}
+SVG动画有三种实现方式：SMIL（SVG原生动画元素，如animate、animateTransform、animateMotion）、CSS动画（对SVG元素应用@keyframes和transition）、JavaScript动画（通过JS操作SVG DOM或使用GSAP/D3等库）。2025年SMIL在部分浏览器中已不推荐使用，CSS和JavaScript方案是主流。Anime.js和GSAP都提供强大的SVG动画工具集。
+{{知识点23}}
+Canvas 2D动画通过HTML5 Canvas元素和CanvasRenderingContext2D API实现，使用JavaScript在canvas上逐帧绘制图形。Canvas动画适合粒子系统、数据可视化、游戏等需要大量图形元素的场景。性能优化要点：使用requestAnimationFrame驱动、避免频繁的canvas状态切换、使用离屏canvas缓存、合理使用willReadFrequently选项。
+{{知识点24}}
+Three.js是最流行的Web 3D/3D动画库，基于WebGL实现。提供场景(Scene)、相机(Camera)、渲染器(Renderer)、几何体(Geometry)、材质(Material)、光照(Light)等核心概念。Three.js内置动画系统支持关键帧动画、骨骼动画、变形目标动画等。2025年Three.js已支持WebGPU渲染器，性能大幅提升。
+{{知识点25}}
+WebGPU是2024-2025年逐步获得浏览器支持的新一代图形API，替代WebGL。WebGPU提供更底层的GPU访问能力，支持计算着色器（Compute Shader），可实现GPU加速的粒子系统、物理模拟等高性能动画。Three.js、Babylon.js等3D库已支持WebGPU后端。WebGPU将推动Web端复杂3D动画和计算密集型动画的发展。
+{{知识点26}}
+View Transitions API是2024-2025年浏览器原生支持的页面/视图切换动画API。通过document.startViewTransition()触发，自动捕获新旧状态的快照并生成过渡动画。支持同页面DOM变化的过渡（SPA场景）和跨页面导航的过渡（MPA场景，需CORS同源）。View Transitions极大简化了页面切换动画的实现。
+{{知识点27}}
+FLIP(First, Last, Invert, Play)是一种高性能动画技术，用于实现布局变化的平滑过渡。First记录元素初始位置/尺寸，Last获取元素最终位置/尺寸，Invert用transform将元素反转回初始位置，Play移除transform并应用transition动画到最终位置。FLIP将布局变化转化为transform动画，避免了昂贵的布局重排(reflow)。Motion、Vue Transition等框架底层都使用FLIP技术。
+{{知识点28}}
+will-change是CSS属性，用于提前告知浏览器元素将要变化的属性，让浏览器提前进行优化（如提升到合成层）。常用值包括transform、opacity、left、top等。但应谨慎使用，过度使用will-change会导致过多的合成层占用GPU内存。最佳实践是仅在动画即将开始时添加，动画结束后移除。
+{{知识点29}}
+prefers-reduced-motion是CSS媒体查询特性，检测用户是否在系统设置中开启了"减少动态效果"选项。语法为@media (prefers-reduced-motion: reduce) { ... }。Web动画开发中应尊重该设置，为敏感用户提供减少或禁用动画的替代方案。这是Web无障碍(WCAG)的重要要求，所有负责任的动画实现都应考虑该媒体查询。
+{{知识点30}}
+Stagger（交错/错开）动画是一种常用模式，多个相似元素按顺序延迟播放动画，形成波浪或级联效果。GSAP通过stagger配置对象支持from（起始位置）、each（每个元素延迟）、grid（网格布局）等高级配置。Anime.js提供stagger()工具函数支持时间交错和值交错。Motion通过transition.staggerChildren配置子元素交错延迟。
+{{知识点31}}
+Morph动画（形变动画）实现一个形状平滑变换为另一个形状的效果。SVG Morph是最常见的实现方式，通过插值两个SVG path的d属性实现形状过渡。GSAP的MorphSVGPlugin是专业的SVG形变插件。Anime.js提供morphTo()内置函数。CSS方面，现代浏览器已支持d属性的动画插值，可在@keyframes中直接定义SVG路径形变。
+{{知识点32}}
+动画性能优化是前端动画开发的核心关注点。最佳实践包括：优先使用transform和opacity进行动画（触发GPU合成层，避免layout和paint）；使用will-change提示浏览器优化；避免在动画中触发强制同步布局（layout thrashing）；使用contain属性限制重排范围；使用content-visibility优化不可见元素的渲染；减少动画元素的数量和复杂度。
+{{知识点33}}
+Timeline Sequencing（时间线序列编排）是组织复杂动画的核心模式。通过Timeline将多个动画串联或并联，控制它们的相对时间关系。GSAP的timeline.add()支持position参数（绝对时间、相对偏移、相对标记如'<''>'等）。Motion使用variants和stagger实现序列编排。Anime.js的createTimeline()支持高级时间位置和嵌套时间线。
+{{知识点34}}
+动画缓动函数(Easing Functions)控制动画的速度曲线。CSS标准缓动函数包括ease、linear、ease-in、ease-out、ease-in-out和cubic-bezier()自定义贝塞尔曲线。2025年CSS新增linear()函数支持任意分段线性缓动。JavaScript库通常还提供弹性(easeOutElastic)、弹跳(easeOutBounce)、指数(easeOutExpo)等高级缓动。缓动函数对动画的"感觉"至关重要。
+{{知识点35}}
+animation-composition是CSS新属性（2024-2025年获得浏览器支持），定义当多个动画影响同一属性时的组合方式。可选值包括replace（替换，默认）、add（累加）、accumulate（累积）。这使得多个动画可以叠加效果，例如一个动画控制旋转，另一个动画在此基础上叠加额外旋转，无需手动计算最终值。
+{{知识点36}}
+animation-range和animation-range-start/animation-range-end是CSS滚动驱动动画的属性，用于定义动画在滚动时间线上的播放范围。可使用百分比或命名范围（如entry、exit、cover、contain）指定动画开始和结束的滚动位置。配合view-timeline可精确控制元素进入/离开视口时的动画触发时机和进度。
+{{知识点37}}
+interpolate-size是CSS新属性（2024-2025年），允许动画到auto等内在尺寸值。传统上CSS无法对width: auto或height: auto进行过渡动画，因为auto是离散值。interpolate-size: allow-keywords开启后，浏览器可将auto作为可插值值处理，配合calc-size()函数实现到auto的平滑过渡，解决了CSS动画的长期痛点。
+{{知识点38}}
+Theater.js是专业的Web动画编排工具，提供可视化编辑器用于精确控制动画时间线。适合复杂的交互动画和叙事型Web体验。与GSAP等运行时库不同，Theater.js强调设计阶段的可视化编排，支持实时预览和微调。适合制作高品质的创意网站和品牌展示页面。
+{{知识点39}}
+粒子动画(Particle Animation)通过大量小元素的运动模拟自然效果（火焰、烟雾、雪花、星空等）。实现方式包括Canvas 2D（适合大量粒子）、WebGL/Three.js（GPU加速粒子系统）、CSS（少量粒子用@keyframes）。核心概念包括粒子发射器(emitter)、粒子生命周期、力场（重力/风力/斥力）。tsparticles是最流行的Web粒子动画库。
+{{知识点40}}
+CSS contain属性可限制元素的渲染范围，优化动画性能。contain: layout阻止内部布局影响外部；contain: style阻止计数器/引用等样式继承；contain: paint阻止溢出内容渲染；contain: size允许浏览器跳过子元素尺寸计算。对动画元素使用contain: layout paint可显著减少重排重绘范围，提升动画性能。
+{{知识点41}}
+Intersection Observer API虽非动画API，但广泛用于触发动画。通过观察元素与视口的交叉状态，在元素进入视口时触发CSS类切换或JavaScript动画。相比scroll事件监听，Intersection Observer异步执行、性能更好。结合CSS transition/animation可实现滚动进入动画（scroll-reveal）。现代框架如Motion也基于类似原理实现scroll动画。
+{{知识点42}}
+手势动画(Gesture Animation)响应用户触摸/鼠标手势（hover、press、pan、fling、pinch、rotate）产生动画反馈。Motion提供whileHover、whileTap、whileDrag等声明式手势动画属性。Anime.js提供Draggable API支持拖拽释放后的惯性动画。好的手势动画使用弹簧物理产生自然的弹性反馈，增强用户体验的流畅感。
+{{知识点43}}
+Exit Animation（退出动画）是元素从DOM移除时播放的动画。在React/Vue等声明式框架中，组件卸载时元素立即从DOM消失，无法播放退出动画。解决方案包括：Motion的AnimatePresence组件、Vue的Transition组件、或自定义延迟卸载逻辑。退出动画是现代Web应用流畅感的关键要素。
+{{知识点44}}
+布局动画(Layout Animation)自动在布局变化时产生平滑过渡。核心技术是FLIP（First, Last, Invert, Play）。Motion的layout属性可声明式启用布局动画。React的experimental View Transition API也支持布局变化过渡。Vue 2025年增强的Transition组件支持更精细的布局动画控制。布局动画广泛用于列表重排、卡片展开/折叠、侧边栏收起等场景。
+{{知识点45}}
+滚动视差(Scroll Parallax)效果让不同层的元素以不同速度滚动，产生深度感。实现方式包括：CSS scroll-driven animations（纯CSS方案）、GSAP ScrollTrigger的scrub参数、Intersection Observer + transform、或专门的视差库（如Rellax）。2025年CSS原生方案已足够强大，但GSAP ScrollTrigger在复杂场景中仍更灵活可靠。

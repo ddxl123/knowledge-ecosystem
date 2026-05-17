@@ -1,0 +1,147 @@
+# 2025前端前端WebXR API
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}
+{{WebXR API 概述}}
+WebXR是一组标准的集合，用于支持将3D场景渲染到虚拟现实（VR）和增强现实（AR）硬件设备上。WebXR Device API实现了WebXR功能集的核心，管理输出设备选择、以适当帧率渲染3D场景、以及管理输入控制器创建的运动向量。WebXR兼容设备包括全沉浸式3D头显（带运动和方向追踪）、AR眼镜（在现实场景上叠加图形）、以及手持移动设备（通过摄像头捕获真实世界并增强图像）。
+
+{{知识点2}}
+{{WebXR 与 WebVR 的区别}}
+WebVR是早期实验性API，仅支持虚拟现实（VR）。WebXR是其继任者，同时支持VR和AR。关键区别：WebXR对高级输入控制器有集成支持（通过事件直接支持select和squeeze动作），而WebVR依赖Gamepad API来支持控制器。WebXR支持的模块化规范包括锚点、深度感知、DOM叠加、手部输入、命中测试、光照估计等扩展模块。
+
+{{知识点3}}
+{{XRSystem 接口}}
+XRSystem是WebXR的入口接口，通过navigator.xr属性访问。它提供两个核心方法：isSessionSupported(mode)检查是否支持给定会话模式（返回Promise<boolean>），requestSession(mode)请求创建新的XRSession。还提供devicechange事件，当可用XR设备集合发生变化时触发。该接口早期版本名为XR。
+
+{{知识点4}}
+{{WebXR 会话模式}}
+WebXR提供三种会话模式：（1）inline——在浏览器文档内呈现，不需要特殊XR硬件；（2）immersive-vr——完全沉浸式VR，需要XR设备如头显，替代整个世界的渲染场景；（3）immersive-ar——沉浸式AR，将渲染内容叠加在真实环境上。AR会话中，应用不需要清除背景或天空盒。
+
+{{知识点5}}
+{{XRSession 接口}}
+XRSession代表正在进行的XR会话。核心属性包括：renderState（渲染选项如裁剪面和FOV）、visibilityState（会话可见性状态）、inputSources（当前输入源列表）、enabledFeatures（已启用的功能数组）、environmentBlendMode（环境混合模式）。核心方法：requestAnimationFrame()、cancelAnimationFrame()、requestReferenceSpace()、updateRenderState()、end()。
+
+{{知识点6}}
+{{requestSession 方法}}
+通过navigator.xr.requestSession(mode, options)请求创建XR会话。options对象可包含requiredFeatures（必需功能数组）和optionalFeatures（可选功能数组）。常见功能包括"local"、"local-floor"、"bounded-floor"、"unbounded"、"hit-test"、"anchors"、"hand-tracking"等。返回Promise，解析为XRSession。
+
+{{知识点7}}
+{{XRSession 事件系统}}
+XRSession支持丰富的事件：end（会话结束）、inputsourceschange（输入源变化）、select/selectstart/selectend（主选择动作事件）、squeeze/squeezestart/squeezeend（主挤压/抓取动作事件）、visibilitychange（可见性变化）。选择事件对应用户按下触发器或按钮，挤压事件对应握持或释放物体。
+
+{{知识点8}}
+{{XRReferenceSpace 参考空间}}
+XRReferenceSpace定义了XR坐标系统的原点和方向。坐标系约定：+X向右，+Y向上，+Z向后（朝向用户）。通过session.requestReferenceSpace(type)创建。参考空间是不可变的，要移动原点需使用getOffsetReferenceSpace()创建新空间。reset事件在追踪原点与环境发生不连续时触发。
+
+{{知识点9}}
+{{参考空间类型}}
+五种参考空间类型：（1）bounded-floor——类似local但用户不会超出预定边界，提供boundsGeometry；（2）local——原点位于会话创建时观察者附近，优化用于用户不大幅移动的场景；（3）local-floor——类似local但y=0在地面高度；（4）unbounded——允许用户自由移动，原点可能漂移；（5）viewer——原点追踪观察者位置和方向，所有会话类型都支持。
+
+{{知识点10}}
+{{XRFrame 接口}}
+XRFrame在requestAnimationFrame回调中传入，提供渲染单帧所需的全部信息。核心属性：session（关联的XRSession）、trackedAnchors（追踪的锚点集合）。核心方法：getViewerPose(refSpace)获取观察者位姿、getPose(space, baseSpace)获取两个空间的相对位姿、getHitTestResults()获取命中测试结果、createAnchor()创建锚点。
+
+{{知识点11}}
+{{XRViewerPose 观察者位姿}}
+XRViewerPose表示观察者在场景中的位姿（位置和方向），继承自XRPose。包含views数组——XRView对象列表，每个代表一个视角。典型头显提供两个视图（左眼和右眼），通过略微不同的视角创建立体3D效果。XRViewerPose始终相对于XRReferenceSpace获取和引用。
+
+{{知识点12}}
+{{XRWebGLLayer 渲染层}}
+XRWebGLLayer是WebXR设备与WebGL渲染上下文之间的桥梁。构造函数：new XRWebGLLayer(session, gl, options)。核心属性：framebuffer（WebGL帧缓冲区）、framebufferWidth/Height（帧缓冲区尺寸）、antialias（是否支持抗锯齿）、fixedFoveation（固定注视点渲染级别，0-1）、ignoreDepthValues（合成器是否忽略深度值）。getViewport(view)返回指定视图的视口。
+
+{{知识点13}}
+{{WebXR 渲染流程}}
+典型WebXR渲染循环：（1）获取XRWebGLLayer并设置为session的baseLayer；（2）在requestAnimationFrame回调中获取XRFrame；（3）调用frame.getViewerPose(referenceSpace)获取位姿；（4）绑定framebuffer；（5）遍历pose.views，对每个视图设置viewport并渲染场景。每个视图渲染到帧缓冲区的不同区域（左半/右半）。
+
+{{知识点14}}
+{{XRInputSource 输入源}}
+XRInputSource表示控制XR会话的输入设备。核心属性：handedness（"left"/"right"/"none"）、targetRayMode（"gaze"/"tracked-pointer"/"screen"）、targetRaySpace（目标射线空间）、gripSpace（握持空间，用于渲染手持物体）、gamepad（Gamepad对象）、hand（XRHand对象）、profiles（输入配置描述数组）。
+
+{{知识点15}}
+{{目标射线与交互}}
+目标射线（target ray）从设备位置沿指向方向延伸。三种模式：gaze（凝视，从头部发出）、tracked-pointer（手柄控制器追踪）、screen（屏幕触摸点）。主要选择动作通过select事件触发（按下触发器/按钮）。主要挤压动作通过squeeze事件触发（握持/释放）。这些是WebXR直接支持的高级交互。
+
+{{知识点16}}
+{{gripSpace 握持空间}}
+gripSpace是XRInputSource的属性，返回一个XRSpace，其原点追踪手持物体应出现的位置和方向。握持空间的坐标系可用来渲染看起来确实被握在用户手中的对象。对于手柄控制器，握持空间通常对应手柄的物理位置。
+
+{{知识点17}}
+{{XRHand 手部追踪}}
+XRHand接口是有序映射（pair iterator），包含25个手部关节。通过XRInputSource.hand属性获取。关节包括：wrist（手腕，索引0）、拇指各段（metacarpal/phalanx-proximal/phalanx-distal/tip）、食指到小指各段（含intermediate中间指骨）。每个关节对应一个XRJointSpace。支持for...of遍历。
+
+{{知识点18}}
+{{XRAnchor 锚点}}
+XRAnchor创建相对于真实世界固定的锚点，保持虚拟物体与物理环境对齐。通过frame.createAnchor(pose, referenceSpace)创建，或通过XRHitTestResult.createAnchor()从命中测试结果创建。anchorSpace属性返回用于定位的XRSpace。delete()方法移除锚点。frame.trackedAnchors返回当前追踪的所有锚点集合。
+
+{{知识点19}}
+{{命中测试（Hit Test）}}
+命中测试用于检测射线与真实世界的交点，是AR应用放置虚拟物体的基础。通过session.requestHitTestSource({space, offsetRay})创建XRHitTestSource。每帧调用frame.getHitTestResults(source)获取XRHitTestResult数组。每个结果提供getPose()获取命中点位姿和createAnchor()创建锚点。取消订阅使用source.cancel()。
+
+{{知识点20}}
+{{光照估计（Lighting Estimation）}}
+XRLightProbe估计用户环境中的光照信息。通过session.requestLightProbe()获取。probeSpace追踪光照估计位置。frame.getLightEstimate(probe)返回XRLightEstimate，包含估计的光照值。reflectionchange事件在反射立方体贴图变化时触发。可通过XRWebGLBinding.getReflectionCubeMap()获取环境反射贴图，实现虚拟物体的真实光照效果。
+
+{{知识点21}}
+{{深度感知（Depth Sensing）}}
+深度感知模块允许获取真实世界的深度信息。XRSession的depthDataFormat和depthUsage属性描述深度数据格式和使用模式。frame.getDepthInformation(view)返回XRCPUDepthInformation对象，包含CPU端深度数据。支持"luminance-alpha"和"float32"等数据格式。用于实现遮挡处理、物体放置等高级AR功能。
+
+{{知识点22}}
+{{DOM Overlays}}
+DOM Overlays模块允许在沉浸式AR会话中在XR视图上叠加DOM元素。启用后session.domOverlayState提供叠加状态信息。这使得可以在AR体验中显示传统HTML UI元素（按钮、文本、表单等），而无需完全使用WebGL渲染UI，简化AR应用的交互界面开发。
+
+{{知识点23}}
+{{WebXR Layers API}}
+Layers API提供更高效的层渲染机制，支持多种层类型：投影层（XRProjectionLayer）、四边形层（XRQuadLayer）、圆柱层（XRCylinderLayer）、等矩形层（XREquirectLayer）、立方体贴图层（XRCubeLayer）。与XRWebGLLayer不同，各层可独立管理，适合360度视频、广告牌式内容等场景。通过XRWebGLBinding创建和管理层。
+
+{{知识点24}}
+{{XRRenderState 渲染状态}}
+XRRenderState包含影响图像渲染的选项。通过session.updateRenderState(state)更新。属性包括：baseLayer（基础XRWebGLLayer）、depthNear（近裁剪面距离，默认0.1米）、depthFar（远裁剪面距离，默认1000米）、inlineVerticalFieldOfView（内联模式的垂直视场角）、layers（Layers API的层列表）。
+
+{{知识点25}}
+{{degrees of freedom 自由度}}
+自由度（DoF）表示XR设备能感知的运动维度。3DoF（三自由度）支持旋转运动：pitch（俯仰）、yaw（偏航）、roll（翻滚）。6DoF（六自由度）额外支持平移运动：前后、左右、上下。简单头显通常为3DoF，高端头显为6DoF（可能需要外部传感器如红外摄像头追踪）。
+
+{{知识点26}}
+{{field of view 视场角}}
+视场角（FOV）是XR设备能呈现的环境范围，以角度度量。人眼单眼FOV约135°，双眼总FOV约200-220°。基础头显FOV约90°，高端头显约150°。更宽的FOV显著提升沉浸感，但也增加设备重量和成本。应用通常定义和管理水平FOV。
+
+{{知识点27}}
+{{XR 设备类型}}
+XR设备类型包括：（1）头显（Headset）——佩戴在头上，通过镜片聚焦屏幕到双眼；（2）护目镜/眼镜（Goggles）——透明镜片叠加图形，直接看到真实世界；（3）CAVE系统——投影到墙壁/天花板/地板的沉浸环境；（4）手持设备——手机通过摄像头实现AR。设备可能通过线缆连接PC或使用无线网络传输图像。
+
+{{知识点28}}
+{{XRView 视图}}
+XRView代表观察者对场景的一个视角。属性包括：eye（"left"/"right"/"none"）、projectionMatrix（4x4投影矩阵）、recommendedViewportScaleFactor（推荐视口缩放因子）。典型头显每帧提供两个XRView（左眼和右眼）。通过XRWebGLLayer.getViewport(view)获取对应视口区域。
+
+{{知识点29}}
+{{XRPose 与 XRRigidTransform}}
+XRPose表示空间位姿，包含transform（XRRigidTransform）和linearVelocity/angularVelocity（线速度/角速度）。XRRigidTransform表示刚体变换（无缩放），包含position（DOMPointReadOnly三维位置）、orientation（四元数旋转）、matrix（4x4变换矩阵）、inverse（逆变换）。
+
+{{知识点30}}
+{{WebXR 安全要求}}
+WebXR API仅在安全上下文（HTTPS）中可用，防止中间人攻击。requestSession()需要用户手势（如点击事件）触发，不能自动启动。某些设备功能（如"bounded-floor"）可能需要额外权限。浏览器可能在会话开始时显示安全提示。
+
+{{知识点31}}
+{{WebXR 合成器}}
+WebXR合成器（Compositor）是浏览器中负责将应用渲染的帧组合并发送到XR硬件的组件。它处理双目视图合成、帧率匹配和时间扭曲（timewarping）。fixedFoveation属性控制注视点渲染。ignoreDepthValues控制合成器是否使用深度缓冲区。合成器独立于应用渲染循环运行，确保流畅体验。
+
+{{知识点32}}
+{{XRReferenceSpace 偏移变换}}
+通过getOffsetReferenceSpace(XRRigidTransform)创建新的参考空间实现原点移动。由于XRReferenceSpace不可变，要改变观察者位置需创建新的偏移空间。例如：new XRRigidTransform({x:2, y:0, z:1})将原点偏移到(2,0,1)。这用于键盘/鼠标等非XR输入控制用户移动。
+
+{{知识点33}}
+{{虚拟现实晕动症}}
+虚拟现实晕动症（VR Sickness）是用户在VR中感到不适、恶心的症状。原因包括：延迟过高、帧率不足、不自然的运动、视野不一致。WebXR的时间扭曲功能减少延迟相关不适。开发者应确保正确的渲染、稳定的帧率、避免突然加速，保护用户健康。
+
+{{知识点34}}
+{{WebXR Gamepads 模块}}
+WebXR Gamepads模块扩展了XRInputSource的gamepad属性支持，通过WebXR特定的Gamepad对象实现。支持控制器按钮和轴的访问、触觉反馈（hapticActuators）。与标准Gamepad API不同，专门为XR控制器优化，提供更精确的输入映射和手势识别。
+
+{{知识点35}}
+{{XRWebGLLayer.getNativeFramebufferScaleFactor}}
+静态方法XRWebGLLayer.getNativeFramebufferScaleFactor(session)返回缩放因子，用于将推荐的WebGL帧缓冲区分辨率缩放到渲染设备的原生分辨率。值为1.0表示设备原生分辨率，小于1.0表示降低分辨率以提高性能。开发者可根据性能需求调整渲染分辨率。
+
+{{知识点36}}
+{{WebXR 模块化规范体系}}
+WebXR采用模块化设计。核心：WebXR Device API。扩展模块包括：Anchors Module（锚点）、Augmented Reality Module（AR）、Depth Sensing Module（深度感知）、DOM Overlays Module（DOM叠加）、Gamepads Module（手柄）、Hand Input Module（手部输入）、Hit Test Module（命中测试）、Layers API（层）、Lighting Estimation API（光照估计）。各模块独立演进，按需启用。

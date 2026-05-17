@@ -1,0 +1,83 @@
+# 2025前端前端CSS Aspect Ratio
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{CSS aspect-ratio 属性定义：aspect-ratio 是 CSS Box Sizing Module Level 4 规范中定义的属性，用于设置元素的首选宽高比。它可以让元素在缩放时自动保持宽度与高度的比例关系，语法为 aspect-ratio: <width> / <height>。}}
+
+{{知识点2}}{{初始值与继承：aspect-ratio 的初始值为 auto，适用于除 inline boxes 和内部 ruby/table 盒子之外的所有元素。该属性不可继承（inherited: no）。}}
+
+{{知识点3}}{{auto 关键字：auto 是默认值，表示元素没有首选宽高比，按正常方式计算尺寸。对于替换元素（如 img、video），auto 会使用元素的内在宽高比。}}
+
+{{知识点4}}{{比例值语法：可以使用 width / height 格式指定比例，如 aspect-ratio: 16 / 9。斜杠前后的数值为正数，空格可选。如果省略 height 及其前面的斜杠，height 默认为 1。}}
+
+{{知识点5}}{{单数值写法：可以只写一个数值，如 aspect-ratio: 0.5，等价于 aspect-ratio: 0.5 / 1（即宽度是高度的一半）。aspect-ratio: 1 等价于 1 / 1（正方形）。}}
+
+{{知识点6}}{{auto 与 ratio 组合：aspect-ratio 可以同时指定 auto 和一个 ratio 值，如 aspect-ratio: auto 3/4 或 aspect-ratio: 9/6 auto。对于替换元素，优先使用内在宽高比；对于非替换元素，使用指定的 ratio。}}
+
+{{知识点7}}{{替换元素与非替换元素的区别：替换元素（img、video、canvas 等）有内在宽高比，浏览器默认会维护其比例。非替换元素（div、span 等）没有内在比例，aspect-ratio 为其设置的是"首选"比例。}}
+
+{{知识点8}}{{aspect-ratio 与 width 的关系：当只设置 width 时，aspect-ratio 会根据 width 和比例自动计算 height。例如 width: 300px + aspect-ratio: 3/1 等价于 width: 300px + height: 100px。}}
+
+{{知识点9}}{{aspect-ratio 与 height 的关系：当只设置 height 时，aspect-ratio 会根据 height 和比例自动计算 width。aspect-ratio 会用作 width 的计算依据。}}
+
+{{知识点10}}{{同时设置 width 和 height 时被忽略：如果元素同时声明了 width 和 height，aspect-ratio 将被忽略，因为两个维度都已确定。仅设置其中一个则不会破坏比例。}}
+
+{{知识点11}}{{不设置 width/height 时的行为：aspect-ratio 可以独立使用，不需要显式设置 width 或 height。此时元素的默认 width: auto 会隐式生效，aspect-ratio 根据上下文自动计算两个维度。}}
+
+{{知识点12}}{{内容溢出时的行为：aspect-ratio 设置的是"首选"（preferred）比例而非"强制"比例。当元素内容过多导致溢出时，元素会扩展以容纳内容，此时宽高比会被破坏。}}
+
+{{知识点13}}{{min-height: 0 防止扩展：如果希望内容溢出时不破坏宽高比，可以设置 min-height: 0（或 min-width: 0），让内容溢出元素边界而不是撑大元素。}}
+
+{{知识点14}}{{与 min-*/max-* 属性的优先级：min-width、max-width、min-height、max-height 等属性会与 aspect-ratio 竞争。如果 min-* 或 max-* 约束"赢"了 width/height 的计算，它们会覆盖 aspect-ratio 的效果。}}
+
+{{知识点15}}{{与 box-sizing 的关系：aspect-ratio 的尺寸计算基于 box-sizing 属性指定的盒子维度。如果 box-sizing: border-box，比例计算包含 padding 和 border；如果 box-sizing: content-box，仅基于内容区域。}}
+
+{{知识点16}}{{响应式 iframe 嵌入：aspect-ratio 最常见的用途之一是创建响应式 iframe。设置 aspect-ratio: 16/9 + width: 100% + height: auto，可以让视频嵌入在任何宽度下保持正确比例。}}
+
+{{知识点17}}{{自动计算 iframe 比例：如果 iframe 标签有 width 和 height 属性，可以用 aspect-ratio: attr(width) / attr(height) 自动读取属性值来设置比例，无需手动计算。}}
+
+{{知识点18}}{{Hero 图片/背景图：background-image 不影响元素尺寸。使用 aspect-ratio: 4/3 等值可以让背景图容器保持固定比例，避免设置固定 height 导致响应性问题。}}
+
+{{知识点19}}{{Grid/Flex 布局中保持正方形：在使用 grid 的 auto-fill/auto-fit 布局中，给子元素设置 aspect-ratio: 1/1 可以让它们始终保持正方形，无论宽度如何变化。}}
+
+{{知识点20}}{{图片画廊一致性：在图片画廊中，不同尺寸的图片可以用 aspect-ratio: 1/1 配合 object-fit: cover 来统一裁剪显示，保持网格整齐。}}
+
+{{知识点21}}{{object-fit 配合使用：aspect-ratio 控制容器比例，object-fit 控制替换元素在容器中的填充方式。常用 object-fit: cover 裁剪填充，或 object-fit: contain 完整显示。}}
+
+{{知识点22}}{{防止布局偏移（CLS）：给图片和视频设置 aspect-ratio 可以在内容加载前预留正确的空间，避免 Cumulative Layout Shift，提升页面性能指标。}}
+
+{{知识点23}}{{浏览器兼容性概览：Chrome 88+、Firefox 89+、Safari 15+、Edge 88+ 支持 aspect-ratio。IE 全系列不支持，Samsung Internet 15+ 支持。截至 2025 年全球支持率超过 95%。}}
+
+{{知识点24}}{{@supports 降级方案：对于不支持的旧浏览器，可以用 @supports not (aspect-ratio: 1/1) 回退到 padding-top 百分比 hack 方案，实现渐进增强。}}
+
+{{知识点25}}{{旧版 Padding-top Hack 原理：在 aspect-ratio 出现前，常用 padding-top: 56.25%（16:9）配合 position: absolute 创建固定比例容器。padding 的百分比值基于父元素宽度计算。}}
+
+{{知识点26}}{{aspect-ratio 替代 padding-top hack 的优势：aspect-ratio 语义更清晰、代码更简洁、不需要额外的伪元素或绝对定位、支持动态计算和动画过渡。}}
+
+{{知识点27}}{{CSS 变量结合：aspect-ratio 支持 CSS 自定义属性，如 aspect-ratio: var(--ratio)，可以动态控制比例，方便主题切换或组件复用。}}
+
+{{知识点28}}{{动画与过渡：aspect-ratio 的计算值类型支持 by computed value type 动画，意味着可以在不同比例值之间添加过渡效果（transition）。}}
+
+{{知识点29}}{{全局值支持：aspect-ratio 支持 inherit、initial、revert、revert-layer、unset 等全局 CSS 关键字，可以方便地重置或继承父元素的宽高比。}}
+
+{{知识点30}}{{实际值计算方式：当使用 ratio 值时，尺寸计算基于 box-sizing 指定的盒子维度；当使用 auto 时，尺寸计算始终基于内容盒（content box）维度。}}
+
+{{知识点31}}{{aspect-ratio: auto 的特殊语义：对于非替换元素，auto 意味着没有首选比例，元素按正常流程渲染。对于替换元素（如 img），auto 使用图片的自然/内在宽高比。}}
+
+{{知识点32}}{{responsive video embed 最佳实践：推荐写法为 video, iframe { aspect-ratio: 16/9; width: 100%; height: auto; }，一行代码替代传统的 wrapper + padding hack。}}
+
+{{知识点33}}{{卡片组件中的应用：现代卡片组件常用 aspect-ratio 控制封面图区域比例，如 aspect-ratio: 16/9 或 3/2，确保不同尺寸图片在卡片中显示一致。}}
+
+{{知识点34}}{{aspect-ratio 与视口单位：可以配合 vw、vh 等视口单位使用 width 或 height，aspect-ratio 仍能正确计算另一个维度，实现视口响应式布局。}}
+
+{{知识点35}}{{CSS Grid 中的 aspect-ratio：在 grid-template-rows 中使用 auto 行高时，子元素的 aspect-ratio 会影响行高计算。行高会根据内容（包括 aspect-ratio 影响的高度）自动确定。}}
+
+{{知识点36}}{{Flexbox 中的行为：在 flex 容器中，子元素的 aspect-ratio 会影响拉伸（stretch）对齐的行为。元素会根据比例计算默认尺寸，而非简单拉伸填满交叉轴。}}
+
+{{知识点37}}{{aspect-ratio 的计算优先级：当元素有明确的 width + height > aspect-ratio 被忽略；仅 width 或仅 height > aspect-ratio 计算缺失维度；都没有 > aspect-ratio 根据可用空间计算两个维度。}}
+
+{{知识点38}}{{空元素的占位效果：即使元素没有内容，设置 aspect-ratio 后也会占据正确的比例空间，这对于图片懒加载的占位符（placeholder）非常有用。}}
+
+{{知识点39}}{{打印样式中的考虑：aspect-ratio 在打印样式中同样生效，可以确保打印输出中元素保持正确比例。但需注意打印环境下的尺寸计算可能与屏幕不同。}}
+
+{{知识点40}}{{aspect-ratio 与 SVG：SVG 元素有内在的 viewBox 宽高比，通常通过 viewBox 属性维护比例。但 CSS aspect-ratio 可以覆盖 SVG 的内在比例，用于特殊布局需求。}}

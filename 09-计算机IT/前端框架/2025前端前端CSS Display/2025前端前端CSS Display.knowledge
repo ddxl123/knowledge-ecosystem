@@ -1,0 +1,83 @@
+# 2025前端前端CSS Display
+# 领域: 计算机IT
+# 学科: 前端框架
+
+{{知识点1}}{{CSS display 属性是 CSS 中最核心的布局属性之一，用于定义元素如何在页面中渲染。它决定了元素生成的盒子类型（外显类型）以及其子元素的布局方式（内显类型）。display 属性的完整语法支持单值和多值两种写法，多值语法如 `display: block flex` 可以同时指定外显类型和内显类型。}}
+
+{{知识点2}}{{外显类型（Outer Display Type）决定了元素在文档流中的角色，只有两个值：`block` 和 `inline`。`block` 元素在前后都会生成换行，占据父容器的整行宽度；`inline` 元素不生成换行，只占据内容所需的宽度，后续元素可以排列在同一行。}}
+
+{{知识点3}}{{内显类型（Inner Display Type）决定了元素子内容的布局方式，主要值包括 `flow`（流式布局）、`flow-root`（新的块级格式化上下文）、`flex`（弹性布局）、`grid`（网格布局）、`table`（表格布局）和 `ruby`（注音布局）。}}
+
+{{知识点4}}{{`display: block` 是最常用的块级显示方式，等价于多值语法 `display: block flow`。块级元素占据父容器的全部可用宽度，每个块级元素都从新的一行开始。典型的块级元素包括 div、p、h1-h6、section 等。}}
+
+{{知识点5}}{{`display: inline` 使元素生成一个或多个行内盒子，不会在前后产生换行。等价于 `display: inline flow`。行内元素只占据内容所需宽度，不能设置 width 和 height。典型的行内元素包括 span、a、em、strong 等。}}
+
+{{知识点6}}{{`display: inline-block` 是一个预组合值，等价于 `display: inline flow-root`。它使元素生成一个块盒子，但像行内元素一样与周围内容一起流动。inline-block 可以设置宽高，同时不换行，常用于导航菜单、按钮组等场景。}}
+
+{{知识点7}}{{`display: flow-root` 等价于 `display: block flow-root`，其唯一目的就是创建一个新的块级格式化上下文（BFC）。它可以替代 `overflow: hidden` 来清除浮动，且不会产生不必要的副作用（如裁剪内容或出现滚动条）。}}
+
+{{知识点8}}{{`display: none` 完全关闭元素的显示，元素不生成任何盒子，对布局没有任何影响，文档渲染就像该元素不存在一样。与 `visibility: hidden` 不同，`visibility: hidden` 保留元素占据的空间但不渲染内容。}}
+
+{{知识点9}}{{`display: contents` 使元素自身不生成特定的盒子，被其伪盒子和子盒子替换。这意味着元素的子元素直接参与父元素的布局上下文，常用于移除包裹层但保留子元素的场景，对无障碍访问有重要影响。}}
+
+{{知识点10}}{{`display: flex` 等价于 `display: block flex`，创建一个块级弹性容器。其直接子元素成为弹性项目（flex items），可以通过 justify-content、align-items、flex-grow 等属性控制对齐和分配空间。Flexbox 是一维布局模型，适合行或列方向的布局。}}
+
+{{知识点11}}{{`display: inline-flex` 等价于 `display: inline flex`，创建一个行内级弹性容器。与 flex 的区别仅在于容器本身是行内级的，不占满整行宽度，后续内容可以排列在其旁边。内部子元素的弹性行为与块级 flex 容器完全一致。}}
+
+{{知识点12}}{{`display: grid` 等价于 `display: block grid`，创建一个块级网格容器。其直接子元素成为网格项目，支持二维布局，可以同时控制行和列。通过 grid-template-columns、grid-template-rows、grid-template-areas 等定义网格结构。}}
+
+{{知识点13}}{{`display: inline-grid` 等价于 `display: inline grid`，创建一个行内级网格容器。容器本身像行内元素一样流动，但内部子元素按网格布局排列。适合在文本流中嵌入网格布局的场景。}}
+
+{{知识点14}}{{`display: list-item` 生成一个块盒子和一个单独的 list-item 行内盒子，使元素表现得像列表项。可以配合 list-style-type 和 list-style-position 使用来控制列表标记样式。可以与外显类型和 flow/flow-root 内显类型组合使用。}}
+
+{{知识点15}}{{CSS display 的多值语法（Multi-keyword Syntax）是 CSS Display Level 3 引入的新特性，允许同时指定外显类型和内显类型。例如 `display: inline flex` 替代 `display: inline-flex`，`display: block flow-root` 替代 `display: flow-root`。多值语法更清晰地描述了元素的完整显示行为。}}
+
+{{知识点16}}{{单值语法到多值语法的映射关系：block → block flow, inline → inline flow, flow-root → block flow-root, inline-block → inline flow-root, flex → block flex, inline-flex → inline flex, grid → block grid, inline-grid → inline grid, table → block table, inline-table → inline table。}}
+
+{{知识点17}}{{表格相关的 display 内部值包括：table-row-group（对应 tbody）、table-header-group（对应 thead）、table-footer-group（对应 tfoot）、table-row（对应 tr）、table-cell（对应 td）、table-column-group（对应 colgroup）、table-column（对应 col）、table-caption（对应 caption）。这些值用于模拟 HTML 表格的内部结构。}}
+
+{{知识点18}}{{Ruby 相关的 display 内部值包括：ruby-base（对应 rb）、ruby-text（对应 rt）、ruby-base-container（匿名盒子）、ruby-text-container（对应 rtc）。这些值用于东亚语言注音排版的内部结构。}}
+
+{{知识点19}}{{块级格式化上下文（Block Formatting Context, BFC）是 CSS 渲染页面的一部分，是块盒子布局发生的区域。BFC 会包含内部浮动、排除外部浮动、抑制外边距折叠。创建 BFC 的方式包括：display: flow-root、overflow 非 visible、float 非 none、position 为 absolute/fixed、display: inline-block 等。}}
+
+{{知识点20}}{{格式化上下文（Formatting Context）是页面中一块独立的渲染区域，内部元素的布局不影响外部。不同的 display 值会创建不同的格式化上下文：flex 格式化上下文、grid 格式化上下文、块级格式化上下文（BFC）、行内格式化上下文（IFC）等。每种格式化上下文都有其特定的布局规则。}}
+
+{{知识点21}}{{display 属性支持动画（Animation），使用离散动画类型（discrete animation）。在两个值之间切换时，动画在 50% 处翻转。但有一个例外：当从 `display: none` 动画到可见值时，浏览器会在动画开始（0%）时就切换为可见值，确保动画全程可见。}}
+
+{{知识点22}}{{外显类型与内显类型的默认规则：当 display 只指定外显类型（如 block 或 inline）时，内显类型默认为 flow（如 block flow 和 inline flow）。当 display 只指定内显类型（如 flex 或 grid）时，外显类型默认为 block（如 block flex 和 block grid）。ruby 是唯一默认外显为 inline 的内显类型。}}
+
+{{知识点23}}{{display: flex 与 display: inline-flex 的核心区别：flex 容器是块级元素，占据父容器全部宽度，前后换行；inline-flex 容器是行内元素，只占据内容宽度，后续内容可以排列在旁边。内部子元素的弹性行为完全相同，区别仅在于容器对外的表现。}}
+
+{{知识点24}}{{display: grid 与 display: inline-grid 的核心区别与 flex 类似：grid 容器是块级的，inline-grid 容器是行内级的。网格容器创建网格格式化上下文，子元素按网格线定位。grid 适合整页布局，inline-grid 适合在行内上下文中嵌入网格。}}
+
+{{知识点25}}{{display: contents 对无障碍访问的影响：由于 contents 使元素自身不生成盒子，某些浏览器可能会影响元素的语义角色。例如，一个设置了 display: contents 的 div 上的 ARIA 角色可能不会被正确暴露给辅助技术。需要谨慎使用，测试无障碍访问效果。}}
+
+{{知识点26}}{{display: flow-root 替代 overflow: hidden 清除浮动：传统的 clearfix 方案使用 overflow: hidden 创建 BFC 来包含浮动元素，但可能导致内容裁剪或意外滚动条。flow-root 是专门为创建 BFC 设计的值，语义更清晰，无副作用。推荐在需要清除浮动时使用 flow-root。}}
+
+{{知识点27}}{{display 与 CSS 盒模型的关系：display 值决定了元素生成的盒子类型——块盒子（block box）、行内盒子（inline box）、行内块盒子（inline-block box）等。不同盒子类型在盒模型中的表现不同，例如行内元素的 margin 和 padding 只影响水平方向，垂直方向不占据空间。}}
+
+{{知识点28}}{{display 属性的全局值：inherit（继承父元素值）、initial（初始值 inline）、revert（回退到用户代理样式表的值）、revert-layer（回退到上一个 cascade layer）、unset（有继承则继承，否则为初始值）。了解这些全局值对重置和覆盖 display 属性非常重要。}}
+
+{{知识点29}}{{display: block 元素的高度塌陷问题：当块级元素的子元素全部浮动时，父元素高度会塌陷为 0。这是因为浮动元素脱离了正常文档流。解决方案包括：使用 display: flow-root、clearfix hack、或设置 overflow: hidden/auto。推荐使用 flow-root 方案。}}
+
+{{知识点30}}{{display 与 position 的交互：当元素设置了 position: absolute 或 position: fixed 时，display 的某些值会自动调整。例如，绝对定位元素的 display: inline 会被计算为 block，因为绝对定位元素总是生成块级盒子。float 元素也有类似的自动调整行为。}}
+
+{{知识点31}}{{匿名盒子与 display：当 DOM 结构与 display 值不匹配时，浏览器会生成匿名盒子来修复结构。例如，一个 display: table-cell 元素如果没有被 table-row 包裹，浏览器会自动插入匿名的 table-row 和 table 盒子。理解匿名盒子对调试布局问题至关重要。}}
+
+{{知识点32}}{{display 与容器查询（Container Queries）的交互：当元素设置了 container-type 不为 normal 时，会创建一个新的格式化上下文。这与 display: flow-root 类似，但目的是为了启用容器查询。容器查询是响应式设计的新范式，允许组件根据其容器大小而非视口大小来调整样式。}}
+
+{{知识点33}}{{display 属性的计算值规则：某些 display 值在特定条件下会被浏览器自动调整（computed value）。例如，浮动或绝对定位元素上的 display: inline 会被计算为 block。设定了 float 的元素，display 值如果不是 none，outer display type 会被强制设为 block。}}
+
+{{知识点34}}{{Flex 布局中的 display: flex 关键特性：flex 容器中的子元素（flex items）可以通过 flex-direction 设置主轴方向（row 或 column），justify-content 控制主轴对齐，align-items 控制交叉轴对齐，flex-wrap 控制换行，gap 控制间距。Flex 布局是 CSS 中最常用的一维布局方案。}}
+
+{{知识点35}}{{Grid 布局中的 display: grid 关键特性：grid 容器支持二维布局，通过 grid-template-columns 和 grid-template-rows 定义轨道大小，grid-template-areas 定义命名区域，auto-placement 自动放置子元素，fr 单位按比例分配空间。Grid 布局适合复杂的页面整体布局。}}
+
+{{知识点36}}{{display: table 与 HTML table 元素的行为相同，创建一个块级表格容器。display: inline-table 则创建行内级表格容器。使用 CSS display 模拟表格结构可以不依赖 HTML table 元素实现表格布局，但在语义化和无障碍方面不如原生 HTML table。}}
+
+{{知识点37}}{{display 属性的继承与层叠：display 不是可继承属性，子元素默认不会继承父元素的 display 值。每个元素有其默认的 display 值（如 div 默认 block，span 默认 inline）。在 CSS 重置样式表中，通常需要显式设置关键元素的 display 值。}}
+
+{{知识点38}}{{display: flex 与 display: grid 的选择指南：当只需要在一个方向（行或列）上布局时使用 flex，当需要同时控制行和列的二维布局时使用 grid。flex 适合组件级别的小布局（导航栏、卡片内容对齐等），grid 适合页面级别的大布局（整页网格、仪表板等）。两者可以嵌套使用。}}
+
+{{知识点39}}{{display 属性在响应式设计中的应用：通过媒体查询切换 display 值是响应式设计的常见模式。例如，在桌面端使用 display: grid 进行多列布局，在移动端切换为 display: block 单列布局；或在桌面端 display: flex 水平排列，移动端切换为 flex-direction: column。}}
+
+{{知识点40}}{{display 属性的浏览器兼容性与渐进增强：多值语法（如 display: block flex）的支持较新，建议使用单值语法作为回退方案。例如先写 `display: inline-flex` 再写 `display: inline flex`。display: contents 和 display: flow-root 在现代浏览器中已获得广泛支持，但旧版浏览器可能需要 polyfill。}}
